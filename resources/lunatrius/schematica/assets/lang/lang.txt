@@ -1,0 +1,3 @@
+en_US
+es_MX
+sl_SI

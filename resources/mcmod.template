@@ -1,0 +1,23 @@
+{
+	"modinfoversion": 2,
+	"modlist": [
+		{
+			"authors": [ @AUTHORS@ ],
+			"credits": "@CREDITS@",
+			"dependants": [ @DEPENDANTS@ ],
+			"dependencies": [ @DEPENDENCIES@ ],
+			"description": "@DESCRIPTION@",
+			"logoFile": "@LOGOFILE@",
+			"mcversion": "@MCVERSION@",
+			"modid": "@MODID@",
+			"name": "@MODNAME@",
+			"parent": "@PARENT@",
+			"requiredMods": [ @REQUIREDMODS@ ],
+			"screenshots": [ @SCREENSHOTS@ ],
+			"updateUrl": "@UPDATEURL@",
+			"url": "@URL@",
+			"useDependencyInformation": "@USEDEPENDANCYINFORMATION@",
+			"version": "@VERSION@"
+		}
+	]
+}

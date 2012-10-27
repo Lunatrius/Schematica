@@ -1,0 +1,23 @@
+{
+	"modinfoversion" : 2,
+	"modlist" : [
+		{
+			"authors" : ["Lunatrius"],
+			"credits" : "",
+			"dependants" : [],
+			"dependencies" : [],
+			"description" : "...",
+			"logoFile" : "",
+			"mcversion" : "1.4.2",
+			"modid" : "test",
+			"name" : "test",
+			"parent" : "",
+			"requiredMods" : [],
+			"screenshots" : [],
+			"updateUrl" : "",
+			"url" : "",
+			"useDependencyInformation" : "",
+			"version" : "1.0"
+		}
+	]
+}

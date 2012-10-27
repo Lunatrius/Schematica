@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project name="GenericMod" default="build">
+    <description>Generic mod builder</description>
+
+    <target name="init">
+        <!-- load properties from files -->
+        <property file="build.properties" />
+        <property file="mod.properties" />
+        <property name="version" value="${version.major}.${version.minor}.${version.micro}.${version.build}" />
+
+        <!-- base dirs -->
+        <property name="workspace" location="${dir.workspace}" />
+        <property name="dev.home" location="${dir.project}" />
+        <property name="mcp.home" location="${dir.mcp}" />
+        <property name="release.home" location="${dir.release}/${mod.id}/${version.minecraft}" />
+        <property name="release.jar" value="[${version.minecraft}]${mod.id}${mod.tags}-v${version}.jar" />
+
+        <!-- setup python -->
+        <property name="python.win" location="${mcp.home}/runtime/bin/python/python_mcp"/>
+        <condition property="python" value="${python.win}" else="python">
+            <os family="Windows" />
+        </condition>
+
+        <!-- setup source dirs -->
+        <property name="dev.src.client" location="${dev.home}/client"/>
+        <property name="dev.src.common" location="${dev.home}/common"/>
+        <property name="dev.src.resources" location="${dev.home}/resources"/>
+
+        <!-- check if the directories are present -->
+        <condition property="has.src.client" value="true" else="false">
+            <available file="${dev.home}/client" type="dir"/>
+        </condition>
+        <condition property="has.src.common" value="true" else="false">
+            <available file="${dev.home}/common" type="dir"/>
+        </condition>
+        <condition property="has.src.resources" value="true" else="false">
+            <available file="${dev.home}/resources" type="dir"/>
+        </condition>
+
+        <!-- setup MCP dirs -->
+        <property name="mcp.src" location="${mcp.home}/src"/>
+        <property name="mcp.src.client" location="${mcp.src}/minecraft"/>
+        <property name="mcp.src.common" location="${mcp.src}/common"/>
+
+        <property name="mcp.bin" location="${mcp.home}/reobf/minecraft"/>
+    </target>
+
+    <target name="clean" >
+        <!-- clean client sources -->
+        <delete verbose="true">
+            <fileset dir="${mcp.src.client}">
+                <present present="both" targetdir="${dev.src.client}"/>
+            </fileset>
+        </delete>
+
+        <!-- clean common sources -->
+        <delete verbose="true">
+            <fileset dir="${mcp.src.common}">
+                <present present="both" targetdir="${dev.src.common}"/>
+            </fileset>
+        </delete>
+
+        <!-- clean classes -->
+        <delete verbose="true">
+            <fileset dir="${mcp.bin}"/>
+        </delete>
+    </target>
+
+    <target name="merge-source" >
+        <!-- merge sources -->
+        <antcall target="merge-client"/>
+        <antcall target="merge-common"/>
+    </target>
+
+    <target name="merge-client" if="${has.src.client}">
+        <!-- merge client sources -->
+        <copy todir="${mcp.src.client}" overwrite="true" verbose="true">
+            <fileset dir="${dev.src.client}" includes="**/*.java"/>
+        </copy>
+    </target>
+
+    <target name="merge-common"  if="${has.src.common}">
+        <!-- merge common sources -->
+        <copy todir="${mcp.src.common}" overwrite="true" verbose="true">
+            <fileset dir="${dev.src.common}" includes="**/*.java"/>
+        </copy>
+    </target>
+
+    <target name="recompile" >
+        <!-- recompile -->
+        <exec executable="${python}" dir="${mcp.home}" failonerror="true">
+            <arg value="${mcp.home}/runtime/recompile.py" />
+        </exec>
+    </target>
+
+    <target name="reobfuscate" >
+        <!-- reobfuscate -->
+        <exec executable="${python}" dir="${mcp.home}" failonerror="true">
+            <arg value="${mcp.home}/runtime/reobfuscate.py" />
+        </exec>
+    </target>
+
+    <target name="build-jar" >
+        <!-- create release directory -->
+        <mkdir dir="${release.home}"/>
+
+        <!-- build the jar -->
+        <jar destfile="${release.home}/${release.jar}">
+            <fileset dir="${mcp.bin}" excludes="cpw/" />
+            <fileset dir="${dev.src.resources}" excludes="mcmod.info,mcmod.template"/>
+            <mappedresources>
+                <concat>
+                    <fileset dir="${dev.src.resources}" includes="mcmod.template" />
+                    <filterchain>
+                        <replacetokens>
+                            <token key="AUTHORS" value="${mod.authors}" />
+                            <token key="CREDITS" value="${mod.credits}" />
+                            <token key="DEPENDANTS" value="${mod.dependants}" />
+                            <token key="DEPENDENCIES" value="${mod.dependencies}" />
+                            <token key="DESCRIPTION" value="${mod.description}" />
+                            <token key="LOGOFILE" value="${mod.logoFile}" />
+                            <token key="MCVERSION" value="${version.minecraft}" />
+                            <token key="MODID" value="${mod.id}" />
+                            <token key="MODNAME" value="${mod.name}" />
+                            <token key="PARENT" value="${mod.parent}" />
+                            <token key="REQUIREDMODS" value="${mod.requiredMods}" />
+                            <token key="SCREENSHOTS" value="${mod.screenshots}" />
+                            <token key="UPDATEURL" value="${mod.updateUrl}" />
+                            <token key="URL" value="${mod.url}" />
+                            <token key="USEDEPENDANCYINFORMATION" value="${mod.useDependencyInformation}" />
+                            <token key="VERSION" value="${version}" />
+                        </replacetokens>
+                    </filterchain>
+                </concat>
+                <mergemapper to="mcmod.info" />
+            </mappedresources>
+        </jar>
+    </target>
+
+    <target name="build" depends="init">
+        <!-- build the project and clean up MCP after -->
+        <antcall target="clean"/>
+        <antcall target="merge-source"/>
+        <antcall target="recompile"/>
+        <antcall target="reobfuscate"/>
+        <antcall target="build-jar"/>
+
+        <antcall target="clean"/>
+    </target>
+</project>
