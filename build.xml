@@ -48,21 +48,21 @@
 
     <target name="clean" >
         <!-- clean client sources -->
-        <delete verbose="true">
+        <delete verbose="true" failonerror="false">
             <fileset dir="${mcp.src.client}">
                 <present present="both" targetdir="${dev.src.client}"/>
             </fileset>
         </delete>
 
         <!-- clean common sources -->
-        <delete verbose="true">
+        <delete verbose="true" failonerror="false">
             <fileset dir="${mcp.src.common}">
                 <present present="both" targetdir="${dev.src.common}"/>
             </fileset>
         </delete>
 
         <!-- clean classes -->
-        <delete verbose="true">
+        <delete verbose="true" failonerror="false">
             <fileset dir="${mcp.bin}"/>
         </delete>
     </target>

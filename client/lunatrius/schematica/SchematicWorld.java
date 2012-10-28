@@ -34,7 +34,7 @@ public class SchematicWorld extends World {
 	private short height;
 
 	public SchematicWorld() {
-		super(anvilSaveHandler, "", worldSettings, null, null);
+		super(anvilSaveHandler, "", null, worldSettings, null);
 		this.blocks = null;
 		this.metadata = null;
 		this.tileEntities = null;
