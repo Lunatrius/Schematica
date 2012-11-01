@@ -380,7 +380,7 @@ public class SchematicWorld extends World {
 			case 0x3:
 				return (byte) ((0x1 | (blockMetadata & 0xC)));
 			}
-		} else if (blockId == Block.button.blockID || blockId == Block.field_82511_ci.blockID) {
+		} else if (blockId == Block.stoneButton.blockID || blockId == Block.woodenButton.blockID) {
 			switch (blockMetadata & 0x7) {
 			case 0x3:
 				return (byte) (0x4 | (blockMetadata & 0x8));
@@ -495,7 +495,7 @@ public class SchematicWorld extends World {
 			case 0x3:
 				return (byte) (0x1 | (blockMetadata & 0xC));
 			}
-		} else if (blockId == Block.field_82510_ck.blockID) {
+		} else if (blockId == Block.anvil.blockID) {
 			switch (blockMetadata & 0x03) {
 			case 0x1:
 				return 0x3 | (blockMetadata & 0xC);
@@ -506,7 +506,7 @@ public class SchematicWorld extends World {
 			case 0x2:
 				return 0x0 | (blockMetadata & 0xC);
 			}
-		} else if (blockId == Block.field_82512_cj.blockID) {
+		} else if (blockId == Block.skull.blockID) {
 			System.out.println(blockMetadata);
 			switch (blockMetadata) {
 			case 0x2:
@@ -655,7 +655,7 @@ public class SchematicWorld extends World {
 			case 0x3:
 				return (byte) (0x2 | (blockMetadata & 0xC));
 			}
-		} else if (blockId == Block.button.blockID || blockId == Block.field_82511_ci.blockID) {
+		} else if (blockId == Block.stoneButton.blockID || blockId == Block.woodenButton.blockID) {
 			switch (blockMetadata & 0x7) {
 			case 0x1:
 				return (byte) (0x4 | (blockMetadata & 0x8));
@@ -790,7 +790,7 @@ public class SchematicWorld extends World {
 			case 0x8:
 				return (byte) (0x4 | (blockMetadata & 0x3));
 			}
-		} else if (blockId == Block.field_82510_ck.blockID) {
+		} else if (blockId == Block.anvil.blockID) {
 			switch (blockMetadata & 0x3) {
 			case 0x0:
 				return 0x3 | (blockMetadata & 0xC);
@@ -801,7 +801,7 @@ public class SchematicWorld extends World {
 			case 0x3:
 				return 0x2 | (blockMetadata & 0xC);
 			}
-		} else if (blockId == Block.field_82512_cj.blockID) {
+		} else if (blockId == Block.skull.blockID) {
 			switch (blockMetadata) {
 			case 0x5:
 				return 0x2;

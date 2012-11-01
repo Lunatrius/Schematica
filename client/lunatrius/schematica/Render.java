@@ -42,6 +42,7 @@ import org.lwjgl.opengl.GL11;
 
 public class Render {
 	private final Settings settings = Settings.instance();
+	private final AxisAlignedBB axisAlignedBB = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
 	private final Map<String, Integer> glLists = new HashMap<String, Integer>();
 	private final List<String> textures = new ArrayList<String>();
 	private final BufferedImage missingTextureImage = new BufferedImage(64, 64, 2);
@@ -172,7 +173,6 @@ public class Render {
 
 		renderBlocks.aoType = 0;
 
-		AxisAlignedBB axisAlignedBB = null;
 		Frustrum frustrum = new Frustrum();
 		frustrum.setPosition(this.settings.playerPosition.x - this.settings.offset.x, this.settings.playerPosition.y - this.settings.offset.y, this.settings.playerPosition.z - this.settings.offset.z);
 		frustrum.setPosition(0, 0, 0);
@@ -192,8 +192,7 @@ public class Render {
 					}
 
 					try {
-						axisAlignedBB = AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1);
-						if (!frustrum.isBoundingBoxInFrustum(axisAlignedBB)) {
+						if (!frustrum.isBoundingBoxInFrustum(this.axisAlignedBB.setBounds(x, y, z, x + 1, y + 1, z + 1))) {
 							continue;
 						}
 
@@ -255,8 +254,7 @@ public class Render {
 					continue;
 				}
 
-				axisAlignedBB = AxisAlignedBB.getBoundingBox(x, y, z, x + 1, y + 1, z + 1);
-				if (!frustrum.isBoundingBoxInFrustum(axisAlignedBB)) {
+				if (!frustrum.isBoundingBoxInFrustum(this.axisAlignedBB.setBounds(x, y, z, x + 1, y + 1, z + 1))) {
 					continue;
 				}
 
