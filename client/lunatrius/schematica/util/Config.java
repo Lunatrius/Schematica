@@ -21,26 +21,26 @@ public class Config {
 	}
 
 	public static Property get(Configuration config, String name, String category, String defaultValue, String comment) {
-		Property prop = config.get(name, category, defaultValue);
+		Property prop = config.get(category, name, defaultValue);
 		prop.comment = comment + " [default: " + defaultValue + "]";
 		return prop;
 	}
 
 	public static Property get(Configuration config, String name, String category, boolean defaultValue, String comment) {
-		Property prop = config.get(name, category, defaultValue);
+		Property prop = config.get(category, name, defaultValue);
 		prop.comment = comment + " [default: " + defaultValue + "]";
 		return prop;
 	}
 
 	public static Property get(Configuration config, String name, String category, int defaultValue, int minValue, int maxValue, String comment) {
-		Property prop = config.get(name, category, defaultValue);
+		Property prop = config.get(category, name, defaultValue);
 		prop.comment = comment + " [range: " + minValue + " ~ " + maxValue + ", default: " + defaultValue + "]";
 		prop.value = Integer.toString(prop.getInt(defaultValue) < minValue ? minValue : (prop.getInt(defaultValue) > maxValue ? maxValue : prop.getInt(defaultValue)));
 		return prop;
 	}
 
 	public static Property get(Configuration config, String name, String category, float defaultValue, float minValue, float maxValue, String comment) {
-		Property prop = config.get(name, category, Float.toString(defaultValue));
+		Property prop = config.get(category, name, Float.toString(defaultValue));
 		prop.comment = comment + " [range: " + minValue + " ~ " + maxValue + ", default: " + defaultValue + "]";
 		try {
 			prop.value = Float.toString(Float.parseFloat(prop.value) < minValue ? minValue : (Float.parseFloat(prop.value) > maxValue ? maxValue : Float.parseFloat(prop.value)));
