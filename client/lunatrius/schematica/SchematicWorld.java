@@ -26,6 +26,7 @@ public class SchematicWorld extends World {
 	private final static AnvilSaveHandler anvilSaveHandler = new AnvilSaveHandler(Minecraft.getMinecraftDir(), "mods/saves-schematica-dummy", false);
 	private final static WorldSettings worldSettings = new WorldSettings(0, EnumGameType.CREATIVE, false, false, WorldType.FLAT);
 
+	private final Settings settings = Settings.instance();
 	private int[][][] blocks;
 	private int[][][] metadata;
 	private List<TileEntity> tileEntities;
@@ -184,6 +185,9 @@ public class SchematicWorld extends World {
 
 	@Override
 	public boolean isBlockOpaqueCube(int x, int y, int z) {
+		if (this.settings.renderingLayer != -1 && this.settings.renderingLayer != y) {
+			return false;
+		}
 		return getBlock(x, y, z) != null && getBlock(x, y, z).isOpaqueCube();
 	}
 

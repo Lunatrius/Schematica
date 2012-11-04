@@ -8,8 +8,8 @@ import java.util.Properties;
 import java.util.logging.Level;
 
 import lunatrius.schematica.util.Config;
+import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.KeyBinding;
-import net.minecraft.src.World;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
@@ -115,7 +115,7 @@ public class Schematica {
 		SchematicWorld world = this.settings.schematic;
 		int[][][] worldMatrix = this.settings.schematicMatrix;
 
-		World mcWorld = this.settings.minecraft.theWorld;
+		IBlockAccess mcWorld = this.settings.mcWorldCache;
 
 		int x, y, z;
 		int blockId = 0;

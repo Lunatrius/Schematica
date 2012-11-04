@@ -140,7 +140,6 @@ public class Render {
 		int maxZ = 0;
 
 		if (this.settings.renderingLayer < 0) {
-			this.settings.renderBlocks.renderAllFaces = false;
 			minX = Math.max(posX - this.settings.renderRange.x, 0);
 			maxX = Math.min(posX + this.settings.renderRange.x, this.settings.schematic.width());
 			minY = Math.max(posY - this.settings.renderRange.y, 0);
@@ -148,7 +147,6 @@ public class Render {
 			minZ = Math.max(posZ - this.settings.renderRange.z, 0);
 			maxZ = Math.min(posZ + this.settings.renderRange.z, this.settings.schematic.length());
 		} else {
-			this.settings.renderBlocks.renderAllFaces = true;
 			minX = Math.max(posX - this.settings.renderRange.x * this.settings.renderRange.y, 0);
 			maxX = Math.min(posX + this.settings.renderRange.x * this.settings.renderRange.y, this.settings.schematic.width());
 			minY = this.settings.renderingLayer;
@@ -210,15 +208,7 @@ public class Render {
 									lastTexture = block.getTextureFile();
 								}
 
-								if (this.settings.renderingLayer >= 0 && (blockId == Block.redstoneRepeaterActive.blockID || blockId == Block.redstoneRepeaterIdle.blockID)) {
-									renderBlocks.renderAllFaces = false;
-								}
-
 								renderBlocks.renderBlockByRenderType(block, x, y, z);
-
-								if (this.settings.renderingLayer >= 0 && (blockId == Block.redstoneRepeaterActive.blockID || blockId == Block.redstoneRepeaterIdle.blockID)) {
-									renderBlocks.renderAllFaces = true;
-								}
 							}
 							break;
 						case 0x02:

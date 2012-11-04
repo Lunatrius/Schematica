@@ -11,6 +11,7 @@ import java.util.List;
 import lunatrius.schematica.util.Vector3f;
 import lunatrius.schematica.util.Vector3i;
 import net.minecraft.client.Minecraft;
+import net.minecraft.src.ChunkCache;
 import net.minecraft.src.CompressedStreamTools;
 import net.minecraft.src.KeyBinding;
 import net.minecraft.src.NBTTagCompound;
@@ -40,6 +41,7 @@ public class Settings {
 	public static final File schematicDirectory = new File(Minecraft.getMinecraftDir(), "/schematics/");
 	public static final File textureDirectory = new File(Minecraft.getMinecraftDir(), "/resources/mod/schematica/");
 	public Minecraft minecraft = Minecraft.getMinecraft();
+	public ChunkCache mcWorldCache = null;
 	public SchematicWorld schematic = null;
 	public int[][][] schematicMatrix = null;
 	public Vector3f playerPosition = new Vector3f();
@@ -226,7 +228,6 @@ public class Settings {
 			point.z += 1;
 			break;
 		}
-
 	}
 
 	public void moveHere() {
@@ -254,10 +255,16 @@ public class Settings {
 				break;
 			}
 		}
+
+		reloadChunkCache();
 	}
 
 	public void toggleRendering() {
 		this.isRenderingSchematic = !this.isRenderingSchematic && (this.schematic != null);
+	}
+
+	public void reloadChunkCache() {
+		this.mcWorldCache = new ChunkCache(this.minecraft.theWorld, this.offset.x - 1, this.offset.y - 1, this.offset.z - 1, this.offset.x + this.schematic.width() + 1, this.offset.y + this.schematic.height() + 1, this.offset.z + this.schematic.length() + 1);
 	}
 
 	public void flipWorld() {

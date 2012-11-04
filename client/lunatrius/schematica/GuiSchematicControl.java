@@ -103,22 +103,28 @@ public class GuiSchematicControl extends GuiScreen {
 		if (guiButton.enabled) {
 			if (guiButton.id == this.btnDecX.id) {
 				this.settings.offset.x -= this.settings.increments[this.incrementX];
+				this.settings.reloadChunkCache();
 			} else if (guiButton.id == this.btnIncX.id) {
 				this.settings.offset.x += this.settings.increments[this.incrementX];
+				this.settings.reloadChunkCache();
 			} else if (guiButton.id == this.btnAmountX.id) {
 				this.incrementX = (this.incrementX + 1) % this.settings.increments.length;
 				this.btnAmountX.displayString = Integer.toString(this.settings.increments[this.incrementX]);
 			} else if (guiButton.id == this.btnDecY.id) {
 				this.settings.offset.y -= this.settings.increments[this.incrementY];
+				this.settings.reloadChunkCache();
 			} else if (guiButton.id == this.btnIncY.id) {
 				this.settings.offset.y += this.settings.increments[this.incrementY];
+				this.settings.reloadChunkCache();
 			} else if (guiButton.id == this.btnAmountY.id) {
 				this.incrementY = (this.incrementY + 1) % this.settings.increments.length;
 				this.btnAmountY.displayString = Integer.toString(this.settings.increments[this.incrementY]);
 			} else if (guiButton.id == this.btnDecZ.id) {
 				this.settings.offset.z -= this.settings.increments[this.incrementZ];
+				this.settings.reloadChunkCache();
 			} else if (guiButton.id == this.btnIncZ.id) {
 				this.settings.offset.z += this.settings.increments[this.incrementZ];
+				this.settings.reloadChunkCache();
 			} else if (guiButton.id == this.btnAmountZ.id) {
 				this.incrementZ = (this.incrementZ + 1) % this.settings.increments.length;
 				this.btnAmountZ.displayString = Integer.toString(this.settings.increments[this.incrementZ]);
