@@ -258,9 +258,9 @@ public class Settings {
 				this.offset.z += 1;
 				break;
 			}
-		}
 
-		reloadChunkCache();
+			reloadChunkCache();
+		}
 	}
 
 	public void toggleRendering() {
