@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import lunatrius.schematica.util.Vector3f;
 import lunatrius.schematica.util.Vector3i;
@@ -20,6 +21,8 @@ import net.minecraft.src.StringTranslate;
 import net.minecraft.src.TileEntity;
 
 import org.lwjgl.input.Keyboard;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public class Settings {
 	private final static Settings instance = new Settings();
@@ -40,10 +43,10 @@ public class Settings {
 
 	public static final File schematicDirectory = new File(Minecraft.getMinecraftDir(), "/schematics/");
 	public static final File textureDirectory = new File(Minecraft.getMinecraftDir(), "/resources/mod/schematica/");
+	public static final Logger logger = FMLCommonHandler.instance().getFMLLogger();
 	public Minecraft minecraft = Minecraft.getMinecraft();
 	public ChunkCache mcWorldCache = null;
 	public SchematicWorld schematic = null;
-	public int[][][] schematicMatrix = null;
 	public Vector3f playerPosition = new Vector3f();
 	public RenderBlocks renderBlocks = null;
 	public RenderTileEntity renderTileEntity = null;
@@ -54,6 +57,7 @@ public class Settings {
 	public Vector3i pointMax = new Vector3i();
 	public int rotationRender = 0;
 	public Vector3i offset = new Vector3i();
+	public boolean needsUpdate = true;
 	public boolean isRenderingSchematic = false;
 	public int renderingLayer = -1;
 	public boolean isRenderingGuide = false;
@@ -114,7 +118,6 @@ public class Settings {
 			if (tagCompound != null) {
 				this.schematic = new SchematicWorld();
 				this.schematic.readFromNBT(tagCompound);
-				this.schematicMatrix = new int[this.schematic.width()][this.schematic.height()][this.schematic.length()];
 
 				this.renderBlocks = new RenderBlocks(this.schematic);
 				this.renderTileEntity = new RenderTileEntity(this.schematic);
@@ -124,7 +127,6 @@ public class Settings {
 		} catch (Exception e) {
 			e.printStackTrace();
 			this.schematic = null;
-			this.schematicMatrix = null;
 			this.renderBlocks = null;
 			this.renderTileEntity = null;
 			this.isRenderingSchematic = false;
@@ -203,6 +205,8 @@ public class Settings {
 		this.pointMax.x = Math.max(this.pointA.x, this.pointB.x);
 		this.pointMax.y = Math.max(this.pointA.y, this.pointB.y);
 		this.pointMax.z = Math.max(this.pointA.z, this.pointB.z);
+
+		this.needsUpdate = true;
 	}
 
 	public void moveHere(Vector3i point) {
@@ -265,19 +269,20 @@ public class Settings {
 
 	public void reloadChunkCache() {
 		this.mcWorldCache = new ChunkCache(this.minecraft.theWorld, this.offset.x - 1, this.offset.y - 1, this.offset.z - 1, this.offset.x + this.schematic.width() + 1, this.offset.y + this.schematic.height() + 1, this.offset.z + this.schematic.length() + 1);
+		this.needsUpdate = true;
 	}
 
 	public void flipWorld() {
 		if (this.schematic != null) {
 			this.schematic.flip();
-			this.schematicMatrix = new int[this.schematic.width()][this.schematic.height()][this.schematic.length()];
+			this.needsUpdate = true;
 		}
 	}
 
 	public void rotateWorld() {
 		if (this.schematic != null) {
 			this.schematic.rotate();
-			this.schematicMatrix = new int[this.schematic.width()][this.schematic.height()][this.schematic.length()];
+			this.needsUpdate = true;
 		}
 	}
 }

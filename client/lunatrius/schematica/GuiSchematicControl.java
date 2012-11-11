@@ -134,15 +134,18 @@ public class GuiSchematicControl extends GuiScreen {
 				} else {
 					this.settings.renderingLayer = -1;
 				}
+				this.settings.needsUpdate = true;
 			} else if (guiButton.id == this.btnIncLayer.id) {
 				if (this.settings.schematic != null) {
 					this.settings.renderingLayer = MathHelper.clamp_int(this.settings.renderingLayer + 1, -1, this.settings.schematic.height() - 1);
 				} else {
 					this.settings.renderingLayer = -1;
 				}
+				this.settings.needsUpdate = true;
 			} else if (guiButton.id == this.btnHide.id) {
 				this.settings.toggleRendering();
 				this.btnHide.displayString = this.strTranslate.translateKey(this.settings.isRenderingSchematic ? "schematic.hide" : "schematic.show");
+				this.settings.needsUpdate = true;
 			} else if (guiButton.id == this.btnMove.id) {
 				this.settings.moveHere();
 			} else if (guiButton.id == this.btnFlip.id) {
@@ -155,7 +158,7 @@ public class GuiSchematicControl extends GuiScreen {
 
 	@Override
 	public void drawScreen(int par1, int par2, float par3) {
-		drawDefaultBackground();
+		// drawDefaultBackground();
 
 		drawCenteredString(this.fontRenderer, this.strTranslate.translateKey("schematic.moveschematic"), this.centerX, this.centerY - 45, 0xFFFFFF);
 		drawCenteredString(this.fontRenderer, this.strTranslate.translateKey("schematic.layers"), this.width - 50, this.height - 165, 0xFFFFFF);
