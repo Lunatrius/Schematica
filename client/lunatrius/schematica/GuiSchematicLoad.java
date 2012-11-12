@@ -91,6 +91,12 @@ public class GuiSchematicLoad extends GuiScreen {
 		try {
 			if (!(this.settings.selectedSchematic > 0 && this.settings.selectedSchematic < schematics.size() && this.settings.loadSchematic((new File(Settings.schematicDirectory, schematics.get(this.settings.selectedSchematic))).getPath()))) {
 				this.settings.selectedSchematic = 0;
+			} else {
+				this.settings.renderingLayer = -1;
+
+				if (this.settings.schematic.width() * this.settings.schematic.height() * this.settings.schematic.length() > 125000) {
+					this.settings.renderingLayer = 0;
+				}
 			}
 		} catch (Exception e) {
 			this.settings.selectedSchematic = 0;
