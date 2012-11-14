@@ -42,6 +42,8 @@ import net.minecraftforge.event.ForgeSubscribe;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
+
 public class Render {
 	private final Settings settings = Settings.instance();
 	private final List<String> textures = new ArrayList<String>();
@@ -79,25 +81,12 @@ public class Render {
 
 	private void initReflection() {
 		try {
-			this.fieldTextureMap = RenderEngine.class.getDeclaredField("c");
-			this.fieldTextureMap.setAccessible(true);
-			this.fieldSingleIntBuffer = RenderEngine.class.getDeclaredField("f");
-			this.fieldSingleIntBuffer.setAccessible(true);
-		} catch (Exception e1) {
+			this.fieldTextureMap = ReflectionHelper.findField(RenderEngine.class, "c", "textureMap");
+			this.fieldSingleIntBuffer = ReflectionHelper.findField(RenderEngine.class, "f", "singleIntBuffer");
+		} catch (Exception e) {
 			this.fieldTextureMap = null;
 			this.fieldSingleIntBuffer = null;
-
-			try {
-				this.fieldTextureMap = RenderEngine.class.getDeclaredField("textureMap");
-				this.fieldTextureMap.setAccessible(true);
-				this.fieldSingleIntBuffer = RenderEngine.class.getDeclaredField("singleIntBuffer");
-				this.fieldSingleIntBuffer.setAccessible(true);
-			} catch (Exception e2) {
-				e2.printStackTrace();
-				this.fieldTextureMap = null;
-				this.fieldSingleIntBuffer = null;
-				this.settings.enableAlpha = false;
-			}
+			e.printStackTrace();
 		}
 	}
 

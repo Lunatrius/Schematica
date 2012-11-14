@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
-<project name="GenericMod" default="build">
-    <description>Generic mod builder</description>
+<project name="GenericForgeMod" default="build">
+    <description>Generic ForgeMod Builder</description>
 
     <target name="init">
         <!-- load properties from files -->
-        <property file="build.properties" />
-        <property file="mod.properties" />
-        <property name="version" value="${version.major}.${version.minor}.${version.micro}.${version.build}" />
+        <property file="build.properties"/>
+        <property file="mod.properties"/>
+        <property name="version" value="${version.major}.${version.minor}.${version.micro}.${version.build}"/>
 
         <!-- base dirs -->
-        <property name="workspace" location="${dir.workspace}" />
-        <property name="dev.home" location="${dir.project}" />
-        <property name="mcp.home" location="${dir.mcp}" />
-        <property name="release.home" location="${dir.release}/${mod.id}/${version.minecraft}" />
-        <property name="release.jar" value="[${version.minecraft}]${mod.id}${mod.tags}-v${version}.jar" />
+        <property name="workspace" location="${dir.workspace}"/>
+        <property name="dev.home" location="${dir.project}"/>
+        <property name="mcp.home" location="${dir.mcp}"/>
+        <property name="release.home" location="${dir.release}/${mod.id}/${version.minecraft}"/>
+        <property name="release.jar" value="[${version.minecraft}]${mod.id}${mod.tags}-v${version}.jar"/>
 
         <!-- setup python -->
         <property name="python.win" location="${mcp.home}/runtime/bin/python/python_mcp"/>
         <condition property="python" value="${python.win}" else="python">
-            <os family="Windows" />
+            <os family="Windows"/>
         </condition>
 
         <!-- setup source dirs -->
@@ -46,7 +46,7 @@
         <property name="mcp.bin" location="${mcp.home}/reobf/minecraft"/>
     </target>
 
-    <target name="clean" >
+    <target name="clean">
         <!-- clean client sources -->
         <delete verbose="true" failonerror="false">
             <fileset dir="${mcp.src.client}">
@@ -67,7 +67,7 @@
         </delete>
     </target>
 
-    <target name="merge-source" >
+    <target name="merge-source">
         <!-- merge sources -->
         <antcall target="merge-client"/>
         <antcall target="merge-common"/>
@@ -80,60 +80,57 @@
         </copy>
     </target>
 
-    <target name="merge-common"  if="${has.src.common}">
+    <target name="merge-common" if="${has.src.common}">
         <!-- merge common sources -->
         <copy todir="${mcp.src.common}" overwrite="true" verbose="true">
             <fileset dir="${dev.src.common}" includes="**/*.java"/>
         </copy>
     </target>
 
-    <target name="recompile" >
+    <target name="recompile">
         <!-- recompile -->
         <exec executable="${python}" dir="${mcp.home}" failonerror="true">
-            <arg value="${mcp.home}/runtime/recompile.py" />
+            <arg value="${mcp.home}/runtime/recompile.py"/>
         </exec>
     </target>
 
-    <target name="reobfuscate" >
+    <target name="reobfuscate">
         <!-- reobfuscate -->
         <exec executable="${python}" dir="${mcp.home}" failonerror="true">
-            <arg value="${mcp.home}/runtime/reobfuscate.py" />
+            <arg value="${mcp.home}/runtime/reobfuscate.py"/>
         </exec>
     </target>
 
-    <target name="build-jar" >
-        <!-- create release directory -->
-        <mkdir dir="${release.home}"/>
-
+    <target name="build-jar">
         <!-- build the jar -->
         <jar destfile="${release.home}/${release.jar}">
-            <fileset dir="${mcp.bin}" excludes="cpw/" />
-            <fileset dir="${dev.src.resources}" excludes="mcmod.info,mcmod.template"/>
+            <fileset dir="${mcp.bin}" excludes="cpw/"/>
+            <fileset dir="${dev.src.resources}" excludes="mcmod.template"/>
             <mappedresources>
                 <concat>
-                    <fileset dir="${dev.src.resources}" includes="mcmod.template" />
+                    <fileset dir="${dev.src.resources}" includes="mcmod.template"/>
                     <filterchain>
                         <replacetokens>
-                            <token key="AUTHORS" value="${mod.authors}" />
-                            <token key="CREDITS" value="${mod.credits}" />
-                            <token key="DEPENDANTS" value="${mod.dependants}" />
-                            <token key="DEPENDENCIES" value="${mod.dependencies}" />
-                            <token key="DESCRIPTION" value="${mod.description}" />
-                            <token key="LOGOFILE" value="${mod.logoFile}" />
-                            <token key="MCVERSION" value="${version.minecraft}" />
-                            <token key="MODID" value="${mod.id}" />
-                            <token key="MODNAME" value="${mod.name}" />
-                            <token key="PARENT" value="${mod.parent}" />
-                            <token key="REQUIREDMODS" value="${mod.requiredMods}" />
-                            <token key="SCREENSHOTS" value="${mod.screenshots}" />
-                            <token key="UPDATEURL" value="${mod.updateUrl}" />
-                            <token key="URL" value="${mod.url}" />
-                            <token key="USEDEPENDANCYINFORMATION" value="${mod.useDependencyInformation}" />
-                            <token key="VERSION" value="${version}" />
+                            <token key="AUTHORS" value="${mod.authors}"/>
+                            <token key="CREDITS" value="${mod.credits}"/>
+                            <token key="DEPENDANTS" value="${mod.dependants}"/>
+                            <token key="DEPENDENCIES" value="${mod.dependencies}"/>
+                            <token key="DESCRIPTION" value="${mod.description}"/>
+                            <token key="LOGOFILE" value="${mod.logoFile}"/>
+                            <token key="MCVERSION" value="${version.minecraft}"/>
+                            <token key="MODID" value="${mod.id}"/>
+                            <token key="MODNAME" value="${mod.name}"/>
+                            <token key="PARENT" value="${mod.parent}"/>
+                            <token key="REQUIREDMODS" value="${mod.requiredMods}"/>
+                            <token key="SCREENSHOTS" value="${mod.screenshots}"/>
+                            <token key="UPDATEURL" value="${mod.updateUrl}"/>
+                            <token key="URL" value="${mod.url}"/>
+                            <token key="USEDEPENDANCYINFORMATION" value="${mod.useDependencyInformation}"/>
+                            <token key="VERSION" value="${version}"/>
                         </replacetokens>
                     </filterchain>
                 </concat>
-                <mergemapper to="mcmod.info" />
+                <mergemapper to="mcmod.info"/>
             </mappedresources>
         </jar>
     </target>

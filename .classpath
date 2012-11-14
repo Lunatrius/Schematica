@@ -3,6 +3,6 @@
 	<classpathentry kind="src" path="client"/>
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Forge142"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Forge"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

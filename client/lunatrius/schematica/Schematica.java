@@ -25,6 +25,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
 @Mod(modid = "Schematica")
 public class Schematica {
@@ -113,18 +114,10 @@ public class Schematica {
 
 	public void initReflection() {
 		try {
-			this.worldRenderers = RenderGlobal.class.getDeclaredField("l");
-			this.worldRenderers.setAccessible(true);
-		} catch (Exception e1) {
+			this.worldRenderers = ReflectionHelper.findField(RenderGlobal.class, "l", "worldRenderers");
+		} catch (Exception e) {
 			this.worldRenderers = null;
-
-			try {
-				this.worldRenderers = RenderGlobal.class.getDeclaredField("worldRenderers");
-				this.worldRenderers.setAccessible(true);
-			} catch (Exception e2) {
-				e2.printStackTrace();
-				this.worldRenderers = null;
-			}
+			e.printStackTrace();
 		}
 	}
 
