@@ -212,7 +212,6 @@ public class GuiSchematicSave extends GuiScreen {
 				this.settings.isRenderingGuide = !this.settings.isRenderingGuide;
 				this.btnEnable.displayString = this.strTranslate.translateKey(this.settings.isRenderingGuide ? "schematic.disable" : "schematic.enable");
 				this.btnSave.enabled = this.settings.isRenderingGuide;
-				this.settings.needsUpdate = true;
 			} else if (guiButton.id == this.btnSave.id) {
 				String path = (new File(Settings.schematicDirectory, this.tfFilename.getText() + ".schematic")).getAbsolutePath();
 				if (this.settings.saveSchematic(path, this.settings.pointMin, this.settings.pointMax)) {

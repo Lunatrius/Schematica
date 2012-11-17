@@ -16,14 +16,14 @@ import net.minecraft.src.TileEntitySign;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-public class RenderTileEntity {
+public class RendererTileEntity {
 	private final Settings settings = Settings.instance();
 	private final ModelChest chestModel = new ModelChest();
 	private final ModelChest largeChestModel = new ModelLargeChest();
 	private final ModelSign modelSign = new ModelSign();
 	private final SchematicWorld world;
 
-	public RenderTileEntity(SchematicWorld world) {
+	public RendererTileEntity(SchematicWorld world) {
 		this.world = world;
 	}
 

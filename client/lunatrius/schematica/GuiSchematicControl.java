@@ -134,18 +134,17 @@ public class GuiSchematicControl extends GuiScreen {
 				} else {
 					this.settings.renderingLayer = -1;
 				}
-				this.settings.needsUpdate = true;
+				this.settings.refreshSchematic();
 			} else if (guiButton.id == this.btnIncLayer.id) {
 				if (this.settings.schematic != null) {
 					this.settings.renderingLayer = MathHelper.clamp_int(this.settings.renderingLayer + 1, -1, this.settings.schematic.height() - 1);
 				} else {
 					this.settings.renderingLayer = -1;
 				}
-				this.settings.needsUpdate = true;
+				this.settings.refreshSchematic();
 			} else if (guiButton.id == this.btnHide.id) {
 				this.settings.toggleRendering();
 				this.btnHide.displayString = this.strTranslate.translateKey(this.settings.isRenderingSchematic ? "schematic.hide" : "schematic.show");
-				this.settings.needsUpdate = true;
 			} else if (guiButton.id == this.btnMove.id) {
 				this.settings.moveHere();
 			} else if (guiButton.id == this.btnFlip.id) {

@@ -93,10 +93,6 @@ public class GuiSchematicLoad extends GuiScreen {
 				this.settings.selectedSchematic = 0;
 			} else {
 				this.settings.renderingLayer = -1;
-
-				if (this.settings.schematic.width() * this.settings.schematic.height() * this.settings.schematic.length() > 125000) {
-					this.settings.renderingLayer = 0;
-				}
 			}
 		} catch (Exception e) {
 			this.settings.selectedSchematic = 0;

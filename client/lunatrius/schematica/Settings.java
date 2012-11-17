@@ -33,7 +33,6 @@ public class Settings {
 	public float alpha = 1.0f;
 	public boolean highlight = true;
 	public float blockDelta = 0.005f;
-	public Vector3i renderRange = new Vector3i(20, 15, 20);
 
 	public KeyBinding[] keyBindings = new KeyBinding[] {
 			new KeyBinding("key.schematic.load", Keyboard.KEY_DIVIDE),
@@ -48,8 +47,10 @@ public class Settings {
 	public ChunkCache mcWorldCache = null;
 	public SchematicWorld schematic = null;
 	public Vector3f playerPosition = new Vector3f();
+	public RendererSchematicChunk[][][] rendererSchematicChunk = null;
+	public final List<RendererSchematicChunk> sortedRendererSchematicChunk = new ArrayList<RendererSchematicChunk>();
 	public RenderBlocks renderBlocks = null;
-	public RenderTileEntity renderTileEntity = null;
+	public RendererTileEntity rendererTileEntity = null;
 	public int selectedSchematic = 0;
 	public Vector3i pointA = new Vector3i();
 	public Vector3i pointB = new Vector3i();
@@ -57,7 +58,6 @@ public class Settings {
 	public Vector3i pointMax = new Vector3i();
 	public int rotationRender = 0;
 	public Vector3i offset = new Vector3i();
-	public boolean needsUpdate = true;
 	public boolean isRenderingSchematic = false;
 	public int renderingLayer = -1;
 	public boolean isRenderingGuide = false;
@@ -110,6 +110,27 @@ public class Settings {
 		return schematicFiles;
 	}
 
+	public void createRendererSchematicChunk() {
+		int width = (this.schematic.width() - 1) / RendererSchematicChunk.CHUNK_WIDTH + 1;
+		int height = (this.schematic.height() - 1) / RendererSchematicChunk.CHUNK_HEIGHT + 1;
+		int length = (this.schematic.width() - 1) / RendererSchematicChunk.CHUNK_LENGTH + 1;
+		this.rendererSchematicChunk = new RendererSchematicChunk[width][height][length];
+
+		while (this.sortedRendererSchematicChunk.size() > 0) {
+			this.sortedRendererSchematicChunk.remove(0).delete();
+		}
+
+		int x, y, z;
+		for (x = 0; x < width; x++) {
+			for (y = 0; y < height; y++) {
+				for (z = 0; z < length; z++) {
+					this.sortedRendererSchematicChunk.add(this.rendererSchematicChunk[x][y][z] = new RendererSchematicChunk(this.schematic, x, y, z));
+				}
+			}
+		}
+
+	}
+
 	public boolean loadSchematic(String filename) {
 		try {
 			InputStream stream = new FileInputStream(filename);
@@ -120,7 +141,9 @@ public class Settings {
 				this.schematic.readFromNBT(tagCompound);
 
 				this.renderBlocks = new RenderBlocks(this.schematic);
-				this.renderTileEntity = new RenderTileEntity(this.schematic);
+				this.rendererTileEntity = new RendererTileEntity(this.schematic);
+
+				createRendererSchematicChunk();
 
 				this.isRenderingSchematic = true;
 			}
@@ -128,7 +151,8 @@ public class Settings {
 			e.printStackTrace();
 			this.schematic = null;
 			this.renderBlocks = null;
-			this.renderTileEntity = null;
+			this.rendererTileEntity = null;
+			this.rendererSchematicChunk = null;
 			this.isRenderingSchematic = false;
 			return false;
 		}
@@ -197,6 +221,12 @@ public class Settings {
 		return this.playerPosition.z - this.offset.z;
 	}
 
+	public void refreshSchematic() {
+		for (RendererSchematicChunk renderer : this.sortedRendererSchematicChunk) {
+			renderer.setDirty();
+		}
+	}
+
 	public void updatePoints() {
 		this.pointMin.x = Math.min(this.pointA.x, this.pointB.x);
 		this.pointMin.y = Math.min(this.pointA.y, this.pointB.y);
@@ -205,8 +235,6 @@ public class Settings {
 		this.pointMax.x = Math.max(this.pointA.x, this.pointB.x);
 		this.pointMax.y = Math.max(this.pointA.y, this.pointB.y);
 		this.pointMax.z = Math.max(this.pointA.z, this.pointB.z);
-
-		this.needsUpdate = true;
 	}
 
 	public void moveHere(Vector3i point) {
@@ -269,20 +297,20 @@ public class Settings {
 
 	public void reloadChunkCache() {
 		this.mcWorldCache = new ChunkCache(this.minecraft.theWorld, this.offset.x - 1, this.offset.y - 1, this.offset.z - 1, this.offset.x + this.schematic.width() + 1, this.offset.y + this.schematic.height() + 1, this.offset.z + this.schematic.length() + 1);
-		this.needsUpdate = true;
+		refreshSchematic();
 	}
 
 	public void flipWorld() {
 		if (this.schematic != null) {
 			this.schematic.flip();
-			this.needsUpdate = true;
+			createRendererSchematicChunk();
 		}
 	}
 
 	public void rotateWorld() {
 		if (this.schematic != null) {
 			this.schematic.rotate();
-			this.needsUpdate = true;
+			createRendererSchematicChunk();
 		}
 	}
 }

@@ -5,11 +5,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 
 import lunatrius.schematica.util.Config;
+import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.KeyBinding;
+import net.minecraft.src.MathHelper;
+import net.minecraft.src.Profiler;
 import net.minecraft.src.RenderGlobal;
 import net.minecraft.src.WorldRenderer;
 import net.minecraftforge.common.Configuration;
@@ -30,11 +34,15 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 @Mod(modid = "Schematica")
 public class Schematica {
 	private final Settings settings = Settings.instance();
+	private final Profiler profiler = this.settings.minecraft.mcProfiler;
 
 	@Instance("Schematica")
 	public static Schematica instance;
 
-	private Field worldRenderers = null;
+	private Field worldRenderersToUpdate = null;
+	private int delay = -1;
+	private int ticks = -1;
+	private int worldRendererCount = -1;
 
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
@@ -82,7 +90,7 @@ public class Schematica {
 	@Init
 	public void init(FMLInitializationEvent event) {
 		try {
-			MinecraftForge.EVENT_BUS.register(new Render());
+			MinecraftForge.EVENT_BUS.register(new RendererSchematicGlobal());
 
 			KeyBindingRegistry.registerKeyBinding(new KeyBindingHandler(this.settings.keyBindings, new boolean[this.settings.keyBindings.length]));
 			TickRegistry.registerTickHandler(new Ticker(EnumSet.of(TickType.CLIENT)), Side.CLIENT);
@@ -105,35 +113,48 @@ public class Schematica {
 			return true;
 		}
 
+		this.profiler.startSection("schematica");
 		if (tick == TickType.CLIENT && this.settings.minecraft.thePlayer != null && this.settings.isRenderingSchematic && this.settings.schematic != null) {
-			checkDirty();
+			this.profiler.startSection("checkDirty");
+			if (--this.delay < 0) {
+				checkDirty();
+				this.delay = this.worldRendererCount / 1000;
+			}
+
+			this.profiler.endStartSection("canUpdate");
+			if (--this.ticks < 0) {
+				RendererSchematicChunk.canUpdate = true;
+				this.ticks = MathHelper.clamp_int(this.worldRendererCount / 10, 1, 100);
+			}
+
+			this.profiler.endSection();
 		}
+		this.profiler.endSection();
 
 		return true;
 	}
 
 	public void initReflection() {
 		try {
-			this.worldRenderers = ReflectionHelper.findField(RenderGlobal.class, "l", "worldRenderers");
+			this.worldRenderersToUpdate = ReflectionHelper.findField(RenderGlobal.class, "j", "worldRenderersToUpdate");
 		} catch (Exception e) {
-			this.worldRenderers = null;
+			this.worldRenderersToUpdate = null;
 			e.printStackTrace();
 		}
 	}
 
 	private void checkDirty() {
-		if (this.worldRenderers != null) {
+		if (this.worldRenderersToUpdate != null) {
 			try {
-				WorldRenderer[] renderers = (WorldRenderer[]) this.worldRenderers.get(this.settings.minecraft.renderGlobal);
+				List<WorldRenderer> renderers = (List<WorldRenderer>) this.worldRenderersToUpdate.get(this.settings.minecraft.renderGlobal);
 				if (renderers != null) {
-					for (WorldRenderer renderer : renderers) {
-						if (renderer.needsUpdate) {
-							if (renderer.posX + 16 >= this.settings.offset.x && renderer.posX <= this.settings.offset.x + this.settings.schematic.width()) {
-								if (renderer.posZ + 16 >= this.settings.offset.z && renderer.posZ <= this.settings.offset.z + this.settings.schematic.length()) {
-									if (renderer.posY + 16 >= this.settings.offset.y && renderer.posY <= this.settings.offset.y + this.settings.schematic.height()) {
-										this.settings.needsUpdate = true;
-									}
-								}
+					this.worldRendererCount = renderers.size();
+
+					for (int i = 0; i < 1000 && i < renderers.size(); i++) {
+						AxisAlignedBB worldRendererBoundingBox = renderers.get(this.worldRendererCount - 1 - i).rendererBoundingBox.getOffsetBoundingBox(-this.settings.offset.x, -this.settings.offset.y, -this.settings.offset.z);
+						for (RendererSchematicChunk renderer : this.settings.sortedRendererSchematicChunk) {
+							if (renderer.getBoundingBox().intersectsWith(worldRendererBoundingBox)) {
+								renderer.setDirty();
 							}
 						}
 					}
@@ -141,6 +162,7 @@ public class Schematica {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+
 		}
 	}
 }
