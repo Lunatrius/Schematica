@@ -5,14 +5,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 
 import lunatrius.schematica.util.Config;
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.KeyBinding;
-import net.minecraft.src.MathHelper;
 import net.minecraft.src.Profiler;
 import net.minecraft.src.RenderGlobal;
 import net.minecraft.src.WorldRenderer;
@@ -39,10 +37,7 @@ public class Schematica {
 	@Instance("Schematica")
 	public static Schematica instance;
 
-	private Field worldRenderersToUpdate = null;
-	private int delay = -1;
-	private int ticks = -1;
-	private int worldRendererCount = -1;
+	private Field sortedWorldRenderers = null;
 
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
@@ -116,16 +111,10 @@ public class Schematica {
 		this.profiler.startSection("schematica");
 		if (tick == TickType.CLIENT && this.settings.minecraft.thePlayer != null && this.settings.isRenderingSchematic && this.settings.schematic != null) {
 			this.profiler.startSection("checkDirty");
-			if (--this.delay < 0) {
-				checkDirty();
-				this.delay = this.worldRendererCount / 1000;
-			}
+			checkDirty();
 
 			this.profiler.endStartSection("canUpdate");
-			if (--this.ticks < 0) {
-				RendererSchematicChunk.canUpdate = true;
-				this.ticks = MathHelper.clamp_int(this.worldRendererCount / 10, 1, 100);
-			}
+			RendererSchematicChunk.canUpdate = true;
 
 			this.profiler.endSection();
 		}
@@ -136,25 +125,26 @@ public class Schematica {
 
 	public void initReflection() {
 		try {
-			this.worldRenderersToUpdate = ReflectionHelper.findField(RenderGlobal.class, "j", "worldRenderersToUpdate");
+			this.sortedWorldRenderers = ReflectionHelper.findField(RenderGlobal.class, "k", "sortedWorldRenderers");
 		} catch (Exception e) {
-			this.worldRenderersToUpdate = null;
+			this.sortedWorldRenderers = null;
 			e.printStackTrace();
 		}
 	}
 
 	private void checkDirty() {
-		if (this.worldRenderersToUpdate != null) {
+		if (this.sortedWorldRenderers != null) {
 			try {
-				List<WorldRenderer> renderers = (List<WorldRenderer>) this.worldRenderersToUpdate.get(this.settings.minecraft.renderGlobal);
+				WorldRenderer[] renderers = (WorldRenderer[]) this.sortedWorldRenderers.get(this.settings.minecraft.renderGlobal);
 				if (renderers != null) {
-					this.worldRendererCount = renderers.size();
-
-					for (int i = 0; i < 1000 && i < renderers.size(); i++) {
-						AxisAlignedBB worldRendererBoundingBox = renderers.get(this.worldRendererCount - 1 - i).rendererBoundingBox.getOffsetBoundingBox(-this.settings.offset.x, -this.settings.offset.y, -this.settings.offset.z);
-						for (RendererSchematicChunk renderer : this.settings.sortedRendererSchematicChunk) {
-							if (renderer.getBoundingBox().intersectsWith(worldRendererBoundingBox)) {
-								renderer.setDirty();
+					int count = 0;
+					for (WorldRenderer worldRenderer : renderers) {
+						if (worldRenderer.needsUpdate && count++ < 125) {
+							AxisAlignedBB worldRendererBoundingBox = worldRenderer.rendererBoundingBox.getOffsetBoundingBox(-this.settings.offset.x, -this.settings.offset.y, -this.settings.offset.z);
+							for (RendererSchematicChunk renderer : this.settings.sortedRendererSchematicChunk) {
+								if (!renderer.getDirty() && renderer.getBoundingBox().intersectsWith(worldRendererBoundingBox)) {
+									renderer.setDirty();
+								}
 							}
 						}
 					}
