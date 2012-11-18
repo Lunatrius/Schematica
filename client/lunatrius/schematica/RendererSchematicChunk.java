@@ -189,11 +189,11 @@ public class RendererSchematicChunk {
 				int minX = 0, maxX = 0, minY = 0, maxY = 0, minZ = 0, maxZ = 0;
 
 				minX = (int) this.boundingBox.minX;
-				maxX = (int) this.boundingBox.maxX;
+				maxX = Math.min((int) this.boundingBox.maxX, this.schematic.width());
 				minY = (int) this.boundingBox.minY;
-				maxY = (int) this.boundingBox.maxY;
+				maxY = Math.min((int) this.boundingBox.maxY, this.schematic.height());
 				minZ = (int) this.boundingBox.minZ;
-				maxZ = (int) this.boundingBox.maxZ;
+				maxZ = Math.min((int) this.boundingBox.maxZ, this.schematic.length());
 
 				if (this.settings.renderingLayer >= 0) {
 					if (this.settings.renderingLayer >= minY && this.settings.renderingLayer < maxY) {
@@ -320,14 +320,18 @@ public class RendererSchematicChunk {
 
 						if (mcBlockId != 0) {
 							if (this.settings.highlight && renderPass == 2) {
-								if (blockId != mcBlockId) {
+								if (blockId == 0 && this.settings.highlightAir) {
+									tmp = new Vector3i(x, y, z);
+									drawCuboidSurface(tmp, tmp.clone().add(1), 0x3F, 0.75f, 0.0f, 0.75f, 0.25f);
+									drawCuboidOutline(tmp, tmp.clone().add(1), 0x3F, 0.75f, 0.0f, 0.75f, 0.25f);
+								} else if (blockId != mcBlockId) {
 									tmp = new Vector3i(x, y, z);
 									drawCuboidSurface(tmp, tmp.clone().add(1), sides, 1.0f, 0.0f, 0.0f, 0.25f);
 									drawCuboidOutline(tmp, tmp.clone().add(1), sides, 1.0f, 0.0f, 0.0f, 0.25f);
 								} else if (this.schematic.getBlockMetadata(x, y, z) != mcWorld.getBlockMetadata(x + this.settings.offset.x, y + this.settings.offset.y, z + this.settings.offset.z)) {
 									tmp = new Vector3i(x, y, z);
-									drawCuboidSurface(tmp, tmp.clone().add(1), sides, 0.75f, 0.35f, 0.0f, 0.45f);
-									drawCuboidOutline(tmp, tmp.clone().add(1), sides, 0.75f, 0.35f, 0.0f, 0.45f);
+									drawCuboidSurface(tmp, tmp.clone().add(1), sides, 0.75f, 0.35f, 0.0f, 0.25f);
+									drawCuboidOutline(tmp, tmp.clone().add(1), sides, 0.75f, 0.35f, 0.0f, 0.25f);
 								}
 							}
 						} else if (mcBlockId == 0 && blockId > 0 && blockId < 0x1000) {

@@ -32,6 +32,7 @@ public class Settings {
 	public boolean enableAlpha = false;
 	public float alpha = 1.0f;
 	public boolean highlight = true;
+	public boolean highlightAir = true;
 	public float blockDelta = 0.005f;
 
 	public KeyBinding[] keyBindings = new KeyBinding[] {
