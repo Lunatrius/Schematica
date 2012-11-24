@@ -21,14 +21,14 @@ public class RendererSchematicGlobal {
 	private final Frustrum frustrum = new Frustrum();
 	private final RendererSchematicChunkSorter rendererSchematicChunkSorter = new RendererSchematicChunkSorter();
 
-	private final int quadBufferSize = 240;
-	private final FloatBuffer quadColorBudder = BufferUtils.createFloatBuffer(this.quadBufferSize * 4);
-	private final FloatBuffer quadVertexBuffer = BufferUtils.createFloatBuffer(this.quadBufferSize * 3);
+	private final static int quadBufferSize = 240;
+	private final FloatBuffer quadColorBudder = BufferUtils.createFloatBuffer(quadBufferSize * 4);
+	private final FloatBuffer quadVertexBuffer = BufferUtils.createFloatBuffer(quadBufferSize * 3);
 	private int quadObjectCount = -1;
 
-	private final int lineBufferSize = 240;
-	private final FloatBuffer lineColorBuffer = BufferUtils.createFloatBuffer(this.lineBufferSize * 4);
-	private final FloatBuffer lineVertecBuffer = BufferUtils.createFloatBuffer(this.lineBufferSize * 3);
+	private final static int lineBufferSize = 240;
+	private final FloatBuffer lineColorBuffer = BufferUtils.createFloatBuffer(lineBufferSize * 4);
+	private final FloatBuffer lineVertecBuffer = BufferUtils.createFloatBuffer(lineBufferSize * 3);
 	private int lineObjectCount = -1;
 
 	@ForgeSubscribe
@@ -67,7 +67,7 @@ public class RendererSchematicGlobal {
 			updateFrustrum();
 
 			this.profiler.endStartSection("sortAndUpdate");
-			if (RendererSchematicChunk.canUpdate) {
+			if (RendererSchematicChunk.getCanUpdate()) {
 				sortAndUpdate();
 			}
 

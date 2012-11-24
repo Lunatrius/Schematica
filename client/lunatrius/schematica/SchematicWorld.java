@@ -46,8 +46,8 @@ public class SchematicWorld extends World {
 
 	public SchematicWorld(int[][][] blocks, int[][][] metadata, List<TileEntity> tileEntities, short width, short height, short length) {
 		this();
-		this.blocks = blocks;
-		this.metadata = metadata;
+		this.blocks = blocks.clone();
+		this.metadata = metadata.clone();
 		this.tileEntities = tileEntities;
 		this.width = width;
 		this.length = length;

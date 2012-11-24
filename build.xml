@@ -104,7 +104,7 @@
     <target name="build-jar">
         <!-- build the jar -->
         <jar destfile="${release.home}/${release.jar}">
-            <fileset dir="${mcp.bin}" excludes="cpw/"/>
+            <fileset dir="${mcp.bin}"/>
             <fileset dir="${dev.src.resources}" excludes="mcmod.template"/>
             <mappedresources>
                 <concat>

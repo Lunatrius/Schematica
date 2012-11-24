@@ -57,7 +57,7 @@ public class Schematica {
 			ClassLoader classLoader = getClass().getClassLoader();
 			InputStream stream = classLoader.getResourceAsStream(langDir + "lang.txt");
 
-			BufferedReader input = new BufferedReader(new InputStreamReader(stream));
+			BufferedReader input = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
 			try {
 				String lang = "";
 				while ((lang = input.readLine()) != null) {
@@ -79,8 +79,17 @@ public class Schematica {
 			throw new RuntimeException(e);
 		}
 
-		Settings.schematicDirectory.mkdirs();
-		Settings.textureDirectory.mkdirs();
+		if (!Settings.schematicDirectory.exists()) {
+			if (!Settings.schematicDirectory.mkdirs()) {
+				System.out.println("Could not create schematic directory!");
+			}
+		}
+
+		if (!Settings.textureDirectory.exists()) {
+			if (!Settings.textureDirectory.mkdirs()) {
+				System.out.println("Could not create texture directory!");
+			}
+		}
 	}
 
 	@Init
@@ -115,7 +124,7 @@ public class Schematica {
 			checkDirty();
 
 			this.profiler.endStartSection("canUpdate");
-			RendererSchematicChunk.canUpdate = true;
+			RendererSchematicChunk.setCanUpdate(true);
 
 			this.profiler.endSection();
 		}

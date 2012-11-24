@@ -46,7 +46,7 @@ public class RendererSchematicChunk {
 	public static final int CHUNK_HEIGHT = 16;
 	public static final int CHUNK_LENGTH = 16;
 
-	public static boolean canUpdate = false;
+	private static boolean canUpdate = false;
 
 	public boolean isInFrustrum = false;
 
@@ -59,21 +59,21 @@ public class RendererSchematicChunk {
 
 	private final AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
 
-	private final int initialSize = 1152;
+	private final static int initialSize = 1152;
 
 	private final List<String> textures = new ArrayList<String>();
 	private final BufferedImage missingTextureImage = new BufferedImage(64, 64, 2);
 	private Field fieldTextureMap = null;
 	private Field fieldSingleIntBuffer = null;
 
-	private float[] quadColorBuffer = new float[this.initialSize * 4];
-	private float[] quadVertexBuffer = new float[this.initialSize * 3];
+	private float[] quadColorBuffer = new float[initialSize * 4];
+	private float[] quadVertexBuffer = new float[initialSize * 3];
 	private int quadColorIndex = -1;
 	private int quadVertexIndex = -1;
 	private int quadCount = -1;
 
-	private float[] lineColorBuffer = new float[this.initialSize * 4];
-	private float[] lineVertexBuffer = new float[this.initialSize * 3];
+	private float[] lineColorBuffer = new float[initialSize * 4];
+	private float[] lineVertexBuffer = new float[initialSize * 3];
 	private int lineColorIndex = -1;
 	private int lineVertexIndex = -1;
 	private int lineCount = -1;
@@ -151,6 +151,14 @@ public class RendererSchematicChunk {
 		return this.boundingBox;
 	}
 
+	public static void setCanUpdate(boolean parCanUpdate) {
+		canUpdate = parCanUpdate;
+	}
+
+	public static boolean getCanUpdate() {
+		return canUpdate;
+	}
+
 	public void setDirty() {
 		if (!this.empty) {
 			this.needsUpdate = true;
@@ -175,7 +183,7 @@ public class RendererSchematicChunk {
 
 		if (this.needsUpdate) {
 			this.needsUpdate = false;
-			canUpdate = false;
+			setCanUpdate(false);
 
 			for (int pass = 0; pass < 3; pass++) {
 				this.quadColorIndex = 0;
@@ -267,7 +275,7 @@ public class RendererSchematicChunk {
 	}
 
 	public void renderBlocks(int renderPass, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
-		IBlockAccess mcWorld = this.settings.minecraft.theWorld;
+		IBlockAccess mcWorld = this.settings.mcWorldCache;
 		RenderBlocks renderBlocks = this.settings.renderBlocks;
 
 		int x, y, z;
@@ -342,7 +350,7 @@ public class RendererSchematicChunk {
 							}
 
 							if (block != null) {
-								if (lastTexture != block.getTextureFile()) {
+								if (!lastTexture.equals(block.getTextureFile())) {
 									ForgeHooksClient.bindTexture(getTextureName(block.getTextureFile()), 0);
 									lastTexture = block.getTextureFile();
 								}
@@ -365,7 +373,7 @@ public class RendererSchematicChunk {
 	}
 
 	public void renderTileEntities(int renderPass) {
-		IBlockAccess mcWorld = this.settings.minecraft.theWorld;
+		IBlockAccess mcWorld = this.settings.mcWorldCache;
 		RendererTileEntity rendererTileEntity = this.settings.rendererTileEntity;
 
 		int x, y, z;
@@ -814,7 +822,12 @@ public class RendererSchematicChunk {
 					}
 				}
 
-				newTextureFile.getParentFile().mkdirs();
+				if (!newTextureFile.getParentFile().exists()) {
+					if (!newTextureFile.getParentFile().mkdirs()) {
+						return texture;
+					}
+				}
+
 				ImageIO.write(bufferedImage, "png", newTextureFile);
 			}
 
