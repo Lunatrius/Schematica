@@ -59,6 +59,11 @@ public class GuiSchematicSave extends GuiScreen {
 
 	private String filename = "";
 
+	private final String strSaveSelection = this.strTranslate.translateKey("schematic.saveselection");
+	private final String strX = this.strTranslate.translateKey("schematic.x");
+	private final String strY = this.strTranslate.translateKey("schematic.y");
+	private final String strZ = this.strTranslate.translateKey("schematic.z");
+
 	public GuiSchematicSave(GuiScreen guiScreen) {
 		this.prevGuiScreen = guiScreen;
 	}
@@ -245,24 +250,24 @@ public class GuiSchematicSave extends GuiScreen {
 	public void drawScreen(int par1, int par2, float par3) {
 		// drawDefaultBackground();
 
-		drawString(this.fontRenderer, this.strTranslate.translateKey("schematic.saveselection"), this.width - 205, this.height - 45, 0xFFFFFF);
+		drawString(this.fontRenderer, this.strSaveSelection, this.width - 205, this.height - 45, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strTranslate.translateKey("schematic.x"), this.centerX - 145, this.centerY - 24, 0xFFFFFF);
+		drawString(this.fontRenderer, this.strX, this.centerX - 145, this.centerY - 24, 0xFFFFFF);
 		drawString(this.fontRenderer, Integer.toString(this.settings.pointA.x), this.centerX - 25, this.centerY - 24, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strTranslate.translateKey("schematic.y"), this.centerX - 145, this.centerY + 1, 0xFFFFFF);
+		drawString(this.fontRenderer, this.strY, this.centerX - 145, this.centerY + 1, 0xFFFFFF);
 		drawString(this.fontRenderer, Integer.toString(this.settings.pointA.y), this.centerX - 25, this.centerY + 1, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strTranslate.translateKey("schematic.z"), this.centerX - 145, this.centerY + 26, 0xFFFFFF);
+		drawString(this.fontRenderer, this.strZ, this.centerX - 145, this.centerY + 26, 0xFFFFFF);
 		drawString(this.fontRenderer, Integer.toString(this.settings.pointA.z), this.centerX - 25, this.centerY + 26, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strTranslate.translateKey("schematic.x"), this.centerX + 15, this.centerY - 24, 0xFFFFFF);
+		drawString(this.fontRenderer, this.strX, this.centerX + 15, this.centerY - 24, 0xFFFFFF);
 		drawString(this.fontRenderer, Integer.toString(this.settings.pointB.x), this.centerX + 135, this.centerY - 24, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strTranslate.translateKey("schematic.y"), this.centerX + 15, this.centerY + 1, 0xFFFFFF);
+		drawString(this.fontRenderer, this.strY, this.centerX + 15, this.centerY + 1, 0xFFFFFF);
 		drawString(this.fontRenderer, Integer.toString(this.settings.pointB.y), this.centerX + 135, this.centerY + 1, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strTranslate.translateKey("schematic.z"), this.centerX + 15, this.centerY + 26, 0xFFFFFF);
+		drawString(this.fontRenderer, this.strZ, this.centerX + 15, this.centerY + 26, 0xFFFFFF);
 		drawString(this.fontRenderer, Integer.toString(this.settings.pointB.z), this.centerX + 135, this.centerY + 26, 0xFFFFFF);
 
 		this.tfFilename.drawTextBox();

@@ -21,6 +21,9 @@ public class GuiSchematicLoad extends GuiScreen {
 	private GuiSmallButton btnOpenDir = null;
 	private GuiSmallButton btnDone = null;
 
+	private final String strTitle = this.strTranslate.translateKey("schematic.title");
+	private final String strFolderInfo = this.strTranslate.translateKey("schematic.folderInfo");
+
 	public GuiSchematicLoad(GuiScreen guiScreen) {
 		this.prevGuiScreen = guiScreen;
 	}
@@ -75,8 +78,8 @@ public class GuiSchematicLoad extends GuiScreen {
 	public void drawScreen(int x, int y, float partialTicks) {
 		this.schematicGuiChooserSlot.drawScreen(x, y, partialTicks);
 
-		this.drawCenteredString(this.fontRenderer, this.strTranslate.translateKey("schematic.title"), this.width / 2, 16, 0x00FFFFFF);
-		this.drawCenteredString(this.fontRenderer, this.strTranslate.translateKey("schematic.folderInfo"), this.width / 2 - 77, this.height - 26, 0x00808080);
+		this.drawCenteredString(this.fontRenderer, this.strTitle, this.width / 2, 16, 0x00FFFFFF);
+		this.drawCenteredString(this.fontRenderer, this.strFolderInfo, this.width / 2 - 77, this.height - 26, 0x00808080);
 		super.drawScreen(x, y, partialTicks);
 	}
 

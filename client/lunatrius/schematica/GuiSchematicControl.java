@@ -39,6 +39,14 @@ public class GuiSchematicControl extends GuiScreen {
 	private int incrementY = 0;
 	private int incrementZ = 0;
 
+	private final String strMoveSchematic = this.strTranslate.translateKey("schematic.moveschematic");
+	private final String strLayers = this.strTranslate.translateKey("schematic.layers");
+	private final String strOperations = this.strTranslate.translateKey("schematic.operations");
+	private final String strAll = this.strTranslate.translateKey("schematic.all");
+	private final String strX = this.strTranslate.translateKey("schematic.x");
+	private final String strY = this.strTranslate.translateKey("schematic.y");
+	private final String strZ = this.strTranslate.translateKey("schematic.z");
+
 	public GuiSchematicControl(GuiScreen guiScreen) {
 		this.prevGuiScreen = guiScreen;
 	}
@@ -159,19 +167,19 @@ public class GuiSchematicControl extends GuiScreen {
 	public void drawScreen(int par1, int par2, float par3) {
 		// drawDefaultBackground();
 
-		drawCenteredString(this.fontRenderer, this.strTranslate.translateKey("schematic.moveschematic"), this.centerX, this.centerY - 45, 0xFFFFFF);
-		drawCenteredString(this.fontRenderer, this.strTranslate.translateKey("schematic.layers"), this.width - 50, this.height - 165, 0xFFFFFF);
-		drawCenteredString(this.fontRenderer, this.strTranslate.translateKey("schematic.operations"), this.width - 50, this.height - 120, 0xFFFFFF);
+		drawCenteredString(this.fontRenderer, this.strMoveSchematic, this.centerX, this.centerY - 45, 0xFFFFFF);
+		drawCenteredString(this.fontRenderer, this.strLayers, this.width - 50, this.height - 165, 0xFFFFFF);
+		drawCenteredString(this.fontRenderer, this.strOperations, this.width - 50, this.height - 120, 0xFFFFFF);
 
-		drawCenteredString(this.fontRenderer, this.settings.renderingLayer < 0 ? this.strTranslate.translateKey("schematic.all") : Integer.toString(this.settings.renderingLayer + 1), this.width - 50, this.height - 145, 0xFFFFFF);
+		drawCenteredString(this.fontRenderer, this.settings.renderingLayer < 0 ? this.strAll : Integer.toString(this.settings.renderingLayer + 1), this.width - 50, this.height - 145, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strTranslate.translateKey("schematic.x"), this.centerX - 65, this.centerY - 24, 0xFFFFFF);
+		drawString(this.fontRenderer, this.strX, this.centerX - 65, this.centerY - 24, 0xFFFFFF);
 		drawString(this.fontRenderer, Integer.toString(this.settings.offset.x), this.centerX + 55, this.centerY - 24, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strTranslate.translateKey("schematic.y"), this.centerX - 65, this.centerY + 1, 0xFFFFFF);
+		drawString(this.fontRenderer, this.strY, this.centerX - 65, this.centerY + 1, 0xFFFFFF);
 		drawString(this.fontRenderer, Integer.toString(this.settings.offset.y), this.centerX + 55, this.centerY + 1, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strTranslate.translateKey("schematic.z"), this.centerX - 65, this.centerY + 26, 0xFFFFFF);
+		drawString(this.fontRenderer, this.strZ, this.centerX - 65, this.centerY + 26, 0xFFFFFF);
 		drawString(this.fontRenderer, Integer.toString(this.settings.offset.z), this.centerX + 55, this.centerY + 26, 0xFFFFFF);
 
 		super.drawScreen(par1, par2, par3);
