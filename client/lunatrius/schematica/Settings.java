@@ -297,8 +297,10 @@ public class Settings {
 	}
 
 	public void reloadChunkCache() {
-		this.mcWorldCache = new ChunkCache(this.minecraft.theWorld, this.offset.x - 1, this.offset.y - 1, this.offset.z - 1, this.offset.x + this.schematic.width() + 1, this.offset.y + this.schematic.height() + 1, this.offset.z + this.schematic.length() + 1);
-		refreshSchematic();
+		if (this.schematic != null) {
+			this.mcWorldCache = new ChunkCache(this.minecraft.theWorld, this.offset.x - 1, this.offset.y - 1, this.offset.z - 1, this.offset.x + this.schematic.width() + 1, this.offset.y + this.schematic.height() + 1, this.offset.z + this.schematic.length() + 1);
+			refreshSchematic();
+		}
 	}
 
 	public void flipWorld() {
