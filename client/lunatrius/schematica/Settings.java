@@ -14,10 +14,11 @@ import lunatrius.schematica.util.Vector3i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.ChunkCache;
 import net.minecraft.src.CompressedStreamTools;
+import net.minecraft.src.ItemStack;
 import net.minecraft.src.KeyBinding;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.RenderBlocks;
-import net.minecraft.src.StringTranslate;
+import net.minecraft.src.RenderItem;
 import net.minecraft.src.TileEntity;
 
 import org.lwjgl.input.Keyboard;
@@ -25,8 +26,7 @@ import org.lwjgl.input.Keyboard;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class Settings {
-	private final static Settings instance = new Settings();
-	private final StringTranslate strTranslate = StringTranslate.getInstance();
+	private static final Settings instance = new Settings();
 
 	// loaded from config
 	public boolean enableAlpha = false;
@@ -44,6 +44,8 @@ public class Settings {
 	public static final File schematicDirectory = new File(Minecraft.getMinecraftDir(), "/schematics/");
 	public static final File textureDirectory = new File(Minecraft.getMinecraftDir(), "/resources/mod/schematica/");
 	public static final Logger logger = FMLCommonHandler.instance().getFMLLogger();
+	public static final RenderItem renderItem = new RenderItem();
+	public static final ItemStack defaultIcon = new ItemStack(2, 1, 0);
 	public Minecraft minecraft = Minecraft.getMinecraft();
 	public ChunkCache mcWorldCache = null;
 	public SchematicWorld schematic = null;
@@ -52,7 +54,6 @@ public class Settings {
 	public final List<RendererSchematicChunk> sortedRendererSchematicChunk = new ArrayList<RendererSchematicChunk>();
 	public RenderBlocks renderBlocks = null;
 	public RendererTileEntity rendererTileEntity = null;
-	public int selectedSchematic = 0;
 	public Vector3i pointA = new Vector3i();
 	public Vector3i pointB = new Vector3i();
 	public Vector3i pointMin = new Vector3i();
@@ -100,21 +101,11 @@ public class Settings {
 		}
 	}
 
-	public List<String> getSchematicFiles() {
-		ArrayList<String> schematicFiles = new ArrayList<String>();
-		schematicFiles.add(this.strTranslate.translateKey("schematic.noschematic"));
-
-		File[] files = schematicDirectory.listFiles(new FileFilterSchematic());
-		for (int i = 0; i < files.length; i++) {
-			schematicFiles.add(files[i].getName());
-		}
-		return schematicFiles;
-	}
-
 	public void createRendererSchematicChunk() {
 		int width = (this.schematic.width() - 1) / RendererSchematicChunk.CHUNK_WIDTH + 1;
 		int height = (this.schematic.height() - 1) / RendererSchematicChunk.CHUNK_HEIGHT + 1;
-		int length = (this.schematic.width() - 1) / RendererSchematicChunk.CHUNK_LENGTH + 1;
+		int length = (this.schematic.length() - 1) / RendererSchematicChunk.CHUNK_LENGTH + 1;
+
 		this.rendererSchematicChunk = new RendererSchematicChunk[width][height][length];
 
 		while (this.sortedRendererSchematicChunk.size() > 0) {
@@ -161,7 +152,7 @@ public class Settings {
 		return true;
 	}
 
-	public boolean saveSchematic(String filename, Vector3i from, Vector3i to) {
+	public boolean saveSchematic(File directory, String filename, Vector3i from, Vector3i to) {
 		try {
 			NBTTagCompound tagCompound = new NBTTagCompound();
 
@@ -198,10 +189,22 @@ public class Settings {
 				}
 			}
 
-			SchematicWorld schematicOut = new SchematicWorld(blocks, metadata, tileEntities, width, height, length);
+			String icon = Integer.toString(defaultIcon.copy().itemID);
+
+			try {
+				String[] parts = filename.split(";");
+				if (parts.length == 2) {
+					icon = parts[0];
+					filename = parts[1];
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			SchematicWorld schematicOut = new SchematicWorld(icon, blocks, metadata, tileEntities, width, height, length);
 			schematicOut.writeToNBT(tagCompound);
 
-			OutputStream stream = new FileOutputStream(filename);
+			OutputStream stream = new FileOutputStream(new File(directory, filename));
 			CompressedStreamTools.writeCompressed(tagCompound, stream);
 		} catch (Exception e) {
 			e.printStackTrace();

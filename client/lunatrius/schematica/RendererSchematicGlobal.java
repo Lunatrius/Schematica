@@ -21,12 +21,12 @@ public class RendererSchematicGlobal {
 	private final Frustrum frustrum = new Frustrum();
 	private final RendererSchematicChunkSorter rendererSchematicChunkSorter = new RendererSchematicChunkSorter();
 
-	private final static int quadBufferSize = 240;
+	private static final int quadBufferSize = 240;
 	private final FloatBuffer quadColorBudder = BufferUtils.createFloatBuffer(quadBufferSize * 4);
 	private final FloatBuffer quadVertexBuffer = BufferUtils.createFloatBuffer(quadBufferSize * 3);
 	private int quadObjectCount = -1;
 
-	private final static int lineBufferSize = 240;
+	private static final int lineBufferSize = 240;
 	private final FloatBuffer lineColorBuffer = BufferUtils.createFloatBuffer(lineBufferSize * 4);
 	private final FloatBuffer lineVertecBuffer = BufferUtils.createFloatBuffer(lineBufferSize * 3);
 	private int lineObjectCount = -1;

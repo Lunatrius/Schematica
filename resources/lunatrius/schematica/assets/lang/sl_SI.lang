@@ -23,6 +23,9 @@ schematic.disable=Onemogo\u010di
 schematic.x=X:
 schematic.y=Y:
 schematic.z=Z:
+schematic.materials=Materiali
+schematic.materialname=Material
+schematic.materialamount=Koli\u010dina
 
 key.schematic.load=Nalo\u017ei shemo
 key.schematic.save=Shrani shemo

@@ -23,6 +23,9 @@ schematic.disable=Desactivar
 schematic.x=X:
 schematic.y=Y:
 schematic.z=Z:
+schematic.materials=Materials [?]
+schematic.materialname=Material [?]
+schematic.materialamount=Amount [?]
 
 key.schematic.load=Cargar esquema
 key.schematic.save=Guardar esquema

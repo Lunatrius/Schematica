@@ -35,6 +35,8 @@ public class GuiSchematicControl extends GuiScreen {
 	private GuiButton btnFlip = null;
 	private GuiButton btnRotate = null;
 
+	private GuiButton btnMaterials = null;
+
 	private int incrementX = 0;
 	private int incrementY = 0;
 	private int incrementZ = 0;
@@ -46,6 +48,7 @@ public class GuiSchematicControl extends GuiScreen {
 	private final String strX = this.strTranslate.translateKey("schematic.x");
 	private final String strY = this.strTranslate.translateKey("schematic.y");
 	private final String strZ = this.strTranslate.translateKey("schematic.z");
+	private final String strMaterials = this.strTranslate.translateKey("schematic.materials");
 
 	public GuiSchematicControl(GuiScreen guiScreen) {
 		this.prevGuiScreen = guiScreen;
@@ -104,6 +107,11 @@ public class GuiSchematicControl extends GuiScreen {
 
 		this.btnRotate = new GuiButton(id++, this.width - 90, this.height - 30, 80, 20, this.strTranslate.translateKey("schematic.rotate"));
 		this.controlList.add(this.btnRotate);
+
+		this.btnMaterials = new GuiButton(id++, 10, this.height - 30, 80, 20, this.strTranslate.translateKey("schematic.materials"));
+		this.controlList.add(this.btnMaterials);
+
+		this.btnMaterials.enabled = this.settings.schematic != null;
 	}
 
 	@Override
@@ -159,6 +167,8 @@ public class GuiSchematicControl extends GuiScreen {
 				this.settings.flipWorld();
 			} else if (guiButton.id == this.btnRotate.id) {
 				this.settings.rotateWorld();
+			} else if (guiButton.id == this.btnMaterials.id) {
+				this.settings.minecraft.displayGuiScreen(new GuiSchematicMaterials(this));
 			}
 		}
 	}
@@ -168,6 +178,7 @@ public class GuiSchematicControl extends GuiScreen {
 		// drawDefaultBackground();
 
 		drawCenteredString(this.fontRenderer, this.strMoveSchematic, this.centerX, this.centerY - 45, 0xFFFFFF);
+		drawCenteredString(this.fontRenderer, this.strMaterials, 50, this.height - 45, 0xFFFFFF);
 		drawCenteredString(this.fontRenderer, this.strLayers, this.width - 50, this.height - 165, 0xFFFFFF);
 		drawCenteredString(this.fontRenderer, this.strOperations, this.width - 50, this.height - 120, 0xFFFFFF);
 

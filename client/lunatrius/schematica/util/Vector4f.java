@@ -3,7 +3,7 @@ package lunatrius.schematica.util;
 public class Vector4f {
 	public float x, y, z, w;
 
-	public final static Vector4f ZERO = new Vector4f();
+	public static final Vector4f ZERO = new Vector4f();
 
 	public Vector4f() {
 		this.x = 0;

@@ -31,6 +31,7 @@ import net.minecraft.src.Tessellator;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntityChest;
 import net.minecraft.src.TileEntityEnderChest;
+import net.minecraft.src.TileEntityMobSpawner;
 import net.minecraft.src.TileEntityRenderer;
 import net.minecraft.src.TileEntitySign;
 import net.minecraft.src.TileEntitySpecialRenderer;
@@ -59,7 +60,7 @@ public class RendererSchematicChunk {
 
 	private final AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
 
-	private final static int initialSize = 1152;
+	private static final int initialSize = 1152;
 
 	private final List<String> textures = new ArrayList<String>();
 	private final BufferedImage missingTextureImage = new BufferedImage(64, 64, 2);
@@ -79,7 +80,6 @@ public class RendererSchematicChunk {
 	private int lineCount = -1;
 
 	private boolean needsUpdate = true;
-	private boolean empty = true;
 	private int glList = -1;
 
 	public RendererSchematicChunk(SchematicWorld schematicWorld, int baseX, int baseY, int baseZ) {
@@ -94,16 +94,6 @@ public class RendererSchematicChunk {
 		this.centerPosition.z = (int) ((baseZ + 0.5) * CHUNK_LENGTH);
 
 		int x, y, z;
-		for (y = (int) this.boundingBox.minY; y < this.boundingBox.maxY; y++) {
-			for (x = (int) this.boundingBox.minX; x < this.boundingBox.maxX; x++) {
-				for (z = (int) this.boundingBox.minZ; z < this.boundingBox.maxZ; z++) {
-					if (this.schematic.getBlockId(x, y, z) != 0) {
-						this.empty = false;
-					}
-				}
-			}
-		}
-
 		for (TileEntity tileEntity : this.schematic.getTileEntities()) {
 			x = tileEntity.xCoord;
 			y = tileEntity.yCoord;
@@ -160,13 +150,11 @@ public class RendererSchematicChunk {
 	}
 
 	public void setDirty() {
-		if (!this.empty) {
-			this.needsUpdate = true;
-		}
+		this.needsUpdate = true;
 	}
 
 	public boolean getDirty() {
-		return this.needsUpdate && !this.empty;
+		return this.needsUpdate;
 	}
 
 	public float distanceToPoint(Vector3f vector) {
@@ -177,10 +165,6 @@ public class RendererSchematicChunk {
 	}
 
 	public void updateRenderer() {
-		if (this.empty) {
-			return;
-		}
-
 		if (this.needsUpdate) {
 			this.needsUpdate = false;
 			setCanUpdate(false);
@@ -261,7 +245,7 @@ public class RendererSchematicChunk {
 	}
 
 	public void render(int renderPass) {
-		if (this.empty || !this.isInFrustrum) {
+		if (!this.isInFrustrum) {
 			return;
 		}
 
@@ -402,10 +386,16 @@ public class RendererSchematicChunk {
 						rendererTileEntity.renderTileEntityChestAt((TileEntityChest) tileEntity);
 					} else if (tileEntity instanceof TileEntityEnderChest) {
 						rendererTileEntity.renderTileEntityEnderChestAt((TileEntityEnderChest) tileEntity);
+					} else if (tileEntity instanceof TileEntityMobSpawner) {
+						continue;
 					} else {
 						TileEntitySpecialRenderer tileEntitySpecialRenderer = TileEntityRenderer.instance.getSpecialRendererForEntity(tileEntity);
 						if (tileEntitySpecialRenderer != null) {
-							tileEntitySpecialRenderer.renderTileEntityAt(tileEntity, x, y, z, 0);
+							try {
+								tileEntitySpecialRenderer.renderTileEntityAt(tileEntity, x, y, z, 0);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 							GL11.glColor4f(1.0f, 1.0f, 1.0f, this.settings.alpha);
 						}
 					}

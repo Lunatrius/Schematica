@@ -1,7 +1,5 @@
 package lunatrius.schematica;
 
-import java.io.File;
-
 import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.GuiTextField;
@@ -218,8 +216,8 @@ public class GuiSchematicSave extends GuiScreen {
 				this.btnEnable.displayString = this.strTranslate.translateKey(this.settings.isRenderingGuide ? "schematic.disable" : "schematic.enable");
 				this.btnSave.enabled = this.settings.isRenderingGuide;
 			} else if (guiButton.id == this.btnSave.id) {
-				String path = (new File(Settings.schematicDirectory, this.tfFilename.getText() + ".schematic")).getAbsolutePath();
-				if (this.settings.saveSchematic(path, this.settings.pointMin, this.settings.pointMax)) {
+				String path = this.tfFilename.getText() + ".schematic";
+				if (this.settings.saveSchematic(Settings.schematicDirectory, path, this.settings.pointMin, this.settings.pointMax)) {
 					this.filename = "";
 					this.tfFilename.setText(this.filename);
 				}

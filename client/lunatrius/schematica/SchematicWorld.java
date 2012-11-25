@@ -1,7 +1,11 @@
 package lunatrius.schematica;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.AnvilSaveHandler;
@@ -10,6 +14,8 @@ import net.minecraft.src.Block;
 import net.minecraft.src.Entity;
 import net.minecraft.src.EnumGameType;
 import net.minecraft.src.IChunkProvider;
+import net.minecraft.src.Item;
+import net.minecraft.src.ItemStack;
 import net.minecraft.src.Material;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
@@ -23,39 +29,73 @@ import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 
 public class SchematicWorld extends World {
-	private final static AnvilSaveHandler anvilSaveHandler = new AnvilSaveHandler(Minecraft.getMinecraftDir(), "mods/saves-schematica-dummy", false);
-	private final static WorldSettings worldSettings = new WorldSettings(0, EnumGameType.CREATIVE, false, false, WorldType.FLAT);
+	private static final AnvilSaveHandler anvilSaveHandler = new AnvilSaveHandler(Minecraft.getMinecraftDir(), "mods/saves-schematica-dummy", false);
+	private static final WorldSettings worldSettings = new WorldSettings(0, EnumGameType.CREATIVE, false, false, WorldType.FLAT);
+	private static final Comparator<ItemStack> blockListComparator = new Comparator<ItemStack>() {
+		@Override
+		public int compare(ItemStack itemStackA, ItemStack itemStackB) {
+			return (itemStackA.itemID * 16 + itemStackA.getItemDamage()) - (itemStackB.itemID * 16 + itemStackB.getItemDamage());
+		}
+	};
+
+	protected static final List<Integer> blockListIgnoreID = new ArrayList<Integer>();
+	protected static final List<Integer> blockListIgnoreMetadata = new ArrayList<Integer>();
+	protected static final Map<Integer, Integer> blockListMapping = new HashMap<Integer, Integer>();
 
 	private final Settings settings = Settings.instance();
+	private ItemStack icon;
 	private int[][][] blocks;
 	private int[][][] metadata;
-	private List<TileEntity> tileEntities;
+	private final List<TileEntity> tileEntities = new ArrayList<TileEntity>();
+	private final List<ItemStack> blockList = new ArrayList<ItemStack>();
 	private short width;
 	private short length;
 	private short height;
 
 	public SchematicWorld() {
 		super(anvilSaveHandler, "", null, worldSettings, null);
+		this.icon = Settings.defaultIcon.copy();
 		this.blocks = null;
 		this.metadata = null;
-		this.tileEntities = null;
+		this.tileEntities.clear();
 		this.width = 0;
 		this.length = 0;
 		this.height = 0;
 	}
 
-	public SchematicWorld(int[][][] blocks, int[][][] metadata, List<TileEntity> tileEntities, short width, short height, short length) {
+	public SchematicWorld(String icon, int[][][] blocks, int[][][] metadata, List<TileEntity> tileEntities, short width, short height, short length) {
 		this();
+		try {
+			String[] parts = icon.split(":");
+			if (parts.length == 1) {
+				this.icon = new ItemStack(Integer.parseInt(parts[0]), 1, 0);
+			} else if (parts.length == 2) {
+				this.icon = new ItemStack(Integer.parseInt(parts[0]), 1, Integer.parseInt(parts[1]));
+			}
+		} catch (Exception e) {
+			this.icon = Settings.defaultIcon.copy();
+			e.printStackTrace();
+		}
 		this.blocks = blocks.clone();
 		this.metadata = metadata.clone();
-		this.tileEntities = tileEntities;
+		if (tileEntities != null) {
+			this.tileEntities.addAll(tileEntities);
+		}
 		this.width = width;
 		this.length = length;
 		this.height = height;
+
+		generateBlockList();
 	}
 
 	@SuppressWarnings("null")
 	public void readFromNBT(NBTTagCompound tagCompound) {
+		if (tagCompound.hasKey("Icon")) {
+			this.icon.readFromNBT(tagCompound.getCompoundTag("Icon"));
+		} else {
+			this.icon = Settings.defaultIcon.copy();
+		}
+
 		byte localBlocks[] = tagCompound.getByteArray("Blocks");
 		byte localMetadata[] = tagCompound.getByteArray("Data");
 
@@ -84,7 +124,7 @@ public class SchematicWorld extends World {
 			}
 		}
 
-		this.tileEntities = new ArrayList<TileEntity>();
+		this.tileEntities.clear();
 
 		NBTTagList tileEntitiesList = tagCompound.getTagList("TileEntities");
 
@@ -95,9 +135,15 @@ public class SchematicWorld extends World {
 		}
 
 		refreshChests();
+
+		generateBlockList();
 	}
 
 	public void writeToNBT(NBTTagCompound tagCompound) {
+		NBTTagCompound tagCompoundIcon = new NBTTagCompound();
+		this.icon.writeToNBT(tagCompoundIcon);
+		tagCompound.setCompoundTag("Icon", tagCompoundIcon);
+
 		tagCompound.setShort("Width", this.width);
 		tagCompound.setShort("Length", this.length);
 		tagCompound.setShort("Height", this.height);
@@ -135,6 +181,68 @@ public class SchematicWorld extends World {
 		}
 
 		tagCompound.setTag("TileEntities", tileEntitiesList);
+	}
+
+	private void generateBlockList() {
+		this.blockList.clear();
+
+		int x, y, z, itemID, itemDamage;
+		ItemStack itemStack = null;
+
+		for (x = 0; x < this.width; x++) {
+			for (y = 0; y < this.height; y++) {
+				for (z = 0; z < this.length; z++) {
+					itemID = this.blocks[x][y][z];
+					itemDamage = this.metadata[x][y][z];
+
+					if (itemID == 0 || blockListIgnoreID.contains(itemID)) {
+						continue;
+					}
+
+					if (blockListIgnoreMetadata.contains(itemID)) {
+						itemDamage = 0;
+					}
+
+					if (blockListMapping.containsKey(itemID)) {
+						itemID = blockListMapping.get(itemID);
+					}
+
+					if (itemID == Block.wood.blockID || itemID == Block.leaves.blockID) {
+						itemDamage &= 0x03;
+					}
+
+					if (itemID == Block.stoneSingleSlab.blockID || itemID == Block.woodSingleSlab.blockID) {
+						itemDamage &= 0x07;
+					}
+
+					if (itemID >= 256) {
+						itemDamage = 0;
+					}
+
+					if (itemID - 256 == Block.cocoaPlant.blockID) {
+						itemDamage = 0x03;
+					}
+
+					if (itemID == Item.skull.shiftedIndex) {
+						itemDamage = this.metadata[x][y][z];
+					}
+
+					itemStack = null;
+					for (ItemStack block : this.blockList) {
+						if (block.itemID == itemID && block.getItemDamage() == itemDamage) {
+							itemStack = block;
+							itemStack.stackSize++;
+							break;
+						}
+					}
+
+					if (itemStack == null) {
+						this.blockList.add(new ItemStack(itemID, 1, itemDamage));
+					}
+				}
+			}
+		}
+		Collections.sort(this.blockList, blockListComparator);
 	}
 
 	@Override
@@ -236,6 +344,11 @@ public class SchematicWorld extends World {
 		return null;
 	}
 
+	@Override
+	public boolean blockExists(int x, int y, int z) {
+		return false;
+	}
+
 	public void setBlockMetadata(int x, int y, int z, byte metadata) {
 		this.metadata[x][y][z] = metadata;
 	}
@@ -245,11 +358,16 @@ public class SchematicWorld extends World {
 	}
 
 	public void setTileEntities(List<TileEntity> tileEntities) {
-		this.tileEntities = tileEntities;
+		this.tileEntities.clear();
+		this.tileEntities.addAll(tileEntities);
 	}
 
 	public List<TileEntity> getTileEntities() {
 		return this.tileEntities;
+	}
+
+	public List<ItemStack> getBlockList() {
+		return this.blockList;
 	}
 
 	public void refreshChests() {
