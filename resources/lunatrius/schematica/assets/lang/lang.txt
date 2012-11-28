@@ -1,3 +1,4 @@
 en_US
 es_MX
+lt_LT
 sl_SI
