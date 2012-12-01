@@ -154,7 +154,7 @@ public class Settings {
 
 	public boolean saveSchematic(File directory, String filename, Vector3i from, Vector3i to) {
 		try {
-			NBTTagCompound tagCompound = new NBTTagCompound();
+			NBTTagCompound tagCompound = new NBTTagCompound("Schematic");
 
 			int minX = Math.min(from.x, to.x);
 			int maxX = Math.max(from.x, to.x);
