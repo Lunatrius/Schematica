@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.logging.Level;
 
 import lunatrius.schematica.util.Config;
@@ -67,12 +66,7 @@ public class Schematica {
 				while ((lang = input.readLine()) != null) {
 					if (lang.length() > 0) {
 						Settings.logger.log(Level.INFO, "Loading language file: " + lang);
-						InputStream streamLang = classLoader.getResourceAsStream(langDir + lang + ".lang");
-						Properties properties = new Properties();
-						properties.load(streamLang);
-						for (String key : properties.stringPropertyNames()) {
-							LanguageRegistry.instance().addStringLocalization(key, lang, properties.getProperty(key));
-						}
+						LanguageRegistry.instance().loadLocalization(classLoader.getResource(langDir + lang + ".lang"), lang, false);
 					}
 				}
 			} finally {
