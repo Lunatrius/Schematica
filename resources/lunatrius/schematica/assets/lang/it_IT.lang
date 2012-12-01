@@ -1,0 +1,34 @@
+# Author: mrTJO
+# Version: 1.0
+schematic.openFolder=Apri cartella schematiche
+schematic.done=Fatto
+schematic.title=Seleziona file schematico
+schematic.folderInfo=(Posiziona qui i file schematici)
+schematic.noschematic=-- Nessuna Schematica --
+schematic.increase=+
+schematic.decrease=-
+schematic.hide=Nascondi
+schematic.all=TUTTI
+schematic.show=Visualizza
+schematic.movehere=Posiziona qui
+schematic.flip=Specchia
+schematic.rotate=Ruota
+schematic.save=Salva
+schematic.moveschematic=Movi schematica
+schematic.layers=Livelli
+schematic.operations=Operazioni
+schematic.point.red=Punto rosso
+schematic.point.blue=Punto blu
+schematic.saveselection=Salva la selezione come schematica
+schematic.enable=Abilita
+schematic.disable=Disabilita
+schematic.x=X:
+schematic.y=Y:
+schematic.z=Z:
+schematic.materials=Materiali
+schematic.materialname=Materiale
+schematic.materialamount=Quantit\u00e0
+
+key.schematic.load=Carica schematica
+key.schematic.save=Salva schematica
+key.schematic.control=Manipola schematica
