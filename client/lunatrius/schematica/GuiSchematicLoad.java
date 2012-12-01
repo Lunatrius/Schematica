@@ -168,6 +168,7 @@ public class GuiSchematicLoad extends GuiScreen {
 				this.settings.loadSchematic((new File(this.currentDirectory, schematic.getName())).getPath());
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		this.settings.moveHere();
 	}
