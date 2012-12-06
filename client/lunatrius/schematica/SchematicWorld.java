@@ -165,7 +165,7 @@ public class SchematicWorld extends World {
 			}
 		}
 
-		tagCompound.setString("Materials", "Classic");
+		tagCompound.setString("Materials", "Alpha");
 		tagCompound.setByteArray("Blocks", localBlocks);
 		tagCompound.setByteArray("Data", localMetadata);
 		if (extra) {
