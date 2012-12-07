@@ -67,14 +67,16 @@ public class RendererSchematicChunk {
 	private Field fieldTextureMap = null;
 	private Field fieldSingleIntBuffer = null;
 
-	private float[] quadColorBuffer = new float[initialSize * 4];
-	private float[] quadVertexBuffer = new float[initialSize * 3];
+	private int quadSize = initialSize;
+	private float[] quadColorBuffer = null;
+	private float[] quadVertexBuffer = null;
 	private int quadColorIndex = -1;
 	private int quadVertexIndex = -1;
 	private int quadCount = -1;
 
-	private float[] lineColorBuffer = new float[initialSize * 4];
-	private float[] lineVertexBuffer = new float[initialSize * 3];
+	private int lineSize = initialSize;
+	private float[] lineColorBuffer = null;
+	private float[] lineVertexBuffer = null;
 	private int lineColorIndex = -1;
 	private int lineVertexIndex = -1;
 	private int lineCount = -1;
@@ -169,6 +171,11 @@ public class RendererSchematicChunk {
 			this.needsUpdate = false;
 			setCanUpdate(false);
 
+			this.quadVertexBuffer = new float[this.quadSize * 3];
+			this.quadColorBuffer = new float[this.quadSize * 4];
+			this.lineVertexBuffer = new float[this.lineSize * 3];
+			this.lineColorBuffer = new float[this.lineSize * 4];
+
 			for (int pass = 0; pass < 3; pass++) {
 				this.quadColorIndex = 0;
 				this.quadVertexIndex = 0;
@@ -241,6 +248,11 @@ public class RendererSchematicChunk {
 
 				GL11.glEndList();
 			}
+
+			this.quadVertexBuffer = null;
+			this.quadColorBuffer = null;
+			this.lineVertexBuffer = null;
+			this.lineColorBuffer = null;
 		}
 	}
 
@@ -406,18 +418,23 @@ public class RendererSchematicChunk {
 		}
 	}
 
+	private float[] createAndCopyBuffer(int newSize, float[] oldBuffer) {
+		float[] tempBuffer = new float[newSize];
+		System.arraycopy(oldBuffer, 0, tempBuffer, 0, oldBuffer.length);
+
+		// oldBuffer = tempBuffer;
+		return tempBuffer;
+	}
+
 	private void drawCuboidSurface(Vector3i a, Vector3i b, int sides, float red, float green, float blue, float alpha) {
 		Vector3f zero = new Vector3f(a.x, a.y, a.z).sub(this.settings.blockDelta);
 		Vector3f size = new Vector3f(b.x, b.y, b.z).add(this.settings.blockDelta);
 
-		if (this.quadVertexIndex + 72 >= this.quadVertexBuffer.length) {
-			float[] tempVertexBuffer = new float[this.quadVertexBuffer.length * 2];
-			System.arraycopy(this.quadVertexBuffer, 0, tempVertexBuffer, 0, this.quadVertexBuffer.length);
-			this.quadVertexBuffer = tempVertexBuffer;
+		if (this.quadCount + 24 >= this.quadSize) {
+			this.quadSize *= 2;
 
-			float[] tempColorBuffer = new float[this.quadColorBuffer.length * 2];
-			System.arraycopy(this.quadColorBuffer, 0, tempColorBuffer, 0, this.quadColorBuffer.length);
-			this.quadColorBuffer = tempColorBuffer;
+			this.quadVertexBuffer = createAndCopyBuffer(this.quadSize * 3, this.quadVertexBuffer);
+			this.quadColorBuffer = createAndCopyBuffer(this.quadSize * 4, this.quadColorBuffer);
 		}
 
 		int total = 0;
@@ -584,14 +601,11 @@ public class RendererSchematicChunk {
 		Vector3f zero = new Vector3f(a.x, a.y, a.z).sub(this.settings.blockDelta);
 		Vector3f size = new Vector3f(b.x, b.y, b.z).add(this.settings.blockDelta);
 
-		if (this.lineVertexIndex + 72 >= this.lineVertexBuffer.length) {
-			float[] tempVertexBuffer = new float[this.lineVertexBuffer.length * 2];
-			System.arraycopy(this.lineVertexBuffer, 0, tempVertexBuffer, 0, this.lineVertexBuffer.length);
-			this.lineVertexBuffer = tempVertexBuffer;
+		if (this.lineCount + 24 >= this.lineSize) {
+			this.lineSize *= 2;
 
-			float[] tempColorBuffer = new float[this.lineColorBuffer.length * 2];
-			System.arraycopy(this.lineColorBuffer, 0, tempColorBuffer, 0, this.lineColorBuffer.length);
-			this.lineColorBuffer = tempColorBuffer;
+			this.lineVertexBuffer = createAndCopyBuffer(this.lineSize * 3, this.lineVertexBuffer);
+			this.lineColorBuffer = createAndCopyBuffer(this.lineSize * 4, this.lineColorBuffer);
 		}
 
 		int total = 0;
