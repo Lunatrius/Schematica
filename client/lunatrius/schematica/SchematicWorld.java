@@ -130,8 +130,10 @@ public class SchematicWorld extends World {
 
 		for (int i = 0; i < tileEntitiesList.tagCount(); i++) {
 			TileEntity tileEntity = TileEntity.createAndLoadEntity((NBTTagCompound) tileEntitiesList.tagAt(i));
-			tileEntity.worldObj = this;
-			this.tileEntities.add(tileEntity);
+			if (tileEntity != null) {
+				tileEntity.worldObj = this;
+				this.tileEntities.add(tileEntity);
+			}
 		}
 
 		refreshChests();

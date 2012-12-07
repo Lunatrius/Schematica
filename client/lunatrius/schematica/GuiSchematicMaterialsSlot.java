@@ -1,5 +1,7 @@
 package lunatrius.schematica;
 
+import java.util.Locale;
+
 import net.minecraft.src.FontRenderer;
 import net.minecraft.src.GuiSlot;
 import net.minecraft.src.Item;
@@ -53,8 +55,15 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 	@Override
 	protected void drawSlot(int index, int x, int y, int par4, Tessellator tessellator) {
 		ItemStack itemStack = this.guiSchematicMaterials.blockList.get(index);
-		String itemName = Item.itemsList[itemStack.itemID].func_77653_i(itemStack);
+
+		String itemName;
 		String amount = Integer.toString(itemStack.stackSize);
+
+		if (Item.itemsList[itemStack.itemID] != null) {
+			itemName = Item.itemsList[itemStack.itemID].func_77653_i(itemStack);
+		} else {
+			itemName = String.format(Locale.ENGLISH, "#%04d:%02d", itemStack.itemID, itemStack.getItemDamage());
+		}
 
 		drawItemStack(x, y, itemStack);
 
@@ -65,7 +74,7 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 	private void drawItemStack(int x, int y, ItemStack itemStack) {
 		drawItemStackSlot(x, y);
 
-		if (itemStack != null) {
+		if (itemStack != null && Item.itemsList[itemStack.itemID] != null) {
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			RenderHelper.enableGUIStandardItemLighting();
 			Settings.renderItem.renderItemIntoGUI(this.fontRenderer, this.renderEngine, itemStack, x + 2, y + 2);
