@@ -131,7 +131,7 @@ public class RendererSchematicChunk {
 		} catch (Exception e) {
 			this.fieldTextureMap = null;
 			this.fieldSingleIntBuffer = null;
-			e.printStackTrace();
+			Settings.logger.log(e);
 		}
 	}
 
@@ -357,7 +357,7 @@ public class RendererSchematicChunk {
 							}
 						}
 					} catch (Exception e) {
-						e.printStackTrace();
+						Settings.logger.log(e);
 					}
 				}
 			}
@@ -406,7 +406,7 @@ public class RendererSchematicChunk {
 							try {
 								tileEntitySpecialRenderer.renderTileEntityAt(tileEntity, x, y, z, 0);
 							} catch (Exception e) {
-								e.printStackTrace();
+								Settings.logger.log(e);
 							}
 							GL11.glColor4f(1.0f, 1.0f, 1.0f, this.settings.alpha);
 						}
@@ -414,7 +414,7 @@ public class RendererSchematicChunk {
 				}
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			Settings.logger.log(ex);
 		}
 	}
 
@@ -840,11 +840,11 @@ public class RendererSchematicChunk {
 			this.textures.add(textureName);
 			return textureName;
 		} catch (IOException e) {
-			e.printStackTrace();
+			Settings.logger.log(e);
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			Settings.logger.log(e);
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			Settings.logger.log(e);
 		}
 
 		return texture;
@@ -868,7 +868,7 @@ public class RendererSchematicChunk {
 			textureMap.put(texture, Integer.valueOf(glTextureId));
 			return glTextureId;
 		} catch (Exception e) {
-			e.printStackTrace();
+			Settings.logger.log(e);
 			GLAllocation.generateTextureNames(singleIntBuffer);
 			int glTextureId = singleIntBuffer.get(0);
 			this.settings.minecraft.renderEngine.setupTexture(this.missingTextureImage, glTextureId);

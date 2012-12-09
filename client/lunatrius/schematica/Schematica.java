@@ -65,7 +65,7 @@ public class Schematica {
 				String lang = "";
 				while ((lang = input.readLine()) != null) {
 					if (lang.length() > 0) {
-						Settings.logger.log(Level.INFO, "Loading language file: " + lang);
+						Settings.logger.info("Loading language file: " + lang);
 						LanguageRegistry.instance().loadLocalization(classLoader.getResource(langDir + lang + ".lang"), lang, false);
 					}
 				}
@@ -234,7 +234,7 @@ public class Schematica {
 			this.sortedWorldRenderers = ReflectionHelper.findField(RenderGlobal.class, "k", "sortedWorldRenderers");
 		} catch (Exception e) {
 			this.sortedWorldRenderers = null;
-			e.printStackTrace();
+			Settings.logger.log(e);
 		}
 	}
 
@@ -256,9 +256,8 @@ public class Schematica {
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				Settings.logger.log(e);
 			}
-
 		}
 	}
 }

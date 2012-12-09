@@ -7,8 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
+import lunatrius.schematica.util.MCLogger;
 import lunatrius.schematica.util.Vector3f;
 import lunatrius.schematica.util.Vector3i;
 import net.minecraft.client.Minecraft;
@@ -22,8 +22,6 @@ import net.minecraft.src.RenderItem;
 import net.minecraft.src.TileEntity;
 
 import org.lwjgl.input.Keyboard;
-
-import cpw.mods.fml.common.FMLCommonHandler;
 
 public class Settings {
 	private static final Settings instance = new Settings();
@@ -43,7 +41,7 @@ public class Settings {
 
 	public static final File schematicDirectory = new File(Minecraft.getMinecraftDir(), "/schematics/");
 	public static final File textureDirectory = new File(Minecraft.getMinecraftDir(), "/resources/mod/schematica/");
-	public static final Logger logger = FMLCommonHandler.instance().getFMLLogger();
+	public static final MCLogger logger = MCLogger.getLogger(Schematica.class.getSimpleName());
 	public static final RenderItem renderItem = new RenderItem();
 	public static final ItemStack defaultIcon = new ItemStack(2, 1, 0);
 	public Minecraft minecraft = Minecraft.getMinecraft();
@@ -132,6 +130,10 @@ public class Settings {
 				this.schematic = new SchematicWorld();
 				this.schematic.readFromNBT(tagCompound);
 
+				logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", new Object[] {
+						filename, this.schematic.width(), this.schematic.height(), this.schematic.length()
+				}));
+
 				this.renderBlocks = new RenderBlocks(this.schematic);
 				this.rendererTileEntity = new RendererTileEntity(this.schematic);
 
@@ -140,7 +142,7 @@ public class Settings {
 				this.isRenderingSchematic = true;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.log(e);
 			this.schematic = null;
 			this.renderBlocks = null;
 			this.rendererTileEntity = null;
@@ -198,7 +200,7 @@ public class Settings {
 					filename = parts[1];
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.log(e);
 			}
 
 			SchematicWorld schematicOut = new SchematicWorld(icon, blocks, metadata, tileEntities, width, height, length);
@@ -207,7 +209,7 @@ public class Settings {
 			OutputStream stream = new FileOutputStream(new File(directory, filename));
 			CompressedStreamTools.writeCompressed(tagCompound, stream);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.log(e);
 			return false;
 		}
 		return true;

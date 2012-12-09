@@ -73,8 +73,8 @@ public class SchematicWorld extends World {
 				this.icon = new ItemStack(Integer.parseInt(parts[0]), 1, Integer.parseInt(parts[1]));
 			}
 		} catch (Exception e) {
+			Settings.logger.log(e);
 			this.icon = Settings.defaultIcon.copy();
-			e.printStackTrace();
 		}
 		this.blocks = blocks.clone();
 		this.metadata = metadata.clone();

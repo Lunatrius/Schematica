@@ -68,7 +68,6 @@ public class GuiSchematicLoad extends GuiScreen {
 						Settings.schematicDirectory.toURI()
 					});
 				} catch (Throwable e) {
-					e.printStackTrace();
 					success = true;
 				}
 
@@ -117,7 +116,7 @@ public class GuiSchematicLoad extends GuiScreen {
 				this.schematicFiles.add(new GuiSchematicEntry("..", 327, 0, true));
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			Settings.logger.log(e);
 		}
 
 		for (File file : this.currentDirectory.listFiles(new FileFilterSchematic(true))) {
@@ -153,7 +152,7 @@ public class GuiSchematicLoad extends GuiScreen {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Settings.logger.log(e);
 		}
 
 		return Settings.defaultIcon.copy();
@@ -165,10 +164,10 @@ public class GuiSchematicLoad extends GuiScreen {
 		try {
 			if (selectedIndex > 0 && selectedIndex < this.schematicFiles.size()) {
 				GuiSchematicEntry schematic = this.schematicFiles.get(selectedIndex);
-				this.settings.loadSchematic((new File(this.currentDirectory, schematic.getName())).getPath());
+				this.settings.loadSchematic((new File(this.currentDirectory, schematic.getName())).getCanonicalPath());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Settings.logger.log(e);
 		}
 		this.settings.moveHere();
 	}
