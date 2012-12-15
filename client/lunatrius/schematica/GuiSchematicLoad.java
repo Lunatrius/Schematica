@@ -162,7 +162,7 @@ public class GuiSchematicLoad extends GuiScreen {
 		int selectedIndex = this.guiSchematicLoadSlot.selectedIndex;
 
 		try {
-			if (selectedIndex > 0 && selectedIndex < this.schematicFiles.size()) {
+			if (selectedIndex >= 0 && selectedIndex < this.schematicFiles.size()) {
 				GuiSchematicEntry schematic = this.schematicFiles.get(selectedIndex);
 				this.settings.loadSchematic((new File(this.currentDirectory, schematic.getName())).getCanonicalPath());
 			}
