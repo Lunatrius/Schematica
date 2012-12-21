@@ -1,9 +1,10 @@
-package lunatrius.schematica;
+package lunatrius.schematica.gui;
 
-import net.minecraft.src.GuiButton;
-import net.minecraft.src.GuiScreen;
-import net.minecraft.src.GuiTextField;
-import net.minecraft.src.StringTranslate;
+import lunatrius.schematica.Settings;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.util.StringTranslate;
 
 public class GuiSchematicSave extends GuiScreen {
 	private final Settings settings = Settings.instance();

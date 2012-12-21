@@ -1,17 +1,19 @@
-package lunatrius.schematica;
+package lunatrius.schematica.renderer;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.BlockChest;
-import net.minecraft.src.FontRenderer;
-import net.minecraft.src.ModelChest;
-import net.minecraft.src.ModelLargeChest;
-import net.minecraft.src.ModelSign;
-import net.minecraft.src.RenderEngine;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.TileEntityChest;
-import net.minecraft.src.TileEntityEnderChest;
-import net.minecraft.src.TileEntityRenderer;
-import net.minecraft.src.TileEntitySign;
+import lunatrius.schematica.SchematicWorld;
+import lunatrius.schematica.Settings;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.model.ModelChest;
+import net.minecraft.client.model.ModelLargeChest;
+import net.minecraft.client.model.ModelSign;
+import net.minecraft.client.renderer.RenderEngine;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityEnderChest;
+import net.minecraft.tileentity.TileEntitySign;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -42,10 +44,10 @@ public class RendererTileEntity {
 
 			if (par1TileEntityChest.adjacentChestXPos == null && par1TileEntityChest.adjacentChestZPosition == null) {
 				var14 = this.chestModel;
-				this.bindTextureByName("/item/chest.png");
+				bindTextureByName("/item/chest.png");
 			} else {
 				var14 = this.largeChestModel;
-				this.bindTextureByName("/item/largechest.png");
+				bindTextureByName("/item/largechest.png");
 			}
 
 			GL11.glPushMatrix();
@@ -113,7 +115,7 @@ public class RendererTileEntity {
 
 		var9 = getBlockMetadata(par1TileEntityEnderChest);
 
-		this.bindTextureByName("/item/enderchest.png");
+		bindTextureByName("/item/enderchest.png");
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glTranslatef(par1TileEntityEnderChest.xCoord, par1TileEntityEnderChest.yCoord + 1.0f, par1TileEntityEnderChest.zCoord + 1.0f);
@@ -181,7 +183,7 @@ public class RendererTileEntity {
 			this.modelSign.signStick.showModel = false;
 		}
 
-		this.bindTextureByName("/item/sign.png");
+		bindTextureByName("/item/sign.png");
 		GL11.glPushMatrix();
 		GL11.glScalef(var10, -var10, -var10);
 		this.modelSign.renderSign();

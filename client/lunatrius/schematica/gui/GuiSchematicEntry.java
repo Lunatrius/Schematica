@@ -1,6 +1,6 @@
-package lunatrius.schematica;
+package lunatrius.schematica.gui;
 
-import net.minecraft.src.ItemStack;
+import net.minecraft.item.ItemStack;
 
 public class GuiSchematicEntry {
 	private final String name;

@@ -1,4 +1,4 @@
-package lunatrius.schematica;
+package lunatrius.schematica.gui;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,13 +8,16 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.src.CompressedStreamTools;
-import net.minecraft.src.GuiButton;
-import net.minecraft.src.GuiScreen;
-import net.minecraft.src.GuiSmallButton;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.StringTranslate;
+import lunatrius.schematica.FileFilterSchematic;
+import lunatrius.schematica.Settings;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiSmallButton;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StringTranslate;
 
 import org.lwjgl.Sys;
 

@@ -1,4 +1,4 @@
-package lunatrius.schematica;
+package lunatrius.schematica.renderer;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -17,24 +17,26 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import lunatrius.schematica.SchematicWorld;
+import lunatrius.schematica.Settings;
 import lunatrius.schematica.util.Vector3f;
 import lunatrius.schematica.util.Vector3i;
-import net.minecraft.src.AxisAlignedBB;
-import net.minecraft.src.Block;
-import net.minecraft.src.GLAllocation;
-import net.minecraft.src.IBlockAccess;
-import net.minecraft.src.ITexturePack;
-import net.minecraft.src.Profiler;
-import net.minecraft.src.RenderBlocks;
-import net.minecraft.src.RenderEngine;
-import net.minecraft.src.Tessellator;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.TileEntityChest;
-import net.minecraft.src.TileEntityEnderChest;
-import net.minecraft.src.TileEntityMobSpawner;
-import net.minecraft.src.TileEntityRenderer;
-import net.minecraft.src.TileEntitySign;
-import net.minecraft.src.TileEntitySpecialRenderer;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.RenderEngine;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.texturepacks.ITexturePack;
+import net.minecraft.profiler.Profiler;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityEnderChest;
+import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.tileentity.TileEntitySign;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.ForgeHooksClient;
 
 import org.lwjgl.BufferUtils;

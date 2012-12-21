@@ -9,14 +9,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import lunatrius.schematica.renderer.RendererSchematicChunk;
+import lunatrius.schematica.renderer.RendererSchematicGlobal;
 import lunatrius.schematica.util.Config;
-import net.minecraft.src.AxisAlignedBB;
-import net.minecraft.src.Block;
-import net.minecraft.src.Item;
-import net.minecraft.src.KeyBinding;
-import net.minecraft.src.Profiler;
-import net.minecraft.src.RenderGlobal;
-import net.minecraft.src.WorldRenderer;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.item.Item;
+import net.minecraft.profiler.Profiler;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
@@ -24,13 +26,13 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "Schematica")
 public class Schematica {
