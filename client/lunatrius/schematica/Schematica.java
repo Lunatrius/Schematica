@@ -160,6 +160,7 @@ public class Schematica {
 		blockListMapping.put(Block.stoneOvenActive.blockID, Block.stoneOvenIdle.blockID);
 		blockListMapping.put(Block.signPost.blockID, Item.sign.shiftedIndex);
 		blockListMapping.put(Block.doorWood.blockID, Item.doorWood.shiftedIndex);
+		blockListMapping.put(Block.doorSteel.blockID, Item.doorSteel.shiftedIndex);
 		blockListMapping.put(Block.signWall.blockID, Item.sign.shiftedIndex);
 		blockListMapping.put(Block.torchRedstoneIdle.blockID, Block.torchRedstoneActive.blockID);
 		blockListMapping.put(Block.redstoneRepeaterIdle.blockID, Item.redstoneRepeater.shiftedIndex);
