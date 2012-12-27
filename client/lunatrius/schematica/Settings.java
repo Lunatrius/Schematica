@@ -62,6 +62,7 @@ public class Settings {
 	public Vector3i pointMin = new Vector3i();
 	public Vector3i pointMax = new Vector3i();
 	public int rotationRender = 0;
+	public int orientation = 0;
 	public Vector3i offset = new Vector3i();
 	public boolean isRenderingSchematic = false;
 	public int renderingLayer = -1;

@@ -8,7 +8,9 @@ import lunatrius.schematica.util.Vector3f;
 import lunatrius.schematica.util.Vector3i;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.culling.Frustrum;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.profiler.Profiler;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 
@@ -41,7 +43,9 @@ public class RendererSchematicGlobal {
 				this.settings.playerPosition.y = (float) (player.lastTickPosY + (player.posY - player.lastTickPosY) * event.partialTicks);
 				this.settings.playerPosition.z = (float) (player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.partialTicks);
 
-				this.settings.rotationRender = (int) (((player.rotationYaw / 90) % 4 + 4) % 4);
+				this.settings.rotationRender = MathHelper.floor_double(player.rotationYaw / 90) & 3;
+
+				this.settings.orientation = getOrientation(player);
 
 				this.profiler.startSection("schematica");
 				if (this.settings.isRenderingSchematic || this.settings.isRenderingGuide) {
@@ -53,7 +57,28 @@ public class RendererSchematicGlobal {
 		}
 	}
 
-	void render() {
+	private int getOrientation(EntityPlayer player) {
+		if (player.rotationPitch < -45) {
+			return 1;
+		} else if (player.rotationPitch > 45) {
+			return 0;
+		} else {
+			switch (MathHelper.floor_double(player.rotationYaw / 90.0 + 0.5) & 3) {
+			case 0:
+				return 2;
+			case 1:
+				return 5;
+			case 2:
+				return 3;
+			case 3:
+				return 4;
+			}
+		}
+
+		return 0;
+	}
+
+	private void render() {
 		GL11.glPushMatrix();
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -265,14 +290,14 @@ public class RendererSchematicGlobal {
 		this.lineObjectCount += 24;
 	}
 
-	void updateFrustrum() {
+	private void updateFrustrum() {
 		this.frustrum.setPosition(this.settings.getTranslationX(), this.settings.getTranslationY(), this.settings.getTranslationZ());
 		for (RendererSchematicChunk rendererSchematicChunk : this.settings.sortedRendererSchematicChunk) {
 			rendererSchematicChunk.isInFrustrum = this.frustrum.isBoundingBoxInFrustum(rendererSchematicChunk.getBoundingBox());
 		}
 	}
 
-	void sortAndUpdate() {
+	private void sortAndUpdate() {
 		Collections.sort(this.settings.sortedRendererSchematicChunk, this.rendererSchematicChunkSorter);
 
 		for (RendererSchematicChunk rendererSchematicChunk : this.settings.sortedRendererSchematicChunk) {

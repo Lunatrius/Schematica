@@ -451,7 +451,7 @@ public class SchematicWorld extends World {
 	}
 
 	private int flipMetadataZ(int blockMetadata, int blockId) {
-		if (blockId == Block.torchWood.blockID || blockId == Block.torchRedstoneActive.blockID || blockId == Block.torchRedstoneIdle.blockID) {
+		if (isTorch(blockId)) {
 			switch (blockMetadata) {
 			case 0x3:
 				return 0x4;
@@ -480,7 +480,7 @@ public class SchematicWorld extends World {
 			case 0x5:
 				return (byte) (0x4 | (blockMetadata & 0x8));
 			}
-		} else if (blockId == Block.stairCompactCobblestone.blockID || blockId == Block.stairCompactPlanks.blockID || blockId == Block.stairsBrick.blockID || blockId == Block.stairsNetherBrick.blockID || blockId == Block.stairsStoneBrickSmooth.blockID || blockId == Block.stairsSandStone.blockID || blockId == Block.stairsWoodSpruce.blockID || blockId == Block.stairsWoodBirch.blockID || blockId == Block.stairsWoodJungle.blockID) {
+		} else if (isStair(blockId)) {
 			switch (blockMetadata & 0x3) {
 			case 0x2:
 				return (byte) (0x3 | (blockMetadata & 0x4));
@@ -546,7 +546,7 @@ public class SchematicWorld extends World {
 			case 0xF:
 				return 0x9;
 			}
-		} else if (blockId == Block.ladder.blockID || blockId == Block.signWall.blockID || blockId == Block.stoneOvenActive.blockID || blockId == Block.stoneOvenIdle.blockID || blockId == Block.dispenser.blockID || blockId == Block.chest.blockID || blockId == Block.enderChest.blockID) {
+		} else if (blockId == Block.ladder.blockID || blockId == Block.signWall.blockID || isContainer(blockId)) {
 			switch (blockMetadata) {
 			case 0x2:
 				return 0x3;
@@ -567,7 +567,7 @@ public class SchematicWorld extends World {
 			case 0x2:
 				return (byte) (0x0 | (blockMetadata & 0xC));
 			}
-		} else if (blockId == Block.redstoneRepeaterActive.blockID || blockId == Block.redstoneRepeaterIdle.blockID) {
+		} else if (isRedstoneRepeater(blockId)) {
 			switch (blockMetadata & 0x3) {
 			case 0x0:
 				return (byte) (0x2 | (blockMetadata & 0xC));
@@ -581,7 +581,7 @@ public class SchematicWorld extends World {
 			case 0x1:
 				return 0x0;
 			}
-		} else if (blockId == Block.pistonBase.blockID || blockId == Block.pistonStickyBase.blockID || blockId == Block.pistonExtension.blockID) {
+		} else if (isPistonBase(blockId) || blockId == Block.pistonExtension.blockID) {
 			switch (blockMetadata & 0x7) {
 			case 0x2:
 				return (byte) (0x3 | (blockMetadata & 0x8));
@@ -690,7 +690,7 @@ public class SchematicWorld extends World {
 	}
 
 	private int rotateMetadata(int blockMetadata, int blockId) {
-		if (blockId == Block.torchWood.blockID || blockId == Block.torchRedstoneActive.blockID || blockId == Block.torchRedstoneIdle.blockID) {
+		if (isTorch(blockId)) {
 			switch (blockMetadata) {
 			case 0x1:
 				return 0x4;
@@ -739,7 +739,7 @@ public class SchematicWorld extends World {
 			case 0x5:
 				return (byte) (0x2 | (blockMetadata & 0x8));
 			}
-		} else if (blockId == Block.stairCompactCobblestone.blockID || blockId == Block.stairCompactPlanks.blockID || blockId == Block.stairsBrick.blockID || blockId == Block.stairsNetherBrick.blockID || blockId == Block.stairsStoneBrickSmooth.blockID || blockId == Block.stairsSandStone.blockID || blockId == Block.stairsWoodSpruce.blockID || blockId == Block.stairsWoodBirch.blockID || blockId == Block.stairsWoodJungle.blockID) {
+		} else if (isStair(blockId)) {
 			switch (blockMetadata & 0x3) {
 			case 0x0:
 				return (byte) (0x3 | (blockMetadata & 0x4));
@@ -802,7 +802,7 @@ public class SchematicWorld extends World {
 			 * case 0xC: return 0x8; case 0xD: return 0x9; case 0xE: return 0xA;
 			 * case 0xF: return 0xB; }
 			 */
-		} else if (blockId == Block.ladder.blockID || blockId == Block.signWall.blockID || blockId == Block.stoneOvenActive.blockID || blockId == Block.stoneOvenIdle.blockID || blockId == Block.dispenser.blockID || blockId == Block.chest.blockID || blockId == Block.enderChest.blockID) {
+		} else if (blockId == Block.ladder.blockID || blockId == Block.signWall.blockID || isContainer(blockId)) {
 			switch (blockMetadata) {
 			case 0x2:
 				return 0x4;
@@ -835,7 +835,7 @@ public class SchematicWorld extends World {
 			case 0x3:
 				return (byte) (0x2 | (blockMetadata & 0xC));
 			}
-		} else if (blockId == Block.redstoneRepeaterActive.blockID || blockId == Block.redstoneRepeaterIdle.blockID) {
+		} else if (isRedstoneRepeater(blockId)) {
 			switch (blockMetadata & 0x3) {
 			case 0x0:
 				return (byte) (0x3 | (blockMetadata & 0xC));
@@ -857,7 +857,7 @@ public class SchematicWorld extends World {
 			case 0x3:
 				return 0x0;
 			}
-		} else if (blockId == Block.pistonBase.blockID || blockId == Block.pistonStickyBase.blockID || blockId == Block.pistonExtension.blockID) {
+		} else if (isPistonBase(blockId) || blockId == Block.pistonExtension.blockID) {
 			switch (blockMetadata & 0x7) {
 			case 0x0:
 				return (byte) (0x0 | (blockMetadata & 0x8));
@@ -951,5 +951,37 @@ public class SchematicWorld extends World {
 
 	public int height() {
 		return this.height;
+	}
+
+	public static boolean isStair(int itemId) {
+		return itemId == Block.stairCompactCobblestone.blockID || itemId == Block.stairCompactPlanks.blockID || itemId == Block.stairsBrick.blockID || itemId == Block.stairsNetherBrick.blockID || itemId == Block.stairsStoneBrickSmooth.blockID || itemId == Block.stairsSandStone.blockID || itemId == Block.stairsWoodSpruce.blockID || itemId == Block.stairsWoodBirch.blockID || itemId == Block.stairsWoodJungle.blockID;
+	}
+
+	public static boolean isSlab(int itemId) {
+		return itemId == Block.stoneSingleSlab.blockID || itemId == Block.woodSingleSlab.blockID;
+	}
+
+	public static boolean isDoubleSlab(int itemId) {
+		return itemId == Block.stoneDoubleSlab.blockID || itemId == Block.woodDoubleSlab.blockID;
+	}
+
+	public static boolean isPistonBase(int itemId) {
+		return itemId == Block.pistonStickyBase.blockID || itemId == Block.pistonBase.blockID;
+	}
+
+	public static boolean isRedstoneRepeater(int itemId) {
+		return itemId == Block.redstoneRepeaterActive.blockID || itemId == Block.redstoneRepeaterIdle.blockID;
+	}
+
+	public static boolean isTorch(int itemId) {
+		return itemId == Block.torchRedstoneActive.blockID || itemId == Block.torchRedstoneIdle.blockID || itemId == Block.torchWood.blockID;
+	}
+
+	public static boolean isContainer(int itemId) {
+		return itemId == Block.stoneOvenActive.blockID || itemId == Block.stoneOvenIdle.blockID || itemId == Block.dispenser.blockID || itemId == Block.chest.blockID || itemId == Block.enderChest.blockID;
+	}
+
+	public static boolean isMetadataSensitive(int itemId) {
+		return itemId == Block.cloth.blockID || isTorch(itemId) || isSlab(itemId) || isRedstoneRepeater(itemId) || isContainer(itemId);
 	}
 }
