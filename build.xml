@@ -23,16 +23,12 @@
         </condition>
 
         <!-- setup source dirs -->
-        <property name="dev.src.client" location="${dev.home}/client"/>
-        <property name="dev.src.common" location="${dev.home}/common"/>
+        <property name="dev.src.minecraft" location="${dev.home}/minecraft"/>
         <property name="dev.src.resources" location="${dev.home}/resources"/>
 
         <!-- check if the directories are present -->
-        <condition property="has.src.client" value="true" else="false">
-            <available file="${dev.home}/client" type="dir"/>
-        </condition>
-        <condition property="has.src.common" value="true" else="false">
-            <available file="${dev.home}/common" type="dir"/>
+        <condition property="has.src.minecraft" value="true" else="false">
+            <available file="${dev.home}/minecraft" type="dir"/>
         </condition>
         <condition property="has.src.resources" value="true" else="false">
             <available file="${dev.home}/resources" type="dir"/>
@@ -40,24 +36,16 @@
 
         <!-- setup MCP dirs -->
         <property name="mcp.src" location="${mcp.home}/src"/>
-        <property name="mcp.src.client" location="${mcp.src}/minecraft"/>
-        <property name="mcp.src.common" location="${mcp.src}/common"/>
+        <property name="mcp.src.minecraft" location="${mcp.src}/minecraft"/>
 
         <property name="mcp.bin" location="${mcp.home}/reobf/minecraft"/>
     </target>
 
     <target name="clean">
-        <!-- clean client sources -->
+        <!-- clean minecraft sources -->
         <delete verbose="true" failonerror="false">
-            <fileset dir="${mcp.src.client}">
-                <present present="both" targetdir="${dev.src.client}"/>
-            </fileset>
-        </delete>
-
-        <!-- clean common sources -->
-        <delete verbose="true" failonerror="false">
-            <fileset dir="${mcp.src.common}">
-                <present present="both" targetdir="${dev.src.common}"/>
+            <fileset dir="${mcp.src.minecraft}">
+                <present present="both" targetdir="${dev.src.minecraft}"/>
             </fileset>
         </delete>
 
@@ -69,21 +57,13 @@
 
     <target name="merge-source">
         <!-- merge sources -->
-        <antcall target="merge-client"/>
-        <antcall target="merge-common"/>
+        <antcall target="merge-minecraft"/>
     </target>
 
-    <target name="merge-client" if="${has.src.client}">
-        <!-- merge client sources -->
-        <copy todir="${mcp.src.client}" overwrite="true" verbose="true">
-            <fileset dir="${dev.src.client}" includes="**/*.java"/>
-        </copy>
-    </target>
-
-    <target name="merge-common" if="${has.src.common}">
-        <!-- merge common sources -->
-        <copy todir="${mcp.src.common}" overwrite="true" verbose="true">
-            <fileset dir="${dev.src.common}" includes="**/*.java"/>
+    <target name="merge-minecraft" if="${has.src.minecraft}">
+        <!-- merge minecraft sources -->
+        <copy todir="${mcp.src.minecraft}" overwrite="true" verbose="true">
+            <fileset dir="${dev.src.minecraft}" includes="**/*.java"/>
         </copy>
     </target>
 

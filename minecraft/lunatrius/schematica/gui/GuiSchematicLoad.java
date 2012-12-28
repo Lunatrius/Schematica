@@ -10,7 +10,6 @@ import java.util.List;
 
 import lunatrius.schematica.FileFilterSchematic;
 import lunatrius.schematica.Settings;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSmallButton;
@@ -75,7 +74,7 @@ public class GuiSchematicLoad extends GuiScreen {
 				}
 
 				if (success) {
-					System.out.println("Opening via Sys class!");
+					Settings.logger.fine("Opening via Sys class!");
 					Sys.openURL("file://" + Settings.schematicDirectory.getAbsolutePath());
 				}
 			} else if (guiButton.id == this.btnDone.id) {

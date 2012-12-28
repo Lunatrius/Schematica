@@ -38,6 +38,8 @@ import cpw.mods.fml.relauncher.Side;
 public class Schematica {
 	private final Settings settings = Settings.instance();
 	private final Profiler profiler = this.settings.minecraft.mcProfiler;
+	private final SchematicPrinter printer = new SchematicPrinter();
+	private int ticks = -1;
 
 	@Instance("Schematica")
 	public static Schematica instance;
@@ -54,6 +56,9 @@ public class Schematica {
 		this.settings.highlight = Config.getBoolean(config, "highlight", Configuration.CATEGORY_GENERAL, this.settings.highlight, "Highlight invalid placed blocks and to be placed blocks.");
 		this.settings.highlightAir = Config.getBoolean(config, "highlightAir", Configuration.CATEGORY_GENERAL, this.settings.highlightAir, "Highlight invalid placed blocks (where there should be no block).");
 		this.settings.blockDelta = Config.getFloat(config, "blockDelta", Configuration.CATEGORY_GENERAL, this.settings.blockDelta, 0.0f, 0.5f, "Delta value used for highlighting (if you're having issue with overlapping textures try setting this value higher).");
+		this.settings.placeDelay = Config.getInt(config, "placeDelay", Configuration.CATEGORY_GENERAL, this.settings.placeDelay, 0, 20, "Delay in ticks between placement attempts.");
+		this.settings.placeInstantly = Config.getBoolean(config, "placeInstantly", Configuration.CATEGORY_GENERAL, this.settings.placeInstantly, "Place all blocks that can be placed in one tick.");
+		this.settings.placeAdjacent = Config.getBoolean(config, "placeAdjacent", Configuration.CATEGORY_GENERAL, this.settings.placeAdjacent, "Place blocks only if there is an adjacent block next to it.");
 		config.save();
 
 		try {
@@ -180,13 +185,13 @@ public class Schematica {
 
 		if (!Settings.schematicDirectory.exists()) {
 			if (!Settings.schematicDirectory.mkdirs()) {
-				System.out.println("Could not create schematic directory!");
+				Settings.logger.fine("Could not create schematic directory!");
 			}
 		}
 
 		if (!Settings.textureDirectory.exists()) {
 			if (!Settings.textureDirectory.mkdirs()) {
-				System.out.println("Could not create texture directory!");
+				Settings.logger.fine("Could not create texture directory!");
 			}
 		}
 	}
@@ -219,7 +224,14 @@ public class Schematica {
 
 		this.profiler.startSection("schematica");
 		if (tick == TickType.CLIENT && this.settings.minecraft.thePlayer != null && this.settings.isRenderingSchematic && this.settings.schematic != null) {
-			this.profiler.startSection("checkDirty");
+			this.profiler.startSection("printer");
+			if (this.settings.isPrinting && this.ticks-- < 0) {
+				this.ticks = this.settings.placeDelay;
+
+				this.printer.print();
+			}
+
+			this.profiler.endStartSection("checkDirty");
 			checkDirty();
 
 			this.profiler.endStartSection("canUpdate");

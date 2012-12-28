@@ -37,6 +37,7 @@ public class GuiSchematicControl extends GuiScreen {
 	private GuiButton btnRotate = null;
 
 	private GuiButton btnMaterials = null;
+	private GuiButton btnPrint = null;
 
 	private int incrementX = 0;
 	private int incrementY = 0;
@@ -50,6 +51,7 @@ public class GuiSchematicControl extends GuiScreen {
 	private final String strY = this.strTranslate.translateKey("schematic.y");
 	private final String strZ = this.strTranslate.translateKey("schematic.z");
 	private final String strMaterials = this.strTranslate.translateKey("schematic.materials");
+	private final String strPrinter = this.strTranslate.translateKey("schematic.printer");
 
 	public GuiSchematicControl(GuiScreen guiScreen) {
 		this.prevGuiScreen = guiScreen;
@@ -109,10 +111,20 @@ public class GuiSchematicControl extends GuiScreen {
 		this.btnRotate = new GuiButton(id++, this.width - 90, this.height - 30, 80, 20, this.strTranslate.translateKey("schematic.rotate"));
 		this.controlList.add(this.btnRotate);
 
-		this.btnMaterials = new GuiButton(id++, 10, this.height - 30, 80, 20, this.strTranslate.translateKey("schematic.materials"));
+		this.btnMaterials = new GuiButton(id++, 10, this.height - 70, 80, 20, this.strTranslate.translateKey("schematic.materials"));
 		this.controlList.add(this.btnMaterials);
 
+		this.btnPrint = new GuiButton(id++, 10, this.height - 30, 80, 20, this.strTranslate.translateKey(this.settings.isPrinting ? "schematic.disable" : "schematic.enable"));
+		this.controlList.add(this.btnPrint);
+
+		this.btnDecLayer.enabled = this.settings.schematic != null;
+		this.btnIncLayer.enabled = this.settings.schematic != null;
+		this.btnHide.enabled = this.settings.schematic != null;
+		this.btnMove.enabled = this.settings.schematic != null;
+		this.btnFlip.enabled = this.settings.schematic != null;
+		this.btnRotate.enabled = this.settings.schematic != null;
 		this.btnMaterials.enabled = this.settings.schematic != null;
+		this.btnPrint.enabled = this.settings.schematic != null;
 	}
 
 	@Override
@@ -170,6 +182,9 @@ public class GuiSchematicControl extends GuiScreen {
 				this.settings.rotateWorld();
 			} else if (guiButton.id == this.btnMaterials.id) {
 				this.settings.minecraft.displayGuiScreen(new GuiSchematicMaterials(this));
+			} else if (guiButton.id == this.btnPrint.id) {
+				this.settings.isPrinting = !this.settings.isPrinting;
+				this.btnPrint.displayString = this.strTranslate.translateKey(this.settings.isPrinting ? "schematic.disable" : "schematic.enable");
 			}
 		}
 	}
@@ -179,7 +194,8 @@ public class GuiSchematicControl extends GuiScreen {
 		// drawDefaultBackground();
 
 		drawCenteredString(this.fontRenderer, this.strMoveSchematic, this.centerX, this.centerY - 45, 0xFFFFFF);
-		drawCenteredString(this.fontRenderer, this.strMaterials, 50, this.height - 45, 0xFFFFFF);
+		drawCenteredString(this.fontRenderer, this.strMaterials, 50, this.height - 85, 0xFFFFFF);
+		drawCenteredString(this.fontRenderer, this.strPrinter, 50, this.height - 45, 0xFFFFFF);
 		drawCenteredString(this.fontRenderer, this.strLayers, this.width - 50, this.height - 165, 0xFFFFFF);
 		drawCenteredString(this.fontRenderer, this.strOperations, this.width - 50, this.height - 120, 0xFFFFFF);
 

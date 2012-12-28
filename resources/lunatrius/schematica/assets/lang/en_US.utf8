@@ -28,6 +28,7 @@ schematic.z=Z:
 schematic.materials=Materials
 schematic.materialname=Material
 schematic.materialamount=Amount
+schematic.printer=Printer
 
 key.schematic.load=Load schematic
 key.schematic.save=Save schematic

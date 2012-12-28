@@ -37,6 +37,9 @@ public class Settings {
 	public boolean highlight = true;
 	public boolean highlightAir = true;
 	public float blockDelta = 0.005f;
+	public int placeDelay = 1;
+	public boolean placeInstantly = false;
+	public boolean placeAdjacent = true;
 
 	public KeyBinding[] keyBindings = new KeyBinding[] {
 			new KeyBinding("key.schematic.load", Keyboard.KEY_DIVIDE),
@@ -67,6 +70,7 @@ public class Settings {
 	public boolean isRenderingSchematic = false;
 	public int renderingLayer = -1;
 	public boolean isRenderingGuide = false;
+	public boolean isPrinting = false;
 	public int[] increments = {
 			1, 5, 15, 50, 250
 	};

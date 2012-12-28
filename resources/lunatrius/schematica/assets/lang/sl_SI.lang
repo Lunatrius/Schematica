@@ -28,6 +28,7 @@ schematic.z=Z:
 schematic.materials=Materiali
 schematic.materialname=Material
 schematic.materialamount=Koli\u010dina
+schematic.printer=Tiskalnik
 
 key.schematic.load=Nalo\u017ei shemo
 key.schematic.save=Shrani shemo

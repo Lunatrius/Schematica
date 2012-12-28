@@ -504,7 +504,7 @@ public class SchematicWorld extends World {
 			case 0x3:
 				return (byte) ((0x1 | (blockMetadata & 0xC)));
 			}
-		} else if (blockId == Block.stoneButton.blockID || blockId == Block.woodenButton.blockID) {
+		} else if (isButton(blockId)) {
 			switch (blockMetadata & 0x7) {
 			case 0x3:
 				return (byte) (0x4 | (blockMetadata & 0x8));
@@ -553,7 +553,7 @@ public class SchematicWorld extends World {
 			case 0x3:
 				return 0x2;
 			}
-		} else if (blockId == Block.pumpkin.blockID || blockId == Block.pumpkinLantern.blockID) {
+		} else if (isPumpkin(blockId)) {
 			switch (blockMetadata) {
 			case 0x0:
 				return 0x2;
@@ -631,7 +631,6 @@ public class SchematicWorld extends World {
 				return 0x0 | (blockMetadata & 0xC);
 			}
 		} else if (blockId == Block.skull.blockID) {
-			System.out.println(blockMetadata);
 			switch (blockMetadata) {
 			case 0x2:
 				return 0x3;
@@ -779,7 +778,7 @@ public class SchematicWorld extends World {
 			case 0x3:
 				return (byte) (0x2 | (blockMetadata & 0xC));
 			}
-		} else if (blockId == Block.stoneButton.blockID || blockId == Block.woodenButton.blockID) {
+		} else if (isButton(blockId)) {
 			switch (blockMetadata & 0x7) {
 			case 0x1:
 				return (byte) (0x4 | (blockMetadata & 0x8));
@@ -813,7 +812,7 @@ public class SchematicWorld extends World {
 			case 0x5:
 				return 0x2;
 			}
-		} else if (blockId == Block.pumpkin.blockID || blockId == Block.pumpkinLantern.blockID) {
+		} else if (isPumpkin(blockId)) {
 			switch (blockMetadata) {
 			case 0x0:
 				return 0x3;
@@ -981,7 +980,19 @@ public class SchematicWorld extends World {
 		return itemId == Block.stoneOvenActive.blockID || itemId == Block.stoneOvenIdle.blockID || itemId == Block.dispenser.blockID || itemId == Block.chest.blockID || itemId == Block.enderChest.blockID;
 	}
 
+	public static boolean isButton(int itemId) {
+		return itemId == Block.stoneButton.blockID || itemId == Block.woodenButton.blockID;
+	}
+
+	public static boolean isPumpkin(int itemId) {
+		return itemId == Block.pumpkin.blockID || itemId == Block.pumpkinLantern.blockID;
+	}
+
+	public static boolean isFluidContainer(int itemId) {
+		return itemId == Item.bucketWater.shiftedIndex || itemId == Item.bucketLava.shiftedIndex;
+	}
+
 	public static boolean isMetadataSensitive(int itemId) {
-		return itemId == Block.cloth.blockID || isTorch(itemId) || isSlab(itemId) || isRedstoneRepeater(itemId) || isContainer(itemId);
+		return itemId == Block.cloth.blockID || itemId == Block.anvil.blockID || itemId == Block.trapdoor.blockID || isTorch(itemId) || isSlab(itemId) || isPistonBase(itemId) || isRedstoneRepeater(itemId) || isContainer(itemId) || isButton(itemId) || isPumpkin(itemId);
 	}
 }
