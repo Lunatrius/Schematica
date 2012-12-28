@@ -1,5 +1,6 @@
 en_US
 es_MX
+hu_HU
 it_IT
 lt_LT
 pt_PT

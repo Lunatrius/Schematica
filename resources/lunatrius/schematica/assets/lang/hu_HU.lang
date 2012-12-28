@@ -1,0 +1,35 @@
+# Author: Gabor Stenzinger
+# Version: 1.1
+schematic.openFolder=Klis\u00e9 k\u00f6nyvt\u00e1r megnyit\u00e1sa
+schematic.done=K\u00e9sz
+schematic.title=Klis\u00e9 megnyit\u00e1sa
+schematic.folderInfo=(Helyezd ide a klis\u00e9 f\u00e1jlokat)
+schematic.noschematic=-- Nem tal\u00e1lhat\u00f3 klis\u00e9 --
+schematic.increase=+
+schematic.decrease=-
+schematic.hide=Elrejt
+schematic.all=MIND
+schematic.show=Mutat
+schematic.movehere=Mozgat\u00e1s ide
+schematic.flip=T\u00fckr\u00f6z
+schematic.rotate=Forgat
+schematic.save=Ment\u00e9s
+schematic.moveschematic=Klis\u00e9 mozgat\u00e1sa
+schematic.layers=Szeletek
+schematic.operations=M\u0171veletek
+schematic.point.red=Piros pont
+schematic.point.blue=K\u00e9k pont
+schematic.saveselection=Kijel\u00f6l\u00e9s ment\u00e9se klis\u00e9k\u00e9nt
+schematic.enable=Bekapcsol
+schematic.disable=Kikapcsol
+schematic.x=X:
+schematic.y=Y:
+schematic.z=Z:
+schematic.materials=Anyagfelhaszn\u00e1l\u00e1s
+schematic.materialname=Anyag
+schematic.materialamount=Mennyis\u00e9g
+schematic.printer=Nyomtat\u00f3
+
+key.schematic.load=Klis\u00e9 bet\u00f6lt\u00e9se
+key.schematic.save=Klis\u00e9 ment\u00e9se
+key.schematic.control=Klis\u00e9 m\u00f3dos\u00edt\u00e1sa
