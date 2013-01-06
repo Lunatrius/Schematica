@@ -47,11 +47,14 @@ public class Settings {
 			new KeyBinding("key.schematic.control", Keyboard.KEY_SUBTRACT)
 	};
 
+	public static final String sbcDisablePrinter = "\u00a70\u00a72\u00a70\u00a70\u00a7e\u00a7f";
+
 	public static final File schematicDirectory = new File(Minecraft.getMinecraftDir(), "/schematics/");
 	public static final File textureDirectory = new File(Minecraft.getMinecraftDir(), "/resources/mod/schematica/");
 	public static final MCLogger logger = MCLogger.getLogger(Schematica.class.getSimpleName());
 	public static final RenderItem renderItem = new RenderItem();
 	public static final ItemStack defaultIcon = new ItemStack(2, 1, 0);
+
 	public Minecraft minecraft = Minecraft.getMinecraft();
 	public ChunkCache mcWorldCache = null;
 	public SchematicWorld schematic = null;
@@ -70,6 +73,8 @@ public class Settings {
 	public boolean isRenderingSchematic = false;
 	public int renderingLayer = -1;
 	public boolean isRenderingGuide = false;
+	public int chatLines = 0;
+	public boolean isPrinterEnabled = true;
 	public boolean isPrinting = false;
 	public int[] increments = {
 			1, 5, 15, 50, 250

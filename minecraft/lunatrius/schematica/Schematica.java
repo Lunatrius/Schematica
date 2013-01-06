@@ -200,6 +200,7 @@ public class Schematica {
 	public void init(FMLInitializationEvent event) {
 		try {
 			MinecraftForge.EVENT_BUS.register(new RendererSchematicGlobal());
+			MinecraftForge.EVENT_BUS.register(new ChatEventHandler());
 
 			KeyBindingRegistry.registerKeyBinding(new KeyBindingHandler(this.settings.keyBindings, new boolean[this.settings.keyBindings.length]));
 			TickRegistry.registerTickHandler(new Ticker(EnumSet.of(TickType.CLIENT)), Side.CLIENT);
@@ -238,6 +239,9 @@ public class Schematica {
 			RendererSchematicChunk.setCanUpdate(true);
 
 			this.profiler.endSection();
+		} else if (tick == TickType.CLIENT && this.settings.minecraft.thePlayer == null) {
+			this.settings.chatLines = 0;
+			this.settings.isPrinterEnabled = true;
 		}
 		this.profiler.endSection();
 

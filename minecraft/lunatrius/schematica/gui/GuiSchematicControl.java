@@ -124,7 +124,7 @@ public class GuiSchematicControl extends GuiScreen {
 		this.btnFlip.enabled = this.settings.schematic != null;
 		this.btnRotate.enabled = this.settings.schematic != null;
 		this.btnMaterials.enabled = this.settings.schematic != null;
-		this.btnPrint.enabled = this.settings.schematic != null;
+		this.btnPrint.enabled = this.settings.schematic != null && this.settings.isPrinterEnabled;
 	}
 
 	@Override
@@ -182,7 +182,7 @@ public class GuiSchematicControl extends GuiScreen {
 				this.settings.rotateWorld();
 			} else if (guiButton.id == this.btnMaterials.id) {
 				this.settings.minecraft.displayGuiScreen(new GuiSchematicMaterials(this));
-			} else if (guiButton.id == this.btnPrint.id) {
+			} else if (guiButton.id == this.btnPrint.id && this.settings.isPrinterEnabled) {
 				this.settings.isPrinting = !this.settings.isPrinting;
 				this.btnPrint.displayString = this.strTranslate.translateKey(this.settings.isPrinting ? "schematic.disable" : "schematic.enable");
 			}
