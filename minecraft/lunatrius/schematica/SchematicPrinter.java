@@ -7,6 +7,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.network.packet.Packet15Place;
 import net.minecraft.network.packet.Packet16BlockItemSwitch;
+import net.minecraft.network.packet.Packet19EntityAction;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -17,12 +18,11 @@ public class SchematicPrinter {
 
 	public boolean print() {
 		int minX, maxX, minY, maxY, minZ, maxZ, x, y, z, blockId, blockMetadata, slot;
+		boolean isSneaking;
 		EntityPlayer player = this.settings.minecraft.thePlayer;
 		World world = this.settings.minecraft.theWorld;
 
-		if (!player.isSneaking()) {
-			return false;
-		}
+		syncSneaking(player, true);
 
 		minX = Math.max(0, (int) this.settings.getTranslationX() - 3);
 		maxX = Math.min(this.settings.schematic.width(), (int) this.settings.getTranslationX() + 3);
@@ -32,6 +32,7 @@ public class SchematicPrinter {
 		maxZ = Math.min(this.settings.schematic.length(), (int) this.settings.getTranslationZ() + 3);
 
 		slot = player.inventory.currentItem;
+		isSneaking = player.isSneaking();
 
 		for (y = minY; y <= maxY; y++) {
 			for (x = minX; x <= maxX; x++) {
@@ -48,6 +49,7 @@ public class SchematicPrinter {
 						syncCurrentItem(player);
 
 						if (!this.settings.placeInstantly) {
+							syncSneaking(player, isSneaking);
 							return true;
 						}
 					}
@@ -57,6 +59,7 @@ public class SchematicPrinter {
 
 		player.inventory.currentItem = slot;
 		syncCurrentItem(player);
+		syncSneaking(player, isSneaking);
 		return true;
 	}
 
@@ -336,6 +339,11 @@ public class SchematicPrinter {
 
 	private void syncCurrentItem(EntityPlayer player) {
 		PacketDispatcher.sendPacketToServer(new Packet16BlockItemSwitch(player.inventory.currentItem));
+	}
+
+	private void syncSneaking(EntityPlayer player, boolean isSneaking) {
+		player.setSneaking(isSneaking);
+		PacketDispatcher.sendPacketToServer(new Packet19EntityAction(player, isSneaking ? 1 : 2));
 	}
 
 	private int getSide(ForgeDirection direction) {
