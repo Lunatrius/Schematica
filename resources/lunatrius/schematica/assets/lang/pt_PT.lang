@@ -1,14 +1,14 @@
 # Author: Tiago Muchagato
-# Version: 1.0
-schematic.openFolder=Abrir Pasta das Schematicas
-schematic.done=Pronto
-schematic.title=Seleccionar schematica
-schematic.folderInfo=(Coloque schematicas aqui)
-schematic.noschematic=-- N\u0103o tem Schematicas --
+# Version: 1.1
+schematic.openFolder=Abrir pasta das schematicas
+schematic.done=Feito
+schematic.title=Selecionar schematica
+schematic.folderInfo=(Colocar schematcas aqui)
+schematic.noschematic=-- N\u0103o tens schematicas --
 schematic.increase=+
 schematic.decrease=-
 schematic.hide=Esconder
-schematic.all=Todas
+schematic.all=TODAS
 schematic.show=Mostrar
 schematic.movehere=Mover para aqui
 schematic.flip=Virar
@@ -20,14 +20,15 @@ schematic.operations=Opera\u00e7\u0151es
 schematic.point.red=Ponto Vermelho
 schematic.point.blue=Ponto Azul
 schematic.saveselection=Guardar selec\u00e7\u0103o como uma schematica
-schematic.enable=Permitir
-schematic.disable=Inabilitar
+schematic.enable=Habilitar
+schematic.disable=Desabilitar
 schematic.x=X:
 schematic.y=Y:
 schematic.z=Z:
 schematic.materials=Materiais
 schematic.materialname=Material
 schematic.materialamount=Quantidade
+schematic.printer=Modo de constru\u00e7\u0103o autom\u00e1tica
 
 key.schematic.load=Carregar schematica
 key.schematic.save=Guardar schematica
