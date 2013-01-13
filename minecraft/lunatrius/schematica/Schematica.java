@@ -226,7 +226,7 @@ public class Schematica {
 		this.profiler.startSection("schematica");
 		if (tick == TickType.CLIENT && this.settings.minecraft.thePlayer != null && this.settings.isRenderingSchematic && this.settings.schematic != null) {
 			this.profiler.startSection("printer");
-			if (this.settings.isPrinting && this.ticks-- < 0) {
+			if (this.settings.isPrinterEnabled && this.settings.isPrinting && this.ticks-- < 0) {
 				this.ticks = this.settings.placeDelay;
 
 				this.printer.print();
