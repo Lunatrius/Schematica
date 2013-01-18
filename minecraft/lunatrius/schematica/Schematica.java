@@ -155,33 +155,33 @@ public class Schematica {
 		blockListIgnoreMetadata.add(Block.anvil.blockID);
 
 		Map<Integer, Integer> blockListMapping = SchematicWorld.blockListMapping;
-		blockListMapping.put(Block.waterMoving.blockID, Item.bucketWater.shiftedIndex);
-		blockListMapping.put(Block.waterStill.blockID, Item.bucketWater.shiftedIndex);
-		blockListMapping.put(Block.lavaMoving.blockID, Item.bucketLava.shiftedIndex);
-		blockListMapping.put(Block.lavaStill.blockID, Item.bucketLava.shiftedIndex);
-		blockListMapping.put(Block.bed.blockID, Item.bed.shiftedIndex);
-		blockListMapping.put(Block.redstoneWire.blockID, Item.redstone.shiftedIndex);
-		blockListMapping.put(Block.crops.blockID, Item.seeds.shiftedIndex);
+		blockListMapping.put(Block.waterMoving.blockID, Item.bucketWater.itemID);
+		blockListMapping.put(Block.waterStill.blockID, Item.bucketWater.itemID);
+		blockListMapping.put(Block.lavaMoving.blockID, Item.bucketLava.itemID);
+		blockListMapping.put(Block.lavaStill.blockID, Item.bucketLava.itemID);
+		blockListMapping.put(Block.bed.blockID, Item.bed.itemID);
+		blockListMapping.put(Block.redstoneWire.blockID, Item.redstone.itemID);
+		blockListMapping.put(Block.crops.blockID, Item.seeds.itemID);
 		blockListMapping.put(Block.stoneOvenActive.blockID, Block.stoneOvenIdle.blockID);
-		blockListMapping.put(Block.signPost.blockID, Item.sign.shiftedIndex);
-		blockListMapping.put(Block.doorWood.blockID, Item.doorWood.shiftedIndex);
-		blockListMapping.put(Block.doorSteel.blockID, Item.doorSteel.shiftedIndex);
-		blockListMapping.put(Block.signWall.blockID, Item.sign.shiftedIndex);
+		blockListMapping.put(Block.signPost.blockID, Item.sign.itemID);
+		blockListMapping.put(Block.doorWood.blockID, Item.doorWood.itemID);
+		blockListMapping.put(Block.doorSteel.blockID, Item.doorSteel.itemID);
+		blockListMapping.put(Block.signWall.blockID, Item.sign.itemID);
 		blockListMapping.put(Block.torchRedstoneIdle.blockID, Block.torchRedstoneActive.blockID);
-		blockListMapping.put(Block.redstoneRepeaterIdle.blockID, Item.redstoneRepeater.shiftedIndex);
-		blockListMapping.put(Block.redstoneRepeaterActive.blockID, Item.redstoneRepeater.shiftedIndex);
-		blockListMapping.put(Block.pumpkinStem.blockID, Item.pumpkinSeeds.shiftedIndex);
-		blockListMapping.put(Block.melonStem.blockID, Item.melonSeeds.shiftedIndex);
-		blockListMapping.put(Block.netherStalk.blockID, Item.netherStalkSeeds.shiftedIndex);
-		blockListMapping.put(Block.brewingStand.blockID, Item.brewingStand.shiftedIndex);
-		blockListMapping.put(Block.cauldron.blockID, Item.cauldron.shiftedIndex);
+		blockListMapping.put(Block.redstoneRepeaterIdle.blockID, Item.redstoneRepeater.itemID);
+		blockListMapping.put(Block.redstoneRepeaterActive.blockID, Item.redstoneRepeater.itemID);
+		blockListMapping.put(Block.pumpkinStem.blockID, Item.pumpkinSeeds.itemID);
+		blockListMapping.put(Block.melonStem.blockID, Item.melonSeeds.itemID);
+		blockListMapping.put(Block.netherStalk.blockID, Item.netherStalkSeeds.itemID);
+		blockListMapping.put(Block.brewingStand.blockID, Item.brewingStand.itemID);
+		blockListMapping.put(Block.cauldron.blockID, Item.cauldron.itemID);
 		blockListMapping.put(Block.redstoneLampActive.blockID, Block.redstoneLampIdle.blockID);
-		blockListMapping.put(Block.cocoaPlant.blockID, Item.dyePowder.shiftedIndex);
-		blockListMapping.put(Block.tripWire.blockID, Item.silk.shiftedIndex);
-		blockListMapping.put(Block.flowerPot.blockID, Item.flowerPot.shiftedIndex);
-		blockListMapping.put(Block.carrot.blockID, Item.carrot.shiftedIndex);
-		blockListMapping.put(Block.potato.blockID, Item.potato.shiftedIndex);
-		blockListMapping.put(Block.skull.blockID, Item.skull.shiftedIndex);
+		blockListMapping.put(Block.cocoaPlant.blockID, Item.dyePowder.itemID);
+		blockListMapping.put(Block.tripWire.blockID, Item.silk.itemID);
+		blockListMapping.put(Block.flowerPot.blockID, Item.flowerPot.itemID);
+		blockListMapping.put(Block.carrot.blockID, Item.carrot.itemID);
+		blockListMapping.put(Block.potato.blockID, Item.potato.itemID);
+		blockListMapping.put(Block.skull.blockID, Item.skull.itemID);
 
 		if (!Settings.schematicDirectory.exists()) {
 			if (!Settings.schematicDirectory.mkdirs()) {

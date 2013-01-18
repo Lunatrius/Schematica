@@ -225,7 +225,7 @@ public class SchematicWorld extends World {
 						itemDamage = 0x03;
 					}
 
-					if (itemID == Item.skull.shiftedIndex) {
+					if (itemID == Item.skull.itemID) {
 						itemDamage = this.metadata[x][y][z];
 					}
 
@@ -443,7 +443,7 @@ public class SchematicWorld extends World {
 					base = 12;
 				}
 
-				skullTileEntity.func_82116_a((2 * base - angle) & 15);
+				skullTileEntity.setSkullRotation((2 * base - angle) & 15);
 			}
 		}
 
@@ -676,7 +676,7 @@ public class SchematicWorld extends World {
 
 			if (tileEntity instanceof TileEntitySkull && tileEntity.blockMetadata == 0x1) {
 				TileEntitySkull skullTileEntity = (TileEntitySkull) tileEntity;
-				skullTileEntity.func_82116_a((skullTileEntity.func_82119_b() + 12) & 15);
+				skullTileEntity.setSkullRotation((skullTileEntity.func_82119_b() + 12) & 15);
 			}
 
 		}
@@ -989,7 +989,7 @@ public class SchematicWorld extends World {
 	}
 
 	public static boolean isFluidContainer(int itemId) {
-		return itemId == Item.bucketWater.shiftedIndex || itemId == Item.bucketLava.shiftedIndex;
+		return itemId == Item.bucketWater.itemID || itemId == Item.bucketLava.itemID;
 	}
 
 	public static boolean isMetadataSensitive(int itemId) {

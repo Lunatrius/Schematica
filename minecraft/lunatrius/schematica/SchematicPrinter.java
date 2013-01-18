@@ -46,6 +46,7 @@ public class SchematicPrinter {
 					blockMetadata = this.settings.schematic.getBlockMetadata(x, y, z);
 					if (placeBlock(this.settings.minecraft, world, player, this.settings.offset.x + x, this.settings.offset.y + y, this.settings.offset.z + z, getMappedId(blockId), blockMetadata)) {
 						if (!this.settings.placeInstantly) {
+							player.inventory.currentItem = slot;
 							syncSneaking(player, isSneaking);
 							return true;
 						}
@@ -71,7 +72,7 @@ public class SchematicPrinter {
 			return false;
 		}
 
-		if (SchematicWorld.isFluidContainer(itemId) || itemId == Item.sign.shiftedIndex) {
+		if (SchematicWorld.isFluidContainer(itemId) || itemId == Item.sign.itemID) {
 			return false;
 		}
 
@@ -165,7 +166,7 @@ public class SchematicPrinter {
 				} else {
 					return false;
 				}
-			} else if (itemId == Item.redstoneRepeater.shiftedIndex) {
+			} else if (itemId == Item.redstoneRepeater.itemID) {
 				itemDamageInHand = 0;
 			} else if (itemId == Block.anvil.blockID) {
 				switch (itemDamage & 0xC) {
@@ -287,7 +288,7 @@ public class SchematicPrinter {
 			default:
 				return false;
 			}
-		} else if (itemId == Item.redstoneRepeater.shiftedIndex) {
+		} else if (itemId == Item.redstoneRepeater.itemID) {
 			switch (itemDamage & 0x3) {
 			case 0:
 				return orientation == 3;
