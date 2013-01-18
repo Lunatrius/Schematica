@@ -2,19 +2,19 @@ package lunatrius.schematica;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.network.packet.Packet15Place;
-import net.minecraft.network.packet.Packet16BlockItemSwitch;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet19EntityAction;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class SchematicPrinter {
 	private final Settings settings = Settings.instance();
-	private int lastItem = -1;
 
 	public boolean print() {
 		int minX, maxX, minY, maxY, minZ, maxZ, x, y, z, blockId, blockMetadata, slot;
@@ -44,10 +44,7 @@ public class SchematicPrinter {
 					}
 
 					blockMetadata = this.settings.schematic.getBlockMetadata(x, y, z);
-					if (placeBlock(world, player, this.settings.offset.x + x, this.settings.offset.y + y, this.settings.offset.z + z, getMappedId(blockId), blockMetadata)) {
-						player.inventory.currentItem = slot;
-						syncCurrentItem(player);
-
+					if (placeBlock(this.settings.minecraft, world, player, this.settings.offset.x + x, this.settings.offset.y + y, this.settings.offset.z + z, getMappedId(blockId), blockMetadata)) {
 						if (!this.settings.placeInstantly) {
 							syncSneaking(player, isSneaking);
 							return true;
@@ -58,7 +55,6 @@ public class SchematicPrinter {
 		}
 
 		player.inventory.currentItem = slot;
-		syncCurrentItem(player);
 		syncSneaking(player, isSneaking);
 		return true;
 	}
@@ -70,7 +66,7 @@ public class SchematicPrinter {
 		return blockId;
 	}
 
-	private boolean placeBlock(World world, EntityPlayer player, int x, int y, int z, int itemId, int itemDamage) {
+	private boolean placeBlock(Minecraft minecraft, World world, EntityPlayer player, int x, int y, int z, int itemId, int itemDamage) {
 		if (!isValidOrientation(player, x, y, z, itemId, itemDamage)) {
 			return false;
 		}
@@ -220,11 +216,11 @@ public class SchematicPrinter {
 				return false;
 			}
 
-			if (!swapToItem(this.settings.minecraft.thePlayer.inventory, itemId, itemDamageInHand)) {
+			if (!swapToItem(player.inventory, itemId, itemDamageInHand)) {
 				return false;
 			}
 		} else {
-			if (!swapToItem(this.settings.minecraft.thePlayer.inventory, itemId)) {
+			if (!swapToItem(player.inventory, itemId)) {
 				return false;
 			}
 
@@ -243,8 +239,7 @@ public class SchematicPrinter {
 
 		side = getSide(direction);
 		if (side != 255 && blocks[side] || !this.settings.placeAdjacent) {
-			placeBlock(this.settings.minecraft.thePlayer, x, y, z, direction, 0.0f, offsetY, 0.0f);
-			return true;
+			return placeBlock(minecraft, world, player, x, y, z, direction, 0.0f, offsetY, 0.0f);
 		}
 
 		return false;
@@ -330,15 +325,21 @@ public class SchematicPrinter {
 		return true;
 	}
 
-	private void placeBlock(EntityPlayer player, int x, int y, int z, ForgeDirection direction, float offsetX, float offsetY, float offsetZ) {
-		if (this.lastItem != player.inventory.currentItem) {
-			syncCurrentItem(player);
-		}
-		PacketDispatcher.sendPacketToServer(new Packet15Place(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, getSide(direction), player.getCurrentEquippedItem(), offsetX, offsetY, offsetZ));
-	}
+	private boolean placeBlock(Minecraft minecraft, World world, EntityPlayer player, int x, int y, int z, ForgeDirection direction, float offsetX, float offsetY, float offsetZ) {
+		ItemStack itemStack = player.getCurrentEquippedItem();
+		boolean success = false;
 
-	private void syncCurrentItem(EntityPlayer player) {
-		PacketDispatcher.sendPacketToServer(new Packet16BlockItemSwitch(player.inventory.currentItem));
+		x += direction.offsetX;
+		y += direction.offsetY;
+		z += direction.offsetZ;
+
+		success = minecraft.playerController.onPlayerRightClick(player, world, itemStack, x, y, z, getSide(direction), Vec3.createVectorHelper(x + offsetX, y + offsetY, z + offsetZ));
+
+		if (itemStack.stackSize == 0 && success) {
+			player.inventory.mainInventory[player.inventory.currentItem] = null;
+		}
+
+		return success;
 	}
 
 	private void syncSneaking(EntityPlayer player, boolean isSneaking) {
@@ -368,7 +369,6 @@ public class SchematicPrinter {
 	private boolean swapToItem(InventoryPlayer inventory, int itemID, int itemDamage) {
 		int slot = getInventorySlotWithItem(inventory, itemID, itemDamage);
 		if (slot > -1 && slot < 9) {
-			this.lastItem = inventory.currentItem;
 			inventory.currentItem = slot;
 			return true;
 		}
@@ -378,7 +378,6 @@ public class SchematicPrinter {
 	private boolean swapToItem(InventoryPlayer inventory, int itemID) {
 		int slot = getInventorySlotWithItem(inventory, itemID);
 		if (slot > -1 && slot < 9) {
-			this.lastItem = inventory.currentItem;
 			inventory.currentItem = slot;
 			return true;
 		}
