@@ -145,7 +145,7 @@ public class GuiSchematicSave extends GuiScreen {
 		this.btnSave.enabled = this.settings.isRenderingGuide;
 		this.controlList.add(this.btnSave);
 
-		this.tfFilename.setMaxStringLength(128);
+		this.tfFilename.setMaxStringLength(1024);
 		this.tfFilename.setText(this.filename);
 	}
 
