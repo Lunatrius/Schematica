@@ -186,17 +186,20 @@ public class Settings {
 			int[][][] blocks = new int[width][height][length];
 			int[][][] metadata = new int[width][height][length];
 			List<TileEntity> tileEntities = new ArrayList<TileEntity>();
+			TileEntity tileEntity = null;
+			NBTTagCompound tileEntityNBT = null;
 
 			for (int x = minX; x <= maxX; x++) {
 				for (int y = minY; y <= maxY; y++) {
 					for (int z = minZ; z <= maxZ; z++) {
 						blocks[x - minX][y - minY][z - minZ] = this.minecraft.theWorld.getBlockId(x, y, z);
 						metadata[x - minX][y - minY][z - minZ] = this.minecraft.theWorld.getBlockMetadata(x, y, z);
-						if (this.minecraft.theWorld.getBlockTileEntity(x, y, z) != null) {
-							NBTTagCompound te = new NBTTagCompound();
-							this.minecraft.theWorld.getBlockTileEntity(x, y, z).writeToNBT(te);
+						tileEntity = this.minecraft.theWorld.getBlockTileEntity(x, y, z);
+						if (tileEntity != null) {
+							tileEntityNBT = new NBTTagCompound();
+							tileEntity.writeToNBT(tileEntityNBT);
 
-							TileEntity tileEntity = TileEntity.createAndLoadEntity(te);
+							tileEntity = TileEntity.createAndLoadEntity(tileEntityNBT);
 							tileEntity.xCoord -= minX;
 							tileEntity.yCoord -= minY;
 							tileEntity.zCoord -= minZ;
