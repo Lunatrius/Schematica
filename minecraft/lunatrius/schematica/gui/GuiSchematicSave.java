@@ -72,78 +72,78 @@ public class GuiSchematicSave extends GuiScreen {
 		this.centerX = this.width / 2;
 		this.centerY = this.height / 2;
 
-		this.controlList.clear();
+		this.buttonList.clear();
 
 		int id = 0;
 
 		this.btnPointA = new GuiButton(id++, this.centerX - 130, this.centerY - 55, 100, 20, this.strTranslate.translateKey("schematic.point.red"));
-		this.controlList.add(this.btnPointA);
+		this.buttonList.add(this.btnPointA);
 
 		this.btnDecAX = new GuiButton(id++, this.centerX - 130, this.centerY - 30, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
-		this.controlList.add(this.btnDecAX);
+		this.buttonList.add(this.btnDecAX);
 
 		this.btnAmountAX = new GuiButton(id++, this.centerX - 95, this.centerY - 30, 30, 20, Integer.toString(this.settings.increments[this.incrementAX]));
-		this.controlList.add(this.btnAmountAX);
+		this.buttonList.add(this.btnAmountAX);
 
 		this.btnIncAX = new GuiButton(id++, this.centerX - 60, this.centerY - 30, 30, 20, this.strTranslate.translateKey("schematic.increase"));
-		this.controlList.add(this.btnIncAX);
+		this.buttonList.add(this.btnIncAX);
 
 		this.btnDecAY = new GuiButton(id++, this.centerX - 130, this.centerY - 5, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
-		this.controlList.add(this.btnDecAY);
+		this.buttonList.add(this.btnDecAY);
 
 		this.btnAmountAY = new GuiButton(id++, this.centerX - 95, this.centerY - 5, 30, 20, Integer.toString(this.settings.increments[this.incrementAY]));
-		this.controlList.add(this.btnAmountAY);
+		this.buttonList.add(this.btnAmountAY);
 
 		this.btnIncAY = new GuiButton(id++, this.centerX - 60, this.centerY - 5, 30, 20, this.strTranslate.translateKey("schematic.increase"));
-		this.controlList.add(this.btnIncAY);
+		this.buttonList.add(this.btnIncAY);
 
 		this.btnDecAZ = new GuiButton(id++, this.centerX - 130, this.centerY + 20, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
-		this.controlList.add(this.btnDecAZ);
+		this.buttonList.add(this.btnDecAZ);
 
 		this.btnAmountAZ = new GuiButton(id++, this.centerX - 95, this.centerY + 20, 30, 20, Integer.toString(this.settings.increments[this.incrementAZ]));
-		this.controlList.add(this.btnAmountAZ);
+		this.buttonList.add(this.btnAmountAZ);
 
 		this.btnIncAZ = new GuiButton(id++, this.centerX - 60, this.centerY + 20, 30, 20, this.strTranslate.translateKey("schematic.increase"));
-		this.controlList.add(this.btnIncAZ);
+		this.buttonList.add(this.btnIncAZ);
 
 		this.btnPointB = new GuiButton(id++, this.centerX + 30, this.centerY - 55, 100, 20, this.strTranslate.translateKey("schematic.point.blue"));
-		this.controlList.add(this.btnPointB);
+		this.buttonList.add(this.btnPointB);
 
 		this.btnDecBX = new GuiButton(id++, this.centerX + 30, this.centerY - 30, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
-		this.controlList.add(this.btnDecBX);
+		this.buttonList.add(this.btnDecBX);
 
 		this.btnAmountBX = new GuiButton(id++, this.centerX + 65, this.centerY - 30, 30, 20, Integer.toString(this.settings.increments[this.incrementBX]));
-		this.controlList.add(this.btnAmountBX);
+		this.buttonList.add(this.btnAmountBX);
 
 		this.btnIncBX = new GuiButton(id++, this.centerX + 100, this.centerY - 30, 30, 20, this.strTranslate.translateKey("schematic.increase"));
-		this.controlList.add(this.btnIncBX);
+		this.buttonList.add(this.btnIncBX);
 
 		this.btnDecBY = new GuiButton(id++, this.centerX + 30, this.centerY - 5, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
-		this.controlList.add(this.btnDecBY);
+		this.buttonList.add(this.btnDecBY);
 
 		this.btnAmountBY = new GuiButton(id++, this.centerX + 65, this.centerY - 5, 30, 20, Integer.toString(this.settings.increments[this.incrementBY]));
-		this.controlList.add(this.btnAmountBY);
+		this.buttonList.add(this.btnAmountBY);
 
 		this.btnIncBY = new GuiButton(id++, this.centerX + 100, this.centerY - 5, 30, 20, this.strTranslate.translateKey("schematic.increase"));
-		this.controlList.add(this.btnIncBY);
+		this.buttonList.add(this.btnIncBY);
 
 		this.btnDecBZ = new GuiButton(id++, this.centerX + 30, this.centerY + 20, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
-		this.controlList.add(this.btnDecBZ);
+		this.buttonList.add(this.btnDecBZ);
 
 		this.btnAmountBZ = new GuiButton(id++, this.centerX + 65, this.centerY + 20, 30, 20, Integer.toString(this.settings.increments[this.incrementBZ]));
-		this.controlList.add(this.btnAmountBZ);
+		this.buttonList.add(this.btnAmountBZ);
 
 		this.btnIncBZ = new GuiButton(id++, this.centerX + 100, this.centerY + 20, 30, 20, this.strTranslate.translateKey("schematic.increase"));
-		this.controlList.add(this.btnIncBZ);
+		this.buttonList.add(this.btnIncBZ);
 
 		this.btnEnable = new GuiButton(id++, this.width - 210, this.height - 30, 50, 20, this.strTranslate.translateKey(this.settings.isRenderingGuide ? "schematic.disable" : "schematic.enable"));
-		this.controlList.add(this.btnEnable);
+		this.buttonList.add(this.btnEnable);
 
 		this.tfFilename = new GuiTextField(this.fontRenderer, this.width - 155, this.height - 29, 100, 18);
 
 		this.btnSave = new GuiButton(id++, this.width - 50, this.height - 30, 40, 20, this.strTranslate.translateKey("schematic.save"));
 		this.btnSave.enabled = this.settings.isRenderingGuide;
-		this.controlList.add(this.btnSave);
+		this.buttonList.add(this.btnSave);
 
 		this.tfFilename.setMaxStringLength(1024);
 		this.tfFilename.setText(this.filename);

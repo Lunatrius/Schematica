@@ -53,7 +53,7 @@ public class SchematicWorld extends World {
 	private short height;
 
 	public SchematicWorld() {
-		super(anvilSaveHandler, "", null, worldSettings, null);
+		super(anvilSaveHandler, "", null, worldSettings, null, null);
 		this.icon = Settings.defaultIcon.copy();
 		this.blocks = null;
 		this.metadata = null;
@@ -977,7 +977,7 @@ public class SchematicWorld extends World {
 	}
 
 	public static boolean isContainer(int itemId) {
-		return itemId == Block.stoneOvenActive.blockID || itemId == Block.stoneOvenIdle.blockID || itemId == Block.dispenser.blockID || itemId == Block.chest.blockID || itemId == Block.enderChest.blockID;
+		return itemId == Block.furnaceBurning.blockID || itemId == Block.furnaceIdle.blockID || itemId == Block.dispenser.blockID || itemId == Block.chest.blockID || itemId == Block.enderChest.blockID;
 	}
 
 	public static boolean isButton(int itemId) {

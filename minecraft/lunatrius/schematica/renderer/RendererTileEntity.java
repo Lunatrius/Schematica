@@ -296,7 +296,7 @@ public class RendererTileEntity {
 		RenderEngine var2 = TileEntityRenderer.instance.renderEngine;
 
 		if (var2 != null) {
-			var2.bindTexture(var2.getTexture(string));
+			var2.func_98187_b(string);
 		}
 	}
 }

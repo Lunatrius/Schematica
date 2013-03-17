@@ -45,10 +45,10 @@ public class GuiSchematicLoad extends GuiScreen {
 		int id = 0;
 
 		this.btnOpenDir = new GuiSmallButton(id++, this.width / 2 - 154, this.height - 36, this.strTranslate.translateKey("schematic.openFolder"));
-		this.controlList.add(this.btnOpenDir);
+		this.buttonList.add(this.btnOpenDir);
 
 		this.btnDone = new GuiSmallButton(id++, this.width / 2 + 4, this.height - 36, this.strTranslate.translateKey("schematic.done"));
-		this.controlList.add(this.btnDone);
+		this.buttonList.add(this.btnDone);
 
 		this.guiSchematicLoadSlot = new GuiSchematicLoadSlot(this);
 

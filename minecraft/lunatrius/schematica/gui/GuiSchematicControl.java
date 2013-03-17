@@ -62,60 +62,60 @@ public class GuiSchematicControl extends GuiScreen {
 		this.centerX = this.width / 2;
 		this.centerY = this.height / 2;
 
-		this.controlList.clear();
+		this.buttonList.clear();
 
 		int id = 0;
 
 		this.btnDecX = new GuiButton(id++, this.centerX - 50, this.centerY - 30, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
-		this.controlList.add(this.btnDecX);
+		this.buttonList.add(this.btnDecX);
 
 		this.btnAmountX = new GuiButton(id++, this.centerX - 15, this.centerY - 30, 30, 20, Integer.toString(this.settings.increments[this.incrementX]));
-		this.controlList.add(this.btnAmountX);
+		this.buttonList.add(this.btnAmountX);
 
 		this.btnIncX = new GuiButton(id++, this.centerX + 20, this.centerY - 30, 30, 20, this.strTranslate.translateKey("schematic.increase"));
-		this.controlList.add(this.btnIncX);
+		this.buttonList.add(this.btnIncX);
 
 		this.btnDecY = new GuiButton(id++, this.centerX - 50, this.centerY - 5, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
-		this.controlList.add(this.btnDecY);
+		this.buttonList.add(this.btnDecY);
 
 		this.btnAmountY = new GuiButton(id++, this.centerX - 15, this.centerY - 5, 30, 20, Integer.toString(this.settings.increments[this.incrementY]));
-		this.controlList.add(this.btnAmountY);
+		this.buttonList.add(this.btnAmountY);
 
 		this.btnIncY = new GuiButton(id++, this.centerX + 20, this.centerY - 5, 30, 20, this.strTranslate.translateKey("schematic.increase"));
-		this.controlList.add(this.btnIncY);
+		this.buttonList.add(this.btnIncY);
 
 		this.btnDecZ = new GuiButton(id++, this.centerX - 50, this.centerY + 20, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
-		this.controlList.add(this.btnDecZ);
+		this.buttonList.add(this.btnDecZ);
 
 		this.btnAmountZ = new GuiButton(id++, this.centerX - 15, this.centerY + 20, 30, 20, Integer.toString(this.settings.increments[this.incrementZ]));
-		this.controlList.add(this.btnAmountZ);
+		this.buttonList.add(this.btnAmountZ);
 
 		this.btnIncZ = new GuiButton(id++, this.centerX + 20, this.centerY + 20, 30, 20, this.strTranslate.translateKey("schematic.increase"));
-		this.controlList.add(this.btnIncZ);
+		this.buttonList.add(this.btnIncZ);
 
 		this.btnDecLayer = new GuiButton(id++, this.width - 90, this.height - 150, 25, 20, this.strTranslate.translateKey("schematic.decrease"));
-		this.controlList.add(this.btnDecLayer);
+		this.buttonList.add(this.btnDecLayer);
 
 		this.btnIncLayer = new GuiButton(id++, this.width - 35, this.height - 150, 25, 20, this.strTranslate.translateKey("schematic.increase"));
-		this.controlList.add(this.btnIncLayer);
+		this.buttonList.add(this.btnIncLayer);
 
 		this.btnHide = new GuiButton(id++, this.width - 90, this.height - 105, 80, 20, this.strTranslate.translateKey(this.settings.isRenderingSchematic ? "schematic.hide" : "schematic.show"));
-		this.controlList.add(this.btnHide);
+		this.buttonList.add(this.btnHide);
 
 		this.btnMove = new GuiButton(id++, this.width - 90, this.height - 80, 80, 20, this.strTranslate.translateKey("schematic.movehere"));
-		this.controlList.add(this.btnMove);
+		this.buttonList.add(this.btnMove);
 
 		this.btnFlip = new GuiButton(id++, this.width - 90, this.height - 55, 80, 20, this.strTranslate.translateKey("schematic.flip"));
-		this.controlList.add(this.btnFlip);
+		this.buttonList.add(this.btnFlip);
 
 		this.btnRotate = new GuiButton(id++, this.width - 90, this.height - 30, 80, 20, this.strTranslate.translateKey("schematic.rotate"));
-		this.controlList.add(this.btnRotate);
+		this.buttonList.add(this.btnRotate);
 
 		this.btnMaterials = new GuiButton(id++, 10, this.height - 70, 80, 20, this.strTranslate.translateKey("schematic.materials"));
-		this.controlList.add(this.btnMaterials);
+		this.buttonList.add(this.btnMaterials);
 
 		this.btnPrint = new GuiButton(id++, 10, this.height - 30, 80, 20, this.strTranslate.translateKey(this.settings.isPrinting ? "schematic.disable" : "schematic.enable"));
-		this.controlList.add(this.btnPrint);
+		this.buttonList.add(this.btnPrint);
 
 		this.btnDecLayer.enabled = this.settings.schematic != null;
 		this.btnIncLayer.enabled = this.settings.schematic != null;

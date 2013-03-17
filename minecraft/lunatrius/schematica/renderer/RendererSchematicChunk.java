@@ -1,34 +1,18 @@
 package lunatrius.schematica.renderer;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import javax.imageio.ImageIO;
 
 import lunatrius.schematica.SchematicWorld;
 import lunatrius.schematica.Settings;
 import lunatrius.schematica.util.Vector3f;
 import lunatrius.schematica.util.Vector3i;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.RenderEngine;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.texturepacks.ITexturePack;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
@@ -37,12 +21,9 @@ import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.ForgeHooksClient;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-
-import cpw.mods.fml.relauncher.ReflectionHelper;
 
 public class RendererSchematicChunk {
 	public static final int CHUNK_WIDTH = 16;
@@ -64,11 +45,6 @@ public class RendererSchematicChunk {
 
 	private static final int initialSize = 1152;
 
-	private final List<String> textures = new ArrayList<String>();
-	private final BufferedImage missingTextureImage = new BufferedImage(64, 64, 2);
-	private Field fieldTextureMap = null;
-	private Field fieldSingleIntBuffer = null;
-
 	private int quadSize = initialSize;
 	private float[] quadColorBuffer = null;
 	private float[] quadVertexBuffer = null;
@@ -87,9 +63,6 @@ public class RendererSchematicChunk {
 	private int glList = -1;
 
 	public RendererSchematicChunk(SchematicWorld schematicWorld, int baseX, int baseY, int baseZ) {
-		initTexture();
-		initReflection();
-
 		this.schematic = schematicWorld;
 		this.boundingBox.setBounds(baseX * CHUNK_WIDTH, baseY * CHUNK_HEIGHT, baseZ * CHUNK_LENGTH, (baseX + 1) * CHUNK_WIDTH, (baseY + 1) * CHUNK_HEIGHT, (baseZ + 1) * CHUNK_LENGTH);
 
@@ -115,26 +88,6 @@ public class RendererSchematicChunk {
 		}
 
 		this.glList = GL11.glGenLists(3);
-	}
-
-	private void initTexture() {
-		Graphics graphics = this.missingTextureImage.getGraphics();
-		graphics.setColor(Color.WHITE);
-		graphics.fillRect(0, 0, 64, 64);
-		graphics.setColor(Color.BLACK);
-		graphics.drawString("missingtex", 1, 10);
-		graphics.dispose();
-	}
-
-	private void initReflection() {
-		try {
-			this.fieldTextureMap = ReflectionHelper.findField(RenderEngine.class, "c", "textureMap");
-			this.fieldSingleIntBuffer = ReflectionHelper.findField(RenderEngine.class, "f", "singleIntBuffer");
-		} catch (Exception e) {
-			this.fieldTextureMap = null;
-			this.fieldSingleIntBuffer = null;
-			Settings.logger.log(e);
-		}
 	}
 
 	public void delete() {
@@ -280,11 +233,10 @@ public class RendererSchematicChunk {
 		int blockId = 0, mcBlockId = 0;
 		int sides = 0;
 		Block block = null;
-		String lastTexture = "";
 		Vector3i tmp;
 
-		boolean ambientOcclusion = this.settings.minecraft.gameSettings.ambientOcclusion;
-		this.settings.minecraft.gameSettings.ambientOcclusion = false;
+		int ambientOcclusion = this.settings.minecraft.gameSettings.ambientOcclusion;
+		this.settings.minecraft.gameSettings.ambientOcclusion = 0;
 
 		Tessellator.instance.startDrawingQuads();
 
@@ -348,11 +300,6 @@ public class RendererSchematicChunk {
 							}
 
 							if (block != null) {
-								if (!lastTexture.equals(block.getTextureFile())) {
-									ForgeHooksClient.bindTexture(getTextureName(block.getTextureFile()), 0);
-									lastTexture = block.getTextureFile();
-								}
-
 								if (block.canRenderInPass(renderPass)) {
 									renderBlocks.renderBlockByRenderType(block, x, y, z);
 								}
@@ -798,90 +745,5 @@ public class RendererSchematicChunk {
 			this.lineColorBuffer[this.lineColorIndex++] = blue;
 			this.lineColorBuffer[this.lineColorIndex++] = alpha;
 		}
-	}
-
-	private String getTextureName(String texture) {
-		if (!this.settings.enableAlpha) {
-			return texture;
-		}
-
-		String textureName = "/" + (int) (this.settings.alpha * 255) + texture.replace('/', '-');
-
-		if (this.textures.contains(textureName)) {
-			return textureName;
-		}
-
-		try {
-			ITexturePack texturePackBase = this.settings.minecraft.texturePackList.getSelectedTexturePack();
-			File newTextureFile = new File(Settings.textureDirectory, texturePackBase.getTexturePackFileName().replace(".zip", "") + textureName);
-			if (!newTextureFile.exists()) {
-				BufferedImage bufferedImage = readTextureImage(texturePackBase.getResourceAsStream(texture));
-				if (bufferedImage == null) {
-					return texture;
-				}
-
-				int x, y, color;
-				for (x = 0; x < bufferedImage.getWidth(); x++) {
-					for (y = 0; y < bufferedImage.getHeight(); y++) {
-						color = bufferedImage.getRGB(x, y);
-						bufferedImage.setRGB(x, y, (((int) (((color >> 24) & 0xFF) * this.settings.alpha)) << 24) | (color & 0x00FFFFFF));
-					}
-				}
-
-				if (!newTextureFile.getParentFile().exists()) {
-					if (!newTextureFile.getParentFile().mkdirs()) {
-						return texture;
-					}
-				}
-
-				ImageIO.write(bufferedImage, "png", newTextureFile);
-			}
-
-			loadTexture(textureName, readTextureImage(new BufferedInputStream(new FileInputStream(newTextureFile))));
-
-			this.textures.add(textureName);
-			return textureName;
-		} catch (IOException e) {
-			Settings.logger.log(e);
-		} catch (IllegalArgumentException e) {
-			Settings.logger.log(e);
-		} catch (IllegalAccessException e) {
-			Settings.logger.log(e);
-		}
-
-		return texture;
-	}
-
-	private int loadTexture(String texture, BufferedImage textureImage) throws IllegalArgumentException, IllegalAccessException {
-		HashMap<String, Integer> textureMap = (HashMap<String, Integer>) this.fieldTextureMap.get(this.settings.minecraft.renderEngine);
-		IntBuffer singleIntBuffer = (IntBuffer) this.fieldSingleIntBuffer.get(this.settings.minecraft.renderEngine);
-
-		Integer textureId = textureMap.get(texture);
-
-		if (textureId != null) {
-			return textureId.intValue();
-		}
-
-		try {
-			singleIntBuffer.clear();
-			GLAllocation.generateTextureNames(singleIntBuffer);
-			int glTextureId = singleIntBuffer.get(0);
-			this.settings.minecraft.renderEngine.setupTexture(textureImage, glTextureId);
-			textureMap.put(texture, Integer.valueOf(glTextureId));
-			return glTextureId;
-		} catch (Exception e) {
-			Settings.logger.log(e);
-			GLAllocation.generateTextureNames(singleIntBuffer);
-			int glTextureId = singleIntBuffer.get(0);
-			this.settings.minecraft.renderEngine.setupTexture(this.missingTextureImage, glTextureId);
-			textureMap.put(texture, Integer.valueOf(glTextureId));
-			return glTextureId;
-		}
-	}
-
-	private BufferedImage readTextureImage(InputStream inputStream) throws IOException {
-		BufferedImage bufferedImage = ImageIO.read(inputStream);
-		inputStream.close();
-		return bufferedImage;
 	}
 }

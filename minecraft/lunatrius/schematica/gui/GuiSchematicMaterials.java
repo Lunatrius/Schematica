@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lunatrius.schematica.Settings;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSmallButton;
@@ -38,7 +37,7 @@ public class GuiSchematicMaterials extends GuiScreen {
 		int id = 0;
 
 		this.btnDone = new GuiSmallButton(id++, this.width / 2 + 4, this.height - 30, this.strTranslate.translateKey("schematic.done"));
-		this.controlList.add(this.btnDone);
+		this.buttonList.add(this.btnDone);
 
 		this.guiSchematicMaterialsSlot = new GuiSchematicMaterialsSlot(this);
 	}

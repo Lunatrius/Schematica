@@ -51,14 +51,14 @@ public class Schematica {
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 
 		config.load();
-		this.settings.enableAlpha = Config.getBoolean(config, "alphaEnabled", Configuration.CATEGORY_GENERAL, this.settings.enableAlpha, "Enable transparent textures.");
-		this.settings.alpha = Config.getInt(config, "alpha", Configuration.CATEGORY_GENERAL, (int) (this.settings.alpha * 255), 0, 255, "Alpha value used when rendering the schematic.") / 255.0f;
-		this.settings.highlight = Config.getBoolean(config, "highlight", Configuration.CATEGORY_GENERAL, this.settings.highlight, "Highlight invalid placed blocks and to be placed blocks.");
-		this.settings.highlightAir = Config.getBoolean(config, "highlightAir", Configuration.CATEGORY_GENERAL, this.settings.highlightAir, "Highlight invalid placed blocks (where there should be no block).");
-		this.settings.blockDelta = Config.getFloat(config, "blockDelta", Configuration.CATEGORY_GENERAL, this.settings.blockDelta, 0.0f, 0.5f, "Delta value used for highlighting (if you're having issue with overlapping textures try setting this value higher).");
-		this.settings.placeDelay = Config.getInt(config, "placeDelay", Configuration.CATEGORY_GENERAL, this.settings.placeDelay, 0, 20, "Delay in ticks between placement attempts.");
-		this.settings.placeInstantly = Config.getBoolean(config, "placeInstantly", Configuration.CATEGORY_GENERAL, this.settings.placeInstantly, "Place all blocks that can be placed in one tick.");
-		this.settings.placeAdjacent = Config.getBoolean(config, "placeAdjacent", Configuration.CATEGORY_GENERAL, this.settings.placeAdjacent, "Place blocks only if there is an adjacent block next to it.");
+		this.settings.enableAlpha = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "alphaEnabled", this.settings.enableAlpha, "Enable transparent textures.");
+		this.settings.alpha = Config.getInt(config, Configuration.CATEGORY_GENERAL, "alpha", (int) (this.settings.alpha * 255), 0, 255, "Alpha value used when rendering the schematic.") / 255.0f;
+		this.settings.highlight = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "highlight", this.settings.highlight, "Highlight invalid placed blocks and to be placed blocks.");
+		this.settings.highlightAir = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "highlightAir", this.settings.highlightAir, "Highlight invalid placed blocks (where there should be no block).");
+		this.settings.blockDelta = (float) Config.getDouble(config, Configuration.CATEGORY_GENERAL, "blockDelta", this.settings.blockDelta, 0.0, 0.5, "Delta value used for highlighting (if you're having issue with overlapping textures try setting this value higher).");
+		this.settings.placeDelay = Config.getInt(config, Configuration.CATEGORY_GENERAL, "placeDelay", this.settings.placeDelay, 0, 20, "Delay in ticks between placement attempts.");
+		this.settings.placeInstantly = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "placeInstantly", this.settings.placeInstantly, "Place all blocks that can be placed in one tick.");
+		this.settings.placeAdjacent = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "placeAdjacent", this.settings.placeAdjacent, "Place blocks only if there is an adjacent block next to it.");
 		config.save();
 
 		try {
@@ -108,8 +108,8 @@ public class Schematica {
 		blockListIgnoreMetadata.add(Block.redstoneWire.blockID);
 		blockListIgnoreMetadata.add(Block.crops.blockID);
 		blockListIgnoreMetadata.add(Block.tilledField.blockID);
-		blockListIgnoreMetadata.add(Block.stoneOvenIdle.blockID);
-		blockListIgnoreMetadata.add(Block.stoneOvenActive.blockID);
+		blockListIgnoreMetadata.add(Block.furnaceIdle.blockID);
+		blockListIgnoreMetadata.add(Block.furnaceBurning.blockID);
 		blockListIgnoreMetadata.add(Block.signPost.blockID);
 		blockListIgnoreMetadata.add(Block.doorWood.blockID);
 		blockListIgnoreMetadata.add(Block.ladder.blockID);
@@ -162,7 +162,7 @@ public class Schematica {
 		blockListMapping.put(Block.bed.blockID, Item.bed.itemID);
 		blockListMapping.put(Block.redstoneWire.blockID, Item.redstone.itemID);
 		blockListMapping.put(Block.crops.blockID, Item.seeds.itemID);
-		blockListMapping.put(Block.stoneOvenActive.blockID, Block.stoneOvenIdle.blockID);
+		blockListMapping.put(Block.furnaceBurning.blockID, Block.furnaceIdle.blockID);
 		blockListMapping.put(Block.signPost.blockID, Item.sign.itemID);
 		blockListMapping.put(Block.doorWood.blockID, Item.doorWood.itemID);
 		blockListMapping.put(Block.doorSteel.blockID, Item.doorSteel.itemID);
@@ -242,6 +242,8 @@ public class Schematica {
 		} else if (tick == TickType.CLIENT && this.settings.minecraft.thePlayer == null) {
 			this.settings.chatLines = 0;
 			this.settings.isPrinterEnabled = true;
+			this.settings.schematic = null;
+			this.settings.mcWorldCache = null;
 		}
 		this.profiler.endSection();
 
