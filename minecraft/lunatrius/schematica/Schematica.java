@@ -252,7 +252,7 @@ public class Schematica {
 
 	public void initReflection() {
 		try {
-			this.sortedWorldRenderers = ReflectionHelper.findField(RenderGlobal.class, "k", "sortedWorldRenderers");
+			this.sortedWorldRenderers = ReflectionHelper.findField(RenderGlobal.class, "k", "field_72768_k", "sortedWorldRenderers");
 		} catch (Exception e) {
 			this.sortedWorldRenderers = null;
 			Settings.logger.log(e);
