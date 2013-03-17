@@ -242,6 +242,8 @@ public class Schematica {
 		} else if (tick == TickType.CLIENT && this.settings.minecraft.thePlayer == null) {
 			this.settings.chatLines = 0;
 			this.settings.isPrinterEnabled = true;
+			this.settings.isRenderingSchematic = false;
+			this.settings.isRenderingGuide = false;
 			this.settings.schematic = null;
 			this.settings.mcWorldCache = null;
 		}

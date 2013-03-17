@@ -1,18 +1,32 @@
 package lunatrius.schematica.renderer;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import lunatrius.schematica.SchematicWorld;
 import lunatrius.schematica.Settings;
 import lunatrius.schematica.util.Vector3f;
 import lunatrius.schematica.util.Vector3i;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.Texture;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.texturepacks.ITexturePack;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
@@ -37,13 +51,16 @@ public class RendererSchematicChunk {
 	public final Vector3i centerPosition = new Vector3i();
 
 	private final Settings settings = Settings.instance();
-	private final Profiler profiler = this.settings.minecraft.mcProfiler;
+	private final Minecraft minecraft = this.settings.minecraft;
+	private final Profiler profiler = this.minecraft.mcProfiler;
 	private final SchematicWorld schematic;
 	private final List<TileEntity> tileEntities = new ArrayList<TileEntity>();
 
 	private final AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
 
 	private static final int initialSize = 1152;
+
+	private final Map<String, Integer> texturePacks = new HashMap<String, Integer>();
 
 	private int quadSize = initialSize;
 	private float[] quadColorBuffer = null;
@@ -235,8 +252,10 @@ public class RendererSchematicChunk {
 		Block block = null;
 		Vector3i tmp;
 
-		int ambientOcclusion = this.settings.minecraft.gameSettings.ambientOcclusion;
-		this.settings.minecraft.gameSettings.ambientOcclusion = 0;
+		int ambientOcclusion = this.minecraft.gameSettings.ambientOcclusion;
+		this.minecraft.gameSettings.ambientOcclusion = 0;
+
+		bindTexture();
 
 		Tessellator.instance.startDrawingQuads();
 
@@ -299,10 +318,8 @@ public class RendererSchematicChunk {
 								drawCuboidOutline(tmp, tmp.clone().add(1), sides, 0.0f, 0.75f, 1.0f, 0.25f);
 							}
 
-							if (block != null) {
-								if (block.canRenderInPass(renderPass)) {
-									renderBlocks.renderBlockByRenderType(block, x, y, z);
-								}
+							if (block != null && block.canRenderInPass(renderPass)) {
+								renderBlocks.renderBlockByRenderType(block, x, y, z);
 							}
 						}
 					} catch (Exception e) {
@@ -314,7 +331,7 @@ public class RendererSchematicChunk {
 
 		Tessellator.instance.draw();
 
-		this.settings.minecraft.gameSettings.ambientOcclusion = ambientOcclusion;
+		this.minecraft.gameSettings.ambientOcclusion = ambientOcclusion;
 	}
 
 	public void renderTileEntities(int renderPass) {
@@ -744,6 +761,62 @@ public class RendererSchematicChunk {
 			this.lineColorBuffer[this.lineColorIndex++] = green;
 			this.lineColorBuffer[this.lineColorIndex++] = blue;
 			this.lineColorBuffer[this.lineColorIndex++] = alpha;
+		}
+	}
+
+	private void bindTexture() {
+		ITexturePack texturePackBase = this.minecraft.texturePackList.getSelectedTexturePack();
+		String texturePackFileName = texturePackBase.getTexturePackFileName() + "-" + (int) (this.settings.alpha * 255);
+
+		try {
+			if (!this.texturePacks.containsKey(texturePackFileName)) {
+				BufferedImage bufferedImage = null;
+
+				File textureFile = new File(Settings.textureDirectory, texturePackFileName + ".png");
+				if (textureFile.exists()) {
+					BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(textureFile));
+					bufferedImage = ImageIO.read(bufferedInputStream);
+					bufferedInputStream.close();
+				} else {
+					Texture texture = this.minecraft.renderEngine.field_94154_l.func_94246_d();
+					int width = texture.func_94275_d();
+					int height = texture.func_94276_e();
+					ByteBuffer buffer = texture.func_94273_h();
+
+					bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+					int x, y, offset, alpha, red, green, blue;
+
+					for (y = 0; y < height; y++) {
+						for (x = 0; x < width; x++) {
+							offset = (y * width + x) * 4;
+
+							alpha = buffer.get(offset + 3) & 0xFF;
+							red = buffer.get(offset + 0) & 0xFF;
+							green = buffer.get(offset + 1) & 0xFF;
+							blue = buffer.get(offset + 2) & 0xFF;
+
+							alpha *= this.settings.alpha;
+
+							bufferedImage.setRGB(x, y, (alpha << 24) | (red << 16) | (green << 8) | (blue));
+						}
+					}
+
+					ImageIO.write(bufferedImage, "png", textureFile);
+				}
+
+				if (bufferedImage != null) {
+					this.texturePacks.put(texturePackFileName, this.minecraft.renderEngine.allocateAndSetupTexture(bufferedImage));
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if (this.texturePacks.containsKey(texturePackFileName)) {
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.texturePacks.get(texturePackFileName));
 		}
 	}
 }
