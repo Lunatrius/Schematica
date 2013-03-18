@@ -53,7 +53,7 @@ public class RendererSchematicChunk {
 
 	private static final int initialSize = 1152;
 
-	private final Map<String, Integer> texturePacks = new HashMap<String, Integer>();
+	private static final Map<String, Integer> texturePacks = new HashMap<String, Integer>();
 
 	private int quadSize = initialSize;
 	private float[] quadColorBuffer = null;
@@ -761,7 +761,7 @@ public class RendererSchematicChunk {
 		ITexturePack texturePackBase = this.minecraft.texturePackList.getSelectedTexturePack();
 		String texturePackFileName = texturePackBase.getTexturePackFileName() + "-" + (int) (this.settings.alpha * 255);
 
-		if (!this.texturePacks.containsKey(texturePackFileName)) {
+		if (!texturePacks.containsKey(texturePackFileName)) {
 			Texture texture = this.minecraft.renderEngine.field_94154_l.func_94246_d();
 			int width = texture.func_94275_d();
 			int height = texture.func_94276_e();
@@ -785,11 +785,11 @@ public class RendererSchematicChunk {
 				}
 			}
 
-			this.texturePacks.put(texturePackFileName, this.minecraft.renderEngine.allocateAndSetupTexture(bufferedImage));
+			texturePacks.put(texturePackFileName, this.minecraft.renderEngine.allocateAndSetupTexture(bufferedImage));
 		}
 
-		if (this.texturePacks.containsKey(texturePackFileName)) {
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.texturePacks.get(texturePackFileName));
+		if (texturePacks.containsKey(texturePackFileName)) {
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePacks.get(texturePackFileName));
 		}
 	}
 }
