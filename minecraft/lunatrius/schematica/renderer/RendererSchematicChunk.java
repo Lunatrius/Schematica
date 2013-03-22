@@ -316,7 +316,7 @@ public class RendererSchematicChunk {
 							}
 						}
 					} catch (Exception e) {
-						Settings.logger.log(e);
+						Settings.logger.func_98234_c("Failed to render block!", e);
 					}
 				}
 			}
@@ -365,7 +365,7 @@ public class RendererSchematicChunk {
 							try {
 								tileEntitySpecialRenderer.renderTileEntityAt(tileEntity, x, y, z, 0);
 							} catch (Exception e) {
-								Settings.logger.log(e);
+								Settings.logger.func_98234_c("Failed to render a tile entity!", e);
 							}
 							GL11.glColor4f(1.0f, 1.0f, 1.0f, this.settings.alpha);
 						}
@@ -373,7 +373,7 @@ public class RendererSchematicChunk {
 				}
 			}
 		} catch (Exception ex) {
-			Settings.logger.log(ex);
+			Settings.logger.func_98234_c("Failed to render tile entities!", ex);
 		}
 	}
 

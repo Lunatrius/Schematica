@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 import lunatrius.schematica.renderer.RendererSchematicChunk;
 import lunatrius.schematica.renderer.RendererSchematicGlobal;
@@ -72,7 +71,7 @@ public class Schematica {
 				String lang = "";
 				while ((lang = input.readLine()) != null) {
 					if (lang.length() > 0) {
-						Settings.logger.info("Loading language file: " + lang);
+						Settings.logger.func_98233_a("Loading language file: " + lang);
 						LanguageRegistry.instance().loadLocalization(classLoader.getResource(langDir + lang + ".lang"), lang, false);
 					}
 				}
@@ -80,7 +79,7 @@ public class Schematica {
 				input.close();
 			}
 		} catch (Exception e) {
-			Settings.logger.log(Level.SEVERE, "Could not load language files - corrupted installation detected!", e);
+			Settings.logger.func_98234_c("Could not load language files - corrupted installation detected!", e);
 			throw new RuntimeException(e);
 		}
 
@@ -185,13 +184,13 @@ public class Schematica {
 
 		if (!Settings.schematicDirectory.exists()) {
 			if (!Settings.schematicDirectory.mkdirs()) {
-				Settings.logger.fine("Could not create schematic directory!");
+				Settings.logger.func_98233_a("Could not create schematic directory!");
 			}
 		}
 
 		if (!Settings.textureDirectory.exists()) {
 			if (!Settings.textureDirectory.mkdirs()) {
-				Settings.logger.fine("Could not create texture directory!");
+				Settings.logger.func_98233_a("Could not create texture directory!");
 			}
 		}
 	}
@@ -207,7 +206,7 @@ public class Schematica {
 
 			initReflection();
 		} catch (Exception e) {
-			Settings.logger.log(Level.SEVERE, "Could not initialize the mod!", e);
+			Settings.logger.func_98234_c("Could not initialize the mod!", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -257,7 +256,7 @@ public class Schematica {
 			this.sortedWorldRenderers = ReflectionHelper.findField(RenderGlobal.class, "k", "field_72768_k", "sortedWorldRenderers");
 		} catch (Exception e) {
 			this.sortedWorldRenderers = null;
-			Settings.logger.log(e);
+			Settings.logger.func_98234_c("Reflection initalization failed!", e);
 		}
 	}
 
@@ -279,7 +278,7 @@ public class Schematica {
 					}
 				}
 			} catch (Exception e) {
-				Settings.logger.log(e);
+				Settings.logger.func_98234_c("Dirty check failed!", e);
 			}
 		}
 	}

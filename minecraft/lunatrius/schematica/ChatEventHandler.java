@@ -12,7 +12,7 @@ public class ChatEventHandler {
 
 		if (this.settings.isPrinterEnabled && this.settings.chatLines < 10) {
 			if (event.message.contains(Settings.sbcDisablePrinter)) {
-				Settings.logger.fine("Printer is disabled on this server.");
+				Settings.logger.func_98233_a("Printer is disabled on this server.");
 				this.settings.isPrinterEnabled = false;
 			}
 		}

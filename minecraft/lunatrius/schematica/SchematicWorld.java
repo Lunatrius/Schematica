@@ -73,7 +73,7 @@ public class SchematicWorld extends World {
 				this.icon = new ItemStack(Integer.parseInt(parts[0]), 1, Integer.parseInt(parts[1]));
 			}
 		} catch (Exception e) {
-			Settings.logger.log(e);
+			Settings.logger.func_98234_c("Failed to assign an icon!", e);
 			this.icon = Settings.defaultIcon.copy();
 		}
 		this.blocks = blocks.clone();

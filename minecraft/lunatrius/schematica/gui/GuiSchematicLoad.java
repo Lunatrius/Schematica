@@ -74,7 +74,7 @@ public class GuiSchematicLoad extends GuiScreen {
 				}
 
 				if (success) {
-					Settings.logger.fine("Opening via Sys class!");
+					Settings.logger.func_98233_a("Opening via Sys class!");
 					Sys.openURL("file://" + Settings.schematicDirectory.getAbsolutePath());
 				}
 			} else if (guiButton.id == this.btnDone.id) {
@@ -118,7 +118,7 @@ public class GuiSchematicLoad extends GuiScreen {
 				this.schematicFiles.add(new GuiSchematicEntry("..", 327, 0, true));
 			}
 		} catch (IOException e) {
-			Settings.logger.log(e);
+			Settings.logger.func_98234_c("Failed to add GuiSchematicEntry!", e);
 		}
 
 		for (File file : this.currentDirectory.listFiles(new FileFilterSchematic(true))) {
@@ -154,7 +154,7 @@ public class GuiSchematicLoad extends GuiScreen {
 				}
 			}
 		} catch (Exception e) {
-			Settings.logger.log(e);
+			Settings.logger.func_98234_c("Failed to read schematic icon!", e);
 		}
 
 		return Settings.defaultIcon.copy();
@@ -169,7 +169,7 @@ public class GuiSchematicLoad extends GuiScreen {
 				this.settings.loadSchematic((new File(this.currentDirectory, schematic.getName())).getCanonicalPath());
 			}
 		} catch (Exception e) {
-			Settings.logger.log(e);
+			Settings.logger.func_98234_c("Failed to load schematic!", e);
 		}
 		this.settings.moveHere();
 	}

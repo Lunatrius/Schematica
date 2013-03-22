@@ -13,7 +13,6 @@ import lunatrius.schematica.gui.GuiSchematicLoad;
 import lunatrius.schematica.gui.GuiSchematicSave;
 import lunatrius.schematica.renderer.RendererSchematicChunk;
 import lunatrius.schematica.renderer.RendererTileEntity;
-import lunatrius.schematica.util.MCLogger;
 import lunatrius.schematica.util.Vector3f;
 import lunatrius.schematica.util.Vector3i;
 import net.minecraft.client.Minecraft;
@@ -21,6 +20,8 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemStack;
+import net.minecraft.logging.ILogAgent;
+import net.minecraft.logging.LogAgent;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -51,7 +52,7 @@ public class Settings {
 
 	public static final File schematicDirectory = new File(Minecraft.getMinecraftDir(), "/schematics/");
 	public static final File textureDirectory = new File(Minecraft.getMinecraftDir(), "/resources/mod/schematica/");
-	public static final MCLogger logger = MCLogger.getLogger(Schematica.class.getSimpleName());
+	public static final ILogAgent logger = new LogAgent(Schematica.class.getSimpleName(), "", (new File(Minecraft.getMinecraftDir(), "output-schematica.log")).getAbsolutePath());
 	public static final RenderItem renderItem = new RenderItem();
 	public static final ItemStack defaultIcon = new ItemStack(2, 1, 0);
 
@@ -145,7 +146,7 @@ public class Settings {
 				this.schematic = new SchematicWorld();
 				this.schematic.readFromNBT(tagCompound);
 
-				logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", new Object[] {
+				logger.func_98233_a(String.format("Loaded %s [w:%d,h:%d,l:%d]", new Object[] {
 						filename, this.schematic.width(), this.schematic.height(), this.schematic.length()
 				}));
 
@@ -157,7 +158,7 @@ public class Settings {
 				this.isRenderingSchematic = true;
 			}
 		} catch (Exception e) {
-			logger.log(e);
+			logger.func_98234_c("Failed to load schematic!", e);
 			this.schematic = null;
 			this.renderBlocks = null;
 			this.rendererTileEntity = null;
@@ -218,7 +219,7 @@ public class Settings {
 					filename = parts[1];
 				}
 			} catch (Exception e) {
-				logger.log(e);
+				logger.func_98234_c("Failed to parse icon data!", e);
 			}
 
 			SchematicWorld schematicOut = new SchematicWorld(icon, blocks, metadata, tileEntities, width, height, length);
@@ -227,7 +228,7 @@ public class Settings {
 			OutputStream stream = new FileOutputStream(new File(directory, filename));
 			CompressedStreamTools.writeCompressed(tagCompound, stream);
 		} catch (Exception e) {
-			logger.log(e);
+			logger.func_98234_c("Failed to save schematic!", e);
 			return false;
 		}
 		return true;
