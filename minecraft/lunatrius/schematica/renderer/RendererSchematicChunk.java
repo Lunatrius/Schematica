@@ -14,6 +14,7 @@ import lunatrius.schematica.util.Vector3f;
 import lunatrius.schematica.util.Vector3i;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.Texture;
@@ -22,10 +23,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.texturepacks.ITexturePack;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.tileentity.TileEntityEnderChest;
-import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.tileentity.TileEntitySign;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 
@@ -233,6 +230,8 @@ public class RendererSchematicChunk {
 		renderTileEntities(renderPass);
 
 		this.profiler.endSection();
+
+		this.minecraft.renderEngine.func_98185_a();
 	}
 
 	public void renderBlocks(int renderPass, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
@@ -329,7 +328,6 @@ public class RendererSchematicChunk {
 
 	public void renderTileEntities(int renderPass) {
 		IBlockAccess mcWorld = this.settings.mcWorldCache;
-		RendererTileEntity rendererTileEntity = this.settings.rendererTileEntity;
 
 		int x, y, z;
 		int mcBlockId = 0;
@@ -351,24 +349,18 @@ public class RendererSchematicChunk {
 				mcBlockId = mcWorld.getBlockId(x + this.settings.offset.x, y + this.settings.offset.y, z + this.settings.offset.z);
 
 				if (mcBlockId == 0) {
-					if (tileEntity instanceof TileEntitySign) {
-						rendererTileEntity.renderTileEntitySignAt((TileEntitySign) tileEntity);
-					} else if (tileEntity instanceof TileEntityChest) {
-						rendererTileEntity.renderTileEntityChestAt((TileEntityChest) tileEntity);
-					} else if (tileEntity instanceof TileEntityEnderChest) {
-						rendererTileEntity.renderTileEntityEnderChestAt((TileEntityEnderChest) tileEntity);
-					} else if (tileEntity instanceof TileEntityMobSpawner) {
-						continue;
-					} else {
-						TileEntitySpecialRenderer tileEntitySpecialRenderer = TileEntityRenderer.instance.getSpecialRendererForEntity(tileEntity);
-						if (tileEntitySpecialRenderer != null) {
-							try {
-								tileEntitySpecialRenderer.renderTileEntityAt(tileEntity, x, y, z, 0);
-							} catch (Exception e) {
-								Settings.logger.func_98234_c("Failed to render a tile entity!", e);
-							}
-							GL11.glColor4f(1.0f, 1.0f, 1.0f, this.settings.alpha);
+					TileEntitySpecialRenderer tileEntitySpecialRenderer = TileEntityRenderer.instance.getSpecialRendererForEntity(tileEntity);
+					if (tileEntitySpecialRenderer != null) {
+						try {
+							tileEntitySpecialRenderer.renderTileEntityAt(tileEntity, x, y, z, 0);
+
+							OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+							GL11.glDisable(GL11.GL_TEXTURE_2D);
+							OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+						} catch (Exception e) {
+							Settings.logger.func_98234_c("Failed to render a tile entity!", e);
 						}
+						GL11.glColor4f(1.0f, 1.0f, 1.0f, this.settings.alpha);
 					}
 				}
 			}
@@ -381,7 +373,6 @@ public class RendererSchematicChunk {
 		float[] tempBuffer = new float[newSize];
 		System.arraycopy(oldBuffer, 0, tempBuffer, 0, oldBuffer.length);
 
-		// oldBuffer = tempBuffer;
 		return tempBuffer;
 	}
 
