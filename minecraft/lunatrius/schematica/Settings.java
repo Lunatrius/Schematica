@@ -12,7 +12,6 @@ import lunatrius.schematica.gui.GuiSchematicControl;
 import lunatrius.schematica.gui.GuiSchematicLoad;
 import lunatrius.schematica.gui.GuiSchematicSave;
 import lunatrius.schematica.renderer.RendererSchematicChunk;
-import lunatrius.schematica.renderer.RendererTileEntity;
 import lunatrius.schematica.util.Vector3f;
 import lunatrius.schematica.util.Vector3i;
 import net.minecraft.client.Minecraft;
@@ -63,7 +62,6 @@ public class Settings {
 	public RendererSchematicChunk[][][] rendererSchematicChunk = null;
 	public final List<RendererSchematicChunk> sortedRendererSchematicChunk = new ArrayList<RendererSchematicChunk>();
 	public RenderBlocks renderBlocks = null;
-	public RendererTileEntity rendererTileEntity = null;
 	public Vector3i pointA = new Vector3i();
 	public Vector3i pointB = new Vector3i();
 	public Vector3i pointMin = new Vector3i();
@@ -146,12 +144,11 @@ public class Settings {
 				this.schematic = new SchematicWorld();
 				this.schematic.readFromNBT(tagCompound);
 
-				logger.func_98233_a(String.format("Loaded %s [w:%d,h:%d,l:%d]", new Object[] {
+				logger.logInfo(String.format("Loaded %s [w:%d,h:%d,l:%d]", new Object[] {
 						filename, this.schematic.width(), this.schematic.height(), this.schematic.length()
 				}));
 
 				this.renderBlocks = new RenderBlocks(this.schematic);
-				this.rendererTileEntity = new RendererTileEntity(this.schematic);
 
 				createRendererSchematicChunk();
 
@@ -161,7 +158,6 @@ public class Settings {
 			logger.func_98234_c("Failed to load schematic!", e);
 			this.schematic = null;
 			this.renderBlocks = null;
-			this.rendererTileEntity = null;
 			this.rendererSchematicChunk = null;
 			this.isRenderingSchematic = false;
 			return false;
@@ -322,7 +318,7 @@ public class Settings {
 
 	public void reloadChunkCache() {
 		if (this.schematic != null) {
-			this.mcWorldCache = new ChunkCache(this.minecraft.theWorld, this.offset.x - 1, this.offset.y - 1, this.offset.z - 1, this.offset.x + this.schematic.width() + 1, this.offset.y + this.schematic.height() + 1, this.offset.z + this.schematic.length() + 1);
+			this.mcWorldCache = new ChunkCache(this.minecraft.theWorld, this.offset.x - 1, this.offset.y - 1, this.offset.z - 1, this.offset.x + this.schematic.width() + 1, this.offset.y + this.schematic.height() + 1, this.offset.z + this.schematic.length() + 1, 0);
 			refreshSchematic();
 		}
 	}

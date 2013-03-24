@@ -231,7 +231,7 @@ public class RendererSchematicChunk {
 
 		this.profiler.endSection();
 
-		this.minecraft.renderEngine.func_98185_a();
+		this.minecraft.renderEngine.resetBoundTexture();
 	}
 
 	public void renderBlocks(int renderPass, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
@@ -753,10 +753,10 @@ public class RendererSchematicChunk {
 		String texturePackFileName = texturePackBase.getTexturePackFileName() + "-" + (int) (this.settings.alpha * 255);
 
 		if (!texturePacks.containsKey(texturePackFileName)) {
-			Texture texture = this.minecraft.renderEngine.field_94154_l.func_94246_d();
-			int width = texture.func_94275_d();
-			int height = texture.func_94276_e();
-			ByteBuffer buffer = texture.func_94273_h();
+			Texture texture = this.minecraft.renderEngine.textureMapBlocks.getTexture();
+			int width = texture.getWidth();
+			int height = texture.getHeight();
+			ByteBuffer buffer = texture.getTextureData();
 
 			BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 			int x, y, offset, alpha, red, green, blue;

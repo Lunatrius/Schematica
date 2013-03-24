@@ -74,7 +74,7 @@ public class GuiSchematicLoad extends GuiScreen {
 				}
 
 				if (success) {
-					Settings.logger.func_98233_a("Opening via Sys class!");
+					Settings.logger.logInfo("Opening via Sys class!");
 					Sys.openURL("file://" + Settings.schematicDirectory.getAbsolutePath());
 				}
 			} else if (guiButton.id == this.btnDone.id) {

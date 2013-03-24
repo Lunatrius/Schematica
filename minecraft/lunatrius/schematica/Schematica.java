@@ -71,7 +71,7 @@ public class Schematica {
 				String lang = "";
 				while ((lang = input.readLine()) != null) {
 					if (lang.length() > 0) {
-						Settings.logger.func_98233_a("Loading language file: " + lang);
+						Settings.logger.logInfo("Loading language file: " + lang);
 						LanguageRegistry.instance().loadLocalization(classLoader.getResource(langDir + lang + ".lang"), lang, false);
 					}
 				}
@@ -102,7 +102,7 @@ public class Schematica {
 		blockListIgnoreMetadata.add(Block.pistonBase.blockID);
 		blockListIgnoreMetadata.add(Block.stoneSingleSlab.blockID);
 		blockListIgnoreMetadata.add(Block.torchWood.blockID);
-		blockListIgnoreMetadata.add(Block.stairCompactPlanks.blockID);
+		blockListIgnoreMetadata.add(Block.stairsWoodOak.blockID);
 		blockListIgnoreMetadata.add(Block.chest.blockID);
 		blockListIgnoreMetadata.add(Block.redstoneWire.blockID);
 		blockListIgnoreMetadata.add(Block.crops.blockID);
@@ -113,7 +113,7 @@ public class Schematica {
 		blockListIgnoreMetadata.add(Block.doorWood.blockID);
 		blockListIgnoreMetadata.add(Block.ladder.blockID);
 		blockListIgnoreMetadata.add(Block.rail.blockID);
-		blockListIgnoreMetadata.add(Block.stairCompactCobblestone.blockID);
+		blockListIgnoreMetadata.add(Block.stairsCobblestone.blockID);
 		blockListIgnoreMetadata.add(Block.signWall.blockID);
 		blockListIgnoreMetadata.add(Block.lever.blockID);
 		blockListIgnoreMetadata.add(Block.pressurePlateStone.blockID);
@@ -132,7 +132,7 @@ public class Schematica {
 		blockListIgnoreMetadata.add(Block.vine.blockID);
 		blockListIgnoreMetadata.add(Block.fenceGate.blockID);
 		blockListIgnoreMetadata.add(Block.stairsBrick.blockID);
-		blockListIgnoreMetadata.add(Block.stairsStoneBrickSmooth.blockID);
+		blockListIgnoreMetadata.add(Block.stairsStoneBrick.blockID);
 		blockListIgnoreMetadata.add(Block.waterlily.blockID);
 		blockListIgnoreMetadata.add(Block.stairsNetherBrick.blockID);
 		blockListIgnoreMetadata.add(Block.netherStalk.blockID);
@@ -184,13 +184,13 @@ public class Schematica {
 
 		if (!Settings.schematicDirectory.exists()) {
 			if (!Settings.schematicDirectory.mkdirs()) {
-				Settings.logger.func_98233_a("Could not create schematic directory!");
+				Settings.logger.logInfo("Could not create schematic directory!");
 			}
 		}
 
 		if (!Settings.textureDirectory.exists()) {
 			if (!Settings.textureDirectory.mkdirs()) {
-				Settings.logger.func_98233_a("Could not create texture directory!");
+				Settings.logger.logInfo("Could not create texture directory!");
 			}
 		}
 	}

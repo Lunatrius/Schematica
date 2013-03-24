@@ -953,7 +953,7 @@ public class SchematicWorld extends World {
 	}
 
 	public static boolean isStair(int itemId) {
-		return itemId == Block.stairCompactCobblestone.blockID || itemId == Block.stairCompactPlanks.blockID || itemId == Block.stairsBrick.blockID || itemId == Block.stairsNetherBrick.blockID || itemId == Block.stairsStoneBrickSmooth.blockID || itemId == Block.stairsSandStone.blockID || itemId == Block.stairsWoodSpruce.blockID || itemId == Block.stairsWoodBirch.blockID || itemId == Block.stairsWoodJungle.blockID;
+		return itemId == Block.stairsWoodOak.blockID || itemId == Block.stairsCobblestone.blockID || itemId == Block.stairsBrick.blockID || itemId == Block.stairsStoneBrick.blockID || itemId == Block.stairsNetherBrick.blockID || itemId == Block.stairsSandStone.blockID || itemId == Block.stairsWoodSpruce.blockID || itemId == Block.stairsWoodBirch.blockID || itemId == Block.stairsWoodJungle.blockID || itemId == Block.stairCompactNetherQuartz.blockID;
 	}
 
 	public static boolean isSlab(int itemId) {
