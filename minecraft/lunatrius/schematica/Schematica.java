@@ -1,12 +1,19 @@
 package lunatrius.schematica;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.Set;
 
 import lunatrius.schematica.renderer.RendererSchematicChunk;
 import lunatrius.schematica.renderer.RendererSchematicGlobal;
@@ -24,9 +31,11 @@ import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
@@ -35,6 +44,9 @@ import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "Schematica")
 public class Schematica {
+	private static final FileFilterConfiguration FILE_FILTER_CONFIGURATION = new FileFilterConfiguration();
+	private static final String DIR_ASSETS = "lunatrius/schematica/assets/";
+
 	private final Settings settings = Settings.instance();
 	private final Profiler profiler = this.settings.minecraft.mcProfiler;
 	private final SchematicPrinter printer = new SchematicPrinter();
@@ -44,10 +56,13 @@ public class Schematica {
 	public static Schematica instance;
 
 	private Field sortedWorldRenderers = null;
+	private File configurationFolder = null;
 
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
-		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+		File suggestedConfigurationFile = event.getSuggestedConfigurationFile();
+		Configuration config = new Configuration(suggestedConfigurationFile);
+		this.configurationFolder = suggestedConfigurationFile.getParentFile();
 
 		config.load();
 		this.settings.enableAlpha = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "alphaEnabled", this.settings.enableAlpha, "Enable transparent textures.");
@@ -61,8 +76,7 @@ public class Schematica {
 		config.save();
 
 		try {
-			String assetsDir = "lunatrius/schematica/assets/";
-			String langDir = assetsDir + "lang/";
+			String langDir = DIR_ASSETS + "lang/";
 			ClassLoader classLoader = getClass().getClassLoader();
 			InputStream stream = classLoader.getResourceAsStream(langDir + "lang.txt");
 
@@ -204,10 +218,85 @@ public class Schematica {
 			KeyBindingRegistry.registerKeyBinding(new KeyBindingHandler(this.settings.keyBindings, new boolean[this.settings.keyBindings.length]));
 			TickRegistry.registerTickHandler(new Ticker(EnumSet.of(TickType.CLIENT)), Side.CLIENT);
 
-			initReflection();
+			this.sortedWorldRenderers = ReflectionHelper.findField(RenderGlobal.class, "k", "field_72768_k", "sortedWorldRenderers");
 		} catch (Exception e) {
 			Settings.logger.func_98234_c("Could not initialize the mod!", e);
 			throw new RuntimeException(e);
+		}
+	}
+
+	@PostInit
+	public void postInit(FMLPostInitializationEvent event) {
+		String[] files = new String[] {
+				"aliasVanilla", "flipVanilla", "rotationVanilla"
+		};
+		String mappingDir = DIR_ASSETS + "mapping/";
+		ClassLoader classLoader = getClass().getClassLoader();
+
+		for (String filename : files) {
+			loadConfigurationFile(classLoader.getResource(mappingDir + filename + ".properties"), filename + ".properties");
+		}
+
+		File[] configurationFiles = this.configurationFolder.listFiles(FILE_FILTER_CONFIGURATION);
+
+		for (File configurationFile : configurationFiles) {
+			try {
+				loadConfigurationFile(configurationFile.toURI().toURL(), configurationFile.getName());
+			} catch (MalformedURLException e) {
+				Settings.logger.func_98234_c("Could not load properties file.", e);
+			}
+		}
+	}
+
+	private void loadConfigurationFile(URL configurationFile, String configurationFilename) {
+		if (configurationFile == null) {
+			Settings.logger.logInfo("Skipping " + configurationFilename + "...");
+			return;
+		}
+
+		Properties properties = new Properties();
+		InputStream inputStream = null;
+
+		Settings.logger.logInfo("Reading " + configurationFilename + "...");
+
+		try {
+			inputStream = configurationFile.openStream();
+			properties.load(inputStream);
+		} catch (IOException e) {
+			Settings.logger.func_98234_c("Could not load properties file.", e);
+		} finally {
+			try {
+				if (inputStream != null) {
+					inputStream.close();
+				}
+			} catch (IOException e) {
+				Settings.logger.func_98234_c("Could not close properties file.", e);
+			}
+		}
+
+		String filename = configurationFilename.toLowerCase();
+		Set<Entry<Object, Object>> entrySet = properties.entrySet();
+		for (Entry<Object, Object> entry : entrySet) {
+			if (!(entry.getKey() instanceof String) || !(entry.getValue() instanceof String)) {
+				continue;
+			}
+
+			String key = (String) entry.getKey();
+			String value = (String) entry.getValue();
+
+			if (filename.startsWith("alias")) {
+				if (!BlockInfo.addMappingAlias(key, value)) {
+					Settings.logger.logWarning("Failed alias: " + key + " => " + value);
+				}
+			} else if (filename.startsWith("flip")) {
+				if (!BlockInfo.addMappingFlip(key, value)) {
+					Settings.logger.logWarning("Failed flip: " + key + " => " + value);
+				}
+			} else if (filename.startsWith("rotation")) {
+				if (!BlockInfo.addMappingRotation(key, value)) {
+					Settings.logger.logWarning("Failed rotation: " + key + " => " + value);
+				}
+			}
 		}
 	}
 
@@ -249,15 +338,6 @@ public class Schematica {
 		this.profiler.endSection();
 
 		return true;
-	}
-
-	public void initReflection() {
-		try {
-			this.sortedWorldRenderers = ReflectionHelper.findField(RenderGlobal.class, "k", "field_72768_k", "sortedWorldRenderers");
-		} catch (Exception e) {
-			this.sortedWorldRenderers = null;
-			Settings.logger.func_98234_c("Reflection initalization failed!", e);
-		}
 	}
 
 	private void checkDirty() {

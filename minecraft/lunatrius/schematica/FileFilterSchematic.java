@@ -2,9 +2,7 @@ package lunatrius.schematica;
 
 import java.io.File;
 
-import javax.swing.filechooser.FileFilter;
-
-public class FileFilterSchematic extends FileFilter implements java.io.FileFilter {
+public class FileFilterSchematic implements java.io.FileFilter {
 	private final boolean directory;
 
 	public FileFilterSchematic(boolean dir) {
@@ -18,11 +16,6 @@ public class FileFilterSchematic extends FileFilter implements java.io.FileFilte
 			return file.isDirectory();
 		}
 
-		return file.getPath().toLowerCase().endsWith(".schematic");
-	}
-
-	@Override
-	public String getDescription() {
-		return "Schematic files (*.schematic)";
+		return file.getName().toLowerCase().endsWith(".schematic");
 	}
 }

@@ -21,6 +21,9 @@ import net.minecraft.util.StringTranslate;
 import org.lwjgl.Sys;
 
 public class GuiSchematicLoad extends GuiScreen {
+	private static final FileFilterSchematic FILE_FILTER_FOLDER = new FileFilterSchematic(true);
+	private static final FileFilterSchematic FILE_FILTER_SCHEMATIC = new FileFilterSchematic(false);
+
 	private final Settings settings = Settings.instance();
 	private final GuiScreen prevGuiScreen;
 	private GuiSchematicLoadSlot guiSchematicLoadSlot;
@@ -121,7 +124,7 @@ public class GuiSchematicLoad extends GuiScreen {
 			Settings.logger.func_98234_c("Failed to add GuiSchematicEntry!", e);
 		}
 
-		for (File file : this.currentDirectory.listFiles(new FileFilterSchematic(true))) {
+		for (File file : this.currentDirectory.listFiles(FILE_FILTER_FOLDER)) {
 			name = file.getName();
 
 			itemID = file.listFiles().length == 0 ? 325 : 326;
@@ -129,7 +132,7 @@ public class GuiSchematicLoad extends GuiScreen {
 			this.schematicFiles.add(new GuiSchematicEntry(name, itemID, 0, file.isDirectory()));
 		}
 
-		File[] files = this.currentDirectory.listFiles(new FileFilterSchematic(false));
+		File[] files = this.currentDirectory.listFiles(FILE_FILTER_SCHEMATIC);
 		if (files.length == 0) {
 			this.schematicFiles.add(new GuiSchematicEntry(this.strTranslate.translateKey("schematic.noschematic"), 3, 0, false));
 		} else {
