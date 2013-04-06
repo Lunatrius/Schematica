@@ -749,6 +749,10 @@ public class RendererSchematicChunk {
 	}
 
 	private void bindTexture() {
+		if (!this.settings.enableAlpha) {
+			return;
+		}
+
 		ITexturePack texturePackBase = this.minecraft.texturePackList.getSelectedTexturePack();
 		String texturePackFileName = texturePackBase.getTexturePackFileName() + "-" + (int) (this.settings.alpha * 255);
 
