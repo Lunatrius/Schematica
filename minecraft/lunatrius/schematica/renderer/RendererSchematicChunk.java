@@ -224,6 +224,7 @@ public class RendererSchematicChunk {
 		}
 
 		this.profiler.startSection("blocks");
+		bindTexture();
 		GL11.glCallList(this.glList + renderPass);
 
 		this.profiler.endStartSection("tileEntities");
@@ -246,8 +247,6 @@ public class RendererSchematicChunk {
 
 		int ambientOcclusion = this.minecraft.gameSettings.ambientOcclusion;
 		this.minecraft.gameSettings.ambientOcclusion = 0;
-
-		bindTexture();
 
 		Tessellator.instance.startDrawingQuads();
 
@@ -750,6 +749,7 @@ public class RendererSchematicChunk {
 
 	private void bindTexture() {
 		if (!this.settings.enableAlpha) {
+			this.minecraft.renderEngine.bindTexture("/terrain.png");
 			return;
 		}
 
