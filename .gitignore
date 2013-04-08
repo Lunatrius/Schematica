@@ -1,4 +1,10 @@
+# IDE
 /.settings/
+/.idea/
+
+# folders
 /bin/
 /release/
+
+# files
 /build.properties
