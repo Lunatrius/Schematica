@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE project>
 <project name="GenericForgeMod" default="build">
-    <description>Generic ForgeMod Builder</description>
+    <description>ForgeSchematica Builder</description>
 
     <target name="init">
         <!-- load properties from files -->
@@ -37,7 +37,6 @@
         <!-- setup MCP dirs -->
         <property name="mcp.src" location="${mcp.home}/src"/>
         <property name="mcp.src.minecraft" location="${mcp.src}/minecraft"/>
-
         <property name="mcp.bin" location="${mcp.home}/reobf/minecraft"/>
     </target>
 
@@ -122,7 +121,6 @@
         <antcall target="recompile"/>
         <antcall target="reobfuscate"/>
         <antcall target="build-jar"/>
-
         <antcall target="clean"/>
     </target>
 </project>

@@ -121,7 +121,7 @@ public class GuiSchematicLoad extends GuiScreen {
 				this.schematicFiles.add(new GuiSchematicEntry("..", 327, 0, true));
 			}
 		} catch (IOException e) {
-			Settings.logger.func_98234_c("Failed to add GuiSchematicEntry!", e);
+			Settings.logger.logSevereException("Failed to add GuiSchematicEntry!", e);
 		}
 
 		for (File file : this.currentDirectory.listFiles(FILE_FILTER_FOLDER)) {
@@ -157,7 +157,7 @@ public class GuiSchematicLoad extends GuiScreen {
 				}
 			}
 		} catch (Exception e) {
-			Settings.logger.func_98234_c("Failed to read schematic icon!", e);
+			Settings.logger.logSevereException("Failed to read schematic icon!", e);
 		}
 
 		return Settings.defaultIcon.copy();
@@ -172,7 +172,7 @@ public class GuiSchematicLoad extends GuiScreen {
 				this.settings.loadSchematic((new File(this.currentDirectory, schematic.getName())).getCanonicalPath());
 			}
 		} catch (Exception e) {
-			Settings.logger.func_98234_c("Failed to load schematic!", e);
+			Settings.logger.logSevereException("Failed to load schematic!", e);
 		}
 		this.settings.moveHere();
 	}

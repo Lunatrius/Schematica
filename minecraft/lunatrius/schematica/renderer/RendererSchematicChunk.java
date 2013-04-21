@@ -314,7 +314,7 @@ public class RendererSchematicChunk {
 							}
 						}
 					} catch (Exception e) {
-						Settings.logger.func_98234_c("Failed to render block!", e);
+						Settings.logger.logSevereException("Failed to render block!", e);
 					}
 				}
 			}
@@ -357,14 +357,14 @@ public class RendererSchematicChunk {
 							GL11.glDisable(GL11.GL_TEXTURE_2D);
 							OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
 						} catch (Exception e) {
-							Settings.logger.func_98234_c("Failed to render a tile entity!", e);
+							Settings.logger.logSevereException("Failed to render a tile entity!", e);
 						}
 						GL11.glColor4f(1.0f, 1.0f, 1.0f, this.settings.alpha);
 					}
 				}
 			}
 		} catch (Exception ex) {
-			Settings.logger.func_98234_c("Failed to render tile entities!", ex);
+			Settings.logger.logSevereException("Failed to render tile entities!", ex);
 		}
 	}
 

@@ -93,7 +93,7 @@ public class Schematica {
 				input.close();
 			}
 		} catch (Exception e) {
-			Settings.logger.func_98234_c("Could not load language files - corrupted installation detected!", e);
+			Settings.logger.logSevereException("Could not load language files - corrupted installation detected!", e);
 			throw new RuntimeException(e);
 		}
 
@@ -131,7 +131,7 @@ public class Schematica {
 		blockListIgnoreMetadata.add(Block.signWall.blockID);
 		blockListIgnoreMetadata.add(Block.lever.blockID);
 		blockListIgnoreMetadata.add(Block.pressurePlateStone.blockID);
-		blockListIgnoreMetadata.add(Block.doorSteel.blockID);
+		blockListIgnoreMetadata.add(Block.doorIron.blockID);
 		blockListIgnoreMetadata.add(Block.pressurePlatePlanks.blockID);
 		blockListIgnoreMetadata.add(Block.torchRedstoneIdle.blockID);
 		blockListIgnoreMetadata.add(Block.torchRedstoneActive.blockID);
@@ -178,7 +178,7 @@ public class Schematica {
 		blockListMapping.put(Block.furnaceBurning.blockID, Block.furnaceIdle.blockID);
 		blockListMapping.put(Block.signPost.blockID, Item.sign.itemID);
 		blockListMapping.put(Block.doorWood.blockID, Item.doorWood.itemID);
-		blockListMapping.put(Block.doorSteel.blockID, Item.doorSteel.itemID);
+		blockListMapping.put(Block.doorIron.blockID, Item.doorIron.itemID);
 		blockListMapping.put(Block.signWall.blockID, Item.sign.itemID);
 		blockListMapping.put(Block.torchRedstoneIdle.blockID, Block.torchRedstoneActive.blockID);
 		blockListMapping.put(Block.redstoneRepeaterIdle.blockID, Item.redstoneRepeater.itemID);
@@ -220,7 +220,7 @@ public class Schematica {
 
 			this.sortedWorldRenderers = ReflectionHelper.findField(RenderGlobal.class, "k", "field_72768_k", "sortedWorldRenderers");
 		} catch (Exception e) {
-			Settings.logger.func_98234_c("Could not initialize the mod!", e);
+			Settings.logger.logSevereException("Could not initialize the mod!", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -243,7 +243,7 @@ public class Schematica {
 			try {
 				loadConfigurationFile(configurationFile.toURI().toURL(), configurationFile.getName());
 			} catch (MalformedURLException e) {
-				Settings.logger.func_98234_c("Could not load properties file.", e);
+				Settings.logger.logSevereException("Could not load properties file.", e);
 			}
 		}
 	}
@@ -263,14 +263,14 @@ public class Schematica {
 			inputStream = configurationFile.openStream();
 			properties.load(inputStream);
 		} catch (IOException e) {
-			Settings.logger.func_98234_c("Could not load properties file.", e);
+			Settings.logger.logSevereException("Could not load properties file.", e);
 		} finally {
 			try {
 				if (inputStream != null) {
 					inputStream.close();
 				}
 			} catch (IOException e) {
-				Settings.logger.func_98234_c("Could not close properties file.", e);
+				Settings.logger.logSevereException("Could not close properties file.", e);
 			}
 		}
 
@@ -358,7 +358,7 @@ public class Schematica {
 					}
 				}
 			} catch (Exception e) {
-				Settings.logger.func_98234_c("Dirty check failed!", e);
+				Settings.logger.logSevereException("Dirty check failed!", e);
 			}
 		}
 	}

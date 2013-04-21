@@ -155,7 +155,7 @@ public class Settings {
 				this.isRenderingSchematic = true;
 			}
 		} catch (Exception e) {
-			logger.func_98234_c("Failed to load schematic!", e);
+			logger.logSevereException("Failed to load schematic!", e);
 			this.schematic = null;
 			this.renderBlocks = null;
 			this.rendererSchematicChunk = null;
@@ -215,7 +215,7 @@ public class Settings {
 					filename = parts[1];
 				}
 			} catch (Exception e) {
-				logger.func_98234_c("Failed to parse icon data!", e);
+				logger.logSevereException("Failed to parse icon data!", e);
 			}
 
 			SchematicWorld schematicOut = new SchematicWorld(icon, blocks, metadata, tileEntities, width, height, length);
@@ -224,7 +224,7 @@ public class Settings {
 			OutputStream stream = new FileOutputStream(new File(directory, filename));
 			CompressedStreamTools.writeCompressed(tagCompound, stream);
 		} catch (Exception e) {
-			logger.func_98234_c("Failed to save schematic!", e);
+			logger.logSevereException("Failed to save schematic!", e);
 			return false;
 		}
 		return true;

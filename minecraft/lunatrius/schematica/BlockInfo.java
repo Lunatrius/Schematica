@@ -69,7 +69,7 @@ public class BlockInfo {
 		try {
 			return Integer.valueOf(str, 10);
 		} catch (NumberFormatException e) {
-			Settings.logger.func_98235_b("Could not parse the given number!", e);
+			Settings.logger.logSevereException("Could not parse the given number!", e);
 		}
 		return 0;
 	}

@@ -73,7 +73,7 @@ public class SchematicWorld extends World {
 				this.icon = new ItemStack(Integer.parseInt(parts[0]), 1, Integer.parseInt(parts[1]));
 			}
 		} catch (Exception e) {
-			Settings.logger.func_98234_c("Failed to assign an icon!", e);
+			Settings.logger.logSevereException("Failed to assign an icon!", e);
 			this.icon = Settings.defaultIcon.copy();
 		}
 		this.blocks = blocks.clone();
@@ -502,7 +502,7 @@ public class SchematicWorld extends World {
 	}
 
 	public static boolean isStair(int itemId) {
-		return itemId == Block.stairsWoodOak.blockID || itemId == Block.stairsCobblestone.blockID || itemId == Block.stairsBrick.blockID || itemId == Block.stairsStoneBrick.blockID || itemId == Block.stairsNetherBrick.blockID || itemId == Block.stairsSandStone.blockID || itemId == Block.stairsWoodSpruce.blockID || itemId == Block.stairsWoodBirch.blockID || itemId == Block.stairsWoodJungle.blockID || itemId == Block.stairCompactNetherQuartz.blockID;
+		return itemId == Block.stairsWoodOak.blockID || itemId == Block.stairsCobblestone.blockID || itemId == Block.stairsBrick.blockID || itemId == Block.stairsStoneBrick.blockID || itemId == Block.stairsNetherBrick.blockID || itemId == Block.stairsSandStone.blockID || itemId == Block.stairsWoodSpruce.blockID || itemId == Block.stairsWoodBirch.blockID || itemId == Block.stairsWoodJungle.blockID || itemId == Block.stairsNetherQuartz.blockID;
 	}
 
 	public static boolean isSlab(int itemId) {
