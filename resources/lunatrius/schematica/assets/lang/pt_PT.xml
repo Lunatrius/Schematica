@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties version="1.0">
+  <!-- Author: Tiago Muchagato -->
+  <!-- Version: 1.1 -->
+  <comment>Português (pt_PT) Localization File</comment>
+  <entry key="schematic.openFolder">Abrir pasta das schematicas</entry>
+  <entry key="schematic.done">Feito</entry>
+  <entry key="schematic.title">Selecionar schematica</entry>
+  <entry key="schematic.folderInfo">(Colocar schematcas aqui)</entry>
+  <entry key="schematic.noschematic">-- Năo tens schematicas --</entry>
+  <entry key="schematic.increase">+</entry>
+  <entry key="schematic.decrease">-</entry>
+  <entry key="schematic.hide">Esconder</entry>
+  <entry key="schematic.all">TODAS</entry>
+  <entry key="schematic.show">Mostrar</entry>
+  <entry key="schematic.movehere">Mover para aqui</entry>
+  <entry key="schematic.flip">Virar</entry>
+  <entry key="schematic.rotate">Rodar</entry>
+  <entry key="schematic.save">Guardar</entry>
+  <entry key="schematic.moveschematic">Mover schematica</entry>
+  <entry key="schematic.layers">Camadas</entry>
+  <entry key="schematic.operations">Operaçőes</entry>
+  <entry key="schematic.point.red">Ponto Vermelho</entry>
+  <entry key="schematic.point.blue">Ponto Azul</entry>
+  <entry key="schematic.saveselection">Guardar selecçăo como uma schematica</entry>
+  <entry key="schematic.enable">Habilitar</entry>
+  <entry key="schematic.disable">Desabilitar</entry>
+  <entry key="schematic.x">X:</entry>
+  <entry key="schematic.y">Y:</entry>
+  <entry key="schematic.z">Z:</entry>
+  <entry key="schematic.materials">Materiais</entry>
+  <entry key="schematic.materialname">Material</entry>
+  <entry key="schematic.materialamount">Quantidade</entry>
+  <entry key="schematic.printer">Modo de construçăo automática</entry>
+  <entry key="key.schematic.load">Carregar schematica</entry>
+  <entry key="key.schematic.save">Guardar schematica</entry>
+  <entry key="key.schematic.control">Manipular schematica</entry>
+</properties>

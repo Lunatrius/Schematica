@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE project>
-<project name="GenericForgeMod" default="build">
+<project name="ForgeSchematica" default="build">
     <description>ForgeSchematica Builder</description>
 
     <target name="init">

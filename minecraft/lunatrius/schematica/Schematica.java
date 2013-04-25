@@ -1,32 +1,5 @@
 package lunatrius.schematica;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Field;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Set;
-
-import lunatrius.schematica.renderer.RendererSchematicChunk;
-import lunatrius.schematica.renderer.RendererSchematicGlobal;
-import lunatrius.schematica.util.Config;
-import net.minecraft.block.Block;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.item.Item;
-import net.minecraft.profiler.Profiler;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -41,6 +14,25 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
+import lunatrius.schematica.renderer.RendererSchematicChunk;
+import lunatrius.schematica.renderer.RendererSchematicGlobal;
+import lunatrius.schematica.util.Config;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.item.Item;
+import net.minecraft.profiler.Profiler;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
+
+import java.io.*;
+import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
+import java.util.Map.Entry;
 
 @Mod(modid = "Schematica")
 public class Schematica {
@@ -86,7 +78,7 @@ public class Schematica {
 				while ((lang = input.readLine()) != null) {
 					if (lang.length() > 0) {
 						Settings.logger.logInfo("Loading language file: " + lang);
-						LanguageRegistry.instance().loadLocalization(classLoader.getResource(langDir + lang + ".lang"), lang, false);
+						LanguageRegistry.instance().loadLocalization(classLoader.getResource(langDir + lang + ".xml"), lang, true);
 					}
 				}
 			} finally {

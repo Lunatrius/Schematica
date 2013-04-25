@@ -1,9 +1,9 @@
 package lunatrius.schematica;
 
-import java.util.EnumSet;
-
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
+
+import java.util.EnumSet;
 
 public class Ticker implements ITickHandler {
 	private EnumSet<TickType> ticks = EnumSet.noneOf(TickType.class);

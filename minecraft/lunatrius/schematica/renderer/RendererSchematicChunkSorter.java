@@ -1,9 +1,9 @@
 package lunatrius.schematica.renderer;
 
-import java.util.Comparator;
-
 import lunatrius.schematica.Settings;
 import lunatrius.schematica.util.Vector3f;
+
+import java.util.Comparator;
 
 public class RendererSchematicChunkSorter implements Comparator {
 	private final Settings settings = Settings.instance();

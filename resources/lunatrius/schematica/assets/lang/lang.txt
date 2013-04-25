@@ -4,5 +4,6 @@ es_MX
 hu_HU
 it_IT
 lt_LT
+nl_NL
 pt_PT
 sl_SI

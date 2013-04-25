@@ -1,13 +1,5 @@
 package lunatrius.schematica.gui;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
 import lunatrius.schematica.FileFilterSchematic;
 import lunatrius.schematica.Settings;
 import net.minecraft.client.gui.GuiButton;
@@ -17,8 +9,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.StringTranslate;
-
 import org.lwjgl.Sys;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiSchematicLoad extends GuiScreen {
 	private static final FileFilterSchematic FILE_FILTER_FOLDER = new FileFilterSchematic(true);
@@ -68,9 +67,9 @@ public class GuiSchematicLoad extends GuiScreen {
 					Class c = Class.forName("java.awt.Desktop");
 					Object m = c.getMethod("getDesktop", new Class[0]).invoke((Object) null, new Object[0]);
 					c.getMethod("browse", new Class[] {
-						URI.class
+							URI.class
 					}).invoke(m, new Object[] {
-						Settings.schematicDirectory.toURI()
+							Settings.schematicDirectory.toURI()
 					});
 				} catch (Throwable e) {
 					success = true;

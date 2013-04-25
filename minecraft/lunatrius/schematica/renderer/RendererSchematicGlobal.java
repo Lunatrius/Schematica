@@ -1,8 +1,5 @@
 package lunatrius.schematica.renderer;
 
-import java.nio.FloatBuffer;
-import java.util.Collections;
-
 import lunatrius.schematica.Settings;
 import lunatrius.schematica.util.Vector3f;
 import lunatrius.schematica.util.Vector3i;
@@ -13,9 +10,11 @@ import net.minecraft.profiler.Profiler;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.ForgeSubscribe;
-
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+
+import java.nio.FloatBuffer;
+import java.util.Collections;
 
 public class RendererSchematicGlobal {
 	private final Settings settings = Settings.instance();

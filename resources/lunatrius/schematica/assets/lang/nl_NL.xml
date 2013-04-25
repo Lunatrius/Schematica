@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties version="1.0">
+  <!-- Author: YourWorstNightmare -->
+  <!-- Version: 1.1 -->
+  <comment>Nederlands (nl_NL) Localization File</comment>
+  <entry key="schematic.openFolder">Open schematic map</entry>
+  <entry key="schematic.done">Klaar</entry>
+  <entry key="schematic.title">Selecteer schematic bestand</entry>
+  <entry key="schematic.folderInfo">(Plaats schematic bestanden hier)</entry>
+  <entry key="schematic.noschematic">-- Geen schematic --</entry>
+  <entry key="schematic.increase">+</entry>
+  <entry key="schematic.decrease">-</entry>
+  <entry key="schematic.hide">Verberg</entry>
+  <entry key="schematic.all">ALLE</entry>
+  <entry key="schematic.show">Geef weer</entry>
+  <entry key="schematic.movehere">Verplaats hiernaartoe</entry>
+  <entry key="schematic.flip">Spiegelen</entry>
+  <entry key="schematic.rotate">Roteer</entry>
+  <entry key="schematic.save">Opslaan</entry>
+  <entry key="schematic.moveschematic">Verplaats schematic</entry>
+  <entry key="schematic.layers">Lagen</entry>
+  <entry key="schematic.operations">Handelingen</entry>
+  <entry key="schematic.point.red">Rood punt</entry>
+  <entry key="schematic.point.blue">Blauw punt</entry>
+  <entry key="schematic.saveselection">Sla de selectie op als schematic</entry>
+  <entry key="schematic.enable">Inschakelen</entry>
+  <entry key="schematic.disable">Uitschakelen</entry>
+  <entry key="schematic.x">X:</entry>
+  <entry key="schematic.y">Y:</entry>
+  <entry key="schematic.z">Z:</entry>
+  <entry key="schematic.materials">Materialen</entry>
+  <entry key="schematic.materialname">Materiaal</entry>
+  <entry key="schematic.materialamount">Hoeveelheid</entry>
+  <entry key="schematic.printer">Printer</entry>
+  <entry key="key.schematic.load">Laad schematic</entry>
+  <entry key="key.schematic.save">Sla schematic op</entry>
+  <entry key="key.schematic.control">Bewerk schematic</entry>
+</properties>

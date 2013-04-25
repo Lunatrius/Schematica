@@ -1,5 +1,6 @@
 package lunatrius.schematica;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.client.Minecraft;
@@ -11,7 +12,6 @@ import net.minecraft.network.packet.Packet19EntityAction;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class SchematicPrinter {
 	private final Settings settings = Settings.instance();

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties version="1.0">
+  <!-- Author: inpixies -->
+  <!-- Version: 1.0 -->
+  <comment>Español (es_MX) Localization File</comment>
+  <entry key="schematic.openFolder">Abrir carpeta de esquemas</entry>
+  <entry key="schematic.done">Listo</entry>
+  <entry key="schematic.title">Seleccionar archivo de esquema</entry>
+  <entry key="schematic.folderInfo">(Colocar archivos de esquema aquí)</entry>
+  <entry key="schematic.noschematic">-- Sin esquema --</entry>
+  <entry key="schematic.increase">+</entry>
+  <entry key="schematic.decrease">-</entry>
+  <entry key="schematic.hide">Ocultar</entry>
+  <entry key="schematic.all">TODO</entry>
+  <entry key="schematic.show">Mostrar</entry>
+  <entry key="schematic.movehere">Mover aquí</entry>
+  <entry key="schematic.flip">Voltear</entry>
+  <entry key="schematic.rotate">Girar</entry>
+  <entry key="schematic.save">Guardar</entry>
+  <entry key="schematic.moveschematic">Mover esquema</entry>
+  <entry key="schematic.layers">Capas</entry>
+  <entry key="schematic.operations">Operaciones</entry>
+  <entry key="schematic.point.red">Punto rojo</entry>
+  <entry key="schematic.point.blue">Punto azul</entry>
+  <entry key="schematic.saveselection">Guardar lo seleccionado como un esquema</entry>
+  <entry key="schematic.enable">Activar</entry>
+  <entry key="schematic.disable">Desactivar</entry>
+  <entry key="schematic.x">X:</entry>
+  <entry key="schematic.y">Y:</entry>
+  <entry key="schematic.z">Z:</entry>
+  <entry key="schematic.materials">Materiales</entry>
+  <entry key="schematic.materialname">Material</entry>
+  <entry key="schematic.materialamount">Cantidad</entry>
+  <entry key="key.schematic.load">Cargar esquema</entry>
+  <entry key="key.schematic.save">Guardar esquema</entry>
+  <entry key="key.schematic.control">Manipular esquema</entry>
+</properties>

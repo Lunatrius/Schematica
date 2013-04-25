@@ -1,14 +1,14 @@
 package lunatrius.schematica.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lunatrius.schematica.Settings;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSmallButton;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StringTranslate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiSchematicMaterials extends GuiScreen {
 	private final GuiScreen prevGuiScreen;

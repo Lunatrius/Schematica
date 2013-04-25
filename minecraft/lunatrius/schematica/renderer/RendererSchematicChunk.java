@@ -1,13 +1,5 @@
 package lunatrius.schematica.renderer;
 
-import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import lunatrius.schematica.SchematicWorld;
 import lunatrius.schematica.Settings;
 import lunatrius.schematica.util.Vector3f;
@@ -25,9 +17,16 @@ import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
-
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RendererSchematicChunk {
 	public static final int CHUNK_WIDTH = 16;

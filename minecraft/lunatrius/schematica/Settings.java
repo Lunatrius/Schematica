@@ -1,13 +1,5 @@
 package lunatrius.schematica;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
 import lunatrius.schematica.gui.GuiSchematicControl;
 import lunatrius.schematica.gui.GuiSchematicLoad;
 import lunatrius.schematica.gui.GuiSchematicSave;
@@ -25,8 +17,11 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCache;
-
 import org.lwjgl.input.Keyboard;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Settings {
 	private static final Settings instance = new Settings();
