@@ -7,3 +7,4 @@ lt_LT
 nl_NL
 pt_PT
 sl_SI
+zh_CN
