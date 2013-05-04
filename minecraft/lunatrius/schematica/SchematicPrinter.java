@@ -35,6 +35,12 @@ public class SchematicPrinter {
 		isSneaking = player.isSneaking();
 
 		for (y = minY; y <= maxY; y++) {
+			if (this.settings.renderingLayer >= 0) {
+				if (y != this.settings.renderingLayer) {
+					continue;
+				}
+			}
+
 			for (x = minX; x <= maxX; x++) {
 				for (z = minZ; z <= maxZ; z++) {
 					blockId = this.settings.schematic.getBlockId(x, y, z);
