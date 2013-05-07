@@ -131,6 +131,8 @@ public class SchematicPrinter {
 						itemDamageInHand = 0;
 					}
 				}
+			} else if (SchematicWorld.isBlock(itemId)) {
+				itemDamageInHand = itemDamage;
 			} else if (SchematicWorld.isSlab(itemId)) {
 				if ((itemDamage & 0x8) != 0 && direction == ForgeDirection.DOWN) {
 					direction = ForgeDirection.UP;
@@ -217,8 +219,6 @@ public class SchematicPrinter {
 				} else {
 					return false;
 				}
-			} else if (itemId == Block.cloth.blockID) {
-				itemDamageInHand = itemDamage;
 			} else {
 				return false;
 			}

@@ -496,6 +496,10 @@ public class SchematicWorld extends World {
 		return this.height;
 	}
 
+	public static boolean isBlock(int itemId) {
+		return itemId == Block.planks.blockID || itemId == Block.sandStone.blockID || itemId == Block.cloth.blockID || itemId == Block.stoneBrick.blockID;
+	}
+
 	public static boolean isStair(int itemId) {
 		return itemId == Block.stairsWoodOak.blockID || itemId == Block.stairsCobblestone.blockID || itemId == Block.stairsBrick.blockID || itemId == Block.stairsStoneBrick.blockID || itemId == Block.stairsNetherBrick.blockID || itemId == Block.stairsSandStone.blockID || itemId == Block.stairsWoodSpruce.blockID || itemId == Block.stairsWoodBirch.blockID || itemId == Block.stairsWoodJungle.blockID || itemId == Block.stairsNetherQuartz.blockID;
 	}
@@ -537,6 +541,6 @@ public class SchematicWorld extends World {
 	}
 
 	public static boolean isMetadataSensitive(int itemId) {
-		return itemId == Block.cloth.blockID || itemId == Block.anvil.blockID || itemId == Block.trapdoor.blockID || isTorch(itemId) || isSlab(itemId) || isPistonBase(itemId) || isRedstoneRepeater(itemId) || isContainer(itemId) || isButton(itemId) || isPumpkin(itemId);
+		return itemId == Block.anvil.blockID || itemId == Block.trapdoor.blockID || isTorch(itemId) || isBlock(itemId) || isSlab(itemId) || isPistonBase(itemId) || isRedstoneRepeater(itemId) || isContainer(itemId) || isButton(itemId) || isPumpkin(itemId);
 	}
 }
