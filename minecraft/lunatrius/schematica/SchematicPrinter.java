@@ -143,6 +143,8 @@ public class SchematicPrinter {
 				itemDamageInHand = itemDamage & 0x7;
 			} else if (SchematicWorld.isPistonBase(itemId)) {
 				itemDamageInHand = 0;
+			} else if (SchematicWorld.isDoubleSlab(itemId)) {
+				itemDamageInHand = itemDamage;
 			} else if (SchematicWorld.isContainer(itemId)) {
 				itemDamageInHand = 0;
 			} else if (SchematicWorld.isButton(itemId)) {
