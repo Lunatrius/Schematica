@@ -13,7 +13,7 @@
         <property name="workspace" location="${dir.workspace}"/>
         <property name="dev.home" location="${dir.project}"/>
         <property name="mcp.home" location="${dir.mcp}"/>
-        <property name="release.home" location="${dir.release}/${mod.id}/${version.minecraft}"/>
+        <property name="release.home" location="${dir.release}"/>
         <property name="release.jar" value="[${version.minecraft}]${mod.id}${mod.tags}-v${version}.jar"/>
 
         <!-- setup python -->

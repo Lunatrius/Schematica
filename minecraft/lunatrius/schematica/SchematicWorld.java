@@ -94,9 +94,17 @@ public class SchematicWorld extends World {
 		byte localBlocks[] = tagCompound.getByteArray("Blocks");
 		byte localMetadata[] = tagCompound.getByteArray("Data");
 
-		boolean extra = false;
+		boolean extra = tagCompound.hasKey("Add") || tagCompound.hasKey("AddBlocks");
 		byte extraBlocks[] = null;
-		if ((extra = tagCompound.hasKey("Add")) == true) {
+		byte extraBlocksNibble[] = null;
+		if (tagCompound.hasKey("AddBlocks")) {
+			extraBlocksNibble = tagCompound.getByteArray("AddBlocks");
+			extraBlocks = new byte[extraBlocksNibble.length * 2];
+			for (int i = 0; i < extraBlocksNibble.length; i++) {
+				extraBlocks[i * 2 + 0] = (byte) ((extraBlocksNibble[i] >> 4) & 0xF);
+				extraBlocks[i * 2 + 1] = (byte) (extraBlocksNibble[i] & 0xF);
+			}
+		} else if (tagCompound.hasKey("Add")) {
 			extraBlocks = tagCompound.getByteArray("Add");
 		}
 
@@ -145,9 +153,11 @@ public class SchematicWorld extends World {
 		tagCompound.setShort("Length", this.length);
 		tagCompound.setShort("Height", this.height);
 
-		byte localBlocks[] = new byte[this.width * this.length * this.height];
-		byte localMetadata[] = new byte[this.width * this.length * this.height];
-		byte extraBlocks[] = new byte[this.width * this.length * this.height];
+		int size = this.width * this.length * this.height;
+		byte localBlocks[] = new byte[size];
+		byte localMetadata[] = new byte[size];
+		byte extraBlocks[] = new byte[size];
+		byte extraBlocksNibble[] = new byte[(int) Math.ceil(size / 2.0)];
 		boolean extra = false;
 
 		for (int x = 0; x < this.width; x++) {
@@ -162,12 +172,21 @@ public class SchematicWorld extends World {
 			}
 		}
 
+		for (int i = 0; i < extraBlocksNibble.length; i++) {
+			if (i * 2 + 1 < extraBlocks.length) {
+				extraBlocksNibble[i] = (byte) ((extraBlocks[i * 2 + 0] << 4) | extraBlocks[i * 2 + 1]);
+			} else {
+				extraBlocksNibble[i] = (byte) (extraBlocks[i * 2 + 0] << 4);
+			}
+		}
+
 		tagCompound.setString("Materials", "Alpha");
 		tagCompound.setByteArray("Blocks", localBlocks);
 		tagCompound.setByteArray("Data", localMetadata);
 		if (extra) {
-			tagCompound.setByteArray("Add", extraBlocks);
+			tagCompound.setByteArray("AddBlocks", extraBlocksNibble);
 		}
+
 		tagCompound.setTag("Entities", new NBTTagList());
 
 		NBTTagList tileEntitiesList = new NBTTagList();
@@ -541,6 +560,6 @@ public class SchematicWorld extends World {
 	}
 
 	public static boolean isMetadataSensitive(int itemId) {
-		return itemId == Block.anvil.blockID || itemId == Block.trapdoor.blockID || isTorch(itemId) || isBlock(itemId) || isSlab(itemId) || isDoubleSlab(itemId)|| isPistonBase(itemId) || isRedstoneRepeater(itemId) || isContainer(itemId) || isButton(itemId) || isPumpkin(itemId);
+		return itemId == Block.anvil.blockID || itemId == Block.trapdoor.blockID || isTorch(itemId) || isBlock(itemId) || isSlab(itemId) || isDoubleSlab(itemId) || isPistonBase(itemId) || isRedstoneRepeater(itemId) || isContainer(itemId) || isButton(itemId) || isPumpkin(itemId);
 	}
 }
