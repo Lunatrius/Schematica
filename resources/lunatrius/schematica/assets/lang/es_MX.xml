@@ -2,8 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties version="1.0">
   <!-- Author: inpixies -->
-  <!-- Version: 1.0 -->
-  <comment>Español (es_MX) Localization File</comment>
+  <comment>Español (es_MX)</comment>
   <entry key="schematic.openFolder">Abrir carpeta de esquemas</entry>
   <entry key="schematic.done">Listo</entry>
   <entry key="schematic.title">Seleccionar archivo de esquema</entry>
@@ -32,6 +31,7 @@
   <entry key="schematic.materials">Materiales</entry>
   <entry key="schematic.materialname">Material</entry>
   <entry key="schematic.materialamount">Cantidad</entry>
+  <entry key="schematic.printer">Printer</entry> <!-- requires translation -->
   <entry key="key.schematic.load">Cargar esquema</entry>
   <entry key="key.schematic.save">Guardar esquema</entry>
   <entry key="key.schematic.control">Manipular esquema</entry>

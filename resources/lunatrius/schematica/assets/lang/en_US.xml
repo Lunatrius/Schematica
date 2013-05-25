@@ -2,8 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties version="1.0">
   <!-- Author: Lunatrius -->
-  <!-- Version: 1.1 -->
-  <comment>English (en_US) Localization File</comment>
+  <comment>English (en_US)</comment>
   <entry key="schematic.openFolder">Open schematic folder</entry>
   <entry key="schematic.done">Done</entry>
   <entry key="schematic.title">Select schematic file</entry>

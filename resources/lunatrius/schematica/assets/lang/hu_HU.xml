@@ -2,8 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties version="1.0">
   <!-- Author: Gabor Stenzinger -->
-  <!-- Version: 1.1 -->
-  <comment>Magyar (hu_HU) Localization File</comment>
+  <comment>Magyar (hu_HU)</comment>
   <entry key="schematic.openFolder">Klisé könyvtár megnyitása</entry>
   <entry key="schematic.done">Kész</entry>
   <entry key="schematic.title">Klisé megnyitása</entry>

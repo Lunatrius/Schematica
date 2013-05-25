@@ -2,8 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties version="1.0">
   <!-- Author: Sebastian Schieß -->
-  <!-- Version: 1.1 -->
-  <comment>Deutsch (de_DE) Localization File</comment>
+  <comment>Deutsch (de_DE)</comment>
   <entry key="schematic.openFolder">Öffne Schematic-Ordner</entry>
   <entry key="schematic.done">Fertig</entry>
   <entry key="schematic.title">Wähle Schematic-Datei</entry>

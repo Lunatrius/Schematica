@@ -2,8 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties version="1.0">
   <!-- Author: FANS4ever -->
-  <!-- Version: 1.0 -->
-  <comment>Lietuvių (lt_LT) Localization File</comment>
+  <comment>Lietuvių (lt_LT)</comment>
   <entry key="schematic.openFolder">Atidaryti schemø aplankà</entry>
   <entry key="schematic.done">Baigta</entry>
   <entry key="schematic.title">Pasirinkite schemos failà</entry>
@@ -32,6 +31,7 @@
   <entry key="schematic.materials">Medþiagos</entry>
   <entry key="schematic.materialname">Medþiaga</entry>
   <entry key="schematic.materialamount">Kiekis</entry>
+  <entry key="schematic.printer">Printer</entry> <!-- requires translation -->
   <entry key="key.schematic.load">Atidaryti schemà</entry>
   <entry key="key.schematic.save">Iðsaugoti schemà</entry>
   <entry key="key.schematic.control">Manipuliuoti schemà</entry>

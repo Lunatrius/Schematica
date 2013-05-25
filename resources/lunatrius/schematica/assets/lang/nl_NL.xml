@@ -2,8 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties version="1.0">
   <!-- Author: YourWorstNightmare -->
-  <!-- Version: 1.1 -->
-  <comment>Nederlands (nl_NL) Localization File</comment>
+  <comment>Nederlands (nl_NL)</comment>
   <entry key="schematic.openFolder">Open schematic map</entry>
   <entry key="schematic.done">Klaar</entry>
   <entry key="schematic.title">Selecteer schematic bestand</entry>

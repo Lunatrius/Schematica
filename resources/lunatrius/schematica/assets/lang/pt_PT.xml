@@ -2,8 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties version="1.0">
   <!-- Author: Tiago Muchagato -->
-  <!-- Version: 1.1 -->
-  <comment>Português (pt_PT) Localization File</comment>
+  <comment>Português (pt_PT)</comment>
   <entry key="schematic.openFolder">Abrir pasta das schematicas</entry>
   <entry key="schematic.done">Feito</entry>
   <entry key="schematic.title">Selecionar schematica</entry>

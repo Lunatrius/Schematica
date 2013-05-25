@@ -2,8 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties version="1.0">
   <!-- Author: mrTJO -->
-  <!-- Version: 1.0 -->
-  <comment>Italiano (it_IT) Localization File</comment>
+  <comment>Italiano (it_IT)</comment>
   <entry key="schematic.openFolder">Apri cartella schematiche</entry>
   <entry key="schematic.done">Fatto</entry>
   <entry key="schematic.title">Seleziona file schematico</entry>
@@ -32,6 +31,7 @@
   <entry key="schematic.materials">Materiali</entry>
   <entry key="schematic.materialname">Materiale</entry>
   <entry key="schematic.materialamount">Quantità</entry>
+  <entry key="schematic.printer">Printer</entry> <!-- requires translation -->
   <entry key="key.schematic.load">Carica schematica</entry>
   <entry key="key.schematic.save">Salva schematica</entry>
   <entry key="key.schematic.control">Manipola schematica</entry>

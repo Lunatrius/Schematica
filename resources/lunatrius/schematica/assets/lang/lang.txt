@@ -1,6 +1,7 @@
 de_DE
 en_US
 es_MX
+fr_FR
 hu_HU
 it_IT
 lt_LT
