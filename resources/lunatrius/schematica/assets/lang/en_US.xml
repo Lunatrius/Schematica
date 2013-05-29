@@ -2,37 +2,37 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties version="1.0">
   <!-- Author: Lunatrius -->
-  <comment>English (en_US)</comment>
-  <entry key="schematic.openFolder">Open schematic folder</entry>
-  <entry key="schematic.done">Done</entry>
-  <entry key="schematic.title">Select schematic file</entry>
-  <entry key="schematic.folderInfo">(Place schematic files here)</entry>
-  <entry key="schematic.noschematic">-- No schematic --</entry>
+  <comment>Polski (pl_PL)</comment>
+  <entry key="schematic.openFolder">Otworz folder z schematami/entry>
+  <entry key="schematic.done">Gotowe</entry>
+  <entry key="schematic.title">Wybierz plik schematu</entry>
+  <entry key="schematic.folderInfo">(Tutaj wrzucaj schematy)</entry>
+  <entry key="schematic.noschematic">-- Nie ma schematu --</entry>
   <entry key="schematic.increase">+</entry>
   <entry key="schematic.decrease">-</entry>
-  <entry key="schematic.hide">Hide</entry>
-  <entry key="schematic.all">ALL</entry>
-  <entry key="schematic.show">Show</entry>
-  <entry key="schematic.movehere">Move here</entry>
-  <entry key="schematic.flip">Flip</entry>
-  <entry key="schematic.rotate">Rotate</entry>
-  <entry key="schematic.save">Save</entry>
-  <entry key="schematic.moveschematic">Move schematic</entry>
-  <entry key="schematic.layers">Layers</entry>
-  <entry key="schematic.operations">Operations</entry>
-  <entry key="schematic.point.red">Red point</entry>
-  <entry key="schematic.point.blue">Blue point</entry>
-  <entry key="schematic.saveselection">Save the selection as a schematic</entry>
-  <entry key="schematic.enable">Enable</entry>
-  <entry key="schematic.disable">Disable</entry>
+  <entry key="schematic.hide">Schowaj</entry>
+  <entry key="schematic.all">Wszystko</entry>
+  <entry key="schematic.show">Pokarz</entry>
+  <entry key="schematic.movehere">Przenies tutaj</entry>
+  <entry key="schematic.flip">Odwroc</entry>
+  <entry key="schematic.rotate">Obroc</entry>
+  <entry key="schematic.save">Zapisz</entry>
+  <entry key="schematic.moveschematic">Przenies schemat</entry>
+  <entry key="schematic.layers">Warstwy</entry>
+  <entry key="schematic.operations">Operacje</entry>
+  <entry key="schematic.point.red">Czerwony znacznik</entry>
+  <entry key="schematic.point.blue">Niebieski znacznik</entry>
+  <entry key="schematic.saveselection">Zapisz zaznaczenie jako schemat</entry>
+  <entry key="schematic.enable">Wlacz</entry>
+  <entry key="schematic.disable">Wylacz</entry>
   <entry key="schematic.x">X:</entry>
   <entry key="schematic.y">Y:</entry>
   <entry key="schematic.z">Z:</entry>
-  <entry key="schematic.materials">Materials</entry>
+  <entry key="schematic.materials">Materialy</entry>
   <entry key="schematic.materialname">Material</entry>
-  <entry key="schematic.materialamount">Amount</entry>
-  <entry key="schematic.printer">Printer</entry>
-  <entry key="key.schematic.load">Load schematic</entry>
-  <entry key="key.schematic.save">Save schematic</entry>
-  <entry key="key.schematic.control">Manipulate schematic</entry>
+  <entry key="schematic.materialamount">Ilosc</entry>
+  <entry key="schematic.printer">Drukarka</entry>
+  <entry key="key.schematic.load">Ladowanie schematu</entry>
+  <entry key="key.schematic.save">Zapisywanie schematu</entry>
+  <entry key="key.schematic.control">Manipulacja schematem</entry>
 </properties>
