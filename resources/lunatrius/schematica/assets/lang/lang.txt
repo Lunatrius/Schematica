@@ -1,3 +1,4 @@
+da_DK
 de_DE
 en_US
 es_MX
@@ -6,6 +7,7 @@ hu_HU
 it_IT
 lt_LT
 nl_NL
+pl_PL
 pt_PT
 sl_SI
 zh_CN
