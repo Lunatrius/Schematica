@@ -760,6 +760,9 @@ public class RendererSchematicChunk {
 			int width = texture.getWidth();
 			int height = texture.getHeight();
 			ByteBuffer buffer = texture.getTextureData();
+			byte[] byteArray = new byte[width * height * 4];
+			buffer.position(0);
+			buffer.get(byteArray);
 
 			BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 			int x, y, offset, alpha, red, green, blue;
@@ -768,10 +771,10 @@ public class RendererSchematicChunk {
 				for (x = 0; x < width; x++) {
 					offset = (y * width + x) * 4;
 
-					alpha = buffer.get(offset + 3) & 0xFF;
-					red = buffer.get(offset + 0) & 0xFF;
-					green = buffer.get(offset + 1) & 0xFF;
-					blue = buffer.get(offset + 2) & 0xFF;
+					alpha = (byteArray[offset + 3] & 0xFF);
+					red = (byteArray[offset + 0] & 0xFF);
+					green = (byteArray[offset + 1] & 0xFF);
+					blue = (byteArray[offset + 2] & 0xFF);
 
 					alpha *= this.settings.alpha;
 
