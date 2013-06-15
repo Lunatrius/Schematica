@@ -75,6 +75,9 @@ public class SchematicWorld extends World {
 		this.metadata = metadata.clone();
 		if (tileEntities != null) {
 			this.tileEntities.addAll(tileEntities);
+			for (TileEntity tileEntity : this.tileEntities) {
+				tileEntity.validate();
+			}
 		}
 		this.width = width;
 		this.length = length;
@@ -135,6 +138,7 @@ public class SchematicWorld extends World {
 			TileEntity tileEntity = TileEntity.createAndLoadEntity((NBTTagCompound) tileEntitiesList.tagAt(i));
 			if (tileEntity != null) {
 				tileEntity.worldObj = this;
+				tileEntity.validate();
 				this.tileEntities.add(tileEntity);
 			}
 		}
@@ -272,8 +276,9 @@ public class SchematicWorld extends World {
 	@Override
 	public TileEntity getBlockTileEntity(int x, int y, int z) {
 		for (int i = 0; i < this.tileEntities.size(); i++) {
-			if (this.tileEntities.get(i).xCoord == x && this.tileEntities.get(i).yCoord == y && this.tileEntities.get(i).zCoord == z) {
-				return this.tileEntities.get(i);
+			TileEntity tileEntity = this.tileEntities.get(i);
+			if (tileEntity.xCoord == x && tileEntity.yCoord == y && tileEntity.zCoord == z) {
+				return tileEntity;
 			}
 		}
 		return null;
@@ -365,8 +370,10 @@ public class SchematicWorld extends World {
 		return false;
 	}
 
-	public void setBlockMetadata(int x, int y, int z, byte metadata) {
+	@Override
+	public boolean setBlockMetadataWithNotify(int x, int y, int z, int metadata, int flag) {
 		this.metadata[x][y][z] = metadata;
+		return true;
 	}
 
 	public Block getBlock(int x, int y, int z) {
@@ -376,6 +383,9 @@ public class SchematicWorld extends World {
 	public void setTileEntities(List<TileEntity> tileEntities) {
 		this.tileEntities.clear();
 		this.tileEntities.addAll(tileEntities);
+		for (TileEntity tileEntity : this.tileEntities) {
+			tileEntity.validate();
+		}
 	}
 
 	public List<TileEntity> getTileEntities() {
