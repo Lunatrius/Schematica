@@ -4,8 +4,6 @@ import lunatrius.schematica.gui.GuiSchematicControl;
 import lunatrius.schematica.gui.GuiSchematicLoad;
 import lunatrius.schematica.gui.GuiSchematicSave;
 import lunatrius.schematica.renderer.RendererSchematicChunk;
-import lunatrius.schematica.util.Vector3f;
-import lunatrius.schematica.util.Vector3i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -18,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCache;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.util.vector.Vector3f;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -35,6 +34,8 @@ public class Settings {
 	public int placeDelay = 1;
 	public boolean placeInstantly = false;
 	public boolean placeAdjacent = true;
+	public boolean drawQuads = true;
+	public boolean drawLines = true;
 
 	public KeyBinding[] keyBindings = new KeyBinding[] {
 			new KeyBinding("key.schematic.load", Keyboard.KEY_DIVIDE),
@@ -57,13 +58,13 @@ public class Settings {
 	public RendererSchematicChunk[][][] rendererSchematicChunk = null;
 	public final List<RendererSchematicChunk> sortedRendererSchematicChunk = new ArrayList<RendererSchematicChunk>();
 	public RenderBlocks renderBlocks = null;
-	public Vector3i pointA = new Vector3i();
-	public Vector3i pointB = new Vector3i();
-	public Vector3i pointMin = new Vector3i();
-	public Vector3i pointMax = new Vector3i();
+	public Vector3f pointA = new Vector3f();
+	public Vector3f pointB = new Vector3f();
+	public Vector3f pointMin = new Vector3f();
+	public Vector3f pointMax = new Vector3f();
 	public int rotationRender = 0;
 	public int orientation = 0;
-	public Vector3i offset = new Vector3i();
+	public Vector3f offset = new Vector3f();
 	public boolean isRenderingSchematic = false;
 	public int renderingLayer = -1;
 	public boolean isRenderingGuide = false;
@@ -161,16 +162,16 @@ public class Settings {
 		return true;
 	}
 
-	public boolean saveSchematic(File directory, String filename, Vector3i from, Vector3i to) {
+	public boolean saveSchematic(File directory, String filename, Vector3f from, Vector3f to) {
 		try {
 			NBTTagCompound tagCompound = new NBTTagCompound("Schematic");
 
-			int minX = Math.min(from.x, to.x);
-			int maxX = Math.max(from.x, to.x);
-			int minY = Math.min(from.y, to.y);
-			int maxY = Math.max(from.y, to.y);
-			int minZ = Math.min(from.z, to.z);
-			int maxZ = Math.max(from.z, to.z);
+			int minX = (int) Math.min(from.x, to.x);
+			int maxX = (int) Math.max(from.x, to.x);
+			int minY = (int) Math.min(from.y, to.y);
+			int maxY = (int) Math.max(from.y, to.y);
+			int minZ = (int) Math.min(from.z, to.z);
+			int maxZ = (int) Math.max(from.z, to.z);
 			short width = (short) (Math.abs(maxX - minX) + 1);
 			short height = (short) (Math.abs(maxY - minY) + 1);
 			short length = (short) (Math.abs(maxZ - minZ) + 1);
@@ -253,7 +254,7 @@ public class Settings {
 		this.pointMax.z = Math.max(this.pointA.z, this.pointB.z);
 	}
 
-	public void moveHere(Vector3i point) {
+	public void moveHere(Vector3f point) {
 		point.x = (int) Math.floor(this.playerPosition.x);
 		point.y = (int) Math.floor(this.playerPosition.y - 1);
 		point.z = (int) Math.floor(this.playerPosition.z);
@@ -313,7 +314,7 @@ public class Settings {
 
 	public void reloadChunkCache() {
 		if (this.schematic != null) {
-			this.mcWorldCache = new ChunkCache(this.minecraft.theWorld, this.offset.x - 1, this.offset.y - 1, this.offset.z - 1, this.offset.x + this.schematic.width() + 1, this.offset.y + this.schematic.height() + 1, this.offset.z + this.schematic.length() + 1, 0);
+			this.mcWorldCache = new ChunkCache(this.minecraft.theWorld, (int) this.offset.x - 1, (int) this.offset.y - 1, (int) this.offset.z - 1, (int) this.offset.x + this.schematic.width() + 1, (int) this.offset.y + this.schematic.height() + 1, (int) this.offset.z + this.schematic.length() + 1, 0);
 			refreshSchematic();
 		}
 	}

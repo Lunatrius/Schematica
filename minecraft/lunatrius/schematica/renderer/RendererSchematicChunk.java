@@ -2,8 +2,6 @@ package lunatrius.schematica.renderer;
 
 import lunatrius.schematica.SchematicWorld;
 import lunatrius.schematica.Settings;
-import lunatrius.schematica.util.Vector3f;
-import lunatrius.schematica.util.Vector3i;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -17,12 +15,11 @@ import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector3f;
 
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +34,7 @@ public class RendererSchematicChunk {
 
 	public boolean isInFrustrum = false;
 
-	public final Vector3i centerPosition = new Vector3i();
+	public final Vector3f centerPosition = new Vector3f();
 
 	private final Settings settings = Settings.instance();
 	private final Minecraft minecraft = this.settings.minecraft;
@@ -47,23 +44,7 @@ public class RendererSchematicChunk {
 
 	private final AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
 
-	private static final int initialSize = 1152;
-
 	private static final Map<String, Integer> texturePacks = new HashMap<String, Integer>();
-
-	private int quadSize = initialSize;
-	private float[] quadColorBuffer = null;
-	private float[] quadVertexBuffer = null;
-	private int quadColorIndex = -1;
-	private int quadVertexIndex = -1;
-	private int quadCount = -1;
-
-	private int lineSize = initialSize;
-	private float[] lineColorBuffer = null;
-	private float[] lineVertexBuffer = null;
-	private int lineColorIndex = -1;
-	private int lineVertexIndex = -1;
-	private int lineCount = -1;
 
 	private boolean needsUpdate = true;
 	private int glList = -1;
@@ -132,21 +113,12 @@ public class RendererSchematicChunk {
 			this.needsUpdate = false;
 			setCanUpdate(false);
 
-			this.quadVertexBuffer = new float[this.quadSize * 3];
-			this.quadColorBuffer = new float[this.quadSize * 4];
-			this.lineVertexBuffer = new float[this.lineSize * 3];
-			this.lineColorBuffer = new float[this.lineSize * 4];
+			RenderHelper.createBuffers();
 
 			for (int pass = 0; pass < 3; pass++) {
-				this.quadColorIndex = 0;
-				this.quadVertexIndex = 0;
-				this.quadCount = 0;
+				RenderHelper.initBuffers();
 
-				this.lineColorIndex = 0;
-				this.lineVertexIndex = 0;
-				this.lineCount = 0;
-
-				int minX = 0, maxX = 0, minY = 0, maxY = 0, minZ = 0, maxZ = 0;
+				int minX, maxX, minY, maxY, minZ, maxZ;
 
 				minX = (int) this.boundingBox.minX;
 				maxX = Math.min((int) this.boundingBox.maxX, this.schematic.width());
@@ -167,7 +139,10 @@ public class RendererSchematicChunk {
 				GL11.glNewList(this.glList + pass, GL11.GL_COMPILE);
 				renderBlocks(pass, minX, minY, minZ, maxX, maxY, maxZ);
 
-				if (this.quadCount > 0 || this.lineCount > 0) {
+				int quadCount = RenderHelper.getQuadCount();
+				int lineCount = RenderHelper.getLineCount();
+
+				if (quadCount > 0 || lineCount > 0) {
 					GL11.glDisable(GL11.GL_TEXTURE_2D);
 
 					GL11.glLineWidth(1.5f);
@@ -175,30 +150,16 @@ public class RendererSchematicChunk {
 					GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 					GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
 
-					FloatBuffer colorBuffer, vertexBuffer;
-
-					if (this.quadCount > 0) {
-						colorBuffer = BufferUtils.createFloatBuffer(this.quadColorBuffer.length).put(this.quadColorBuffer);
-						vertexBuffer = BufferUtils.createFloatBuffer(this.quadVertexBuffer.length).put(this.quadVertexBuffer);
-
-						colorBuffer.flip();
-						vertexBuffer.flip();
-
-						GL11.glColorPointer(4, 0, colorBuffer);
-						GL11.glVertexPointer(3, 0, vertexBuffer);
-						GL11.glDrawArrays(GL11.GL_QUADS, 0, this.quadCount);
+					if (quadCount > 0) {
+						GL11.glVertexPointer(3, 0, RenderHelper.getQuadVertexBuffer());
+						GL11.glColorPointer(4, 0, RenderHelper.getQuadColorBuffer());
+						GL11.glDrawArrays(GL11.GL_QUADS, 0, quadCount);
 					}
 
-					if (this.lineCount > 0) {
-						colorBuffer = BufferUtils.createFloatBuffer(this.lineColorBuffer.length).put(this.lineColorBuffer);
-						vertexBuffer = BufferUtils.createFloatBuffer(this.lineVertexBuffer.length).put(this.lineVertexBuffer);
-
-						colorBuffer.flip();
-						vertexBuffer.flip();
-
-						GL11.glColorPointer(4, 0, colorBuffer);
-						GL11.glVertexPointer(3, 0, vertexBuffer);
-						GL11.glDrawArrays(GL11.GL_LINES, 0, this.lineCount);
+					if (lineCount > 0) {
+						GL11.glVertexPointer(3, 0, RenderHelper.getLineVertexBuffer());
+						GL11.glColorPointer(4, 0, RenderHelper.getLineColorBuffer());
+						GL11.glDrawArrays(GL11.GL_LINES, 0, lineCount);
 					}
 
 					GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
@@ -210,10 +171,7 @@ public class RendererSchematicChunk {
 				GL11.glEndList();
 			}
 
-			this.quadVertexBuffer = null;
-			this.quadColorBuffer = null;
-			this.lineVertexBuffer = null;
-			this.lineColorBuffer = null;
+			RenderHelper.destroyBuffers();
 		}
 	}
 
@@ -239,10 +197,11 @@ public class RendererSchematicChunk {
 		RenderBlocks renderBlocks = this.settings.renderBlocks;
 
 		int x, y, z;
-		int blockId = 0, mcBlockId = 0;
-		int sides = 0;
-		Block block = null;
-		Vector3i tmp;
+		int blockId, mcBlockId;
+		int sides;
+		Block block;
+		Vector3f zero = new Vector3f();
+		Vector3f size = new Vector3f();
 
 		int ambientOcclusion = this.minecraft.gameSettings.ambientOcclusion;
 		this.minecraft.gameSettings.ambientOcclusion = 0;
@@ -256,56 +215,76 @@ public class RendererSchematicChunk {
 						blockId = this.schematic.getBlockId(x, y, z);
 						block = Block.blocksList[blockId];
 
-						mcBlockId = mcWorld.getBlockId(x + this.settings.offset.x, y + this.settings.offset.y, z + this.settings.offset.z);
+						mcBlockId = mcWorld.getBlockId(x + (int) this.settings.offset.x, y + (int) this.settings.offset.y, z + (int) this.settings.offset.z);
 
 						sides = 0;
 						if (block != null) {
 							if (block.shouldSideBeRendered(this.schematic, x, y - 1, z, 0)) {
-								sides |= 0x01;
+								sides |= RenderHelper.QUAD_DOWN;
 							}
 
 							if (block.shouldSideBeRendered(this.schematic, x, y + 1, z, 1)) {
-								sides |= 0x02;
+								sides |= RenderHelper.QUAD_UP;
 							}
 
 							if (block.shouldSideBeRendered(this.schematic, x, y, z - 1, 2)) {
-								sides |= 0x04;
+								sides |= RenderHelper.QUAD_NORTH;
 							}
 
 							if (block.shouldSideBeRendered(this.schematic, x, y, z + 1, 3)) {
-								sides |= 0x08;
+								sides |= RenderHelper.QUAD_SOUTH;
 							}
 
 							if (block.shouldSideBeRendered(this.schematic, x - 1, y, z, 4)) {
-								sides |= 0x10;
+								sides |= RenderHelper.QUAD_WEST;
 							}
 
 							if (block.shouldSideBeRendered(this.schematic, x + 1, y, z, 5)) {
-								sides |= 0x20;
+								sides |= RenderHelper.QUAD_EAST;
 							}
 						}
 
 						if (mcBlockId != 0) {
 							if (this.settings.highlight && renderPass == 2) {
 								if (blockId == 0 && this.settings.highlightAir) {
-									tmp = new Vector3i(x, y, z);
-									drawCuboidSurface(tmp, tmp.clone().add(1), 0x3F, 0.75f, 0.0f, 0.75f, 0.25f);
-									drawCuboidOutline(tmp, tmp.clone().add(1), 0x3F, 0.75f, 0.0f, 0.75f, 0.25f);
+									zero.set(x, y, z);
+									size.set(x + 1, y + 1, z + 1);
+									if (settings.drawQuads) {
+										RenderHelper.drawCuboidSurface(zero, size, RenderHelper.QUAD_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
+									}
+									if (settings.drawLines) {
+										RenderHelper.drawCuboidOutline(zero, size, RenderHelper.QUAD_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
+									}
 								} else if (blockId != mcBlockId) {
-									tmp = new Vector3i(x, y, z);
-									drawCuboidSurface(tmp, tmp.clone().add(1), sides, 1.0f, 0.0f, 0.0f, 0.25f);
-									drawCuboidOutline(tmp, tmp.clone().add(1), sides, 1.0f, 0.0f, 0.0f, 0.25f);
-								} else if (this.schematic.getBlockMetadata(x, y, z) != mcWorld.getBlockMetadata(x + this.settings.offset.x, y + this.settings.offset.y, z + this.settings.offset.z)) {
-									tmp = new Vector3i(x, y, z);
-									drawCuboidSurface(tmp, tmp.clone().add(1), sides, 0.75f, 0.35f, 0.0f, 0.25f);
-									drawCuboidOutline(tmp, tmp.clone().add(1), sides, 0.75f, 0.35f, 0.0f, 0.25f);
+									zero.set(x, y, z);
+									size.set(x + 1, y + 1, z + 1);
+									if (settings.drawQuads) {
+										RenderHelper.drawCuboidSurface(zero, size, sides, 1.0f, 0.0f, 0.0f, 0.25f);
+									}
+									if (settings.drawLines) {
+										RenderHelper.drawCuboidOutline(zero, size, sides, 1.0f, 0.0f, 0.0f, 0.25f);
+									}
+								} else if (this.schematic.getBlockMetadata(x, y, z) != mcWorld.getBlockMetadata(x + (int) this.settings.offset.x, y + (int) this.settings.offset.y, z + (int) this.settings.offset.z)) {
+									zero.set(x, y, z);
+									size.set(x + 1, y + 1, z + 1);
+									if (settings.drawQuads) {
+										RenderHelper.drawCuboidSurface(zero, size, sides, 0.75f, 0.35f, 0.0f, 0.25f);
+									}
+									if (settings.drawLines) {
+										RenderHelper.drawCuboidOutline(zero, size, sides, 0.75f, 0.35f, 0.0f, 0.25f);
+									}
 								}
 							}
 						} else if (mcBlockId == 0 && blockId > 0 && blockId < 0x1000) {
 							if (this.settings.highlight && renderPass == 2) {
-								tmp = new Vector3i(x, y, z);
-								drawCuboidSurface(tmp, tmp.clone().add(1), sides, 0.0f, 0.75f, 1.0f, 0.25f);
-								drawCuboidOutline(tmp, tmp.clone().add(1), sides, 0.0f, 0.75f, 1.0f, 0.25f);
+								zero.set(x, y, z);
+								size.set(x + 1, y + 1, z + 1);
+								if (settings.drawQuads) {
+									RenderHelper.drawCuboidSurface(zero, size, sides, 0.0f, 0.75f, 1.0f, 0.25f);
+								}
+								if (settings.drawLines) {
+									RenderHelper.drawCuboidOutline(zero, size, sides, 0.0f, 0.75f, 1.0f, 0.25f);
+								}
 							}
 
 							if (block != null && block.canRenderInPass(renderPass)) {
@@ -325,10 +304,14 @@ public class RendererSchematicChunk {
 	}
 
 	public void renderTileEntities(int renderPass) {
+		if (renderPass != 0) {
+			return;
+		}
+
 		IBlockAccess mcWorld = this.settings.mcWorldCache;
 
 		int x, y, z;
-		int mcBlockId = 0;
+		int mcBlockId;
 
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, this.settings.alpha);
 
@@ -344,7 +327,7 @@ public class RendererSchematicChunk {
 					}
 				}
 
-				mcBlockId = mcWorld.getBlockId(x + this.settings.offset.x, y + this.settings.offset.y, z + this.settings.offset.z);
+				mcBlockId = mcWorld.getBlockId(x + (int) this.settings.offset.x, y + (int) this.settings.offset.y, z + (int) this.settings.offset.z);
 
 				if (mcBlockId == 0) {
 					TileEntitySpecialRenderer tileEntitySpecialRenderer = TileEntityRenderer.instance.getSpecialRendererForEntity(tileEntity);
@@ -364,385 +347,6 @@ public class RendererSchematicChunk {
 			}
 		} catch (Exception ex) {
 			Settings.logger.logSevereException("Failed to render tile entities!", ex);
-		}
-	}
-
-	private float[] createAndCopyBuffer(int newSize, float[] oldBuffer) {
-		float[] tempBuffer = new float[newSize];
-		System.arraycopy(oldBuffer, 0, tempBuffer, 0, oldBuffer.length);
-
-		return tempBuffer;
-	}
-
-	private void drawCuboidSurface(Vector3i a, Vector3i b, int sides, float red, float green, float blue, float alpha) {
-		Vector3f zero = new Vector3f(a.x, a.y, a.z).sub(this.settings.blockDelta);
-		Vector3f size = new Vector3f(b.x, b.y, b.z).add(this.settings.blockDelta);
-
-		if (this.quadCount + 24 >= this.quadSize) {
-			this.quadSize *= 2;
-
-			this.quadVertexBuffer = createAndCopyBuffer(this.quadSize * 3, this.quadVertexBuffer);
-			this.quadColorBuffer = createAndCopyBuffer(this.quadSize * 4, this.quadColorBuffer);
-		}
-
-		int total = 0;
-
-		// left
-		if ((sides & 0x10) != 0) {
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.z;
-			this.quadCount++;
-
-			total += 4;
-		}
-
-		// right
-		if ((sides & 0x20) != 0) {
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.z;
-			this.quadCount++;
-
-			total += 4;
-		}
-
-		// near
-		if ((sides & 0x04) != 0) {
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.z;
-			this.quadCount++;
-
-			total += 4;
-		}
-
-		// far
-		if ((sides & 0x08) != 0) {
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.z;
-			this.quadCount++;
-
-			total += 4;
-		}
-
-		// bottom
-		if ((sides & 0x01) != 0) {
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.z;
-			this.quadCount++;
-
-			total += 4;
-		}
-
-		// top
-		if ((sides & 0x02) != 0) {
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = zero.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.z;
-			this.quadCount++;
-
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.x;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.y;
-			this.quadVertexBuffer[this.quadVertexIndex++] = size.z;
-			this.quadCount++;
-
-			total += 4;
-		}
-
-		for (int i = 0; i < total; i++) {
-			this.quadColorBuffer[this.quadColorIndex++] = red;
-			this.quadColorBuffer[this.quadColorIndex++] = green;
-			this.quadColorBuffer[this.quadColorIndex++] = blue;
-			this.quadColorBuffer[this.quadColorIndex++] = alpha;
-		}
-	}
-
-	private void drawCuboidOutline(Vector3i a, Vector3i b, int sides, float red, float green, float blue, float alpha) {
-		Vector3f zero = new Vector3f(a.x, a.y, a.z).sub(this.settings.blockDelta);
-		Vector3f size = new Vector3f(b.x, b.y, b.z).add(this.settings.blockDelta);
-
-		if (this.lineCount + 24 >= this.lineSize) {
-			this.lineSize *= 2;
-
-			this.lineVertexBuffer = createAndCopyBuffer(this.lineSize * 3, this.lineVertexBuffer);
-			this.lineColorBuffer = createAndCopyBuffer(this.lineSize * 4, this.lineColorBuffer);
-		}
-
-		int total = 0;
-
-		// bottom left
-		if ((sides & 0x11) != 0) {
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.z;
-			this.lineCount++;
-
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.z;
-			this.lineCount++;
-
-			total += 2;
-		}
-
-		// top left
-		if ((sides & 0x12) != 0) {
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.z;
-			this.lineCount++;
-
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.z;
-			this.lineCount++;
-
-			total += 2;
-		}
-
-		// bottom right
-		if ((sides & 0x21) != 0) {
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.z;
-			this.lineCount++;
-
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.z;
-			this.lineCount++;
-
-			total += 2;
-		}
-
-		// top right
-		if ((sides & 0x22) != 0) {
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.z;
-			this.lineCount++;
-
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.z;
-			this.lineCount++;
-
-			total += 2;
-		}
-
-		// bottom near
-		if ((sides & 0x05) != 0) {
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.z;
-			this.lineCount++;
-
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.z;
-			this.lineCount++;
-
-			total += 2;
-		}
-
-		// top near
-		if ((sides & 0x06) != 0) {
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.z;
-			this.lineCount++;
-
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.z;
-			this.lineCount++;
-
-			total += 2;
-		}
-
-		// bottom far
-		if ((sides & 0x09) != 0) {
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.z;
-			this.lineCount++;
-
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.z;
-			this.lineCount++;
-
-			total += 2;
-		}
-
-		// top far
-		if ((sides & 0x0A) != 0) {
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.z;
-			this.lineCount++;
-
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.z;
-			this.lineCount++;
-
-			total += 2;
-		}
-
-		// near left
-		if ((sides & 0x14) != 0) {
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.z;
-			this.lineCount++;
-
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.z;
-			this.lineCount++;
-
-			total += 2;
-		}
-
-		// near right
-		if ((sides & 0x24) != 0) {
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.z;
-			this.lineCount++;
-
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.z;
-			this.lineCount++;
-
-			total += 2;
-		}
-
-		// far left
-		if ((sides & 0x18) != 0) {
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.z;
-			this.lineCount++;
-
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.z;
-			this.lineCount++;
-
-			total += 2;
-		}
-
-		// far right
-		if ((sides & 0x28) != 0) {
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = zero.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.z;
-			this.lineCount++;
-
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.x;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.y;
-			this.lineVertexBuffer[this.lineVertexIndex++] = size.z;
-			this.lineCount++;
-
-			total += 2;
-		}
-
-		for (int i = 0; i < total; i++) {
-			this.lineColorBuffer[this.lineColorIndex++] = red;
-			this.lineColorBuffer[this.lineColorIndex++] = green;
-			this.lineColorBuffer[this.lineColorIndex++] = blue;
-			this.lineColorBuffer[this.lineColorIndex++] = alpha;
 		}
 	}
 

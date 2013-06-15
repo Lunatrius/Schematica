@@ -1,8 +1,6 @@
 package lunatrius.schematica.renderer;
 
 import lunatrius.schematica.Settings;
-import lunatrius.schematica.util.Vector3f;
-import lunatrius.schematica.util.Vector3i;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.culling.Frustrum;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,10 +8,9 @@ import net.minecraft.profiler.Profiler;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.ForgeSubscribe;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector3f;
 
-import java.nio.FloatBuffer;
 import java.util.Collections;
 
 public class RendererSchematicGlobal {
@@ -22,16 +19,6 @@ public class RendererSchematicGlobal {
 
 	private final Frustrum frustrum = new Frustrum();
 	private final RendererSchematicChunkSorter rendererSchematicChunkSorter = new RendererSchematicChunkSorter();
-
-	private static final int quadBufferSize = 240;
-	private final FloatBuffer quadColorBudder = BufferUtils.createFloatBuffer(quadBufferSize * 4);
-	private final FloatBuffer quadVertexBuffer = BufferUtils.createFloatBuffer(quadBufferSize * 3);
-	private int quadObjectCount = -1;
-
-	private static final int lineBufferSize = 240;
-	private final FloatBuffer lineColorBuffer = BufferUtils.createFloatBuffer(lineBufferSize * 4);
-	private final FloatBuffer lineVertecBuffer = BufferUtils.createFloatBuffer(lineBufferSize * 3);
-	private int lineObjectCount = -1;
 
 	@ForgeSubscribe
 	public void onRender(RenderWorldLastEvent event) {
@@ -106,45 +93,39 @@ public class RendererSchematicGlobal {
 
 		this.profiler.endStartSection("guide");
 
-		this.quadObjectCount = 0;
-		this.lineObjectCount = 0;
-
-		this.quadColorBudder.clear();
-		this.quadVertexBuffer.clear();
-		this.lineColorBuffer.clear();
-		this.lineVertecBuffer.clear();
+		RenderHelper.createBuffers();
 
 		this.profiler.startSection("dataPrep");
 		if (this.settings.isRenderingSchematic) {
-			drawCuboidOutline(Vector3i.ZERO, new Vector3i(this.settings.schematic.width(), this.settings.schematic.height(), this.settings.schematic.length()), 0.75f, 0.0f, 0.75f, 0.25f);
+			RenderHelper.drawCuboidOutline(RenderHelper.VEC_ZERO, this.settings.schematic.dimensions(), RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
 		}
 
 		if (this.settings.isRenderingGuide) {
-			Vector3i start = null;
-			Vector3i end = null;
+			Vector3f start = new Vector3f();
+			Vector3f end = new Vector3f();
 
-			start = this.settings.pointMin.clone().sub(this.settings.offset);
-			end = this.settings.pointMax.clone().sub(this.settings.offset).add(1);
-			drawCuboidOutline(start, end, 0.0f, 0.75f, 0.0f, 0.25f);
+			Vector3f.sub(this.settings.pointMin, this.settings.offset, start);
+			Vector3f.sub(this.settings.pointMax, this.settings.offset, end);
+			end.translate(1, 1, 1);
+			RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.0f, 0.75f, 0.0f, 0.25f);
 
-			start = this.settings.pointA.clone().sub(this.settings.offset);
-			end = start.clone().add(1);
-			drawCuboidOutline(start, end, 0.75f, 0.0f, 0.0f, 0.25f);
-			drawCuboidSurface(start, end, 0.75f, 0.0f, 0.0f, 0.25f);
+			Vector3f.sub(this.settings.pointA, this.settings.offset, start);
+			Vector3f.sub(this.settings.pointA, this.settings.offset, end);
+			end.translate(1, 1, 1);
+			RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
+			RenderHelper.drawCuboidSurface(start, end, RenderHelper.QUAD_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
 
-			start = this.settings.pointB.clone().sub(this.settings.offset);
-			end = start.clone().add(1);
-			drawCuboidOutline(start, end, 0.0f, 0.0f, 0.75f, 0.25f);
-			drawCuboidSurface(start, end, 0.0f, 0.0f, 0.75f, 0.25f);
+			Vector3f.sub(this.settings.pointB, this.settings.offset, start);
+			Vector3f.sub(this.settings.pointB, this.settings.offset, end);
+			end.translate(1, 1, 1);
+			RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
+			RenderHelper.drawCuboidSurface(start, end, RenderHelper.QUAD_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
 		}
 
-		if (this.quadObjectCount > 0 || this.lineObjectCount > 0) {
-			this.quadColorBudder.flip();
-			this.quadVertexBuffer.flip();
+		int quadCount = RenderHelper.getQuadCount();
+		int lineCount = RenderHelper.getLineCount();
 
-			this.lineColorBuffer.flip();
-			this.lineVertecBuffer.flip();
-
+		if (quadCount > 0 || lineCount > 0) {
 			GL11.glDisable(GL11.GL_TEXTURE_2D);
 
 			GL11.glLineWidth(1.5f);
@@ -153,17 +134,17 @@ public class RendererSchematicGlobal {
 			GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
 
 			this.profiler.endStartSection("quad");
-			if (this.quadObjectCount > 0) {
-				GL11.glColorPointer(4, 0, this.quadColorBudder);
-				GL11.glVertexPointer(3, 0, this.quadVertexBuffer);
-				GL11.glDrawArrays(GL11.GL_QUADS, 0, this.quadObjectCount);
+			if (quadCount > 0) {
+				GL11.glVertexPointer(3, 0, RenderHelper.getQuadVertexBuffer());
+				GL11.glColorPointer(4, 0, RenderHelper.getQuadColorBuffer());
+				GL11.glDrawArrays(GL11.GL_QUADS, 0, quadCount);
 			}
 
 			this.profiler.endStartSection("line");
-			if (this.lineObjectCount > 0) {
-				GL11.glColorPointer(4, 0, this.lineColorBuffer);
-				GL11.glVertexPointer(3, 0, this.lineVertecBuffer);
-				GL11.glDrawArrays(GL11.GL_LINES, 0, this.lineObjectCount);
+			if (lineCount > 0) {
+				GL11.glVertexPointer(3, 0, RenderHelper.getLineVertexBuffer());
+				GL11.glColorPointer(4, 0, RenderHelper.getLineColorBuffer());
+				GL11.glDrawArrays(GL11.GL_LINES, 0, lineCount);
 			}
 
 			this.profiler.endSection();
@@ -179,112 +160,6 @@ public class RendererSchematicGlobal {
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		GL11.glPopMatrix();
-	}
-
-	private void drawCuboidSurface(Vector3i a, Vector3i b, float red, float green, float blue, float alpha) {
-		Vector3f zero = new Vector3f(a.x, a.y, a.z).sub(this.settings.blockDelta);
-		Vector3f size = new Vector3f(b.x, b.y, b.z).add(this.settings.blockDelta);
-
-		// left
-		this.quadVertexBuffer.put(zero.x).put(zero.y).put(zero.z);
-		this.quadVertexBuffer.put(zero.x).put(zero.y).put(size.z);
-		this.quadVertexBuffer.put(zero.x).put(size.y).put(size.z);
-		this.quadVertexBuffer.put(zero.x).put(size.y).put(zero.z);
-
-		// right
-		this.quadVertexBuffer.put(size.x).put(zero.y).put(size.z);
-		this.quadVertexBuffer.put(size.x).put(zero.y).put(zero.z);
-		this.quadVertexBuffer.put(size.x).put(size.y).put(zero.z);
-		this.quadVertexBuffer.put(size.x).put(size.y).put(size.z);
-
-		// near
-		this.quadVertexBuffer.put(size.x).put(zero.y).put(zero.z);
-		this.quadVertexBuffer.put(zero.x).put(zero.y).put(zero.z);
-		this.quadVertexBuffer.put(zero.x).put(size.y).put(zero.z);
-		this.quadVertexBuffer.put(size.x).put(size.y).put(zero.z);
-
-		// far
-		this.quadVertexBuffer.put(zero.x).put(zero.y).put(size.z);
-		this.quadVertexBuffer.put(size.x).put(zero.y).put(size.z);
-		this.quadVertexBuffer.put(size.x).put(size.y).put(size.z);
-		this.quadVertexBuffer.put(zero.x).put(size.y).put(size.z);
-
-		// bottom
-		this.quadVertexBuffer.put(size.x).put(zero.y).put(zero.z);
-		this.quadVertexBuffer.put(size.x).put(zero.y).put(size.z);
-		this.quadVertexBuffer.put(zero.x).put(zero.y).put(size.z);
-		this.quadVertexBuffer.put(zero.x).put(zero.y).put(zero.z);
-
-		// top
-		this.quadVertexBuffer.put(size.x).put(size.y).put(zero.z);
-		this.quadVertexBuffer.put(zero.x).put(size.y).put(zero.z);
-		this.quadVertexBuffer.put(zero.x).put(size.y).put(size.z);
-		this.quadVertexBuffer.put(size.x).put(size.y).put(size.z);
-
-		for (int i = 0; i < 24; i++) {
-			this.quadColorBudder.put(red).put(green).put(blue).put(alpha);
-		}
-
-		this.quadObjectCount += 24;
-	}
-
-	private void drawCuboidOutline(Vector3i a, Vector3i b, float red, float green, float blue, float alpha) {
-		Vector3f zero = new Vector3f(a.x, a.y, a.z).sub(this.settings.blockDelta);
-		Vector3f size = new Vector3f(b.x, b.y, b.z).add(this.settings.blockDelta);
-
-		// bottom left
-		this.lineVertecBuffer.put(zero.x).put(zero.y).put(zero.z);
-		this.lineVertecBuffer.put(zero.x).put(zero.y).put(size.z);
-
-		// top left
-		this.lineVertecBuffer.put(zero.x).put(size.y).put(zero.z);
-		this.lineVertecBuffer.put(zero.x).put(size.y).put(size.z);
-
-		// bottom right
-		this.lineVertecBuffer.put(size.x).put(zero.y).put(zero.z);
-		this.lineVertecBuffer.put(size.x).put(zero.y).put(size.z);
-
-		// top right
-		this.lineVertecBuffer.put(size.x).put(size.y).put(zero.z);
-		this.lineVertecBuffer.put(size.x).put(size.y).put(size.z);
-
-		// bottom near
-		this.lineVertecBuffer.put(zero.x).put(zero.y).put(zero.z);
-		this.lineVertecBuffer.put(size.x).put(zero.y).put(zero.z);
-
-		// top near
-		this.lineVertecBuffer.put(zero.x).put(size.y).put(zero.z);
-		this.lineVertecBuffer.put(size.x).put(size.y).put(zero.z);
-
-		// bottom far
-		this.lineVertecBuffer.put(zero.x).put(zero.y).put(size.z);
-		this.lineVertecBuffer.put(size.x).put(zero.y).put(size.z);
-
-		// top far
-		this.lineVertecBuffer.put(zero.x).put(size.y).put(size.z);
-		this.lineVertecBuffer.put(size.x).put(size.y).put(size.z);
-
-		// near left
-		this.lineVertecBuffer.put(zero.x).put(zero.y).put(zero.z);
-		this.lineVertecBuffer.put(zero.x).put(size.y).put(zero.z);
-
-		// near right
-		this.lineVertecBuffer.put(size.x).put(zero.y).put(zero.z);
-		this.lineVertecBuffer.put(size.x).put(size.y).put(zero.z);
-
-		// far left
-		this.lineVertecBuffer.put(zero.x).put(zero.y).put(size.z);
-		this.lineVertecBuffer.put(zero.x).put(size.y).put(size.z);
-
-		// far right
-		this.lineVertecBuffer.put(size.x).put(zero.y).put(size.z);
-		this.lineVertecBuffer.put(size.x).put(size.y).put(size.z);
-
-		for (int i = 0; i < 24; i++) {
-			this.lineColorBuffer.put(red).put(green).put(blue).put(alpha);
-		}
-
-		this.lineObjectCount += 24;
 	}
 
 	private void updateFrustrum() {

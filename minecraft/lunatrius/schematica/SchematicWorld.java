@@ -20,6 +20,7 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.AnvilSaveHandler;
+import org.lwjgl.util.vector.Vector3f;
 
 import java.util.*;
 
@@ -523,6 +524,10 @@ public class SchematicWorld extends World {
 
 	public int height() {
 		return this.height;
+	}
+
+	public Vector3f dimensions() {
+		return new Vector3f(this.width, this.height, this.length);
 	}
 
 	public static boolean isBlock(int itemId) {

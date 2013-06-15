@@ -45,12 +45,12 @@ public class SchematicPrinter {
 				for (z = minZ; z <= maxZ; z++) {
 					blockId = this.settings.schematic.getBlockId(x, y, z);
 
-					if (blockId == 0 || world.getBlockId(this.settings.offset.x + x, this.settings.offset.y + y, this.settings.offset.z + z) != 0) {
+					if (blockId == 0 || world.getBlockId((int) this.settings.offset.x + x, (int) this.settings.offset.y + y, (int) this.settings.offset.z + z) != 0) {
 						continue;
 					}
 
 					blockMetadata = this.settings.schematic.getBlockMetadata(x, y, z);
-					if (placeBlock(this.settings.minecraft, world, player, this.settings.offset.x + x, this.settings.offset.y + y, this.settings.offset.z + z, getMappedId(blockId), blockMetadata)) {
+					if (placeBlock(this.settings.minecraft, world, player, (int) this.settings.offset.x + x, (int) this.settings.offset.y + y, (int) this.settings.offset.z + z, getMappedId(blockId), blockMetadata)) {
 						if (!this.settings.placeInstantly) {
 							player.inventory.currentItem = slot;
 							syncSneaking(player, isSneaking);

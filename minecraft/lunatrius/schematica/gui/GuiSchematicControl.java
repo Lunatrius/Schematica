@@ -202,13 +202,13 @@ public class GuiSchematicControl extends GuiScreen {
 		drawCenteredString(this.fontRenderer, this.settings.renderingLayer < 0 ? this.strAll : Integer.toString(this.settings.renderingLayer + 1), this.width - 50, this.height - 145, 0xFFFFFF);
 
 		drawString(this.fontRenderer, this.strX, this.centerX - 65, this.centerY - 24, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString(this.settings.offset.x), this.centerX + 55, this.centerY - 24, 0xFFFFFF);
+		drawString(this.fontRenderer, Integer.toString((int)this.settings.offset.x), this.centerX + 55, this.centerY - 24, 0xFFFFFF);
 
 		drawString(this.fontRenderer, this.strY, this.centerX - 65, this.centerY + 1, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString(this.settings.offset.y), this.centerX + 55, this.centerY + 1, 0xFFFFFF);
+		drawString(this.fontRenderer, Integer.toString((int)this.settings.offset.y), this.centerX + 55, this.centerY + 1, 0xFFFFFF);
 
 		drawString(this.fontRenderer, this.strZ, this.centerX - 65, this.centerY + 26, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString(this.settings.offset.z), this.centerX + 55, this.centerY + 26, 0xFFFFFF);
+		drawString(this.fontRenderer, Integer.toString((int)this.settings.offset.z), this.centerX + 55, this.centerY + 26, 0xFFFFFF);
 
 		super.drawScreen(par1, par2, par3);
 	}

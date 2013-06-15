@@ -252,22 +252,22 @@ public class GuiSchematicSave extends GuiScreen {
 		drawString(this.fontRenderer, this.strSaveSelection, this.width - 205, this.height - 45, 0xFFFFFF);
 
 		drawString(this.fontRenderer, this.strX, this.centerX - 145, this.centerY - 24, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString(this.settings.pointA.x), this.centerX - 25, this.centerY - 24, 0xFFFFFF);
+		drawString(this.fontRenderer, Integer.toString((int) this.settings.pointA.x), this.centerX - 25, this.centerY - 24, 0xFFFFFF);
 
 		drawString(this.fontRenderer, this.strY, this.centerX - 145, this.centerY + 1, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString(this.settings.pointA.y), this.centerX - 25, this.centerY + 1, 0xFFFFFF);
+		drawString(this.fontRenderer, Integer.toString((int) this.settings.pointA.y), this.centerX - 25, this.centerY + 1, 0xFFFFFF);
 
 		drawString(this.fontRenderer, this.strZ, this.centerX - 145, this.centerY + 26, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString(this.settings.pointA.z), this.centerX - 25, this.centerY + 26, 0xFFFFFF);
+		drawString(this.fontRenderer, Integer.toString((int) this.settings.pointA.z), this.centerX - 25, this.centerY + 26, 0xFFFFFF);
 
 		drawString(this.fontRenderer, this.strX, this.centerX + 15, this.centerY - 24, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString(this.settings.pointB.x), this.centerX + 135, this.centerY - 24, 0xFFFFFF);
+		drawString(this.fontRenderer, Integer.toString((int) this.settings.pointB.x), this.centerX + 135, this.centerY - 24, 0xFFFFFF);
 
 		drawString(this.fontRenderer, this.strY, this.centerX + 15, this.centerY + 1, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString(this.settings.pointB.y), this.centerX + 135, this.centerY + 1, 0xFFFFFF);
+		drawString(this.fontRenderer, Integer.toString((int) this.settings.pointB.y), this.centerX + 135, this.centerY + 1, 0xFFFFFF);
 
 		drawString(this.fontRenderer, this.strZ, this.centerX + 15, this.centerY + 26, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString(this.settings.pointB.z), this.centerX + 135, this.centerY + 26, 0xFFFFFF);
+		drawString(this.fontRenderer, Integer.toString((int) this.settings.pointB.z), this.centerX + 135, this.centerY + 26, 0xFFFFFF);
 
 		this.tfFilename.drawTextBox();
 

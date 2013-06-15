@@ -65,6 +65,8 @@ public class Schematica {
 		this.settings.placeDelay = Config.getInt(config, Configuration.CATEGORY_GENERAL, "placeDelay", this.settings.placeDelay, 0, 20, "Delay in ticks between placement attempts.");
 		this.settings.placeInstantly = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "placeInstantly", this.settings.placeInstantly, "Place all blocks that can be placed in one tick.");
 		this.settings.placeAdjacent = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "placeAdjacent", this.settings.placeAdjacent, "Place blocks only if there is an adjacent block next to it.");
+		this.settings.drawQuads = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "drawQuads", this.settings.drawQuads, "Draw surface areas.");
+		this.settings.drawLines= Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "drawLines", this.settings.drawLines, "Draw outlines.");
 		config.save();
 
 		try {
