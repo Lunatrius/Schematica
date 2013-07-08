@@ -210,7 +210,7 @@ public class Schematica {
 			KeyBindingRegistry.registerKeyBinding(new KeyBindingHandler(this.settings.keyBindings, new boolean[this.settings.keyBindings.length]));
 			TickRegistry.registerTickHandler(new Ticker(EnumSet.of(TickType.CLIENT)), Side.CLIENT);
 
-			this.sortedWorldRenderers = ReflectionHelper.findField(RenderGlobal.class, "k", "field_72768_k", "sortedWorldRenderers");
+			this.sortedWorldRenderers = ReflectionHelper.findField(RenderGlobal.class, "n", "field_72768_k", "sortedWorldRenderers");
 		} catch (Exception e) {
 			Settings.logger.logSevereException("Could not initialize the mod!", e);
 			throw new RuntimeException(e);

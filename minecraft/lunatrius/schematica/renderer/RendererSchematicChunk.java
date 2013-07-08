@@ -1,5 +1,6 @@
 package lunatrius.schematica.renderer;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import lunatrius.schematica.SchematicWorld;
 import lunatrius.schematica.Settings;
 import net.minecraft.block.Block;
@@ -7,20 +8,27 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.resources.ResourceLocation;
+import net.minecraft.client.resources.ResourceManager;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.client.ForgeHooksClient;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class RendererSchematicChunk {
 	public static final int CHUNK_WIDTH = 16;
@@ -41,7 +49,8 @@ public class RendererSchematicChunk {
 
 	private final AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
 
-	private static final Map<String, Integer> texturePacks = new HashMap<String, Integer>();
+	private static final Map<String, ResourceLocation> resourcePacks = new HashMap<String, ResourceLocation>();
+	private Field fieldMapTexturesStiched;
 
 	private boolean needsUpdate = true;
 	private int glList = -1;
@@ -72,6 +81,13 @@ public class RendererSchematicChunk {
 		}
 
 		this.glList = GL11.glGenLists(3);
+
+		try {
+			this.fieldMapTexturesStiched = ReflectionHelper.findField(TextureMap.class, "f", "field_94252_e", "mapTexturesStiched");
+		} catch (Exception ex) {
+			Settings.logger.logSevereException("Failed to initialize mapTexturesStiched!", ex);
+			this.fieldMapTexturesStiched = null;
+		}
 	}
 
 	public void delete() {
@@ -354,45 +370,81 @@ public class RendererSchematicChunk {
 			return;
 		}
 
-		/*
-		 * TODO: update this for the new resource pack stuff
+		String resourcePackName = this.minecraft.func_110438_M().func_110610_d();
 
-		ITexturePack texturePackBase = this.minecraft.texturePackList.getSelectedTexturePack();
-		String texturePackFileName = texturePackBase.getTexturePackFileName() + "-" + (int) (this.settings.alpha * 255);
+		if (!resourcePacks.containsKey(resourcePackName)) {
+			String texturePackFileName = resourcePackName.replaceAll("(?i)[^a-z0-9]", "_") + "-" + (int) (this.settings.alpha * 255) + ".png";
 
-		if (!texturePacks.containsKey(texturePackFileName)) {
-			Texture texture = this.minecraft.renderEngine.textureMapBlocks.getTexture();
-			int width = texture.getWidth();
-			int height = texture.getHeight();
-			ByteBuffer buffer = texture.getTextureData();
-			byte[] byteArray = new byte[width * height * 4];
-			buffer.position(0);
-			buffer.get(byteArray);
+			try {
+				File outputfile = new File("assets/" + texturePackFileName);
 
-			BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-			int x, y, offset, alpha, red, green, blue;
+				ResourceManager manager = this.minecraft.func_110442_L();
 
-			for (y = 0; y < height; y++) {
-				for (x = 0; x < width; x++) {
-					offset = (y * width + x) * 4;
+				Icon icon = Block.dirt.getIcon(0, 0);
+				float deltaU = icon.getMaxU() - icon.getMinU();
+				float deltaV = icon.getMaxV() - icon.getMinV();
 
-					alpha = (byteArray[offset + 3] & 0xFF);
-					red = (byteArray[offset + 0] & 0xFF);
-					green = (byteArray[offset + 1] & 0xFF);
-					blue = (byteArray[offset + 2] & 0xFF);
+				int width = (int) Math.pow(2, Math.round(Math.log(icon.getOriginX() / deltaU) / Math.log(2)));
+				int height = (int) Math.pow(2, Math.round(Math.log(icon.getOriginY() / deltaV) / Math.log(2)));
 
-					alpha *= this.settings.alpha;
+				BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
-					bufferedImage.setRGB(x, y, (alpha << 24) | (red << 16) | (green << 8) | (blue));
+				Map<String, TextureAtlasSprite> map = (Map<String, TextureAtlasSprite>) fieldMapTexturesStiched.get(this.minecraft.renderEngine.func_110581_b(TextureMap.field_110575_b));
+				if (map == null) {
+					Settings.logger.logSevere("mapTexturesStiched is null!");
+					resourcePacks.put(resourcePackName, TextureMap.field_110575_b);
+					return;
 				}
+
+				Collection<TextureAtlasSprite> sprites = map.values();
+
+				for (TextureAtlasSprite sprite : sprites) {
+					ResourceLocation resourcelocation = new ResourceLocation(ForgeHooksClient.fixDomain("textures/blocks/", sprite.getIconName()) + ".png");
+
+					try {
+						sprite.load(manager, resourcelocation);
+					} catch (RuntimeException ignored) {
+					} catch (IOException ignored) {
+					}
+				}
+
+				for (TextureAtlasSprite sprite : sprites) {
+					if (sprite.func_110970_k() != 0) {
+						int[] data = sprite.func_110965_a(0);
+						int offsetX = sprite.func_130010_a();
+						int offsetY = sprite.func_110967_i();
+
+						int x, y;
+						int color, alpha, index = 0;
+
+						for (y = 0; y < sprite.getOriginY(); y++) {
+							for (x = 0; x < sprite.getOriginX(); x++) {
+								color = data[index++];
+								alpha = (color >> 24) & 0xFF;
+								alpha *= this.settings.alpha;
+								color = (color & 0x00FFFFFF) | (alpha << 24);
+								bufferedImage.setRGB(offsetX + x, offsetY + y, color);
+							}
+						}
+					}
+				}
+
+				ImageIO.write(bufferedImage, "png", outputfile);
+
+				for (TextureAtlasSprite sprite : sprites) {
+					if (!sprite.func_130098_m()) {
+						sprite.func_130103_l();
+					}
+				}
+
+				resourcePacks.put(resourcePackName, new ResourceLocation(texturePackFileName));
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
-
-			texturePacks.put(texturePackFileName, this.minecraft.renderEngine.allocateAndSetupTexture(bufferedImage));
 		}
 
-		if (texturePacks.containsKey(texturePackFileName)) {
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePacks.get(texturePackFileName));
+		if (resourcePacks.containsKey(resourcePackName)) {
+			this.minecraft.renderEngine.func_110577_a(resourcePacks.get(resourcePackName));
 		}
-		 */
 	}
 }
