@@ -4,14 +4,12 @@ import lunatrius.schematica.Settings;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.util.StringTranslate;
+import net.minecraft.util.StatCollector;
 
 public class GuiSchematicSave extends GuiScreen {
 	private final Settings settings = Settings.instance();
 	@SuppressWarnings("unused")
 	private final GuiScreen prevGuiScreen;
-
-	private final StringTranslate strTranslate = StringTranslate.getInstance();
 
 	private int centerX = 0;
 	private int centerY = 0;
@@ -58,10 +56,10 @@ public class GuiSchematicSave extends GuiScreen {
 
 	private String filename = "";
 
-	private final String strSaveSelection = this.strTranslate.translateKey("schematic.saveselection");
-	private final String strX = this.strTranslate.translateKey("schematic.x");
-	private final String strY = this.strTranslate.translateKey("schematic.y");
-	private final String strZ = this.strTranslate.translateKey("schematic.z");
+	private final String strSaveSelection = StatCollector.translateToLocal("schematic.saveselection");
+	private final String strX = StatCollector.translateToLocal("schematic.x");
+	private final String strY = StatCollector.translateToLocal("schematic.y");
+	private final String strZ = StatCollector.translateToLocal("schematic.z");
 
 	public GuiSchematicSave(GuiScreen guiScreen) {
 		this.prevGuiScreen = guiScreen;
@@ -76,72 +74,72 @@ public class GuiSchematicSave extends GuiScreen {
 
 		int id = 0;
 
-		this.btnPointA = new GuiButton(id++, this.centerX - 130, this.centerY - 55, 100, 20, this.strTranslate.translateKey("schematic.point.red"));
+		this.btnPointA = new GuiButton(id++, this.centerX - 130, this.centerY - 55, 100, 20, StatCollector.translateToLocal("schematic.point.red"));
 		this.buttonList.add(this.btnPointA);
 
-		this.btnDecAX = new GuiButton(id++, this.centerX - 130, this.centerY - 30, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
+		this.btnDecAX = new GuiButton(id++, this.centerX - 130, this.centerY - 30, 30, 20, StatCollector.translateToLocal("schematic.decrease"));
 		this.buttonList.add(this.btnDecAX);
 
 		this.btnAmountAX = new GuiButton(id++, this.centerX - 95, this.centerY - 30, 30, 20, Integer.toString(this.settings.increments[this.incrementAX]));
 		this.buttonList.add(this.btnAmountAX);
 
-		this.btnIncAX = new GuiButton(id++, this.centerX - 60, this.centerY - 30, 30, 20, this.strTranslate.translateKey("schematic.increase"));
+		this.btnIncAX = new GuiButton(id++, this.centerX - 60, this.centerY - 30, 30, 20, StatCollector.translateToLocal("schematic.increase"));
 		this.buttonList.add(this.btnIncAX);
 
-		this.btnDecAY = new GuiButton(id++, this.centerX - 130, this.centerY - 5, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
+		this.btnDecAY = new GuiButton(id++, this.centerX - 130, this.centerY - 5, 30, 20, StatCollector.translateToLocal("schematic.decrease"));
 		this.buttonList.add(this.btnDecAY);
 
 		this.btnAmountAY = new GuiButton(id++, this.centerX - 95, this.centerY - 5, 30, 20, Integer.toString(this.settings.increments[this.incrementAY]));
 		this.buttonList.add(this.btnAmountAY);
 
-		this.btnIncAY = new GuiButton(id++, this.centerX - 60, this.centerY - 5, 30, 20, this.strTranslate.translateKey("schematic.increase"));
+		this.btnIncAY = new GuiButton(id++, this.centerX - 60, this.centerY - 5, 30, 20, StatCollector.translateToLocal("schematic.increase"));
 		this.buttonList.add(this.btnIncAY);
 
-		this.btnDecAZ = new GuiButton(id++, this.centerX - 130, this.centerY + 20, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
+		this.btnDecAZ = new GuiButton(id++, this.centerX - 130, this.centerY + 20, 30, 20, StatCollector.translateToLocal("schematic.decrease"));
 		this.buttonList.add(this.btnDecAZ);
 
 		this.btnAmountAZ = new GuiButton(id++, this.centerX - 95, this.centerY + 20, 30, 20, Integer.toString(this.settings.increments[this.incrementAZ]));
 		this.buttonList.add(this.btnAmountAZ);
 
-		this.btnIncAZ = new GuiButton(id++, this.centerX - 60, this.centerY + 20, 30, 20, this.strTranslate.translateKey("schematic.increase"));
+		this.btnIncAZ = new GuiButton(id++, this.centerX - 60, this.centerY + 20, 30, 20, StatCollector.translateToLocal("schematic.increase"));
 		this.buttonList.add(this.btnIncAZ);
 
-		this.btnPointB = new GuiButton(id++, this.centerX + 30, this.centerY - 55, 100, 20, this.strTranslate.translateKey("schematic.point.blue"));
+		this.btnPointB = new GuiButton(id++, this.centerX + 30, this.centerY - 55, 100, 20, StatCollector.translateToLocal("schematic.point.blue"));
 		this.buttonList.add(this.btnPointB);
 
-		this.btnDecBX = new GuiButton(id++, this.centerX + 30, this.centerY - 30, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
+		this.btnDecBX = new GuiButton(id++, this.centerX + 30, this.centerY - 30, 30, 20, StatCollector.translateToLocal("schematic.decrease"));
 		this.buttonList.add(this.btnDecBX);
 
 		this.btnAmountBX = new GuiButton(id++, this.centerX + 65, this.centerY - 30, 30, 20, Integer.toString(this.settings.increments[this.incrementBX]));
 		this.buttonList.add(this.btnAmountBX);
 
-		this.btnIncBX = new GuiButton(id++, this.centerX + 100, this.centerY - 30, 30, 20, this.strTranslate.translateKey("schematic.increase"));
+		this.btnIncBX = new GuiButton(id++, this.centerX + 100, this.centerY - 30, 30, 20, StatCollector.translateToLocal("schematic.increase"));
 		this.buttonList.add(this.btnIncBX);
 
-		this.btnDecBY = new GuiButton(id++, this.centerX + 30, this.centerY - 5, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
+		this.btnDecBY = new GuiButton(id++, this.centerX + 30, this.centerY - 5, 30, 20, StatCollector.translateToLocal("schematic.decrease"));
 		this.buttonList.add(this.btnDecBY);
 
 		this.btnAmountBY = new GuiButton(id++, this.centerX + 65, this.centerY - 5, 30, 20, Integer.toString(this.settings.increments[this.incrementBY]));
 		this.buttonList.add(this.btnAmountBY);
 
-		this.btnIncBY = new GuiButton(id++, this.centerX + 100, this.centerY - 5, 30, 20, this.strTranslate.translateKey("schematic.increase"));
+		this.btnIncBY = new GuiButton(id++, this.centerX + 100, this.centerY - 5, 30, 20, StatCollector.translateToLocal("schematic.increase"));
 		this.buttonList.add(this.btnIncBY);
 
-		this.btnDecBZ = new GuiButton(id++, this.centerX + 30, this.centerY + 20, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
+		this.btnDecBZ = new GuiButton(id++, this.centerX + 30, this.centerY + 20, 30, 20, StatCollector.translateToLocal("schematic.decrease"));
 		this.buttonList.add(this.btnDecBZ);
 
 		this.btnAmountBZ = new GuiButton(id++, this.centerX + 65, this.centerY + 20, 30, 20, Integer.toString(this.settings.increments[this.incrementBZ]));
 		this.buttonList.add(this.btnAmountBZ);
 
-		this.btnIncBZ = new GuiButton(id++, this.centerX + 100, this.centerY + 20, 30, 20, this.strTranslate.translateKey("schematic.increase"));
+		this.btnIncBZ = new GuiButton(id++, this.centerX + 100, this.centerY + 20, 30, 20, StatCollector.translateToLocal("schematic.increase"));
 		this.buttonList.add(this.btnIncBZ);
 
-		this.btnEnable = new GuiButton(id++, this.width - 210, this.height - 30, 50, 20, this.strTranslate.translateKey(this.settings.isRenderingGuide ? "schematic.disable" : "schematic.enable"));
+		this.btnEnable = new GuiButton(id++, this.width - 210, this.height - 30, 50, 20, StatCollector.translateToLocal(this.settings.isRenderingGuide ? "schematic.disable" : "schematic.enable"));
 		this.buttonList.add(this.btnEnable);
 
 		this.tfFilename = new GuiTextField(this.fontRenderer, this.width - 155, this.height - 29, 100, 18);
 
-		this.btnSave = new GuiButton(id++, this.width - 50, this.height - 30, 40, 20, this.strTranslate.translateKey("schematic.save"));
+		this.btnSave = new GuiButton(id++, this.width - 50, this.height - 30, 40, 20, StatCollector.translateToLocal("schematic.save"));
 		this.btnSave.enabled = this.settings.isRenderingGuide;
 		this.buttonList.add(this.btnSave);
 
@@ -214,7 +212,7 @@ public class GuiSchematicSave extends GuiScreen {
 				this.btnAmountBZ.displayString = Integer.toString(this.settings.increments[this.incrementBZ]);
 			} else if (guiButton.id == this.btnEnable.id) {
 				this.settings.isRenderingGuide = !this.settings.isRenderingGuide;
-				this.btnEnable.displayString = this.strTranslate.translateKey(this.settings.isRenderingGuide ? "schematic.disable" : "schematic.enable");
+				this.btnEnable.displayString = StatCollector.translateToLocal(this.settings.isRenderingGuide ? "schematic.disable" : "schematic.enable");
 				this.btnSave.enabled = this.settings.isRenderingGuide;
 			} else if (guiButton.id == this.btnSave.id) {
 				String path = this.tfFilename.getText() + ".schematic";

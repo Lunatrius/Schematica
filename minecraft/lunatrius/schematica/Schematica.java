@@ -2,10 +2,8 @@ package lunatrius.schematica;
 
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -50,7 +48,7 @@ public class Schematica {
 	private Field sortedWorldRenderers = null;
 	private File configurationFolder = null;
 
-	@PreInit
+	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		File suggestedConfigurationFile = event.getSuggestedConfigurationFile();
 		Configuration config = new Configuration(suggestedConfigurationFile);
@@ -66,7 +64,7 @@ public class Schematica {
 		this.settings.placeInstantly = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "placeInstantly", this.settings.placeInstantly, "Place all blocks that can be placed in one tick.");
 		this.settings.placeAdjacent = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "placeAdjacent", this.settings.placeAdjacent, "Place blocks only if there is an adjacent block next to it.");
 		this.settings.drawQuads = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "drawQuads", this.settings.drawQuads, "Draw surface areas.");
-		this.settings.drawLines= Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "drawLines", this.settings.drawLines, "Draw outlines.");
+		this.settings.drawLines = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "drawLines", this.settings.drawLines, "Draw outlines.");
 		config.save();
 
 		try {
@@ -203,7 +201,7 @@ public class Schematica {
 		}
 	}
 
-	@Init
+	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		try {
 			MinecraftForge.EVENT_BUS.register(new RendererSchematicGlobal());
@@ -219,7 +217,7 @@ public class Schematica {
 		}
 	}
 
-	@PostInit
+	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		String[] files = new String[] {
 				"aliasVanilla", "flipVanilla", "rotationVanilla"

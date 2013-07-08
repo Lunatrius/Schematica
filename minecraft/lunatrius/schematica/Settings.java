@@ -45,9 +45,9 @@ public class Settings {
 
 	public static final String sbcDisablePrinter = "\u00a70\u00a72\u00a70\u00a70\u00a7e\u00a7f";
 
-	public static final File schematicDirectory = new File(Minecraft.getMinecraftDir(), "/schematics/");
-	public static final File textureDirectory = new File(Minecraft.getMinecraftDir(), "/resources/mod/schematica/");
-	public static final ILogAgent logger = new LogAgent(Schematica.class.getSimpleName(), "", (new File(Minecraft.getMinecraftDir(), "output-schematica.log")).getAbsolutePath());
+	public static final File schematicDirectory = new File(Minecraft.getMinecraft().mcDataDir, "/schematics/");
+	public static final File textureDirectory = new File(Minecraft.getMinecraft().mcDataDir, "/resources/mod/schematica/");
+	public static final ILogAgent logger = new LogAgent(Schematica.class.getSimpleName(), "", (new File(Minecraft.getMinecraft().mcDataDir, "output-schematica.log")).getAbsolutePath());
 	public static final RenderItem renderItem = new RenderItem();
 	public static final ItemStack defaultIcon = new ItemStack(2, 1, 0);
 

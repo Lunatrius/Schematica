@@ -7,10 +7,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.Texture;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.texturepacks.ITexturePack;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -18,8 +17,6 @@ import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
-import java.awt.image.BufferedImage;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -189,7 +186,8 @@ public class RendererSchematicChunk {
 
 		this.profiler.endSection();
 
-		this.minecraft.renderEngine.resetBoundTexture();
+		// TODO: remove if there are no issues
+		// this.minecraft.renderEngine.resetBoundTexture();
 	}
 
 	public void renderBlocks(int renderPass, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
@@ -352,9 +350,12 @@ public class RendererSchematicChunk {
 
 	private void bindTexture() {
 		if (!this.settings.enableAlpha) {
-			this.minecraft.renderEngine.bindTexture("/terrain.png");
+			this.minecraft.renderEngine.func_110577_a(TextureMap.field_110575_b);
 			return;
 		}
+
+		/*
+		 * TODO: update this for the new resource pack stuff
 
 		ITexturePack texturePackBase = this.minecraft.texturePackList.getSelectedTexturePack();
 		String texturePackFileName = texturePackBase.getTexturePackFileName() + "-" + (int) (this.settings.alpha * 255);
@@ -392,5 +393,6 @@ public class RendererSchematicChunk {
 		if (texturePacks.containsKey(texturePackFileName)) {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texturePacks.get(texturePackFileName));
 		}
+		 */
 	}
 }

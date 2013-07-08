@@ -25,7 +25,7 @@ import org.lwjgl.util.vector.Vector3f;
 import java.util.*;
 
 public class SchematicWorld extends World {
-	private static final AnvilSaveHandler anvilSaveHandler = new AnvilSaveHandler(Minecraft.getMinecraftDir(), "mods/saves-schematica-dummy", false);
+	private static final AnvilSaveHandler anvilSaveHandler = new AnvilSaveHandler(Minecraft.getMinecraft().mcDataDir, "mods/saves-schematica-dummy", false);
 	private static final WorldSettings worldSettings = new WorldSettings(0, EnumGameType.CREATIVE, false, false, WorldType.FLAT);
 	private static final Comparator<ItemStack> blockListComparator = new Comparator<ItemStack>() {
 		@Override

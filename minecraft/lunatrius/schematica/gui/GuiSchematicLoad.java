@@ -8,7 +8,7 @@ import net.minecraft.client.gui.GuiSmallButton;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StringTranslate;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.Sys;
 
 import java.io.File;
@@ -27,13 +27,11 @@ public class GuiSchematicLoad extends GuiScreen {
 	private final GuiScreen prevGuiScreen;
 	private GuiSchematicLoadSlot guiSchematicLoadSlot;
 
-	private final StringTranslate strTranslate = StringTranslate.getInstance();
-
 	private GuiSmallButton btnOpenDir = null;
 	private GuiSmallButton btnDone = null;
 
-	private final String strTitle = this.strTranslate.translateKey("schematic.title");
-	private final String strFolderInfo = this.strTranslate.translateKey("schematic.folderInfo");
+	private final String strTitle = StatCollector.translateToLocal("schematic.title");
+	private final String strFolderInfo = StatCollector.translateToLocal("schematic.folderInfo");
 
 	protected File currentDirectory = this.settings.schematicDirectory;
 	protected final List<GuiSchematicEntry> schematicFiles = new ArrayList<GuiSchematicEntry>();
@@ -46,10 +44,10 @@ public class GuiSchematicLoad extends GuiScreen {
 	public void initGui() {
 		int id = 0;
 
-		this.btnOpenDir = new GuiSmallButton(id++, this.width / 2 - 154, this.height - 36, this.strTranslate.translateKey("schematic.openFolder"));
+		this.btnOpenDir = new GuiSmallButton(id++, this.width / 2 - 154, this.height - 36, StatCollector.translateToLocal("schematic.openFolder"));
 		this.buttonList.add(this.btnOpenDir);
 
-		this.btnDone = new GuiSmallButton(id++, this.width / 2 + 4, this.height - 36, this.strTranslate.translateKey("schematic.done"));
+		this.btnDone = new GuiSmallButton(id++, this.width / 2 + 4, this.height - 36, StatCollector.translateToLocal("schematic.done"));
 		this.buttonList.add(this.btnDone);
 
 		this.guiSchematicLoadSlot = new GuiSchematicLoadSlot(this);
@@ -133,7 +131,7 @@ public class GuiSchematicLoad extends GuiScreen {
 
 		File[] files = this.currentDirectory.listFiles(FILE_FILTER_SCHEMATIC);
 		if (files.length == 0) {
-			this.schematicFiles.add(new GuiSchematicEntry(this.strTranslate.translateKey("schematic.noschematic"), 3, 0, false));
+			this.schematicFiles.add(new GuiSchematicEntry(StatCollector.translateToLocal("schematic.noschematic"), 3, 0, false));
 		} else {
 			for (File file : files) {
 				name = file.getName();

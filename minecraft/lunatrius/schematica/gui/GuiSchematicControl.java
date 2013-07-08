@@ -4,14 +4,12 @@ import lunatrius.schematica.Settings;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.StringTranslate;
+import net.minecraft.util.StatCollector;
 
 public class GuiSchematicControl extends GuiScreen {
 	private final Settings settings = Settings.instance();
 	@SuppressWarnings("unused")
 	private final GuiScreen prevGuiScreen;
-
-	private final StringTranslate strTranslate = StringTranslate.getInstance();
 
 	private int centerX = 0;
 	private int centerY = 0;
@@ -43,15 +41,15 @@ public class GuiSchematicControl extends GuiScreen {
 	private int incrementY = 0;
 	private int incrementZ = 0;
 
-	private final String strMoveSchematic = this.strTranslate.translateKey("schematic.moveschematic");
-	private final String strLayers = this.strTranslate.translateKey("schematic.layers");
-	private final String strOperations = this.strTranslate.translateKey("schematic.operations");
-	private final String strAll = this.strTranslate.translateKey("schematic.all");
-	private final String strX = this.strTranslate.translateKey("schematic.x");
-	private final String strY = this.strTranslate.translateKey("schematic.y");
-	private final String strZ = this.strTranslate.translateKey("schematic.z");
-	private final String strMaterials = this.strTranslate.translateKey("schematic.materials");
-	private final String strPrinter = this.strTranslate.translateKey("schematic.printer");
+	private final String strMoveSchematic = StatCollector.translateToLocal("schematic.moveschematic");
+	private final String strLayers = StatCollector.translateToLocal("schematic.layers");
+	private final String strOperations = StatCollector.translateToLocal("schematic.operations");
+	private final String strAll = StatCollector.translateToLocal("schematic.all");
+	private final String strX = StatCollector.translateToLocal("schematic.x");
+	private final String strY = StatCollector.translateToLocal("schematic.y");
+	private final String strZ = StatCollector.translateToLocal("schematic.z");
+	private final String strMaterials = StatCollector.translateToLocal("schematic.materials");
+	private final String strPrinter = StatCollector.translateToLocal("schematic.printer");
 
 	public GuiSchematicControl(GuiScreen guiScreen) {
 		this.prevGuiScreen = guiScreen;
@@ -66,55 +64,55 @@ public class GuiSchematicControl extends GuiScreen {
 
 		int id = 0;
 
-		this.btnDecX = new GuiButton(id++, this.centerX - 50, this.centerY - 30, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
+		this.btnDecX = new GuiButton(id++, this.centerX - 50, this.centerY - 30, 30, 20, StatCollector.translateToLocal("schematic.decrease"));
 		this.buttonList.add(this.btnDecX);
 
 		this.btnAmountX = new GuiButton(id++, this.centerX - 15, this.centerY - 30, 30, 20, Integer.toString(this.settings.increments[this.incrementX]));
 		this.buttonList.add(this.btnAmountX);
 
-		this.btnIncX = new GuiButton(id++, this.centerX + 20, this.centerY - 30, 30, 20, this.strTranslate.translateKey("schematic.increase"));
+		this.btnIncX = new GuiButton(id++, this.centerX + 20, this.centerY - 30, 30, 20, StatCollector.translateToLocal("schematic.increase"));
 		this.buttonList.add(this.btnIncX);
 
-		this.btnDecY = new GuiButton(id++, this.centerX - 50, this.centerY - 5, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
+		this.btnDecY = new GuiButton(id++, this.centerX - 50, this.centerY - 5, 30, 20, StatCollector.translateToLocal("schematic.decrease"));
 		this.buttonList.add(this.btnDecY);
 
 		this.btnAmountY = new GuiButton(id++, this.centerX - 15, this.centerY - 5, 30, 20, Integer.toString(this.settings.increments[this.incrementY]));
 		this.buttonList.add(this.btnAmountY);
 
-		this.btnIncY = new GuiButton(id++, this.centerX + 20, this.centerY - 5, 30, 20, this.strTranslate.translateKey("schematic.increase"));
+		this.btnIncY = new GuiButton(id++, this.centerX + 20, this.centerY - 5, 30, 20, StatCollector.translateToLocal("schematic.increase"));
 		this.buttonList.add(this.btnIncY);
 
-		this.btnDecZ = new GuiButton(id++, this.centerX - 50, this.centerY + 20, 30, 20, this.strTranslate.translateKey("schematic.decrease"));
+		this.btnDecZ = new GuiButton(id++, this.centerX - 50, this.centerY + 20, 30, 20, StatCollector.translateToLocal("schematic.decrease"));
 		this.buttonList.add(this.btnDecZ);
 
 		this.btnAmountZ = new GuiButton(id++, this.centerX - 15, this.centerY + 20, 30, 20, Integer.toString(this.settings.increments[this.incrementZ]));
 		this.buttonList.add(this.btnAmountZ);
 
-		this.btnIncZ = new GuiButton(id++, this.centerX + 20, this.centerY + 20, 30, 20, this.strTranslate.translateKey("schematic.increase"));
+		this.btnIncZ = new GuiButton(id++, this.centerX + 20, this.centerY + 20, 30, 20, StatCollector.translateToLocal("schematic.increase"));
 		this.buttonList.add(this.btnIncZ);
 
-		this.btnDecLayer = new GuiButton(id++, this.width - 90, this.height - 150, 25, 20, this.strTranslate.translateKey("schematic.decrease"));
+		this.btnDecLayer = new GuiButton(id++, this.width - 90, this.height - 150, 25, 20, StatCollector.translateToLocal("schematic.decrease"));
 		this.buttonList.add(this.btnDecLayer);
 
-		this.btnIncLayer = new GuiButton(id++, this.width - 35, this.height - 150, 25, 20, this.strTranslate.translateKey("schematic.increase"));
+		this.btnIncLayer = new GuiButton(id++, this.width - 35, this.height - 150, 25, 20, StatCollector.translateToLocal("schematic.increase"));
 		this.buttonList.add(this.btnIncLayer);
 
-		this.btnHide = new GuiButton(id++, this.width - 90, this.height - 105, 80, 20, this.strTranslate.translateKey(this.settings.isRenderingSchematic ? "schematic.hide" : "schematic.show"));
+		this.btnHide = new GuiButton(id++, this.width - 90, this.height - 105, 80, 20, StatCollector.translateToLocal(this.settings.isRenderingSchematic ? "schematic.hide" : "schematic.show"));
 		this.buttonList.add(this.btnHide);
 
-		this.btnMove = new GuiButton(id++, this.width - 90, this.height - 80, 80, 20, this.strTranslate.translateKey("schematic.movehere"));
+		this.btnMove = new GuiButton(id++, this.width - 90, this.height - 80, 80, 20, StatCollector.translateToLocal("schematic.movehere"));
 		this.buttonList.add(this.btnMove);
 
-		this.btnFlip = new GuiButton(id++, this.width - 90, this.height - 55, 80, 20, this.strTranslate.translateKey("schematic.flip"));
+		this.btnFlip = new GuiButton(id++, this.width - 90, this.height - 55, 80, 20, StatCollector.translateToLocal("schematic.flip"));
 		this.buttonList.add(this.btnFlip);
 
-		this.btnRotate = new GuiButton(id++, this.width - 90, this.height - 30, 80, 20, this.strTranslate.translateKey("schematic.rotate"));
+		this.btnRotate = new GuiButton(id++, this.width - 90, this.height - 30, 80, 20, StatCollector.translateToLocal("schematic.rotate"));
 		this.buttonList.add(this.btnRotate);
 
-		this.btnMaterials = new GuiButton(id++, 10, this.height - 70, 80, 20, this.strTranslate.translateKey("schematic.materials"));
+		this.btnMaterials = new GuiButton(id++, 10, this.height - 70, 80, 20, StatCollector.translateToLocal("schematic.materials"));
 		this.buttonList.add(this.btnMaterials);
 
-		this.btnPrint = new GuiButton(id++, 10, this.height - 30, 80, 20, this.strTranslate.translateKey(this.settings.isPrinting ? "schematic.disable" : "schematic.enable"));
+		this.btnPrint = new GuiButton(id++, 10, this.height - 30, 80, 20, StatCollector.translateToLocal(this.settings.isPrinting ? "schematic.disable" : "schematic.enable"));
 		this.buttonList.add(this.btnPrint);
 
 		this.btnDecLayer.enabled = this.settings.schematic != null;
@@ -173,7 +171,7 @@ public class GuiSchematicControl extends GuiScreen {
 				this.settings.refreshSchematic();
 			} else if (guiButton.id == this.btnHide.id) {
 				this.settings.toggleRendering();
-				this.btnHide.displayString = this.strTranslate.translateKey(this.settings.isRenderingSchematic ? "schematic.hide" : "schematic.show");
+				this.btnHide.displayString = StatCollector.translateToLocal(this.settings.isRenderingSchematic ? "schematic.hide" : "schematic.show");
 			} else if (guiButton.id == this.btnMove.id) {
 				this.settings.moveHere();
 			} else if (guiButton.id == this.btnFlip.id) {
@@ -184,7 +182,7 @@ public class GuiSchematicControl extends GuiScreen {
 				this.settings.minecraft.displayGuiScreen(new GuiSchematicMaterials(this));
 			} else if (guiButton.id == this.btnPrint.id && this.settings.isPrinterEnabled) {
 				this.settings.isPrinting = !this.settings.isPrinting;
-				this.btnPrint.displayString = this.strTranslate.translateKey(this.settings.isPrinting ? "schematic.disable" : "schematic.enable");
+				this.btnPrint.displayString = StatCollector.translateToLocal(this.settings.isPrinting ? "schematic.disable" : "schematic.enable");
 			}
 		}
 	}
@@ -202,13 +200,13 @@ public class GuiSchematicControl extends GuiScreen {
 		drawCenteredString(this.fontRenderer, this.settings.renderingLayer < 0 ? this.strAll : Integer.toString(this.settings.renderingLayer + 1), this.width - 50, this.height - 145, 0xFFFFFF);
 
 		drawString(this.fontRenderer, this.strX, this.centerX - 65, this.centerY - 24, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString((int)this.settings.offset.x), this.centerX + 55, this.centerY - 24, 0xFFFFFF);
+		drawString(this.fontRenderer, Integer.toString((int) this.settings.offset.x), this.centerX + 55, this.centerY - 24, 0xFFFFFF);
 
 		drawString(this.fontRenderer, this.strY, this.centerX - 65, this.centerY + 1, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString((int)this.settings.offset.y), this.centerX + 55, this.centerY + 1, 0xFFFFFF);
+		drawString(this.fontRenderer, Integer.toString((int) this.settings.offset.y), this.centerX + 55, this.centerY + 1, 0xFFFFFF);
 
 		drawString(this.fontRenderer, this.strZ, this.centerX - 65, this.centerY + 26, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString((int)this.settings.offset.z), this.centerX + 55, this.centerY + 26, 0xFFFFFF);
+		drawString(this.fontRenderer, Integer.toString((int) this.settings.offset.z), this.centerX + 55, this.centerY + 26, 0xFFFFFF);
 
 		super.drawScreen(par1, par2, par3);
 	}

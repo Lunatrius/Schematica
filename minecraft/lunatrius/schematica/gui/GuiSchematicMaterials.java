@@ -5,7 +5,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiSmallButton;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StringTranslate;
+import net.minecraft.util.StatCollector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +14,10 @@ public class GuiSchematicMaterials extends GuiScreen {
 	private final GuiScreen prevGuiScreen;
 	private GuiSchematicMaterialsSlot guiSchematicMaterialsSlot;
 
-	private final StringTranslate strTranslate = StringTranslate.getInstance();
-
 	private GuiSmallButton btnDone = null;
 
-	private final String strMaterialName = this.strTranslate.translateKey("schematic.materialname");
-	private final String strMaterialAmount = this.strTranslate.translateKey("schematic.materialamount");
+	private final String strMaterialName = StatCollector.translateToLocal("schematic.materialname");
+	private final String strMaterialAmount = StatCollector.translateToLocal("schematic.materialamount");
 
 	protected final List<ItemStack> blockList;
 
@@ -36,7 +34,7 @@ public class GuiSchematicMaterials extends GuiScreen {
 	public void initGui() {
 		int id = 0;
 
-		this.btnDone = new GuiSmallButton(id++, this.width / 2 + 4, this.height - 30, this.strTranslate.translateKey("schematic.done"));
+		this.btnDone = new GuiSmallButton(id++, this.width / 2 + 4, this.height - 30, StatCollector.translateToLocal("schematic.done"));
 		this.buttonList.add(this.btnDone);
 
 		this.guiSchematicMaterialsSlot = new GuiSchematicMaterialsSlot(this);

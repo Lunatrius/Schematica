@@ -2,10 +2,11 @@ package lunatrius.schematica.gui;
 
 import lunatrius.schematica.Settings;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiSlot;
-import net.minecraft.client.renderer.RenderEngine;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
@@ -16,7 +17,7 @@ import java.util.Locale;
 class GuiSchematicMaterialsSlot extends GuiSlot {
 	private final Settings settings = Settings.instance();
 	private final FontRenderer fontRenderer = this.settings.minecraft.fontRenderer;
-	private final RenderEngine renderEngine = this.settings.minecraft.renderEngine;
+	private final TextureManager renderEngine = this.settings.minecraft.renderEngine;
 
 	private final GuiSchematicMaterials guiSchematicMaterials;
 
@@ -84,7 +85,7 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 
 	private void drawItemStackSlot(int x, int y) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.renderEngine.bindTexture("/gui/slot.png");
+		this.renderEngine.func_110577_a(Gui.field_110323_l);
 		Tessellator var10 = Tessellator.instance;
 		var10.startDrawingQuads();
 		var10.addVertexWithUV(x + 1 + 0, y + 1 + 18, 0, 0 * 0.0078125F, 18 * 0.0078125F);
