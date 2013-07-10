@@ -123,4 +123,8 @@
         <antcall target="build-jar"/>
         <antcall target="clean"/>
     </target>
+
+    <target name="release" depends="build">
+        <signjar jar="${release.home}/${release.jar}" keystore="${signjar.keystore}" alias="${signjar.alias}" storepass="${signjar.storepass}" />
+    </target>
 </project>
