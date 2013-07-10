@@ -60,7 +60,7 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 		String amount = Integer.toString(itemStack.stackSize);
 
 		if (Item.itemsList[itemStack.itemID] != null) {
-			itemName = Item.itemsList[itemStack.itemID].func_77653_i(itemStack);
+			itemName = Item.itemsList[itemStack.itemID].getItemStackDisplayName(itemStack);
 		} else {
 			itemName = String.format(Locale.ENGLISH, "#%04d:%02d", itemStack.itemID, itemStack.getItemDamage());
 		}
