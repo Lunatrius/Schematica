@@ -1,6 +1,7 @@
 da_DK
 de_DE
 en_US
+es_ES
 es_MX
 fr_FR
 hu_HU
