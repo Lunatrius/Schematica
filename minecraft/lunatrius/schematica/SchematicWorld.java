@@ -20,6 +20,7 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.AnvilSaveHandler;
+import net.minecraftforge.common.ForgeDirection;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.*;
@@ -375,6 +376,15 @@ public class SchematicWorld extends World {
 	public boolean setBlockMetadataWithNotify(int x, int y, int z, int metadata, int flag) {
 		this.metadata[x][y][z] = metadata;
 		return true;
+	}
+
+	@Override
+	public boolean isBlockSolidOnSide(int x, int y, int z, ForgeDirection side, boolean _default) {
+		Block block = getBlock(x, y, z);
+		if (block == null) {
+			return false;
+		}
+		return block.isBlockSolidOnSide(this, x, y, z, side);
 	}
 
 	public Block getBlock(int x, int y, int z) {
