@@ -1,3 +1,4 @@
+cs_CZ
 da_DK
 de_DE
 en_US
