@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties version="1.0">
+  <!-- Author: Moravuscz -->
+  <comment>Čeština (cs_CZ)</comment>
+  <entry key="schematic.openFolder">Otevřít složku se schématy</entry>
+  <entry key="schematic.done">Hotovo</entry>
+  <entry key="schematic.title">Vyberte soubor schémata</entry>
+  <entry key="schematic.folderInfo">(Sem dávejte soubory schémat)</entry>
+  <entry key="schematic.noschematic">-- Žádné schéma --</entry>
+  <entry key="schematic.increase">+</entry>
+  <entry key="schematic.decrease">-</entry>
+  <entry key="schematic.hide">Schovat</entry>
+  <entry key="schematic.all">VŠE</entry>
+  <entry key="schematic.show">Zobrazit</entry>
+  <entry key="schematic.movehere">Přesunout sem</entry>
+  <entry key="schematic.flip">Přebrátit</entry>
+  <entry key="schematic.rotate">Otočit</entry>
+  <entry key="schematic.save">Uložit</entry>
+  <entry key="schematic.moveschematic">Přesunout schéma</entry>
+  <entry key="schematic.layers">Vrstvy</entry>
+  <entry key="schematic.operations">Operace</entry>
+  <entry key="schematic.point.red">Rudý bod</entry>
+  <entry key="schematic.point.blue">Modrý bod</entry>
+  <entry key="schematic.saveselection">Uložit výběr jako schéma</entry>
+  <entry key="schematic.enable">Zabnout</entry>
+  <entry key="schematic.disable">Vypnout</entry>
+  <entry key="schematic.x">X:</entry>
+  <entry key="schematic.y">Y:</entry>
+  <entry key="schematic.z">Z:</entry>
+  <entry key="schematic.materials">Materiály</entry>
+  <entry key="schematic.materialname">Materiál</entry>
+  <entry key="schematic.materialamount">Množství</entry>
+  <entry key="schematic.printer">Tiskárna</entry>
+  <entry key="key.schematic.load">načíst schéma</entry>
+  <entry key="key.schematic.save">Uložit schéma</entry>
+  <entry key="key.schematic.control">Manipulovat se schématem</entry>
+</properties>
