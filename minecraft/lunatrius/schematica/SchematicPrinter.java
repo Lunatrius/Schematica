@@ -17,7 +17,7 @@ public class SchematicPrinter {
 	private final Settings settings = Settings.instance();
 
 	public boolean print() {
-		int minX, maxX, minY, maxY, minZ, maxZ, x, y, z, blockId, blockMetadata, slot;
+		int minX, maxX, minY, maxY, minZ, maxZ, x, y, z, wx, wy, wz, blockId, blockMetadata, slot;
 		boolean isSneaking;
 		EntityPlayer player = this.settings.minecraft.thePlayer;
 		World world = this.settings.minecraft.theWorld;
@@ -45,12 +45,17 @@ public class SchematicPrinter {
 				for (z = minZ; z <= maxZ; z++) {
 					blockId = this.settings.schematic.getBlockId(x, y, z);
 
-					if (blockId == 0 || world.getBlockId((int) this.settings.offset.x + x, (int) this.settings.offset.y + y, (int) this.settings.offset.z + z) != 0) {
+					wx = (int) this.settings.offset.x + x;
+					wy = (int) this.settings.offset.y + y;
+					wz = (int) this.settings.offset.z + z;
+
+					Block block = Block.blocksList[world.getBlockId(wx, wy, wz)];
+					if (!world.isAirBlock(wx, wy, wz) && block != null && !block.canPlaceBlockAt(world, wx, wy, wz)) {
 						continue;
 					}
 
 					blockMetadata = this.settings.schematic.getBlockMetadata(x, y, z);
-					if (placeBlock(this.settings.minecraft, world, player, (int) this.settings.offset.x + x, (int) this.settings.offset.y + y, (int) this.settings.offset.z + z, getMappedId(blockId), blockMetadata)) {
+					if (placeBlock(this.settings.minecraft, world, player, wx, wy, wz, getMappedId(blockId), blockMetadata)) {
 						if (!this.settings.placeInstantly) {
 							player.inventory.currentItem = slot;
 							syncSneaking(player, isSneaking);

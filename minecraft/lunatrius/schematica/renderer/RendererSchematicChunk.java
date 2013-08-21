@@ -210,7 +210,7 @@ public class RendererSchematicChunk {
 		IBlockAccess mcWorld = this.settings.mcWorldCache;
 		RenderBlocks renderBlocks = this.settings.renderBlocks;
 
-		int x, y, z;
+		int x, y, z, wx, wy, wz;
 		int blockId, mcBlockId;
 		int sides;
 		Block block;
@@ -229,7 +229,11 @@ public class RendererSchematicChunk {
 						blockId = this.schematic.getBlockId(x, y, z);
 						block = Block.blocksList[blockId];
 
-						mcBlockId = mcWorld.getBlockId(x + (int) this.settings.offset.x, y + (int) this.settings.offset.y, z + (int) this.settings.offset.z);
+						wx = (int) this.settings.offset.x + x;
+						wy = (int) this.settings.offset.y + y;
+						wz = (int) this.settings.offset.z + z;
+
+						mcBlockId = mcWorld.getBlockId(wx, wy, wz);
 
 						sides = 0;
 						if (block != null) {
@@ -258,7 +262,9 @@ public class RendererSchematicChunk {
 							}
 						}
 
-						if (mcBlockId != 0) {
+						boolean isAirBlock = mcWorld.isAirBlock(wx, wy, wz);
+
+						if (!isAirBlock) {
 							if (this.settings.highlight && renderPass == 2) {
 								if (blockId == 0 && this.settings.highlightAir) {
 									zero.set(x, y, z);
@@ -278,7 +284,7 @@ public class RendererSchematicChunk {
 									if (settings.drawLines) {
 										RenderHelper.drawCuboidOutline(zero, size, sides, 1.0f, 0.0f, 0.0f, 0.25f);
 									}
-								} else if (this.schematic.getBlockMetadata(x, y, z) != mcWorld.getBlockMetadata(x + (int) this.settings.offset.x, y + (int) this.settings.offset.y, z + (int) this.settings.offset.z)) {
+								} else if (this.schematic.getBlockMetadata(x, y, z) != mcWorld.getBlockMetadata(wx, wy, wz)) {
 									zero.set(x, y, z);
 									size.set(x + 1, y + 1, z + 1);
 									if (settings.drawQuads) {
@@ -289,7 +295,7 @@ public class RendererSchematicChunk {
 									}
 								}
 							}
-						} else if (mcBlockId == 0 && blockId > 0 && blockId < 0x1000) {
+						} else if (isAirBlock && blockId > 0 && blockId < 0x1000) {
 							if (this.settings.highlight && renderPass == 2) {
 								zero.set(x, y, z);
 								size.set(x + 1, y + 1, z + 1);
