@@ -38,9 +38,9 @@ public class Settings {
 	public boolean drawLines = true;
 
 	public KeyBinding[] keyBindings = new KeyBinding[] {
-			new KeyBinding("key.schematic.load", Keyboard.KEY_DIVIDE),
-			new KeyBinding("key.schematic.save", Keyboard.KEY_MULTIPLY),
-			new KeyBinding("key.schematic.control", Keyboard.KEY_SUBTRACT)
+			new KeyBinding("schematica.key.load", Keyboard.KEY_DIVIDE),
+			new KeyBinding("schematica.key.save", Keyboard.KEY_MULTIPLY),
+			new KeyBinding("schematica.key.control", Keyboard.KEY_SUBTRACT)
 	};
 
 	public static final String sbcDisablePrinter = "\u00a70\u00a72\u00a70\u00a70\u00a7e\u00a7f";

@@ -8,7 +8,6 @@ import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
@@ -25,7 +24,9 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -66,28 +67,6 @@ public class Schematica {
 		this.settings.drawQuads = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "drawQuads", this.settings.drawQuads, "Draw surface areas.");
 		this.settings.drawLines = Config.getBoolean(config, Configuration.CATEGORY_GENERAL, "drawLines", this.settings.drawLines, "Draw outlines.");
 		config.save();
-
-		try {
-			String langDir = DIR_ASSETS + "lang/";
-			ClassLoader classLoader = getClass().getClassLoader();
-			InputStream stream = classLoader.getResourceAsStream(langDir + "lang.txt");
-
-			BufferedReader input = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
-			try {
-				String lang = "";
-				while ((lang = input.readLine()) != null) {
-					if (lang.length() > 0) {
-						Settings.logger.logInfo("Loading language file: " + lang);
-						LanguageRegistry.instance().loadLocalization(classLoader.getResource(langDir + lang + ".xml"), lang, true);
-					}
-				}
-			} finally {
-				input.close();
-			}
-		} catch (Exception e) {
-			Settings.logger.logSevereException("Could not load language files - corrupted installation detected!", e);
-			throw new RuntimeException(e);
-		}
 
 		List<Integer> blockListIgnoreID = SchematicWorld.blockListIgnoreID;
 		blockListIgnoreID.add(Block.pistonExtension.blockID);

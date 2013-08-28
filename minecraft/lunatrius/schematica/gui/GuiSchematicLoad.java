@@ -30,8 +30,8 @@ public class GuiSchematicLoad extends GuiScreen {
 	private GuiSmallButton btnOpenDir = null;
 	private GuiSmallButton btnDone = null;
 
-	private final String strTitle = StatCollector.translateToLocal("schematic.title");
-	private final String strFolderInfo = StatCollector.translateToLocal("schematic.folderInfo");
+	private final String strTitle = StatCollector.translateToLocal("schematica.gui.title");
+	private final String strFolderInfo = StatCollector.translateToLocal("schematica.gui.folderInfo");
 
 	protected File currentDirectory = this.settings.schematicDirectory;
 	protected final List<GuiSchematicEntry> schematicFiles = new ArrayList<GuiSchematicEntry>();
@@ -44,10 +44,10 @@ public class GuiSchematicLoad extends GuiScreen {
 	public void initGui() {
 		int id = 0;
 
-		this.btnOpenDir = new GuiSmallButton(id++, this.width / 2 - 154, this.height - 36, StatCollector.translateToLocal("schematic.openFolder"));
+		this.btnOpenDir = new GuiSmallButton(id++, this.width / 2 - 154, this.height - 36, StatCollector.translateToLocal("schematica.gui.openFolder"));
 		this.buttonList.add(this.btnOpenDir);
 
-		this.btnDone = new GuiSmallButton(id++, this.width / 2 + 4, this.height - 36, StatCollector.translateToLocal("schematic.done"));
+		this.btnDone = new GuiSmallButton(id++, this.width / 2 + 4, this.height - 36, StatCollector.translateToLocal("schematica.gui.done"));
 		this.buttonList.add(this.btnDone);
 
 		this.guiSchematicLoadSlot = new GuiSchematicLoadSlot(this);
@@ -131,7 +131,7 @@ public class GuiSchematicLoad extends GuiScreen {
 
 		File[] files = this.currentDirectory.listFiles(FILE_FILTER_SCHEMATIC);
 		if (files.length == 0) {
-			this.schematicFiles.add(new GuiSchematicEntry(StatCollector.translateToLocal("schematic.noschematic"), 3, 0, false));
+			this.schematicFiles.add(new GuiSchematicEntry(StatCollector.translateToLocal("schematica.gui.noschematic"), 3, 0, false));
 		} else {
 			for (File file : files) {
 				name = file.getName();

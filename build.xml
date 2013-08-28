@@ -42,14 +42,14 @@
 
     <target name="clean">
         <!-- clean minecraft sources -->
-        <delete verbose="true" failonerror="false">
+        <delete verbose="true" failonerror="false" includeemptydirs="true">
             <fileset dir="${mcp.src.minecraft}">
                 <present present="both" targetdir="${dev.src.minecraft}"/>
             </fileset>
         </delete>
 
         <!-- clean classes -->
-        <delete verbose="true" failonerror="false">
+        <delete verbose="true" failonerror="false" includeemptydirs="true">
             <fileset dir="${mcp.bin}"/>
         </delete>
     </target>
@@ -87,7 +87,7 @@
             <fileset dir="${dev.src.resources}" excludes="mcmod.template"/>
             <mappedresources>
                 <concat>
-                    <fileset dir="${dev.src.resources}" includes="mcmod.template"/>
+                    <fileset dir="${dev.src.resources}" includes="mcmod.template,pack.template"/>
                     <filterchain>
                         <replacetokens>
                             <token key="AUTHORS" value="${mod.authors}"/>
@@ -110,6 +110,17 @@
                     </filterchain>
                 </concat>
                 <mergemapper to="mcmod.info"/>
+            </mappedresources>
+            <mappedresources>
+                <concat>
+                    <fileset dir="${dev.src.resources}" includes="pack.template"/>
+                    <filterchain>
+                        <replacetokens>
+                            <token key="MODNAME" value="${mod.name}"/>
+                        </replacetokens>
+                    </filterchain>
+                </concat>
+                <mergemapper to="pack.mcmeta"/>
             </mappedresources>
         </jar>
     </target>

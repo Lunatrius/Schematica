@@ -16,8 +16,8 @@ public class GuiSchematicMaterials extends GuiScreen {
 
 	private GuiSmallButton btnDone = null;
 
-	private final String strMaterialName = StatCollector.translateToLocal("schematic.materialname");
-	private final String strMaterialAmount = StatCollector.translateToLocal("schematic.materialamount");
+	private final String strMaterialName = StatCollector.translateToLocal("schematica.gui.materialname");
+	private final String strMaterialAmount = StatCollector.translateToLocal("schematica.gui.materialamount");
 
 	protected final List<ItemStack> blockList;
 
@@ -34,7 +34,7 @@ public class GuiSchematicMaterials extends GuiScreen {
 	public void initGui() {
 		int id = 0;
 
-		this.btnDone = new GuiSmallButton(id++, this.width / 2 + 4, this.height - 30, StatCollector.translateToLocal("schematic.done"));
+		this.btnDone = new GuiSmallButton(id++, this.width / 2 + 4, this.height - 30, StatCollector.translateToLocal("schematica.gui.done"));
 		this.buttonList.add(this.btnDone);
 
 		this.guiSchematicMaterialsSlot = new GuiSchematicMaterialsSlot(this);
