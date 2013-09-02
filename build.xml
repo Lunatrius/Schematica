@@ -84,10 +84,10 @@
         <!-- build the jar -->
         <jar destfile="${release.home}/${release.jar}">
             <fileset dir="${mcp.bin}"/>
-            <fileset dir="${dev.src.resources}" excludes="mcmod.template"/>
+            <fileset dir="${dev.src.resources}" excludes="mcmod.template,pack.template"/>
             <mappedresources>
                 <concat>
-                    <fileset dir="${dev.src.resources}" includes="mcmod.template,pack.template"/>
+                    <fileset dir="${dev.src.resources}" includes="mcmod.template"/>
                     <filterchain>
                         <replacetokens>
                             <token key="AUTHORS" value="${mod.authors}"/>
