@@ -1,36 +1,32 @@
-# Localization: Lietuvių (lt_LT)
-# Author: FANS4ever
-
-schematica.gui.openFolder=Atidaryti schemø aplankà
+schematica.gui.openFolder=Atidaryti schem\u00f8 aplank\u00e0
 schematica.gui.done=Baigta
-schematica.gui.title=Pasirinkite schemos failà
-schematica.gui.folderInfo=(Dëkite schemø failus èia!)
-schematica.gui.noschematic=-- Nëra schemos --
+schematica.gui.title=Pasirinkite schemos fail\u00e0
+schematica.gui.folderInfo=(D\u00ebkite schem\u00f8 failus \u00e8ia\!)
+schematica.gui.noschematic=-- N\u00ebra schemos --
 schematica.gui.increase=+
 schematica.gui.decrease=-
-schematica.gui.hide=Slëpti
+schematica.gui.hide=Sl\u00ebpti
 schematica.gui.all=VISI
 schematica.gui.show=Rodyti
-schematica.gui.movehere=Perkelti èia
+schematica.gui.movehere=Perkelti \u00e8ia
 schematica.gui.flip=Veidrodinis vaizdas
 schematica.gui.rotate=Pasukti
-schematica.gui.save=Iðsaugoti
-schematica.gui.moveschematic=Patraukti schemà
+schematica.gui.save=I\u00f0saugoti
+schematica.gui.moveschematic=Patraukti schem\u00e0
 schematica.gui.layers=Sluoksnis
 schematica.gui.operations=Veiksmas
-schematica.gui.point.red=Raudonasis taðkas
-schematica.gui.point.blue=Mëlynasis taðkas
-schematica.gui.saveselection=Iðsaugoti paþymëta plotà kaip schemà?
-schematica.gui.enable=Ájungti
-schematica.gui.disable=Iðjungti
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=Medþiagos
-schematica.gui.materialname=Medþiaga
+schematica.gui.point.red=Raudonasis ta\u00f0kas
+schematica.gui.point.blue=M\u00eblynasis ta\u00f0kas
+schematica.gui.saveselection=I\u00f0saugoti pa\u00feym\u00ebta plot\u00e0 kaip schem\u00e0?
+schematica.gui.enable=\u00c1jungti
+schematica.gui.disable=I\u00f0jungti
+schematica.gui.x=X\:
+schematica.gui.y=Y\:
+schematica.gui.z=Z\:
+schematica.gui.materials=Med\u00feiagos
+schematica.gui.materialname=Med\u00feiaga
 schematica.gui.materialamount=Kiekis
-schematica.gui.printer=Printer <!-- requires translation -->
 
-schematica.key.load=Atidaryti schemà
-schematica.key.save=Iðsaugoti schemà
-schematica.key.control=Manipuliuoti schemà
+schematica.key.load=Atidaryti schem\u00e0
+schematica.key.save=I\u00f0saugoti schem\u00e0
+schematica.key.control=Manipuliuoti schem\u00e0

@@ -1,6 +1,3 @@
-# Localization: Nederlands (nl_NL)
-# Author: YourWorstNightmare
-
 schematica.gui.openFolder=Open schematic map
 schematica.gui.done=Klaar
 schematica.gui.title=Selecteer schematic bestand
@@ -23,13 +20,12 @@ schematica.gui.point.blue=Blauw punt
 schematica.gui.saveselection=Sla de selectie op als schematic
 schematica.gui.enable=Inschakelen
 schematica.gui.disable=Uitschakelen
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
+schematica.gui.x=X\:
+schematica.gui.y=Y\:
+schematica.gui.z=Z\:
 schematica.gui.materials=Materialen
 schematica.gui.materialname=Materiaal
 schematica.gui.materialamount=Hoeveelheid
-schematica.gui.printer=Printer
 
 schematica.key.load=Laad schematic
 schematica.key.save=Sla schematic op

@@ -1,10 +1,7 @@
-# Localization: Dansk (da_DK)
-# Author: Mikko Räsänen
-
-schematica.gui.openFolder=Åbn schematics mappe
-schematica.gui.done=Færdig
-schematica.gui.title=Vælg schematic-fil
-schematica.gui.folderInfo=(Placér schematic-filer her)
+schematica.gui.openFolder=\u00c5bn schematics mappe
+schematica.gui.done=F\u00e6rdig
+schematica.gui.title=V\u00e6lg schematic-fil
+schematica.gui.folderInfo=(Plac\u00e9r schematic-filer her)
 schematica.gui.noschematic=-- Ingen schematic --
 schematica.gui.increase=+
 schematica.gui.decrease=-
@@ -13,24 +10,23 @@ schematica.gui.all=ALLE
 schematica.gui.show=Vis
 schematica.gui.movehere=Flyt hertil
 schematica.gui.flip=Vend
-schematica.gui.rotate=Rotér
+schematica.gui.rotate=Rot\u00e9r
 schematica.gui.save=Gem
 schematica.gui.moveschematic=Flyt schematic
 schematica.gui.layers=Lag
 schematica.gui.operations=Operationer
-schematica.gui.point.red=Rødt punkt
-schematica.gui.point.blue=Blåt punkt
+schematica.gui.point.red=R\u00f8dt punkt
+schematica.gui.point.blue=Bl\u00e5t punkt
 schematica.gui.saveselection=Gem markeringen som en schematic
-schematica.gui.enable=Slå til
-schematica.gui.disable=Slå fra
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
+schematica.gui.enable=Sl\u00e5 til
+schematica.gui.disable=Sl\u00e5 fra
+schematica.gui.x=X\:
+schematica.gui.y=Y\:
+schematica.gui.z=Z\:
 schematica.gui.materials=Materialer
 schematica.gui.materialname=Materiale
 schematica.gui.materialamount=Antal
-schematica.gui.printer=Printer
 
-schematica.key.load=Åbn schematic
+schematica.key.load=\u00c5bn schematic
 schematica.key.save=Gem schematic
-schematica.key.control=Manipulér schematic
+schematica.key.control=Manipul\u00e9r schematic

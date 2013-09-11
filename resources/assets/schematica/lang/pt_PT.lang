@@ -1,11 +1,8 @@
-# Localization: Português (pt_PT)
-# Author: Tiago Muchagato
-
 schematica.gui.openFolder=Abrir pasta das schematicas
 schematica.gui.done=Feito
 schematica.gui.title=Selecionar schematica
 schematica.gui.folderInfo=(Colocar schematcas aqui)
-schematica.gui.noschematic=-- Năo tens schematicas --
+schematica.gui.noschematic=-- N\u0103o tens schematicas --
 schematica.gui.increase=+
 schematica.gui.decrease=-
 schematica.gui.hide=Esconder
@@ -17,19 +14,18 @@ schematica.gui.rotate=Rodar
 schematica.gui.save=Guardar
 schematica.gui.moveschematic=Mover schematica
 schematica.gui.layers=Camadas
-schematica.gui.operations=Operaçőes
+schematica.gui.operations=Opera\u00e7\u0151es
 schematica.gui.point.red=Ponto Vermelho
 schematica.gui.point.blue=Ponto Azul
-schematica.gui.saveselection=Guardar selecçăo como uma schematica
+schematica.gui.saveselection=Guardar selec\u00e7\u0103o como uma schematica
 schematica.gui.enable=Habilitar
 schematica.gui.disable=Desabilitar
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
+schematica.gui.x=X\:
+schematica.gui.y=Y\:
+schematica.gui.z=Z\:
 schematica.gui.materials=Materiais
-schematica.gui.materialname=Material
 schematica.gui.materialamount=Quantidade
-schematica.gui.printer=Modo de construçăo automática
+schematica.gui.printer=Modo de constru\u00e7\u0103o autom\u00e1tica
 
 schematica.key.load=Carregar schematica
 schematica.key.save=Guardar schematica

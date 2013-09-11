@@ -1,6 +1,3 @@
-# Localization: Italiano (it_IT)
-# Author: mrTJO
-
 schematica.gui.openFolder=Apri cartella schematiche
 schematica.gui.done=Fatto
 schematica.gui.title=Seleziona file schematico
@@ -23,13 +20,12 @@ schematica.gui.point.blue=Punto blu
 schematica.gui.saveselection=Salva la selezione come schematica
 schematica.gui.enable=Abilita
 schematica.gui.disable=Disabilita
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
+schematica.gui.x=X\:
+schematica.gui.y=Y\:
+schematica.gui.z=Z\:
 schematica.gui.materials=Materiali
 schematica.gui.materialname=Materiale
-schematica.gui.materialamount=Quantità
-schematica.gui.printer=Printer <!-- requires translation -->
+schematica.gui.materialamount=Quantit\u00e0
 
 schematica.key.load=Carica schematica
 schematica.key.save=Salva schematica
