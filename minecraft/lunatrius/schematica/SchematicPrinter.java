@@ -12,6 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet19EntityAction;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.common.ForgeDirection;
 
 public class SchematicPrinter {
@@ -352,7 +354,18 @@ public class SchematicPrinter {
 		y += direction.offsetY;
 		z += direction.offsetZ;
 
-		success = minecraft.playerController.onPlayerRightClick(player, world, itemStack, x, y, z, getSide(direction), Vec3.createVectorHelper(x + offsetX, y + offsetY, z + offsetZ));
+        int side = getSide(direction);
+
+        /* copypasted from n.m.client.Minecraft to sooth finicky servers */
+        success = !ForgeEventFactory.onPlayerInteract(minecraft.thePlayer, Action.RIGHT_CLICK_BLOCK, x, y, z, side).isCanceled();
+        if (success) {
+            // still not assured!
+		    success = minecraft.playerController.onPlayerRightClick(player, world, itemStack, x, y, z, side, Vec3.createVectorHelper(x + offsetX, y + offsetY, z + offsetZ));
+            if(success) {
+                // yes, some servers actually care about this.
+                minecraft.thePlayer.swingItem();
+            }
+        }
 
 		if (itemStack.stackSize == 0 && success) {
 			player.inventory.mainInventory[player.inventory.currentItem] = null;
