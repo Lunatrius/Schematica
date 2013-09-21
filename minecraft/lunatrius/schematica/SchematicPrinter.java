@@ -2,6 +2,7 @@ package lunatrius.schematica;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFluid;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -78,6 +79,10 @@ public class SchematicPrinter {
 		return blockId;
 	}
 
+    private boolean isSolid(int blockId) {
+        return blockId > 0 && (! (Block.blocksList[blockId] instanceof BlockFluid));
+    }
+
 	private boolean placeBlock(Minecraft minecraft, World world, EntityPlayer player, int x, int y, int z, int itemId, int itemDamage) {
 		if (!isValidOrientation(player, x, y, z, itemId, itemDamage)) {
 			return false;
@@ -91,12 +96,12 @@ public class SchematicPrinter {
 		float offsetY = 0.0f;
 		ForgeDirection direction = ForgeDirection.DOWN;
 		boolean[] blocks = new boolean[] {
-				world.getBlockId(x, y + 1, z) > 0,
-				world.getBlockId(x, y - 1, z) > 0,
-				world.getBlockId(x, y, z + 1) > 0,
-				world.getBlockId(x, y, z - 1) > 0,
-				world.getBlockId(x + 1, y, z) > 0,
-				world.getBlockId(x - 1, y, z) > 0
+				isSolid(world.getBlockId(x, y + 1, z)),
+				isSolid(world.getBlockId(x, y - 1, z)),
+				isSolid(world.getBlockId(x, y, z + 1)),
+				isSolid(world.getBlockId(x, y, z - 1)),
+				isSolid(world.getBlockId(x + 1, y, z)),
+				isSolid(world.getBlockId(x - 1, y, z))
 		};
 
 		for (int i = 0; i < 6; i++) {
