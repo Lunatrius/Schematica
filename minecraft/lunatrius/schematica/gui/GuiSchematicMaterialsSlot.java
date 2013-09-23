@@ -85,7 +85,7 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 
 	private void drawItemStackSlot(int x, int y) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.renderEngine.func_110577_a(Gui.field_110323_l);
+		this.renderEngine.bindTexture(Gui.statIcons);
 		Tessellator var10 = Tessellator.instance;
 		var10.startDrawingQuads();
 		var10.addVertexWithUV(x + 1 + 0, y + 1 + 18, 0, 0 * 0.0078125F, 18 * 0.0078125F);

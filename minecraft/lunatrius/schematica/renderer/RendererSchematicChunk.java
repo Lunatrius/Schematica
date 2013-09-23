@@ -83,7 +83,7 @@ public class RendererSchematicChunk {
 		this.glList = GL11.glGenLists(3);
 
 		try {
-			this.fieldMapTexturesStiched = ReflectionHelper.findField(TextureMap.class, "f", "field_94252_e", "mapTexturesStiched");
+			this.fieldMapTexturesStiched = ReflectionHelper.findField(TextureMap.class, "f", "field_94252_e", "mapUploadedSprites");
 		} catch (Exception ex) {
 			Settings.logger.logSevereException("Failed to initialize mapTexturesStiched!", ex);
 			this.fieldMapTexturesStiched = null;
@@ -376,11 +376,11 @@ public class RendererSchematicChunk {
 
 	private void bindTexture() {
 		if (!this.settings.enableAlpha) {
-			this.minecraft.renderEngine.func_110577_a(TextureMap.field_110575_b);
+			this.minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 			return;
 		}
 
-		String resourcePackName = this.minecraft.func_110438_M().func_110610_d();
+		String resourcePackName = this.minecraft.getResourcePackRepository().getResourcePackName();
 
 		if (!resourcePacks.containsKey(resourcePackName)) {
 			String texturePackFileName = resourcePackName.replaceAll("(?i)[^a-z0-9]", "_") + "-" + (int) (this.settings.alpha * 255) + ".png";
@@ -388,21 +388,21 @@ public class RendererSchematicChunk {
 			try {
 				File outputfile = new File("assets/" + texturePackFileName);
 
-				ResourceManager manager = this.minecraft.func_110442_L();
+				ResourceManager manager = this.minecraft.getResourceManager();
 
 				Icon icon = Block.dirt.getIcon(0, 0);
 				float deltaU = icon.getMaxU() - icon.getMinU();
 				float deltaV = icon.getMaxV() - icon.getMinV();
 
-				int width = (int) Math.pow(2, Math.round(Math.log(icon.getOriginX() / deltaU) / Math.log(2)));
-				int height = (int) Math.pow(2, Math.round(Math.log(icon.getOriginY() / deltaV) / Math.log(2)));
+				int width = (int) Math.pow(2, Math.round(Math.log(icon.getIconWidth() / deltaU) / Math.log(2)));
+				int height = (int) Math.pow(2, Math.round(Math.log(icon.getIconHeight() / deltaV) / Math.log(2)));
 
 				BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
-				Map<String, TextureAtlasSprite> map = (Map<String, TextureAtlasSprite>) fieldMapTexturesStiched.get(this.minecraft.renderEngine.func_110581_b(TextureMap.field_110575_b));
+				Map<String, TextureAtlasSprite> map = (Map<String, TextureAtlasSprite>) fieldMapTexturesStiched.get(this.minecraft.renderEngine.getTexture(TextureMap.locationBlocksTexture));
 				if (map == null) {
 					Settings.logger.logSevere("mapTexturesStiched is null!");
-					resourcePacks.put(resourcePackName, TextureMap.field_110575_b);
+					resourcePacks.put(resourcePackName, TextureMap.locationBlocksTexture);
 					return;
 				}
 
@@ -419,16 +419,16 @@ public class RendererSchematicChunk {
 				}
 
 				for (TextureAtlasSprite sprite : sprites) {
-					if (sprite.func_110970_k() != 0) {
-						int[] data = sprite.func_110965_a(0);
-						int offsetX = sprite.func_130010_a();
-						int offsetY = sprite.func_110967_i();
+					if (sprite.getFrameCount() != 0) {
+						int[] data = sprite.getFrameTextureData(0);
+						int offsetX = sprite.getOriginX();
+						int offsetY = sprite.getOriginY();
 
 						int x, y;
 						int color, alpha, index = 0;
 
-						for (y = 0; y < sprite.getOriginY(); y++) {
-							for (x = 0; x < sprite.getOriginX(); x++) {
+						for (y = 0; y < sprite.getIconHeight(); y++) {
+							for (x = 0; x < sprite.getIconWidth(); x++) {
 								color = data[index++];
 								alpha = (color >> 24) & 0xFF;
 								alpha *= this.settings.alpha;
@@ -442,8 +442,8 @@ public class RendererSchematicChunk {
 				ImageIO.write(bufferedImage, "png", outputfile);
 
 				for (TextureAtlasSprite sprite : sprites) {
-					if (!sprite.func_130098_m()) {
-						sprite.func_130103_l();
+					if (!sprite.hasAnimationMetadata()) {
+						sprite.clearFramesTextureData();
 					}
 				}
 
@@ -454,7 +454,7 @@ public class RendererSchematicChunk {
 		}
 
 		if (resourcePacks.containsKey(resourcePackName)) {
-			this.minecraft.renderEngine.func_110577_a(resourcePacks.get(resourcePackName));
+			this.minecraft.renderEngine.bindTexture(resourcePacks.get(resourcePackName));
 		}
 	}
 }
