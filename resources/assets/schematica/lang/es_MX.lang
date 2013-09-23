@@ -20,9 +20,9 @@ schematica.gui.point.blue=Punto azul
 schematica.gui.saveselection=Guardar lo seleccionado como un esquema
 schematica.gui.enable=Activar
 schematica.gui.disable=Desactivar
-schematica.gui.x=X\:
-schematica.gui.y=Y\:
-schematica.gui.z=Z\:
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.materials=Materiales
 schematica.gui.materialamount=Cantidad
 
