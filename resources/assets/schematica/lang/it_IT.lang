@@ -25,7 +25,7 @@ schematica.gui.y=Y:
 schematica.gui.z=Z:
 schematica.gui.materials=Materiali
 schematica.gui.materialname=Materiale
-schematica.gui.materialamount=Quantit\u00e0
+schematica.gui.materialamount=Quantità
 
 schematica.key.load=Carica schematica
 schematica.key.save=Salva schematica

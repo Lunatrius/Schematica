@@ -1,7 +1,7 @@
-schematica.gui.openFolder=\u00d6ffne Schematic-Ordner
+schematica.gui.openFolder=Öffne Schematic-Ordner
 schematica.gui.done=Fertig
-schematica.gui.title=W\u00e4hle Schematic-Datei
-schematica.gui.folderInfo=(F\u00fcge Schematic-Dateien hier ein)
+schematica.gui.title=Wähle Schematic-Datei
+schematica.gui.folderInfo=(Füge Schematic-Dateien hier ein)
 schematica.gui.noschematic=-- Keine Schematic --
 schematica.gui.increase=+
 schematica.gui.decrease=-
@@ -30,4 +30,4 @@ schematica.gui.printer=Drucker
 
 schematica.key.load=Schematic laden
 schematica.key.save=Schematic speichern
-schematica.key.control=Schematic ver\u00e4ndern
+schematica.key.control=Schematic verändern

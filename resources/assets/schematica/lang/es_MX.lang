@@ -1,14 +1,14 @@
 schematica.gui.openFolder=Abrir carpeta de esquemas
 schematica.gui.done=Listo
 schematica.gui.title=Seleccionar archivo de esquema
-schematica.gui.folderInfo=(Colocar archivos de esquema aqu\u00ed)
+schematica.gui.folderInfo=(Colocar archivos de esquema aquí)
 schematica.gui.noschematic=-- Sin esquema --
 schematica.gui.increase=+
 schematica.gui.decrease=-
 schematica.gui.hide=Ocultar
 schematica.gui.all=TODO
 schematica.gui.show=Mostrar
-schematica.gui.movehere=Mover aqu\u00ed
+schematica.gui.movehere=Mover aquí
 schematica.gui.flip=Voltear
 schematica.gui.rotate=Girar
 schematica.gui.save=Guardar
