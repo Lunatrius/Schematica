@@ -1,4 +1,4 @@
-package lunatrius.schematica.renderer;
+package lunatrius.schematica.client.renderer;
 
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import lunatrius.schematica.SchematicWorld;

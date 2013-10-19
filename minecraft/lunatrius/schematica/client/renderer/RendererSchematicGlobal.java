@@ -1,4 +1,4 @@
-package lunatrius.schematica.renderer;
+package lunatrius.schematica.client.renderer;
 
 import lunatrius.schematica.Settings;
 import net.minecraft.client.entity.EntityPlayerSP;

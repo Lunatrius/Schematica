@@ -1,4 +1,4 @@
-package lunatrius.schematica.gui;
+package lunatrius.schematica.client.gui;
 
 import net.minecraft.item.ItemStack;
 

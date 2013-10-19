@@ -538,7 +538,7 @@ public class SchematicWorld extends World {
 	}
 
 	public static boolean isBlock(int itemId) {
-		return itemId == Block.planks.blockID || itemId == Block.sandStone.blockID || itemId == Block.cloth.blockID || itemId == Block.stoneBrick.blockID;
+		return itemId == Block.planks.blockID || itemId == Block.sandStone.blockID || itemId == Block.cloth.blockID || itemId == Block.stoneBrick.blockID || itemId == Block.stainedClay.blockID;
 	}
 
 	public static boolean isStair(int itemId) {

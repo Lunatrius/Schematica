@@ -1,4 +1,4 @@
-package lunatrius.schematica.gui;
+package lunatrius.schematica.client.gui;
 
 import lunatrius.schematica.FileFilterSchematic;
 import lunatrius.schematica.Settings;

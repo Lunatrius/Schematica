@@ -1,9 +1,9 @@
 package lunatrius.schematica;
 
-import lunatrius.schematica.gui.GuiSchematicControl;
-import lunatrius.schematica.gui.GuiSchematicLoad;
-import lunatrius.schematica.gui.GuiSchematicSave;
-import lunatrius.schematica.renderer.RendererSchematicChunk;
+import lunatrius.schematica.client.gui.GuiSchematicControl;
+import lunatrius.schematica.client.gui.GuiSchematicLoad;
+import lunatrius.schematica.client.gui.GuiSchematicSave;
+import lunatrius.schematica.client.renderer.RendererSchematicChunk;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
