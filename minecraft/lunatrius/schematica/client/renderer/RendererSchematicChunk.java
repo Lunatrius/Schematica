@@ -281,7 +281,7 @@ public class RendererSchematicChunk {
 										RenderHelper.drawCuboidSurface(zero, size, RenderHelper.QUAD_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
 									}
 									if (settings.drawLines) {
-										RenderHelper.drawCuboidOutline(zero, size, RenderHelper.QUAD_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
+										RenderHelper.drawCuboidOutline(zero, size, RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
 									}
 								} else if (blockId != mcBlockId) {
 									zero.set(x, y, z);
