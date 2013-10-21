@@ -51,6 +51,7 @@ public class Settings {
 	public static final RenderItem renderItem = new RenderItem();
 	public static final ItemStack defaultIcon = new ItemStack(2, 1, 0);
 
+	private final Vector3f translationVector = new Vector3f();
 	public Minecraft minecraft = Minecraft.getMinecraft();
 	public ChunkCache mcWorldCache = null;
 	public SchematicWorld schematic = null;
@@ -224,6 +225,11 @@ public class Settings {
 			return false;
 		}
 		return true;
+	}
+
+	public Vector3f getTranslationVector() {
+		Vector3f.sub(this.playerPosition, this.offset, this.translationVector);
+		return this.translationVector;
 	}
 
 	public float getTranslationX() {

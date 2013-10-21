@@ -193,6 +193,10 @@ public class RendererSchematicChunk {
 			return;
 		}
 
+		if (distanceToPoint(this.settings.getTranslationVector()) > 25600) {
+			return;
+		}
+
 		this.profiler.startSection("blocks");
 		bindTexture();
 		GL11.glCallList(this.glList + renderPass);
