@@ -15,6 +15,14 @@ public class ChatEventHandler {
 				Settings.logger.logInfo("Printer is disabled on this server.");
 				this.settings.isPrinterEnabled = false;
 			}
+			if (event.message.contains(Settings.sbcDisableSave)) {
+				Settings.logger.logInfo("Saving is disabled on this server.");
+				this.settings.isSaveEnabled = false;
+			}
+			if (event.message.contains(Settings.sbcDisableLoad)) {
+				Settings.logger.logInfo("Loading is disabled on this server.");
+				this.settings.isLoadEnabled = false;
+			}
 		}
 	}
 }

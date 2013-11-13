@@ -78,7 +78,9 @@ public class GuiSchematicLoad extends GuiScreen {
 					Sys.openURL("file://" + Settings.schematicDirectory.getAbsolutePath());
 				}
 			} else if (guiButton.id == this.btnDone.id) {
-				loadSchematic();
+				if (this.settings.isLoadEnabled) {
+					loadSchematic();
+				}
 				this.mc.displayGuiScreen(this.prevGuiScreen);
 			} else {
 				this.guiSchematicLoadSlot.actionPerformed(guiButton);

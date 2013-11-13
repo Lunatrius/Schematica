@@ -44,6 +44,8 @@ public class Settings {
 	};
 
 	public static final String sbcDisablePrinter = "\u00a70\u00a72\u00a70\u00a70\u00a7e\u00a7f";
+	public static final String sbcDisableSave = "\u00a70\u00a72\u00a71\u00a70\u00a7e\u00a7f";
+	public static final String sbcDisableLoad = "\u00a70\u00a72\u00a71\u00a71\u00a7e\u00a7f";
 
 	public static final File schematicDirectory = new File(Minecraft.getMinecraft().mcDataDir, "/schematics/");
 	public static final File textureDirectory = new File(Minecraft.getMinecraft().mcDataDir, "/resources/mod/schematica/");
@@ -71,6 +73,8 @@ public class Settings {
 	public boolean isRenderingGuide = false;
 	public int chatLines = 0;
 	public boolean isPrinterEnabled = true;
+	public boolean isSaveEnabled = true;
+	public boolean isLoadEnabled = true;
 	public boolean isPrinting = false;
 	public int[] increments = {
 			1, 5, 15, 50, 250
@@ -81,6 +85,19 @@ public class Settings {
 
 	public static Settings instance() {
 		return instance;
+	}
+
+	public void reset() {
+		this.chatLines = 0;
+		this.isPrinterEnabled = true;
+		this.isSaveEnabled = true;
+		this.isLoadEnabled = true;
+		this.isRenderingSchematic = false;
+		this.isRenderingGuide = false;
+		this.schematic = null;
+		this.renderBlocks = null;
+		this.rendererSchematicChunk = null;
+		this.mcWorldCache = null;
 	}
 
 	public void keyboardEvent(KeyBinding keybinding) {
@@ -153,10 +170,7 @@ public class Settings {
 			}
 		} catch (Exception e) {
 			logger.logSevereException("Failed to load schematic!", e);
-			this.schematic = null;
-			this.renderBlocks = null;
-			this.rendererSchematicChunk = null;
-			this.isRenderingSchematic = false;
+			reset();
 			return false;
 		}
 

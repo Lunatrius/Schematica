@@ -211,7 +211,7 @@ public class GuiSchematicSave extends GuiScreen {
 				this.incrementBZ = (this.incrementBZ + 1) % this.settings.increments.length;
 				this.btnAmountBZ.displayString = Integer.toString(this.settings.increments[this.incrementBZ]);
 			} else if (guiButton.id == this.btnEnable.id) {
-				this.settings.isRenderingGuide = !this.settings.isRenderingGuide;
+				this.settings.isRenderingGuide = !this.settings.isRenderingGuide && this.settings.isSaveEnabled;
 				this.btnEnable.displayString = StatCollector.translateToLocal(this.settings.isRenderingGuide ? "schematica.gui.disable" : "schematica.gui.enable");
 				this.btnSave.enabled = this.settings.isRenderingGuide;
 			} else if (guiButton.id == this.btnSave.id) {
