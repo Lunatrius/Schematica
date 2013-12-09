@@ -75,6 +75,7 @@ public class SchematicWorld extends World {
 		if (tileEntities != null) {
 			this.tileEntities.addAll(tileEntities);
 			for (TileEntity tileEntity : this.tileEntities) {
+				tileEntity.worldObj = this;
 				tileEntity.validate();
 			}
 		}
@@ -392,6 +393,7 @@ public class SchematicWorld extends World {
 		this.tileEntities.clear();
 		this.tileEntities.addAll(tileEntities);
 		for (TileEntity tileEntity : this.tileEntities) {
+			tileEntity.worldObj = this;
 			tileEntity.validate();
 		}
 	}
