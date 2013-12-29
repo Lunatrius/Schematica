@@ -197,6 +197,9 @@ public class RendererSchematicChunk {
 			return;
 		}
 
+		// some mods enable this, beats me why - it's supposed to be disabled!
+		GL11.glDisable(GL11.GL_LIGHTING);
+
 		this.profiler.startSection("blocks");
 		bindTexture();
 		GL11.glCallList(this.glList + renderPass);
@@ -277,28 +280,28 @@ public class RendererSchematicChunk {
 								if (blockId == 0 && this.settings.highlightAir) {
 									zero.set(x, y, z);
 									size.set(x + 1, y + 1, z + 1);
-									if (settings.drawQuads) {
+									if (this.settings.drawQuads) {
 										RenderHelper.drawCuboidSurface(zero, size, RenderHelper.QUAD_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
 									}
-									if (settings.drawLines) {
+									if (this.settings.drawLines) {
 										RenderHelper.drawCuboidOutline(zero, size, RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
 									}
 								} else if (blockId != mcBlockId) {
 									zero.set(x, y, z);
 									size.set(x + 1, y + 1, z + 1);
-									if (settings.drawQuads) {
+									if (this.settings.drawQuads) {
 										RenderHelper.drawCuboidSurface(zero, size, sides, 1.0f, 0.0f, 0.0f, 0.25f);
 									}
-									if (settings.drawLines) {
+									if (this.settings.drawLines) {
 										RenderHelper.drawCuboidOutline(zero, size, sides, 1.0f, 0.0f, 0.0f, 0.25f);
 									}
 								} else if (this.schematic.getBlockMetadata(x, y, z) != mcWorld.getBlockMetadata(wx, wy, wz)) {
 									zero.set(x, y, z);
 									size.set(x + 1, y + 1, z + 1);
-									if (settings.drawQuads) {
+									if (this.settings.drawQuads) {
 										RenderHelper.drawCuboidSurface(zero, size, sides, 0.75f, 0.35f, 0.0f, 0.25f);
 									}
-									if (settings.drawLines) {
+									if (this.settings.drawLines) {
 										RenderHelper.drawCuboidOutline(zero, size, sides, 0.75f, 0.35f, 0.0f, 0.25f);
 									}
 								}
@@ -307,10 +310,10 @@ public class RendererSchematicChunk {
 							if (this.settings.highlight && renderPass == 2) {
 								zero.set(x, y, z);
 								size.set(x + 1, y + 1, z + 1);
-								if (settings.drawQuads) {
+								if (this.settings.drawQuads) {
 									RenderHelper.drawCuboidSurface(zero, size, sides, 0.0f, 0.75f, 1.0f, 0.25f);
 								}
-								if (settings.drawLines) {
+								if (this.settings.drawLines) {
 									RenderHelper.drawCuboidOutline(zero, size, sides, 0.0f, 0.75f, 1.0f, 0.25f);
 								}
 							}
@@ -403,7 +406,7 @@ public class RendererSchematicChunk {
 
 				BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
-				Map<String, TextureAtlasSprite> map = (Map<String, TextureAtlasSprite>) fieldMapTexturesStiched.get(this.minecraft.renderEngine.getTexture(TextureMap.locationBlocksTexture));
+				Map<String, TextureAtlasSprite> map = (Map<String, TextureAtlasSprite>) this.fieldMapTexturesStiched.get(this.minecraft.renderEngine.getTexture(TextureMap.locationBlocksTexture));
 				if (map == null) {
 					Settings.logger.logSevere("mapTexturesStiched is null!");
 					resourcePacks.put(resourcePackName, TextureMap.locationBlocksTexture);
