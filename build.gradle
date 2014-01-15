@@ -29,7 +29,11 @@ archivesBaseName = "[${config.version.minecraft}]${config.mod.id}"
 
 minecraft {
     version = "${config.version.minecraft}-${config.version.forge}"
-    assetDir = "run/assets"
+
+    if (!project.hasProperty("run_location"))
+        assetDir = "run/assets"
+    else
+        assetDir = run_location.replace("{modid}", config.mod.id).replace("{mcversion}", config.version.minecraft) + "assets"
 }
 
 processResources {
