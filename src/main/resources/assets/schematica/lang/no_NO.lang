@@ -1,0 +1,12 @@
+schematica.gui.increase=+
+schematica.gui.decrease=-
+schematica.gui.all=ALLE
+schematica.gui.show=Vis
+schematica.gui.movehere=Flytt hit
+schematica.gui.save=Lagre
+schematica.gui.enable=Aktiver
+schematica.gui.disable=Deaktiver
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
+

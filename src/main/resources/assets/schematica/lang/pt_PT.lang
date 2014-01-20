@@ -24,6 +24,7 @@ schematica.gui.x=X:
 schematica.gui.y=Y:
 schematica.gui.z=Z:
 schematica.gui.materials=Materiais
+schematica.gui.materialname=Material
 schematica.gui.materialamount=Quantidade
 schematica.gui.printer=Modo de construçăo automática
 
