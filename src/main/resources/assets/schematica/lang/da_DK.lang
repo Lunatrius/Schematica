@@ -26,6 +26,7 @@ schematica.gui.z=Z:
 schematica.gui.materials=Materialer
 schematica.gui.materialname=Materiale
 schematica.gui.materialamount=Antal
+# schematica.gui.printer=Printer
 
 schematica.key.load=Åbn schematic
 schematica.key.save=Gem schematic

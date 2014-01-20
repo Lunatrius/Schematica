@@ -23,6 +23,8 @@ schematica.gui.disable=Desactivar
 schematica.gui.x=X:
 schematica.gui.y=Y:
 schematica.gui.z=Z:
+# schematica.gui.materials=Materials
+# schematica.gui.materialname=Material
 schematica.gui.materialamount=Quantitat
 schematica.gui.printer=Imprimir
 

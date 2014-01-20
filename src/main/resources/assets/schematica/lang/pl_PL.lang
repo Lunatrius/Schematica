@@ -24,6 +24,7 @@ schematica.gui.x=X:
 schematica.gui.y=Y:
 schematica.gui.z=Z:
 schematica.gui.materials=Materialy
+# schematica.gui.materialname=Material
 schematica.gui.materialamount=Ilosc
 schematica.gui.printer=Drukarka
 

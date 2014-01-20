@@ -24,7 +24,9 @@ schematica.gui.x=X:
 schematica.gui.y=Y:
 schematica.gui.z=Z:
 schematica.gui.materials=Materiales
+# schematica.gui.materialname=Material
 schematica.gui.materialamount=Cantidad
+# schematica.gui.printer=Printer
 
 schematica.key.load=Cargar esquema
 schematica.key.save=Guardar esquema

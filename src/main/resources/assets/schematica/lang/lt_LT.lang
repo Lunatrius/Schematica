@@ -26,6 +26,7 @@ schematica.gui.z=Z:
 schematica.gui.materials=Medþiagos
 schematica.gui.materialname=Medþiaga
 schematica.gui.materialamount=Kiekis
+# schematica.gui.printer=Printer
 
 schematica.key.load=Atidaryti schemà
 schematica.key.save=Iðsaugoti schemà

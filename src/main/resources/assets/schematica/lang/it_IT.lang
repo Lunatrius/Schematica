@@ -26,6 +26,7 @@ schematica.gui.z=Z:
 schematica.gui.materials=Materiali
 schematica.gui.materialname=Materiale
 schematica.gui.materialamount=Quantità
+# schematica.gui.printer=Printer
 
 schematica.key.load=Carica schematica
 schematica.key.save=Salva schematica
