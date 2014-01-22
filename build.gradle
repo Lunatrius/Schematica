@@ -5,9 +5,13 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.0-SNAPSHOT'
+        classpath "net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT"
     }
 }
 
@@ -90,7 +94,17 @@ task signJar(dependsOn: "reobf") {
     }
 }
 
-task release(dependsOn: "signJar", type: Copy) {
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = "deobf"
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = "src"
+}
+
+task release(dependsOn: ["sourceJar", "deobfJar", "signJar"], type: Copy) {
     from project.tasks.jar.destinationDir
     into project.file(project.release_location)
 
@@ -102,13 +116,3 @@ task release(dependsOn: "signJar", type: Copy) {
         return project.release_location != "."
     }
 }
-
-task sourceJar(type: Jar) {
-    from sourceSets.main.allSource
-    classifier = 'src'
-}
-
-// temporary :deobf fix
-// reobf {
-//     deobfFile = new net.minecraftforge.gradle.delayed.DelayedFile(project, "build/tmp/deobfBinJar/deobfed.jar")
-// }
