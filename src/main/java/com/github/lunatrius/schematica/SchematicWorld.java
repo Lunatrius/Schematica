@@ -184,22 +184,32 @@ public class SchematicWorld extends World {
 			}
 		}
 
+		int count = 20;
+		NBTTagList tileEntitiesList = new NBTTagList();
+		for (TileEntity tileEntity : this.tileEntities) {
+			NBTTagCompound tileEntityTagCompound = new NBTTagCompound();
+			try {
+				tileEntity.writeToNBT(tileEntityTagCompound);
+				tileEntitiesList.appendTag(tileEntityTagCompound);
+			} catch (Exception e) {
+				int pos = tileEntity.xCoord + (tileEntity.yCoord * this.length + tileEntity.zCoord) * this.width;
+				if (--count > 0) {
+					Block block = Block.blocksList[localBlocks[pos]];
+					Settings.logger.logSevereException(String.format("Block %s[%d] with TileEntity %s failed to save! Replacing with bedrock...", block, block != null ? block.blockID : -1, tileEntity.getClass().getName()), e);
+				}
+				localBlocks[pos] = (byte) Block.bedrock.blockID;
+				localMetadata[pos] = 0;
+				extraBlocks[pos] = 0;
+			}
+		}
+
 		tagCompound.setString("Materials", "Alpha");
 		tagCompound.setByteArray("Blocks", localBlocks);
 		tagCompound.setByteArray("Data", localMetadata);
 		if (extra) {
 			tagCompound.setByteArray("AddBlocks", extraBlocksNibble);
 		}
-
 		tagCompound.setTag("Entities", new NBTTagList());
-
-		NBTTagList tileEntitiesList = new NBTTagList();
-		for (TileEntity tileEntity : this.tileEntities) {
-			NBTTagCompound tileEntityTagCompound = new NBTTagCompound();
-			tileEntity.writeToNBT(tileEntityTagCompound);
-			tileEntitiesList.appendTag(tileEntityTagCompound);
-		}
-
 		tagCompound.setTag("TileEntities", tileEntitiesList);
 	}
 
