@@ -1,5 +1,7 @@
 package com.github.lunatrius.schematica;
 
+import com.github.lunatrius.schematica.lib.Reference;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,7 +71,7 @@ public class BlockInfo {
 		try {
 			return Integer.valueOf(str, 10);
 		} catch (NumberFormatException e) {
-			Settings.logger.logSevereException("Could not parse the given number!", e);
+			Reference.logger.error("Could not parse the given number!", e);
 		}
 		return 0;
 	}

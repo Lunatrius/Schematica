@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Open schematic folder
 schematica.gui.done=Done
 schematica.gui.title=Select schematic file
@@ -28,6 +29,8 @@ schematica.gui.materialname=Material
 schematica.gui.materialamount=Amount
 schematica.gui.printer=Printer
 
+# Keys
+schematica.key.category=Schematica
 schematica.key.load=Load schematic
 schematica.key.save=Save schematic
 schematica.key.control=Manipulate schematic

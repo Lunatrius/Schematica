@@ -1,26 +1,26 @@
 package com.github.lunatrius.schematica.client.renderer;
 
 import com.github.lunatrius.schematica.Settings;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.culling.Frustrum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.event.ForgeSubscribe;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.Collections;
 
 public class RendererSchematicGlobal {
-	private final Settings settings = Settings.instance();
+	private final Settings settings = Settings.instance;
 	private final Profiler profiler = this.settings.minecraft.mcProfiler;
 
 	private final Frustrum frustrum = new Frustrum();
 	private final RendererSchematicChunkSorter rendererSchematicChunkSorter = new RendererSchematicChunkSorter();
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onRender(RenderWorldLastEvent event) {
 		if (this.settings.minecraft != null) {
 			EntityPlayerSP player = this.settings.minecraft.thePlayer;

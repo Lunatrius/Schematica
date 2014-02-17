@@ -1,28 +1,32 @@
 package com.github.lunatrius.schematica;
 
-import cpw.mods.fml.common.network.PacketDispatcher;
+import com.github.lunatrius.schematica.lib.Reference;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFluid;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.Packet19EntityAction;
+import net.minecraft.network.play.client.C0BPacketEntityAction;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import net.minecraftforge.fluids.BlockFluidBase;
 
 public class SchematicPrinter {
-	private final Settings settings = Settings.instance();
+	private final Settings settings = Settings.instance;
 
 	public boolean print() {
-		int minX, maxX, minY, maxY, minZ, maxZ, x, y, z, wx, wy, wz, blockId, blockMetadata, slot;
+		int minX, maxX, minY, maxY, minZ, maxZ, x, y, z, wx, wy, wz, blockMetadata, slot;
+		Block blockId;
 		boolean isSneaking;
-		EntityPlayer player = this.settings.minecraft.thePlayer;
+		EntityClientPlayerMP player = this.settings.minecraft.thePlayer;
 		World world = this.settings.minecraft.theWorld;
 
 		syncSneaking(player, true);
@@ -46,20 +50,20 @@ public class SchematicPrinter {
 
 			for (x = minX; x <= maxX; x++) {
 				for (z = minZ; z <= maxZ; z++) {
-					blockId = this.settings.schematic.getBlockId(x, y, z);
+					blockId = this.settings.schematic.getBlock(x, y, z);
 
 					wx = (int) this.settings.offset.x + x;
 					wy = (int) this.settings.offset.y + y;
 					wz = (int) this.settings.offset.z + z;
 
-					Block block = Block.blocksList[world.getBlockId(wx, wy, wz)];
+					Block block = world.getBlock(wx, wy, wz);
 					if (!world.isAirBlock(wx, wy, wz) && block != null && !block.canPlaceBlockAt(world, wx, wy, wz)) {
 						continue;
 					}
 
 					blockMetadata = this.settings.schematic.getBlockMetadata(x, y, z);
 					if (placeBlock(this.settings.minecraft, world, player, wx, wy, wz, getMappedId(blockId), blockMetadata)) {
-						if (!this.settings.placeInstantly) {
+						if (!Reference.config.placeInstantly) {
 							player.inventory.currentItem = slot;
 							syncSneaking(player, isSneaking);
 							return true;
@@ -74,23 +78,42 @@ public class SchematicPrinter {
 		return true;
 	}
 
-	private int getMappedId(int blockId) {
+	private Object getMappedId(Object blockId) {
 		if (SchematicWorld.blockListMapping.containsKey(blockId)) {
 			return SchematicWorld.blockListMapping.get(blockId);
 		}
 		return blockId;
 	}
 
-	private boolean isSolid(int blockId) {
-		return blockId > 0 && (!(Block.blocksList[blockId] instanceof BlockFluid));
+	private boolean isSolid(World world, int x, int y, int z, ForgeDirection side) {
+		x += side.offsetX;
+		y += side.offsetY;
+		z += side.offsetZ;
+
+		Block block = world.getBlock(x, y, z);
+
+		if (block == null) {
+			return false;
+		}
+
+		if (block.isAir(world, x, y, z)) {
+			return false;
+		}
+
+		if (block instanceof BlockFluidBase) {
+			return false;
+		}
+
+		return true;
+		// return world.isSideSolid(x, y, z, side.getOpposite(), false);
 	}
 
-	private boolean placeBlock(Minecraft minecraft, World world, EntityPlayer player, int x, int y, int z, int itemId, int itemDamage) {
+	private boolean placeBlock(Minecraft minecraft, World world, EntityPlayer player, int x, int y, int z, Object itemId, int itemDamage) {
 		if (!isValidOrientation(player, x, y, z, itemId, itemDamage)) {
 			return false;
 		}
 
-		if (SchematicWorld.isFluidContainer(itemId) || itemId == Item.sign.itemID) {
+		if (SchematicWorld.isFluidContainer(itemId) || itemId == Items.sign) {
 			return false;
 		}
 
@@ -98,15 +121,15 @@ public class SchematicPrinter {
 		float offsetY = 0.0f;
 		ForgeDirection direction = ForgeDirection.DOWN;
 		boolean[] blocks = new boolean[] {
-				isSolid(world.getBlockId(x, y + 1, z)),
-				isSolid(world.getBlockId(x, y - 1, z)),
-				isSolid(world.getBlockId(x, y, z + 1)),
-				isSolid(world.getBlockId(x, y, z - 1)),
-				isSolid(world.getBlockId(x + 1, y, z)),
-				isSolid(world.getBlockId(x - 1, y, z))
+				isSolid(world, x, y, z, ForgeDirection.UP),
+				isSolid(world, x, y, z, ForgeDirection.DOWN),
+				isSolid(world, x, y, z, ForgeDirection.NORTH),
+				isSolid(world, x, y, z, ForgeDirection.SOUTH),
+				isSolid(world, x, y, z, ForgeDirection.WEST),
+				isSolid(world, x, y, z, ForgeDirection.EAST)
 		};
 
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < blocks.length; i++) {
 			if (blocks[i]) {
 				direction = ForgeDirection.getOrientation(i).getOpposite();
 				break;
@@ -135,11 +158,11 @@ public class SchematicPrinter {
 				}
 
 				if (direction == ForgeDirection.DOWN) {
-					if (world.doesBlockHaveSolidTopSurface(x, y - 1, z)) {
+					if (World.doesBlockHaveSolidTopSurface(world, x, y - 1, z)) {
 						itemDamageInHand = 0;
 					}
 				} else {
-					if (world.isBlockSolidOnSide(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, direction, false)) {
+					if (world.isSideSolid(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, direction, false)) {
 						itemDamageInHand = 0;
 					}
 				}
@@ -177,20 +200,20 @@ public class SchematicPrinter {
 					return false;
 				}
 
-				if (world.isBlockSolidOnSide(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, direction, false)) {
+				if (world.isSideSolid(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, direction, false)) {
 					itemDamageInHand = 0;
 				} else {
 					return false;
 				}
 			} else if (SchematicWorld.isPumpkin(itemId)) {
-				if (world.doesBlockHaveSolidTopSurface(x, y - 1, z)) {
+				if (World.doesBlockHaveSolidTopSurface(world, x, y - 1, z)) {
 					itemDamageInHand = 0;
 				} else {
 					return false;
 				}
-			} else if (itemId == Item.redstoneRepeater.itemID) {
+			} else if (itemId == Items.repeater) {
 				itemDamageInHand = 0;
-			} else if (itemId == Block.anvil.blockID) {
+			} else if (itemId == Blocks.anvil) {
 				switch (itemDamage & 0xC) {
 				case 0x0:
 					itemDamageInHand = 0;
@@ -204,9 +227,9 @@ public class SchematicPrinter {
 				default:
 					return false;
 				}
-			} else if (itemId == Block.fenceGate.blockID) {
+			} else if (itemId == Blocks.fence_gate) {
 				itemDamageInHand = 0;
-			} else if (itemId == Block.trapdoor.blockID) {
+			} else if (itemId == Blocks.trapdoor) {
 				switch (itemDamage & 0x3) {
 				case 0x0:
 					direction = ForgeDirection.SOUTH;
@@ -228,7 +251,7 @@ public class SchematicPrinter {
 					offsetY = 0.75f;
 				}
 
-				if (world.isBlockSolidOnSide(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, direction, false)) {
+				if (world.isSideSolid(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ, direction, false)) {
 					itemDamageInHand = 0;
 				} else {
 					return false;
@@ -247,7 +270,7 @@ public class SchematicPrinter {
 
 			if (SchematicWorld.isStair(itemId)) {
 				direction = (itemDamage & 0x4) == 0x0 ? ForgeDirection.DOWN : ForgeDirection.UP;
-			} else if (Block.wood.blockID == itemId) {
+			} else if (Blocks.log == itemId) {
 				if ((itemDamage & 0xC) == 0x00) {
 					direction = ForgeDirection.DOWN;
 				} else if ((itemDamage & 0xC) == 0x04) {
@@ -259,14 +282,15 @@ public class SchematicPrinter {
 		}
 
 		side = getSide(direction);
-		if (side != 255 && blocks[side] || !this.settings.placeAdjacent) {
+
+		if (side != ForgeDirection.UNKNOWN.ordinal() && blocks[side] || !Reference.config.placeAdjacent) {
 			return placeBlock(minecraft, world, player, x, y, z, direction, 0.0f, offsetY, 0.0f);
 		}
 
 		return false;
 	}
 
-	private boolean isValidOrientation(EntityPlayer player, int x, int y, int z, int itemId, int itemDamage) {
+	private boolean isValidOrientation(EntityPlayer player, int x, int y, int z, Object itemId, int itemDamage) {
 		int orientation = this.settings.orientation;
 
 		if (SchematicWorld.isStair(itemId)) {
@@ -281,7 +305,7 @@ public class SchematicPrinter {
 				return orientation == 3;
 			}
 		} else if (SchematicWorld.isPistonBase(itemId)) {
-			return BlockPistonBase.determineOrientation(null, x, y, z, player) == BlockPistonBase.getOrientation(itemDamage);
+			return BlockPistonBase.determineOrientation(null, x, y, z, player) == BlockPistonBase.getPistonOrientation(itemDamage);
 		} else if (SchematicWorld.isContainer(itemId)) {
 			switch (itemDamage) {
 			case 2:
@@ -308,7 +332,7 @@ public class SchematicPrinter {
 			default:
 				return false;
 			}
-		} else if (itemId == Item.redstoneRepeater.itemID) {
+		} else if (itemId == Items.repeater) {
 			switch (itemDamage & 0x3) {
 			case 0:
 				return orientation == 3;
@@ -319,7 +343,7 @@ public class SchematicPrinter {
 			case 3:
 				return orientation == 5;
 			}
-		} else if (itemId == Block.anvil.blockID) {
+		} else if (itemId == Blocks.anvil) {
 			switch (itemDamage & 0x3) {
 			case 0:
 				return orientation == 5;
@@ -330,7 +354,7 @@ public class SchematicPrinter {
 			case 3:
 				return orientation == 2;
 			}
-		} else if (itemId == Block.fenceGate.blockID) {
+		} else if (itemId == Blocks.fence_gate) {
 			switch (itemDamage & 0x3) {
 			case 0:
 				return orientation == 2;
@@ -356,7 +380,7 @@ public class SchematicPrinter {
 
 		int side = getSide(direction);
 
-        /* copypasted from n.m.client.Minecraft to sooth finicky servers */
+		/* copypasted from n.m.client.Minecraft to sooth finicky servers */
 		success = !ForgeEventFactory.onPlayerInteract(minecraft.thePlayer, Action.RIGHT_CLICK_BLOCK, x, y, z, side).isCanceled();
 		if (success) {
 			// still not assured!
@@ -374,31 +398,16 @@ public class SchematicPrinter {
 		return success;
 	}
 
-	private void syncSneaking(EntityPlayer player, boolean isSneaking) {
+	private void syncSneaking(EntityClientPlayerMP player, boolean isSneaking) {
 		player.setSneaking(isSneaking);
-		PacketDispatcher.sendPacketToServer(new Packet19EntityAction(player, isSneaking ? 1 : 2));
+		player.sendQueue.addToSendQueue(new C0BPacketEntityAction(player, isSneaking ? 1 : 2));
 	}
 
 	private int getSide(ForgeDirection direction) {
-		switch (direction) {
-		case UP:
-			return 0;
-		case DOWN:
-			return 1;
-		case SOUTH:
-			return 2;
-		case NORTH:
-			return 3;
-		case EAST:
-			return 4;
-		case WEST:
-			return 5;
-		default:
-			return 255;
-		}
+		return direction.getOpposite().ordinal();
 	}
 
-	private boolean swapToItem(InventoryPlayer inventory, int itemID, int itemDamage) {
+	private boolean swapToItem(InventoryPlayer inventory, Object itemID, int itemDamage) {
 		int slot = getInventorySlotWithItem(inventory, itemID, itemDamage);
 		if (slot > -1 && slot < 9) {
 			inventory.currentItem = slot;
@@ -407,7 +416,7 @@ public class SchematicPrinter {
 		return false;
 	}
 
-	private boolean swapToItem(InventoryPlayer inventory, int itemID) {
+	private boolean swapToItem(InventoryPlayer inventory, Object itemID) {
 		int slot = getInventorySlotWithItem(inventory, itemID);
 		if (slot > -1 && slot < 9) {
 			inventory.currentItem = slot;
@@ -416,18 +425,24 @@ public class SchematicPrinter {
 		return false;
 	}
 
-	private int getInventorySlotWithItem(InventoryPlayer inventory, int itemID, int itemDamage) {
+	private int getInventorySlotWithItem(InventoryPlayer inventory, Object itemID, int itemDamage) {
+		if (itemID instanceof Block) {
+			itemID = Item.getItemFromBlock((Block) itemID);
+		}
 		for (int i = 0; i < inventory.mainInventory.length; i++) {
-			if (inventory.mainInventory[i] != null && inventory.mainInventory[i].itemID == itemID && inventory.mainInventory[i].getItemDamage() == itemDamage) {
+			if (inventory.mainInventory[i] != null && inventory.mainInventory[i].getItem() == itemID && inventory.mainInventory[i].getItemDamage() == itemDamage) {
 				return i;
 			}
 		}
 		return -1;
 	}
 
-	private int getInventorySlotWithItem(InventoryPlayer inventory, int itemID) {
+	private int getInventorySlotWithItem(InventoryPlayer inventory, Object itemID) {
+		if (itemID instanceof Block) {
+			itemID = Item.getItemFromBlock((Block) itemID);
+		}
 		for (int i = 0; i < inventory.mainInventory.length; i++) {
-			if (inventory.mainInventory[i] != null && inventory.mainInventory[i].itemID == itemID) {
+			if (inventory.mainInventory[i] != null && inventory.mainInventory[i].getItem() == itemID) {
 				return i;
 			}
 		}

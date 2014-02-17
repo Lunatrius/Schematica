@@ -2,13 +2,16 @@ package com.github.lunatrius.schematica.client.gui;
 
 import com.github.lunatrius.schematica.FileFilterSchematic;
 import com.github.lunatrius.schematica.Settings;
+import com.github.lunatrius.schematica.lib.Reference;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiSmallButton;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.StatCollector;
 import org.lwjgl.Sys;
 
 import java.io.File;
@@ -23,15 +26,15 @@ public class GuiSchematicLoad extends GuiScreen {
 	private static final FileFilterSchematic FILE_FILTER_FOLDER = new FileFilterSchematic(true);
 	private static final FileFilterSchematic FILE_FILTER_SCHEMATIC = new FileFilterSchematic(false);
 
-	private final Settings settings = Settings.instance();
+	private final Settings settings = Settings.instance;
 	private final GuiScreen prevGuiScreen;
 	private GuiSchematicLoadSlot guiSchematicLoadSlot;
 
-	private GuiSmallButton btnOpenDir = null;
-	private GuiSmallButton btnDone = null;
+	private GuiButton btnOpenDir = null;
+	private GuiButton btnDone = null;
 
-	private final String strTitle = StatCollector.translateToLocal("schematica.gui.title");
-	private final String strFolderInfo = StatCollector.translateToLocal("schematica.gui.folderInfo");
+	private final String strTitle = I18n.format("schematica.gui.title");
+	private final String strFolderInfo = I18n.format("schematica.gui.folderInfo");
 
 	protected File currentDirectory = this.settings.schematicDirectory;
 	protected final List<GuiSchematicEntry> schematicFiles = new ArrayList<GuiSchematicEntry>();
@@ -44,10 +47,10 @@ public class GuiSchematicLoad extends GuiScreen {
 	public void initGui() {
 		int id = 0;
 
-		this.btnOpenDir = new GuiSmallButton(id++, this.width / 2 - 154, this.height - 36, StatCollector.translateToLocal("schematica.gui.openFolder"));
+		this.btnOpenDir = new GuiButton(id++, this.width / 2 - 154, this.height - 36, 150, 20, I18n.format("schematica.gui.openFolder"));
 		this.buttonList.add(this.btnOpenDir);
 
-		this.btnDone = new GuiSmallButton(id++, this.width / 2 + 4, this.height - 36, StatCollector.translateToLocal("schematica.gui.done"));
+		this.btnDone = new GuiButton(id++, this.width / 2 + 4, this.height - 36, 150, 20, I18n.format("schematica.gui.done"));
 		this.buttonList.add(this.btnDone);
 
 		this.guiSchematicLoadSlot = new GuiSchematicLoadSlot(this);
@@ -63,18 +66,16 @@ public class GuiSchematicLoad extends GuiScreen {
 
 				try {
 					Class c = Class.forName("java.awt.Desktop");
-					Object m = c.getMethod("getDesktop", new Class[0]).invoke((Object) null, new Object[0]);
+					Object m = c.getMethod("getDesktop", new Class[0]).invoke((Object) null);
 					c.getMethod("browse", new Class[] {
 							URI.class
-					}).invoke(m, new Object[] {
-							Settings.schematicDirectory.toURI()
-					});
+					}).invoke(m, Settings.schematicDirectory.toURI());
 				} catch (Throwable e) {
 					success = true;
 				}
 
 				if (success) {
-					Settings.logger.logInfo("Opening via Sys class!");
+					Reference.logger.info("Opening via Sys class!");
 					Sys.openURL("file://" + Settings.schematicDirectory.getAbsolutePath());
 				}
 			} else if (guiButton.id == this.btnDone.id) {
@@ -92,8 +93,8 @@ public class GuiSchematicLoad extends GuiScreen {
 	public void drawScreen(int x, int y, float partialTicks) {
 		this.guiSchematicLoadSlot.drawScreen(x, y, partialTicks);
 
-		drawCenteredString(this.fontRenderer, this.strTitle, this.width / 2, 4, 0x00FFFFFF);
-		drawCenteredString(this.fontRenderer, this.strFolderInfo, this.width / 2 - 78, this.height - 12, 0x00808080);
+		drawCenteredString(this.fontRendererObj, this.strTitle, this.width / 2, 4, 0x00FFFFFF);
+		drawCenteredString(this.fontRendererObj, this.strFolderInfo, this.width / 2 - 78, this.height - 12, 0x00808080);
 
 		super.drawScreen(x, y, partialTicks);
 	}
@@ -111,29 +112,29 @@ public class GuiSchematicLoad extends GuiScreen {
 
 	protected void reloadSchematics() {
 		String name = null;
-		int itemID = -1;
+		Item item = null;
 
 		this.schematicFiles.clear();
 
 		try {
 			if (!this.currentDirectory.getCanonicalPath().equals(Settings.schematicDirectory.getCanonicalPath())) {
-				this.schematicFiles.add(new GuiSchematicEntry("..", 327, 0, true));
+				this.schematicFiles.add(new GuiSchematicEntry("..", Items.lava_bucket, 0, true));
 			}
 		} catch (IOException e) {
-			Settings.logger.logSevereException("Failed to add GuiSchematicEntry!", e);
+			Reference.logger.error("Failed to add GuiSchematicEntry!", e);
 		}
 
 		for (File file : this.currentDirectory.listFiles(FILE_FILTER_FOLDER)) {
 			name = file.getName();
 
-			itemID = file.listFiles().length == 0 ? 325 : 326;
+			item = file == null || file.listFiles() == null || file.listFiles().length == 0 ? Items.bucket : Items.water_bucket;
 
-			this.schematicFiles.add(new GuiSchematicEntry(name, itemID, 0, file.isDirectory()));
+			this.schematicFiles.add(new GuiSchematicEntry(name, item, 0, file.isDirectory()));
 		}
 
 		File[] files = this.currentDirectory.listFiles(FILE_FILTER_SCHEMATIC);
 		if (files.length == 0) {
-			this.schematicFiles.add(new GuiSchematicEntry(StatCollector.translateToLocal("schematica.gui.noschematic"), 3, 0, false));
+			this.schematicFiles.add(new GuiSchematicEntry(I18n.format("schematica.gui.noschematic"), Blocks.dirt, 0, false));
 		} else {
 			for (File file : files) {
 				name = file.getName();
@@ -152,11 +153,16 @@ public class GuiSchematicLoad extends GuiScreen {
 				if (tagCompound.hasKey("Icon")) {
 					ItemStack itemStack = Settings.defaultIcon.copy();
 					itemStack.readFromNBT(tagCompound.getCompoundTag("Icon"));
+
+					if (itemStack.getItem() == null) {
+						throw new NullPointerException("Item is null!");
+					}
+
 					return itemStack;
 				}
 			}
 		} catch (Exception e) {
-			Settings.logger.logSevereException("Failed to read schematic icon!", e);
+			Reference.logger.error("Failed to read schematic icon!", e);
 		}
 
 		return Settings.defaultIcon.copy();
@@ -171,7 +177,7 @@ public class GuiSchematicLoad extends GuiScreen {
 				this.settings.loadSchematic((new File(this.currentDirectory, schematic.getName())).getCanonicalPath());
 			}
 		} catch (Exception e) {
-			Settings.logger.logSevereException("Failed to load schematic!", e);
+			Reference.logger.error("Failed to load schematic!", e);
 		}
 		this.settings.moveHere();
 	}
