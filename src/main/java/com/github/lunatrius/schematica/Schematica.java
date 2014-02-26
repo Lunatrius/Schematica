@@ -307,7 +307,7 @@ public class Schematica {
 				if (renderers != null) {
 					int count = 0;
 					for (WorldRenderer worldRenderer : renderers) {
-						if (worldRenderer.needsUpdate && count++ < 125) {
+						if (worldRenderer != null && worldRenderer.needsUpdate && count++ < 125) {
 							AxisAlignedBB worldRendererBoundingBox = worldRenderer.rendererBoundingBox.getOffsetBoundingBox(-this.settings.offset.x, -this.settings.offset.y, -this.settings.offset.z);
 							for (RendererSchematicChunk renderer : this.settings.sortedRendererSchematicChunk) {
 								if (!renderer.getDirty() && renderer.getBoundingBox().intersectsWith(worldRendererBoundingBox)) {
