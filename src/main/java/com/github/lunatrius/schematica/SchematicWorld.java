@@ -25,6 +25,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.AnvilSaveHandler;
 import net.minecraft.world.storage.SaveHandlerMP;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.*;
@@ -311,7 +312,15 @@ public class SchematicWorld extends World {
 		if (x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length) {
 			return 0;
 		}
+		if (this.settings.renderingLayer != -1 && this.settings.renderingLayer != y) {
+			return 0;
+		}
 		return (this.blocks[x][y][z]) & 0xFFF;
+	}
+
+	@Override
+	public Block getBlock(int x, int y, int z) {
+		return GameData.blockRegistry.get(getBlockId(x, y, z));
 	}
 
 	@Override
@@ -325,17 +334,11 @@ public class SchematicWorld extends World {
 		return null;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
-	public int getSkyBlockTypeBrightness(EnumSkyBlock par1EnumSkyBlock, int par2, int par3, int par4) {
+	public int getSkyBlockTypeBrightness(EnumSkyBlock skyBlock, int x, int y, int z) {
 		return 15;
 	}
-
-	/*
-	@Override
-	public float getLightBrightnessForSky(int var1, int var2, int var3, int var4) {
-		return 1.0f;
-	}
-	*/
 
 	@Override
 	public float getLightBrightness(int x, int y, int z) {
@@ -350,34 +353,30 @@ public class SchematicWorld extends World {
 		return this.metadata[x][y][z];
 	}
 
-	/*
 	@Override
-	public Material getBlockMaterial(int x, int y, int z) {
-		return getBlock(x, y, z) != null ? getBlock(x, y, z).getMaterial() : Material.air;
-	}
-
-	@Override
-	public boolean isBlockOpaqueCube(int x, int y, int z) {
-		if (this.settings.renderingLayer != -1 && this.settings.renderingLayer != y) {
+	public boolean isBlockNormalCubeDefault(int x, int y, int z, boolean _default) {
+		Block block = getBlock(x, y, z);
+		if (block == null) {
 			return false;
 		}
-		return getBlock(x, y, z) != null && getBlock(x, y, z).isOpaqueCube();
+		if (block.isNormalCube()) {
+			return true;
+		}
+		return _default;
 	}
-
-	@Override
-	public boolean isBlockNormalCube(int x, int y, int z) {
-		return getBlockMaterial(x, y, z).isOpaque() && getBlock(x, y, z) != null && getBlock(x, y, z).renderAsNormalBlock();
-	}
-	*/
 
 	@Override
 	public boolean isAirBlock(int x, int y, int z) {
-		return getBlock(x, y, z).isAir(this, x, y, z);
+		Block block = getBlock(x, y, z);
+		if (block == null) {
+			return true;
+		}
+		return block.isAir(this, x, y, z);
 	}
 
 	@Override
-	public BiomeGenBase getBiomeGenForCoords(int var1, int var2) {
-		return BiomeGenBase.forest;
+	public BiomeGenBase getBiomeGenForCoords(int x, int z) {
+		return BiomeGenBase.jungle;
 	}
 
 	@Override
@@ -397,7 +396,7 @@ public class SchematicWorld extends World {
 	}
 
 	@Override
-	public Entity getEntityByID(int var1) {
+	public Entity getEntityByID(int id) {
 		return null;
 	}
 
@@ -412,20 +411,18 @@ public class SchematicWorld extends World {
 		return true;
 	}
 
-	/*
 	@Override
-	public boolean isBlockSolidOnSide(int x, int y, int z, ForgeDirection side, boolean _default) {
+	public boolean isSideSolid(int x, int y, int z, ForgeDirection side) {
+		return isSideSolid(x, y, z, side, false);
+	}
+
+	@Override
+	public boolean isSideSolid(int x, int y, int z, ForgeDirection side, boolean _default) {
 		Block block = getBlock(x, y, z);
 		if (block == null) {
 			return false;
 		}
-		return block.isBlockSolidOnSide(this, x, y, z, side);
-	}
-	*/
-
-	@Override
-	public Block getBlock(int x, int y, int z) {
-		return GameData.blockRegistry.get(getBlockId(x, y, z));
+		return block.isSideSolid(this, x, y, z, side);
 	}
 
 	public void setTileEntities(List<TileEntity> tileEntities) {
