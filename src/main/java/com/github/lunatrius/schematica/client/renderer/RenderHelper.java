@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.client.renderer;
 
 import com.github.lunatrius.schematica.Settings;
+import com.github.lunatrius.schematica.lib.Reference;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -31,7 +32,7 @@ public class RenderHelper {
 
 	public static final Vector3f VEC_ZERO = new Vector3f(0, 0, 0);
 
-	private static final Settings settings = Settings.instance();
+	private static final Settings settings = Settings.instance;
 
 	private static int quadSize = 0;
 	private static float[] quadVertexBuffer = null;
@@ -121,8 +122,8 @@ public class RenderHelper {
 	}
 
 	public static void drawCuboidSurface(Vector3f zero, Vector3f size, int sides, float red, float green, float blue, float alpha) {
-		vecZero.set(zero.x - settings.blockDelta, zero.y - settings.blockDelta, zero.z - settings.blockDelta);
-		vecSize.set(size.x + settings.blockDelta, size.y + settings.blockDelta, size.z + settings.blockDelta);
+		vecZero.set(zero.x - Reference.config.blockDelta, zero.y - Reference.config.blockDelta, zero.z - Reference.config.blockDelta);
+		vecSize.set(size.x + Reference.config.blockDelta, size.y + Reference.config.blockDelta, size.z + Reference.config.blockDelta);
 
 		if (quadCount + 24 >= quadSize) {
 			quadSize *= 2;
@@ -286,8 +287,8 @@ public class RenderHelper {
 	}
 
 	public static void drawCuboidOutline(Vector3f zero, Vector3f size, int sides, float red, float green, float blue, float alpha) {
-		vecZero.set(zero.x - settings.blockDelta, zero.y - settings.blockDelta, zero.z - settings.blockDelta);
-		vecSize.set(size.x + settings.blockDelta, size.y + settings.blockDelta, size.z + settings.blockDelta);
+		vecZero.set(zero.x - Reference.config.blockDelta, zero.y - Reference.config.blockDelta, zero.z - Reference.config.blockDelta);
+		vecSize.set(size.x + Reference.config.blockDelta, size.y + Reference.config.blockDelta, size.z + Reference.config.blockDelta);
 
 		if (lineCount + 24 >= lineSize) {
 			lineSize *= 2;

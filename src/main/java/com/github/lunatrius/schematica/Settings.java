@@ -4,43 +4,36 @@ import com.github.lunatrius.schematica.client.gui.GuiSchematicControl;
 import com.github.lunatrius.schematica.client.gui.GuiSchematicLoad;
 import com.github.lunatrius.schematica.client.gui.GuiSchematicSave;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
+import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
+import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.logging.ILogAgent;
-import net.minecraft.logging.LogAgent;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCache;
+import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Settings {
-	private static final Settings instance = new Settings();
-
-	// loaded from config
-	public boolean enableAlpha = false;
-	public float alpha = 1.0f;
-	public boolean highlight = true;
-	public boolean highlightAir = true;
-	public float blockDelta = 0.005f;
-	public int placeDelay = 1;
-	public boolean placeInstantly = false;
-	public boolean placeAdjacent = true;
-	public boolean drawQuads = true;
-	public boolean drawLines = true;
+	public static final Settings instance = new Settings();
 
 	public KeyBinding[] keyBindings = new KeyBinding[] {
-			new KeyBinding("schematica.key.load", Keyboard.KEY_DIVIDE),
-			new KeyBinding("schematica.key.save", Keyboard.KEY_MULTIPLY),
-			new KeyBinding("schematica.key.control", Keyboard.KEY_SUBTRACT)
+			new KeyBinding("schematica.key.load", Keyboard.KEY_DIVIDE, "schematica.key.category"),
+			new KeyBinding("schematica.key.save", Keyboard.KEY_MULTIPLY, "schematica.key.category"),
+			new KeyBinding("schematica.key.control", Keyboard.KEY_SUBTRACT, "schematica.key.category")
 	};
 
 	public static final String sbcDisablePrinter = "\u00a70\u00a72\u00a70\u00a70\u00a7e\u00a7f";
@@ -49,9 +42,9 @@ public class Settings {
 
 	public static final File schematicDirectory = new File(Minecraft.getMinecraft().mcDataDir, "/schematics/");
 	public static final File textureDirectory = new File(Minecraft.getMinecraft().mcDataDir, "/resources/mod/schematica/");
-	public static final ILogAgent logger = new LogAgent(Schematica.class.getSimpleName(), "", (new File(Minecraft.getMinecraft().mcDataDir, "output-schematica.log")).getAbsolutePath());
+	public static Logger logger;
 	public static final RenderItem renderItem = new RenderItem();
-	public static final ItemStack defaultIcon = new ItemStack(2, 1, 0);
+	public static final ItemStack defaultIcon = new ItemStack(Blocks.grass);
 
 	private final Vector3f translationVector = new Vector3f();
 	public Minecraft minecraft = Minecraft.getMinecraft();
@@ -81,10 +74,6 @@ public class Settings {
 	};
 
 	private Settings() {
-	}
-
-	public static Settings instance() {
-		return instance;
 	}
 
 	public void reset() {
@@ -146,7 +135,6 @@ public class Settings {
 				}
 			}
 		}
-
 	}
 
 	public boolean loadSchematic(String filename) {
@@ -155,12 +143,12 @@ public class Settings {
 			NBTTagCompound tagCompound = CompressedStreamTools.readCompressed(stream);
 
 			if (tagCompound != null) {
+				Reference.logger.info(tagCompound);
+
 				this.schematic = new SchematicWorld();
 				this.schematic.readFromNBT(tagCompound);
 
-				logger.logInfo(String.format("Loaded %s [w:%d,h:%d,l:%d]", new Object[] {
-						filename, this.schematic.width(), this.schematic.height(), this.schematic.length()
-				}));
+				Reference.logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", filename, this.schematic.width(), this.schematic.height(), this.schematic.length()));
 
 				this.renderBlocks = new RenderBlocks(this.schematic);
 
@@ -169,7 +157,7 @@ public class Settings {
 				this.isRenderingSchematic = true;
 			}
 		} catch (Exception e) {
-			logger.logSevereException("Failed to load schematic!", e);
+			Reference.logger.fatal("Failed to load schematic!", e);
 			reset();
 			return false;
 		}
@@ -179,7 +167,7 @@ public class Settings {
 
 	public boolean saveSchematic(File directory, String filename, Vector3f from, Vector3f to) {
 		try {
-			NBTTagCompound tagCompound = new NBTTagCompound("Schematic");
+			NBTTagCompound tagCompound = new NBTTagCompound();
 
 			int minX = (int) Math.min(from.x, to.x);
 			int maxX = (int) Math.max(from.x, to.x);
@@ -200,9 +188,9 @@ public class Settings {
 			for (int x = minX; x <= maxX; x++) {
 				for (int y = minY; y <= maxY; y++) {
 					for (int z = minZ; z <= maxZ; z++) {
-						blocks[x - minX][y - minY][z - minZ] = this.minecraft.theWorld.getBlockId(x, y, z);
+						blocks[x - minX][y - minY][z - minZ] = GameData.blockRegistry.getId(this.minecraft.theWorld.getBlock(x, y, z));
 						metadata[x - minX][y - minY][z - minZ] = this.minecraft.theWorld.getBlockMetadata(x, y, z);
-						tileEntity = this.minecraft.theWorld.getBlockTileEntity(x, y, z);
+						tileEntity = this.minecraft.theWorld.getTileEntity(x, y, z);
 						if (tileEntity != null) {
 							tileEntityNBT = new NBTTagCompound();
 							tileEntity.writeToNBT(tileEntityNBT);
@@ -217,7 +205,7 @@ public class Settings {
 				}
 			}
 
-			String icon = Integer.toString(defaultIcon.copy().itemID);
+			String icon = GameData.itemRegistry.getNameForObject(defaultIcon.getItem());
 
 			try {
 				String[] parts = filename.split(";");
@@ -226,16 +214,23 @@ public class Settings {
 					filename = parts[1];
 				}
 			} catch (Exception e) {
-				logger.logSevereException("Failed to parse icon data!", e);
+				Reference.logger.error("Failed to parse icon data!", e);
 			}
 
 			SchematicWorld schematicOut = new SchematicWorld(icon, blocks, metadata, tileEntities, width, height, length);
-			schematicOut.writeToNBT(tagCompound);
+
+			SchematicFormat.writeToFile(directory, filename, schematicOut);
+/*
+
+			NBTTagCompound tagCompoundSchematic = new NBTTagCompound();
+			schematicOut.writeToNBT(tagCompoundSchematic);
+			tagCompound.setTag("Schematic", tagCompoundSchematic);
 
 			OutputStream stream = new FileOutputStream(new File(directory, filename));
 			CompressedStreamTools.writeCompressed(tagCompound, stream);
+			*/
 		} catch (Exception e) {
-			logger.logSevereException("Failed to save schematic!", e);
+			Reference.logger.error("Failed to save schematic!", e);
 			return false;
 		}
 		return true;

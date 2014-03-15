@@ -7,15 +7,12 @@ import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import java.util.Locale;
-
 class GuiSchematicMaterialsSlot extends GuiSlot {
-	private final Settings settings = Settings.instance();
+	private final Settings settings = Settings.instance;
 	private final FontRenderer fontRenderer = this.settings.minecraft.fontRenderer;
 	private final TextureManager renderEngine = this.settings.minecraft.renderEngine;
 
@@ -24,7 +21,7 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 	protected int selectedIndex = -1;
 
 	public GuiSchematicMaterialsSlot(GuiSchematicMaterials par1) {
-		super(Settings.instance().minecraft, par1.width, par1.height, 16, par1.height - 34, 24);
+		super(Settings.instance.minecraft, par1.width, par1.height, 16, par1.height - 34, 24);
 		this.guiSchematicMaterials = par1;
 		this.selectedIndex = -1;
 	}
@@ -35,7 +32,7 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 	}
 
 	@Override
-	protected void elementClicked(int index, boolean par2) {
+	protected void elementClicked(int index, boolean par2, int par3, int par4) {
 		this.selectedIndex = index;
 	}
 
@@ -53,16 +50,16 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 	}
 
 	@Override
-	protected void drawSlot(int index, int x, int y, int par4, Tessellator tessellator) {
+	protected void drawSlot(int index, int x, int y, int par4, Tessellator tessellator, int par6, int par7) {
 		ItemStack itemStack = this.guiSchematicMaterials.blockList.get(index);
 
 		String itemName;
 		String amount = Integer.toString(itemStack.stackSize);
 
-		if (Item.itemsList[itemStack.itemID] != null) {
-			itemName = Item.itemsList[itemStack.itemID].getItemStackDisplayName(itemStack);
+		if (itemStack != null && itemStack.getItem() != null) {
+			itemName = itemStack.getItem().getItemStackDisplayName(itemStack);
 		} else {
-			itemName = String.format(Locale.ENGLISH, "#%04d:%02d", itemStack.itemID, itemStack.getItemDamage());
+			itemName = "Unknown";
 		}
 
 		drawItemStack(x, y, itemStack);
@@ -74,7 +71,7 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 	private void drawItemStack(int x, int y, ItemStack itemStack) {
 		drawItemStackSlot(x, y);
 
-		if (itemStack != null && Item.itemsList[itemStack.itemID] != null) {
+		if (itemStack != null && itemStack.getItem() != null) {
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 			RenderHelper.enableGUIStandardItemLighting();
 			Settings.renderItem.renderItemIntoGUI(this.fontRenderer, this.renderEngine, itemStack, x + 2, y + 2);
