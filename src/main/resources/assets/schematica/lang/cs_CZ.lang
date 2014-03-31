@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Otevřít složku se schématy
 schematica.gui.done=Hotovo
 schematica.gui.title=Vyberte soubor schématu
@@ -28,6 +29,8 @@ schematica.gui.materialname=Materiál
 schematica.gui.materialamount=Množství
 schematica.gui.printer=Tiskárna
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=Načíst schéma
 schematica.key.save=Uložit schéma
 schematica.key.control=Manipulovat se schématem

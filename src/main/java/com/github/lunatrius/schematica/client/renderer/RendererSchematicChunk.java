@@ -1,34 +1,31 @@
 package com.github.lunatrius.schematica.client.renderer;
 
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import com.github.lunatrius.schematica.SchematicWorld;
 import com.github.lunatrius.schematica.Settings;
+import com.github.lunatrius.schematica.lib.Reference;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.client.resources.ResourceManager;
+import net.minecraft.init.Blocks;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.client.ForgeHooksClient;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RendererSchematicChunk {
 	public static final int CHUNK_WIDTH = 16;
@@ -41,7 +38,7 @@ public class RendererSchematicChunk {
 
 	public final Vector3f centerPosition = new Vector3f();
 
-	private final Settings settings = Settings.instance();
+	private final Settings settings = Settings.instance;
 	private final Minecraft minecraft = this.settings.minecraft;
 	private final Profiler profiler = this.minecraft.mcProfiler;
 	private final SchematicWorld schematic;
@@ -85,7 +82,7 @@ public class RendererSchematicChunk {
 		try {
 			this.fieldMapTexturesStiched = ReflectionHelper.findField(TextureMap.class, "f", "field_94252_e", "mapUploadedSprites");
 		} catch (Exception ex) {
-			Settings.logger.logSevereException("Failed to initialize mapTexturesStiched!", ex);
+			Reference.logger.fatal("Failed to initialize mapTexturesStiched!", ex);
 			this.fieldMapTexturesStiched = null;
 		}
 	}
@@ -134,11 +131,11 @@ public class RendererSchematicChunk {
 				int minX, maxX, minY, maxY, minZ, maxZ;
 
 				minX = (int) this.boundingBox.minX;
-				maxX = Math.min((int) this.boundingBox.maxX, this.schematic.width());
+				maxX = Math.min((int) this.boundingBox.maxX, this.schematic.getWidth());
 				minY = (int) this.boundingBox.minY;
-				maxY = Math.min((int) this.boundingBox.maxY, this.schematic.height());
+				maxY = Math.min((int) this.boundingBox.maxY, this.schematic.getHeight());
 				minZ = (int) this.boundingBox.minZ;
-				maxZ = Math.min((int) this.boundingBox.maxZ, this.schematic.length());
+				maxZ = Math.min((int) this.boundingBox.maxZ, this.schematic.getLength());
 
 				if (this.settings.renderingLayer >= 0) {
 					if (this.settings.renderingLayer >= minY && this.settings.renderingLayer < maxY) {
@@ -222,9 +219,9 @@ public class RendererSchematicChunk {
 		RenderBlocks renderBlocks = this.settings.renderBlocks;
 
 		int x, y, z, wx, wy, wz;
-		int blockId, mcBlockId;
+		// int blockId, mcBlockId;
 		int sides;
-		Block block;
+		Block block, mcBlock;
 		Vector3f zero = new Vector3f();
 		Vector3f size = new Vector3f();
 
@@ -237,14 +234,13 @@ public class RendererSchematicChunk {
 			for (z = minZ; z < maxZ; z++) {
 				for (x = minX; x < maxX; x++) {
 					try {
-						blockId = this.schematic.getBlockId(x, y, z);
-						block = Block.blocksList[blockId];
+						block = this.schematic.getBlock(x, y, z);
 
 						wx = (int) this.settings.offset.x + x;
 						wy = (int) this.settings.offset.y + y;
 						wz = (int) this.settings.offset.z + z;
 
-						mcBlockId = mcWorld.getBlockId(wx, wy, wz);
+						mcBlock = mcWorld.getBlock(wx, wy, wz);
 
 						sides = 0;
 						if (block != null) {
@@ -276,44 +272,44 @@ public class RendererSchematicChunk {
 						boolean isAirBlock = mcWorld.isAirBlock(wx, wy, wz);
 
 						if (!isAirBlock) {
-							if (this.settings.highlight && renderPass == 2) {
-								if (blockId == 0 && this.settings.highlightAir) {
+							if (Reference.config.highlight && renderPass == 2) {
+								if (block == Blocks.air && Reference.config.highlightAir) {
 									zero.set(x, y, z);
 									size.set(x + 1, y + 1, z + 1);
-									if (this.settings.drawQuads) {
+									if (Reference.config.drawQuads) {
 										RenderHelper.drawCuboidSurface(zero, size, RenderHelper.QUAD_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
 									}
-									if (this.settings.drawLines) {
+									if (Reference.config.drawLines) {
 										RenderHelper.drawCuboidOutline(zero, size, RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
 									}
-								} else if (blockId != mcBlockId) {
+								} else if (block != mcBlock) {
 									zero.set(x, y, z);
 									size.set(x + 1, y + 1, z + 1);
-									if (this.settings.drawQuads) {
+									if (Reference.config.drawQuads) {
 										RenderHelper.drawCuboidSurface(zero, size, sides, 1.0f, 0.0f, 0.0f, 0.25f);
 									}
-									if (this.settings.drawLines) {
+									if (Reference.config.drawLines) {
 										RenderHelper.drawCuboidOutline(zero, size, sides, 1.0f, 0.0f, 0.0f, 0.25f);
 									}
 								} else if (this.schematic.getBlockMetadata(x, y, z) != mcWorld.getBlockMetadata(wx, wy, wz)) {
 									zero.set(x, y, z);
 									size.set(x + 1, y + 1, z + 1);
-									if (this.settings.drawQuads) {
+									if (Reference.config.drawQuads) {
 										RenderHelper.drawCuboidSurface(zero, size, sides, 0.75f, 0.35f, 0.0f, 0.25f);
 									}
-									if (this.settings.drawLines) {
+									if (Reference.config.drawLines) {
 										RenderHelper.drawCuboidOutline(zero, size, sides, 0.75f, 0.35f, 0.0f, 0.25f);
 									}
 								}
 							}
-						} else if (isAirBlock && blockId > 0 && blockId < 0x1000) {
-							if (this.settings.highlight && renderPass == 2) {
+						} else if (block != Blocks.air) {
+							if (Reference.config.highlight && renderPass == 2) {
 								zero.set(x, y, z);
 								size.set(x + 1, y + 1, z + 1);
-								if (this.settings.drawQuads) {
+								if (Reference.config.drawQuads) {
 									RenderHelper.drawCuboidSurface(zero, size, sides, 0.0f, 0.75f, 1.0f, 0.25f);
 								}
-								if (this.settings.drawLines) {
+								if (Reference.config.drawLines) {
 									RenderHelper.drawCuboidOutline(zero, size, sides, 0.0f, 0.75f, 1.0f, 0.25f);
 								}
 							}
@@ -323,7 +319,7 @@ public class RendererSchematicChunk {
 							}
 						}
 					} catch (Exception e) {
-						Settings.logger.logSevereException("Failed to render block!", e);
+						Reference.logger.error("Failed to render block!", e);
 					}
 				}
 			}
@@ -343,8 +339,9 @@ public class RendererSchematicChunk {
 
 		int x, y, z;
 		int mcBlockId;
+		Block mcBlock;
 
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, this.settings.alpha);
+		GL11.glColor4f(1.0f, 1.0f, 1.0f, Reference.config.alpha);
 
 		try {
 			for (TileEntity tileEntity : this.tileEntities) {
@@ -358,10 +355,10 @@ public class RendererSchematicChunk {
 					}
 				}
 
-				mcBlockId = mcWorld.getBlockId(x + (int) this.settings.offset.x, y + (int) this.settings.offset.y, z + (int) this.settings.offset.z);
+				mcBlock = mcWorld.getBlock(x + (int) this.settings.offset.x, y + (int) this.settings.offset.y, z + (int) this.settings.offset.z);
 
-				if (mcBlockId == 0) {
-					TileEntitySpecialRenderer tileEntitySpecialRenderer = TileEntityRenderer.instance.getSpecialRendererForEntity(tileEntity);
+				if (mcBlock == Blocks.air) {
+					TileEntitySpecialRenderer tileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRenderer(tileEntity);
 					if (tileEntitySpecialRenderer != null) {
 						try {
 							tileEntitySpecialRenderer.renderTileEntityAt(tileEntity, x, y, z, 0);
@@ -370,23 +367,26 @@ public class RendererSchematicChunk {
 							GL11.glDisable(GL11.GL_TEXTURE_2D);
 							OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
 						} catch (Exception e) {
-							Settings.logger.logSevereException("Failed to render a tile entity!", e);
+							Reference.logger.error("Failed to render a tile entity!", e);
 						}
-						GL11.glColor4f(1.0f, 1.0f, 1.0f, this.settings.alpha);
+						GL11.glColor4f(1.0f, 1.0f, 1.0f, Reference.config.alpha);
 					}
 				}
 			}
 		} catch (Exception ex) {
-			Settings.logger.logSevereException("Failed to render tile entities!", ex);
+			Reference.logger.error("Failed to render tile entities!", ex);
 		}
 	}
 
 	private void bindTexture() {
-		if (!this.settings.enableAlpha) {
+		if (!Reference.config.enableAlpha) {
 			this.minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 			return;
 		}
 
+		// TODO: work out alpha for multiple resource packs
+		this.minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+		/*
 		String resourcePackName = this.minecraft.getResourcePackRepository().getResourcePackName();
 
 		if (!resourcePacks.containsKey(resourcePackName)) {
@@ -463,5 +463,6 @@ public class RendererSchematicChunk {
 		if (resourcePacks.containsKey(resourcePackName)) {
 			this.minecraft.renderEngine.bindTexture(resourcePacks.get(resourcePackName));
 		}
+		*/
 	}
 }

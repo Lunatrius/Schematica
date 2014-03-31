@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Abrir carpeta de esquemas
 schematica.gui.done=Hecho
 schematica.gui.title=Seleccionar archivo de esquema
@@ -28,6 +29,8 @@ schematica.gui.materials=Materiales
 schematica.gui.materialamount=Cantidad
 schematica.gui.printer=Impresora
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=Cargar esquema
 schematica.key.save=Guardar esquema
 schematica.key.control=Editar esquema

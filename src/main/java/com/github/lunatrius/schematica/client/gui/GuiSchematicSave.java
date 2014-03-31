@@ -4,10 +4,10 @@ import com.github.lunatrius.schematica.Settings;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
 
 public class GuiSchematicSave extends GuiScreen {
-	private final Settings settings = Settings.instance();
+	private final Settings settings = Settings.instance;
 	@SuppressWarnings("unused")
 	private final GuiScreen prevGuiScreen;
 
@@ -56,10 +56,10 @@ public class GuiSchematicSave extends GuiScreen {
 
 	private String filename = "";
 
-	private final String strSaveSelection = StatCollector.translateToLocal("schematica.gui.saveselection");
-	private final String strX = StatCollector.translateToLocal("schematica.gui.x");
-	private final String strY = StatCollector.translateToLocal("schematica.gui.y");
-	private final String strZ = StatCollector.translateToLocal("schematica.gui.z");
+	private final String strSaveSelection = I18n.format("schematica.gui.saveselection");
+	private final String strX = I18n.format("schematica.gui.x");
+	private final String strY = I18n.format("schematica.gui.y");
+	private final String strZ = I18n.format("schematica.gui.z");
 
 	public GuiSchematicSave(GuiScreen guiScreen) {
 		this.prevGuiScreen = guiScreen;
@@ -74,72 +74,72 @@ public class GuiSchematicSave extends GuiScreen {
 
 		int id = 0;
 
-		this.btnPointA = new GuiButton(id++, this.centerX - 130, this.centerY - 55, 100, 20, StatCollector.translateToLocal("schematica.gui.point.red"));
+		this.btnPointA = new GuiButton(id++, this.centerX - 130, this.centerY - 55, 100, 20, I18n.format("schematica.gui.point.red"));
 		this.buttonList.add(this.btnPointA);
 
-		this.btnDecAX = new GuiButton(id++, this.centerX - 130, this.centerY - 30, 30, 20, StatCollector.translateToLocal("schematica.gui.decrease"));
+		this.btnDecAX = new GuiButton(id++, this.centerX - 130, this.centerY - 30, 30, 20, I18n.format("schematica.gui.decrease"));
 		this.buttonList.add(this.btnDecAX);
 
 		this.btnAmountAX = new GuiButton(id++, this.centerX - 95, this.centerY - 30, 30, 20, Integer.toString(this.settings.increments[this.incrementAX]));
 		this.buttonList.add(this.btnAmountAX);
 
-		this.btnIncAX = new GuiButton(id++, this.centerX - 60, this.centerY - 30, 30, 20, StatCollector.translateToLocal("schematica.gui.increase"));
+		this.btnIncAX = new GuiButton(id++, this.centerX - 60, this.centerY - 30, 30, 20, I18n.format("schematica.gui.increase"));
 		this.buttonList.add(this.btnIncAX);
 
-		this.btnDecAY = new GuiButton(id++, this.centerX - 130, this.centerY - 5, 30, 20, StatCollector.translateToLocal("schematica.gui.decrease"));
+		this.btnDecAY = new GuiButton(id++, this.centerX - 130, this.centerY - 5, 30, 20, I18n.format("schematica.gui.decrease"));
 		this.buttonList.add(this.btnDecAY);
 
 		this.btnAmountAY = new GuiButton(id++, this.centerX - 95, this.centerY - 5, 30, 20, Integer.toString(this.settings.increments[this.incrementAY]));
 		this.buttonList.add(this.btnAmountAY);
 
-		this.btnIncAY = new GuiButton(id++, this.centerX - 60, this.centerY - 5, 30, 20, StatCollector.translateToLocal("schematica.gui.increase"));
+		this.btnIncAY = new GuiButton(id++, this.centerX - 60, this.centerY - 5, 30, 20, I18n.format("schematica.gui.increase"));
 		this.buttonList.add(this.btnIncAY);
 
-		this.btnDecAZ = new GuiButton(id++, this.centerX - 130, this.centerY + 20, 30, 20, StatCollector.translateToLocal("schematica.gui.decrease"));
+		this.btnDecAZ = new GuiButton(id++, this.centerX - 130, this.centerY + 20, 30, 20, I18n.format("schematica.gui.decrease"));
 		this.buttonList.add(this.btnDecAZ);
 
 		this.btnAmountAZ = new GuiButton(id++, this.centerX - 95, this.centerY + 20, 30, 20, Integer.toString(this.settings.increments[this.incrementAZ]));
 		this.buttonList.add(this.btnAmountAZ);
 
-		this.btnIncAZ = new GuiButton(id++, this.centerX - 60, this.centerY + 20, 30, 20, StatCollector.translateToLocal("schematica.gui.increase"));
+		this.btnIncAZ = new GuiButton(id++, this.centerX - 60, this.centerY + 20, 30, 20, I18n.format("schematica.gui.increase"));
 		this.buttonList.add(this.btnIncAZ);
 
-		this.btnPointB = new GuiButton(id++, this.centerX + 30, this.centerY - 55, 100, 20, StatCollector.translateToLocal("schematica.gui.point.blue"));
+		this.btnPointB = new GuiButton(id++, this.centerX + 30, this.centerY - 55, 100, 20, I18n.format("schematica.gui.point.blue"));
 		this.buttonList.add(this.btnPointB);
 
-		this.btnDecBX = new GuiButton(id++, this.centerX + 30, this.centerY - 30, 30, 20, StatCollector.translateToLocal("schematica.gui.decrease"));
+		this.btnDecBX = new GuiButton(id++, this.centerX + 30, this.centerY - 30, 30, 20, I18n.format("schematica.gui.decrease"));
 		this.buttonList.add(this.btnDecBX);
 
 		this.btnAmountBX = new GuiButton(id++, this.centerX + 65, this.centerY - 30, 30, 20, Integer.toString(this.settings.increments[this.incrementBX]));
 		this.buttonList.add(this.btnAmountBX);
 
-		this.btnIncBX = new GuiButton(id++, this.centerX + 100, this.centerY - 30, 30, 20, StatCollector.translateToLocal("schematica.gui.increase"));
+		this.btnIncBX = new GuiButton(id++, this.centerX + 100, this.centerY - 30, 30, 20, I18n.format("schematica.gui.increase"));
 		this.buttonList.add(this.btnIncBX);
 
-		this.btnDecBY = new GuiButton(id++, this.centerX + 30, this.centerY - 5, 30, 20, StatCollector.translateToLocal("schematica.gui.decrease"));
+		this.btnDecBY = new GuiButton(id++, this.centerX + 30, this.centerY - 5, 30, 20, I18n.format("schematica.gui.decrease"));
 		this.buttonList.add(this.btnDecBY);
 
 		this.btnAmountBY = new GuiButton(id++, this.centerX + 65, this.centerY - 5, 30, 20, Integer.toString(this.settings.increments[this.incrementBY]));
 		this.buttonList.add(this.btnAmountBY);
 
-		this.btnIncBY = new GuiButton(id++, this.centerX + 100, this.centerY - 5, 30, 20, StatCollector.translateToLocal("schematica.gui.increase"));
+		this.btnIncBY = new GuiButton(id++, this.centerX + 100, this.centerY - 5, 30, 20, I18n.format("schematica.gui.increase"));
 		this.buttonList.add(this.btnIncBY);
 
-		this.btnDecBZ = new GuiButton(id++, this.centerX + 30, this.centerY + 20, 30, 20, StatCollector.translateToLocal("schematica.gui.decrease"));
+		this.btnDecBZ = new GuiButton(id++, this.centerX + 30, this.centerY + 20, 30, 20, I18n.format("schematica.gui.decrease"));
 		this.buttonList.add(this.btnDecBZ);
 
 		this.btnAmountBZ = new GuiButton(id++, this.centerX + 65, this.centerY + 20, 30, 20, Integer.toString(this.settings.increments[this.incrementBZ]));
 		this.buttonList.add(this.btnAmountBZ);
 
-		this.btnIncBZ = new GuiButton(id++, this.centerX + 100, this.centerY + 20, 30, 20, StatCollector.translateToLocal("schematica.gui.increase"));
+		this.btnIncBZ = new GuiButton(id++, this.centerX + 100, this.centerY + 20, 30, 20, I18n.format("schematica.gui.increase"));
 		this.buttonList.add(this.btnIncBZ);
 
-		this.btnEnable = new GuiButton(id++, this.width - 210, this.height - 30, 50, 20, StatCollector.translateToLocal(this.settings.isRenderingGuide ? "schematica.gui.disable" : "schematica.gui.enable"));
+		this.btnEnable = new GuiButton(id++, this.width - 210, this.height - 30, 50, 20, I18n.format(this.settings.isRenderingGuide ? "schematica.gui.disable" : "schematica.gui.enable"));
 		this.buttonList.add(this.btnEnable);
 
-		this.tfFilename = new GuiTextField(this.fontRenderer, this.width - 155, this.height - 29, 100, 18);
+		this.tfFilename = new GuiTextField(this.fontRendererObj, this.width - 155, this.height - 29, 100, 18);
 
-		this.btnSave = new GuiButton(id++, this.width - 50, this.height - 30, 40, 20, StatCollector.translateToLocal("schematica.gui.save"));
+		this.btnSave = new GuiButton(id++, this.width - 50, this.height - 30, 40, 20, I18n.format("schematica.gui.save"));
 		this.btnSave.enabled = this.settings.isRenderingGuide;
 		this.buttonList.add(this.btnSave);
 
@@ -212,11 +212,11 @@ public class GuiSchematicSave extends GuiScreen {
 				this.btnAmountBZ.displayString = Integer.toString(this.settings.increments[this.incrementBZ]);
 			} else if (guiButton.id == this.btnEnable.id) {
 				this.settings.isRenderingGuide = !this.settings.isRenderingGuide && this.settings.isSaveEnabled;
-				this.btnEnable.displayString = StatCollector.translateToLocal(this.settings.isRenderingGuide ? "schematica.gui.disable" : "schematica.gui.enable");
+				this.btnEnable.displayString = I18n.format(this.settings.isRenderingGuide ? "schematica.gui.disable" : "schematica.gui.enable");
 				this.btnSave.enabled = this.settings.isRenderingGuide;
 			} else if (guiButton.id == this.btnSave.id) {
 				String path = this.tfFilename.getText() + ".schematic";
-				if (this.settings.saveSchematic(Settings.schematicDirectory, path, this.settings.pointMin, this.settings.pointMax)) {
+				if (this.settings.saveSchematic(Settings.SCHEMATIC_DIRECTORY, path, this.settings.pointMin, this.settings.pointMax)) {
 					this.filename = "";
 					this.tfFilename.setText(this.filename);
 				}
@@ -247,25 +247,25 @@ public class GuiSchematicSave extends GuiScreen {
 	public void drawScreen(int par1, int par2, float par3) {
 		// drawDefaultBackground();
 
-		drawString(this.fontRenderer, this.strSaveSelection, this.width - 205, this.height - 45, 0xFFFFFF);
+		drawString(this.fontRendererObj, this.strSaveSelection, this.width - 205, this.height - 45, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strX, this.centerX - 145, this.centerY - 24, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString((int) this.settings.pointA.x), this.centerX - 25, this.centerY - 24, 0xFFFFFF);
+		drawString(this.fontRendererObj, this.strX, this.centerX - 145, this.centerY - 24, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString((int) this.settings.pointA.x), this.centerX - 25, this.centerY - 24, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strY, this.centerX - 145, this.centerY + 1, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString((int) this.settings.pointA.y), this.centerX - 25, this.centerY + 1, 0xFFFFFF);
+		drawString(this.fontRendererObj, this.strY, this.centerX - 145, this.centerY + 1, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString((int) this.settings.pointA.y), this.centerX - 25, this.centerY + 1, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strZ, this.centerX - 145, this.centerY + 26, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString((int) this.settings.pointA.z), this.centerX - 25, this.centerY + 26, 0xFFFFFF);
+		drawString(this.fontRendererObj, this.strZ, this.centerX - 145, this.centerY + 26, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString((int) this.settings.pointA.z), this.centerX - 25, this.centerY + 26, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strX, this.centerX + 15, this.centerY - 24, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString((int) this.settings.pointB.x), this.centerX + 135, this.centerY - 24, 0xFFFFFF);
+		drawString(this.fontRendererObj, this.strX, this.centerX + 15, this.centerY - 24, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString((int) this.settings.pointB.x), this.centerX + 135, this.centerY - 24, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strY, this.centerX + 15, this.centerY + 1, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString((int) this.settings.pointB.y), this.centerX + 135, this.centerY + 1, 0xFFFFFF);
+		drawString(this.fontRendererObj, this.strY, this.centerX + 15, this.centerY + 1, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString((int) this.settings.pointB.y), this.centerX + 135, this.centerY + 1, 0xFFFFFF);
 
-		drawString(this.fontRenderer, this.strZ, this.centerX + 15, this.centerY + 26, 0xFFFFFF);
-		drawString(this.fontRenderer, Integer.toString((int) this.settings.pointB.z), this.centerX + 135, this.centerY + 26, 0xFFFFFF);
+		drawString(this.fontRendererObj, this.strZ, this.centerX + 15, this.centerY + 26, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString((int) this.settings.pointB.z), this.centerX + 135, this.centerY + 26, 0xFFFFFF);
 
 		this.tfFilename.drawTextBox();
 

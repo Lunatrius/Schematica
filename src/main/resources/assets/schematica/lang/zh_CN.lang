@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=打开Schematic文件夹
 schematica.gui.done=完成
 schematica.gui.title=选择Schematic文件
@@ -28,6 +29,8 @@ schematica.gui.materialname=材料
 schematica.gui.materialamount=数量
 schematica.gui.printer=投影
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=载入Schematic文件
 schematica.key.save=保存Schematic文件
 schematica.key.control=调整Schematic文件

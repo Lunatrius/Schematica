@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Open ye Blueprints
 schematica.gui.done=Plundered
 schematica.gui.title=Select ye Blueprint
@@ -28,6 +29,8 @@ schematica.gui.materialname=Stuff
 schematica.gui.materialamount=Number
 schematica.gui.printer=Printing thing
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=Load yer blueprint
 schematica.key.save=Keep yer blueprint
 schematica.key.control=Change yer blueprint

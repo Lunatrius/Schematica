@@ -6,7 +6,7 @@ import org.lwjgl.util.vector.Vector3f;
 import java.util.Comparator;
 
 public class RendererSchematicChunkSorter implements Comparator {
-	private final Settings settings = Settings.instance();
+	private final Settings settings = Settings.instance;
 
 	public int doCompare(RendererSchematicChunk par1RendererSchematicChunk, RendererSchematicChunk par2RendererSchematicChunk) {
 		if (par1RendererSchematicChunk.isInFrustrum && !par2RendererSchematicChunk.isInFrustrum) {

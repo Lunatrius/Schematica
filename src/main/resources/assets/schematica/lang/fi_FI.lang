@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Avaa kaavion sijainti
 schematica.gui.done=Valmis
 schematica.gui.title=Valitse kaavio tiedosto
@@ -28,6 +29,8 @@ schematica.gui.materialname=Materiaali
 schematica.gui.materialamount=Määrä
 schematica.gui.printer=Tulostin
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=Lataa kaava
 schematica.key.save=Tallenna kaava
 schematica.key.control=Käsittele kaavaa

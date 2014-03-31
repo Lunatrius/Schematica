@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Abrir pasta das schematicas
 schematica.gui.done=Feito
 schematica.gui.title=Selecionar schematica
@@ -28,6 +29,8 @@ schematica.gui.materialname=Material
 schematica.gui.materialamount=Quantidade
 schematica.gui.printer=Modo de construçăo automática
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=Carregar schematica
 schematica.key.save=Guardar schematica
 schematica.key.control=Manipular schematica

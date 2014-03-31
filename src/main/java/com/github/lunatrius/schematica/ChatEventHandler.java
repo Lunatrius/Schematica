@@ -1,26 +1,29 @@
 package com.github.lunatrius.schematica;
 
+import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.lib.Strings;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.event.ForgeSubscribe;
 
 public class ChatEventHandler {
-	private final Settings settings = Settings.instance();
+	private final Settings settings = Settings.instance;
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onClientChatReceivedEvent(ClientChatReceivedEvent event) {
 		this.settings.chatLines++;
 
 		if (this.settings.isPrinterEnabled && this.settings.chatLines < 10) {
-			if (event.message.contains(Settings.sbcDisablePrinter)) {
-				Settings.logger.logInfo("Printer is disabled on this server.");
+			String message = event.message.getFormattedText();
+			if (message.contains(Strings.SBC_DISABLE_PRINTER)) {
+				Reference.logger.info("Printer is disabled on this server.");
 				this.settings.isPrinterEnabled = false;
 			}
-			if (event.message.contains(Settings.sbcDisableSave)) {
-				Settings.logger.logInfo("Saving is disabled on this server.");
+			if (message.contains(Strings.SBC_DISABLE_SAVE)) {
+				Reference.logger.info("Saving is disabled on this server.");
 				this.settings.isSaveEnabled = false;
 			}
-			if (event.message.contains(Settings.sbcDisableLoad)) {
-				Settings.logger.logInfo("Loading is disabled on this server.");
+			if (message.contains(Strings.SBC_DISABLE_LOAD)) {
+				Reference.logger.info("Loading is disabled on this server.");
 				this.settings.isLoadEnabled = false;
 			}
 		}

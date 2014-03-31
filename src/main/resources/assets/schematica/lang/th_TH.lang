@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=เปิดโฟลเดอร์ Schematic
 schematica.gui.done=เสร็จสิ้น
 schematica.gui.title=เลือกไฟล์ Schematic ที่ต้องการ
@@ -28,6 +29,8 @@ schematica.gui.materialname=ส่วนประกอบ
 schematica.gui.materialamount=จำนวน
 schematica.gui.printer=การปริ๊น
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=เปิดไฟล์ Schematic
 schematica.key.save=บันทึกไฟล์ Schematic
 schematica.key.control=จัดการ Schematic

@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Открыть папку со схемами
 schematica.gui.done=Готово
 schematica.gui.title=Выберите файл Schematic
@@ -28,6 +29,8 @@ schematica.gui.materialname=Материал
 schematica.gui.materialamount=Количество
 schematica.gui.printer=Принтер
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=Загрузить схему
 schematica.key.save=Сохранить схему
 schematica.key.control=Манипулирование схемой

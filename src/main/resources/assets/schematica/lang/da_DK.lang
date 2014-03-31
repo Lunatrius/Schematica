@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Åbn schematics mappe
 schematica.gui.done=Færdig
 schematica.gui.title=Vælg schematic-fil
@@ -28,6 +29,8 @@ schematica.gui.materialname=Materiale
 schematica.gui.materialamount=Antal
 # schematica.gui.printer=Printer
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=Åbn schematic
 schematica.key.save=Gem schematic
 schematica.key.control=Manipulér schematic

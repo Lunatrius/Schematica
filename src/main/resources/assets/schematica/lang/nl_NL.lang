@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Open schematic map
 schematica.gui.done=Klaar
 schematica.gui.title=Selecteer schematic bestand
@@ -28,6 +29,8 @@ schematica.gui.materialname=Materiaal
 schematica.gui.materialamount=Hoeveelheid
 # schematica.gui.printer=Printer
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=Laad schematic
 schematica.key.save=Sla schematic op
 schematica.key.control=Bewerk schematic

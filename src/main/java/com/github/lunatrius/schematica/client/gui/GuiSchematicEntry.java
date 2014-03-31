@@ -1,40 +1,40 @@
 package com.github.lunatrius.schematica.client.gui;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class GuiSchematicEntry {
 	private final String name;
-	private final int itemID;
-	private final int itemDamage;
-	private final boolean isDirectory;
 	private final ItemStack itemStack;
+	private final boolean isDirectory;
 
 	public GuiSchematicEntry(String name, ItemStack itemStack, boolean isDirectory) {
-		this.name = name;
-		this.itemID = itemStack.itemID;
-		this.itemDamage = itemStack.getItemDamage();
-		this.isDirectory = isDirectory;
-		this.itemStack = new ItemStack(itemStack.itemID, 1, itemStack.getItemDamage());
+		this(name, itemStack.getItem(), itemStack.getItemDamage(), isDirectory);
 	}
 
-	public GuiSchematicEntry(String name, int itemID, int itemDamage, boolean isDirectory) {
+	public GuiSchematicEntry(String name, Item item, int itemDamage, boolean isDirectory) {
 		this.name = name;
-		this.itemID = itemID;
-		this.itemDamage = itemDamage;
 		this.isDirectory = isDirectory;
-		this.itemStack = new ItemStack(itemID, 1, itemDamage);
+		this.itemStack = new ItemStack(item, 1, itemDamage);
+	}
+
+	public GuiSchematicEntry(String name, Block block, int itemDamage, boolean isDirectory) {
+		this.name = name;
+		this.isDirectory = isDirectory;
+		this.itemStack = new ItemStack(block, 1, itemDamage);
 	}
 
 	public String getName() {
 		return this.name;
 	}
 
-	public int getItemID() {
-		return this.itemID;
+	public Item getItem() {
+		return this.itemStack.getItem();
 	}
 
 	public int getItemDamage() {
-		return this.itemDamage;
+		return this.itemStack.getItemDamage();
 	}
 
 	public boolean isDirectory() {

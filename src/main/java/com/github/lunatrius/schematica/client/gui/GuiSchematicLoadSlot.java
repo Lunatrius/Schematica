@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 public class GuiSchematicLoadSlot extends GuiSlot {
-	private final Settings settings = Settings.instance();
+	private final Settings settings = Settings.instance;
 	private final FontRenderer fontRenderer = this.settings.minecraft.fontRenderer;
 	private final TextureManager renderEngine = this.settings.minecraft.renderEngine;
 
@@ -21,7 +21,7 @@ public class GuiSchematicLoadSlot extends GuiSlot {
 	protected int selectedIndex = -1;
 
 	public GuiSchematicLoadSlot(GuiSchematicLoad guiSchematicLoad) {
-		super(Settings.instance().minecraft, guiSchematicLoad.width, guiSchematicLoad.height, 16, guiSchematicLoad.height - 40, 24);
+		super(Settings.instance.minecraft, guiSchematicLoad.width, guiSchematicLoad.height, 16, guiSchematicLoad.height - 40, 24);
 		this.guiSchematicLoad = guiSchematicLoad;
 	}
 
@@ -31,7 +31,7 @@ public class GuiSchematicLoadSlot extends GuiSlot {
 	}
 
 	@Override
-	protected void elementClicked(int index, boolean par2) {
+	protected void elementClicked(int index, boolean par2, int par3, int par4) {
 		GuiSchematicEntry schematic = this.guiSchematicLoad.schematicFiles.get(index);
 		if (schematic.isDirectory()) {
 			this.guiSchematicLoad.changeDirectory(schematic.getName());
@@ -55,7 +55,7 @@ public class GuiSchematicLoadSlot extends GuiSlot {
 	}
 
 	@Override
-	protected void drawSlot(int index, int x, int y, int par4, Tessellator tessellator) {
+	protected void drawSlot(int index, int x, int y, int par4, Tessellator tessellator, int par6, int par7) {
 		if (index < 0 || index >= this.guiSchematicLoad.schematicFiles.size()) {
 			return;
 		}

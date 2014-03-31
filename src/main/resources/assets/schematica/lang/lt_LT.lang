@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Atidaryti schemø aplankà
 schematica.gui.done=Baigta
 schematica.gui.title=Pasirinkite schemos failà
@@ -28,6 +29,8 @@ schematica.gui.materialname=Medþiaga
 schematica.gui.materialamount=Kiekis
 # schematica.gui.printer=Printer
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=Atidaryti schemà
 schematica.key.save=Iðsaugoti schemà
 schematica.key.control=Manipuliuoti schemà

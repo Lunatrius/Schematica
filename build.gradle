@@ -27,9 +27,22 @@ configFile.withReader {
 
 ext.build = System.getenv().BUILD_NUMBER ?: "dev"
 
-group = "com.github.lunatrius.${config.mod.package}"
+group = "com.github.lunatrius"
 version = "${config.version.major}.${config.version.minor}.${config.version.micro}.${build}"
 archivesBaseName = "[${config.version.minecraft}]${config.mod.id}"
+
+repositories {
+    ivy {
+        url "http://mc.lunatri.us/files/mods/forge"
+        layout "pattern", {
+            artifact "[module]/%5B${config.version.minecraft}%5D[module]-universal-[revision]-deobf(.[ext])"
+        }
+    }
+}
+
+dependencies {
+    compile group: group, name: "LunatriusCore", version: "${config.version.lunatriuscore}"
+}
 
 minecraft {
     version = "${config.version.minecraft}-${config.version.forge}"
@@ -48,7 +61,8 @@ processResources {
         expand (["modid": config.mod.id,
             "version": version,
             "mcversion": config.version.minecraft,
-            "forgeversion": config.version.forge
+            "forgeversion": config.version.forge,
+            "coreversion": config.version.lunatriuscore
         ])
     }
 

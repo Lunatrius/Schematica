@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Відкрити папку з технологічними схемами
 schematica.gui.done=Готово
 schematica.gui.title=вибррати файл технологічної схеми
@@ -28,6 +29,8 @@ schematica.gui.materialname=Матеріал
 schematica.gui.materialamount=кількість
 schematica.gui.printer=Принтер
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=завантажити технологічну схему
 schematica.key.save=Зберегти технологічну схему
 schematica.key.control=маніпулювати технологічною схемою схемою

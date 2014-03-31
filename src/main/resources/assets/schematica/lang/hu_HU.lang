@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Klisé könyvtár megnyitása
 schematica.gui.done=Kész
 schematica.gui.title=Klisé megnyitása
@@ -28,6 +29,8 @@ schematica.gui.materialname=Anyag
 schematica.gui.materialamount=Mennyiség
 schematica.gui.printer=Nyomtató
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=Klisé betöltése
 schematica.key.save=Klisé mentése
 schematica.key.control=Klisé módosítása

@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Şematik klasörünü aç
 schematica.gui.done=Tamam
 schematica.gui.title=Şematik dosyasını seçin
@@ -28,6 +29,8 @@ schematica.gui.materialname=Malzeme
 schematica.gui.materialamount=Miktar
 schematica.gui.printer=Yazıcı
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=Şematiki yükle
 schematica.key.save=Şematiki kaydet
 schematica.key.control=Şematiki işleyin

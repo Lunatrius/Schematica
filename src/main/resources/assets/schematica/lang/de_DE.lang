@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Öffne Schematic-Ordner
 schematica.gui.done=Fertig
 schematica.gui.title=Wähle Schematic-Datei
@@ -28,6 +29,8 @@ schematica.gui.materialname=Material
 schematica.gui.materialamount=Menge
 schematica.gui.printer=Drucker
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=Schematic laden
 schematica.key.save=Schematic speichern
 schematica.key.control=Schematic verändern

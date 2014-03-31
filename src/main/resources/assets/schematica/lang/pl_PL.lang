@@ -1,3 +1,4 @@
+# GUI
 schematica.gui.openFolder=Otworz folder z schematami
 schematica.gui.done=Gotowe
 schematica.gui.title=Wybierz plik schematu
@@ -28,6 +29,8 @@ schematica.gui.materials=Materialy
 schematica.gui.materialamount=Ilosc
 schematica.gui.printer=Drukarka
 
+# Keys
+# schematica.key.category=Schematica
 schematica.key.load=Ladowanie schematu
 schematica.key.save=Zapisywanie schematu
 schematica.key.control=Manipulacja schematem
