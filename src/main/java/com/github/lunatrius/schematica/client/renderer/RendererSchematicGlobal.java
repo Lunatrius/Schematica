@@ -1,7 +1,10 @@
 package com.github.lunatrius.schematica.client.renderer;
 
+import com.github.lunatrius.schematica.SchematicWorld;
+import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.Settings;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.culling.Frustrum;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,6 +17,7 @@ import org.lwjgl.util.vector.Vector3f;
 import java.util.Collections;
 
 public class RendererSchematicGlobal {
+	private final Minecraft minecraft = Minecraft.getMinecraft();
 	private final Settings settings = Settings.instance;
 	private final Profiler profiler = this.settings.minecraft.mcProfiler;
 
@@ -22,24 +26,23 @@ public class RendererSchematicGlobal {
 
 	@SubscribeEvent
 	public void onRender(RenderWorldLastEvent event) {
-		if (this.settings.minecraft != null) {
-			EntityPlayerSP player = this.settings.minecraft.thePlayer;
-			if (player != null) {
-				this.settings.playerPosition.x = (float) (player.lastTickPosX + (player.posX - player.lastTickPosX) * event.partialTicks);
-				this.settings.playerPosition.y = (float) (player.lastTickPosY + (player.posY - player.lastTickPosY) * event.partialTicks);
-				this.settings.playerPosition.z = (float) (player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.partialTicks);
+		EntityPlayerSP player = this.minecraft.thePlayer;
+		if (player != null) {
+			this.settings.playerPosition.x = (float) (player.lastTickPosX + (player.posX - player.lastTickPosX) * event.partialTicks);
+			this.settings.playerPosition.y = (float) (player.lastTickPosY + (player.posY - player.lastTickPosY) * event.partialTicks);
+			this.settings.playerPosition.z = (float) (player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.partialTicks);
 
-				this.settings.rotationRender = MathHelper.floor_double(player.rotationYaw / 90) & 3;
+			this.settings.rotationRender = MathHelper.floor_double(player.rotationYaw / 90) & 3;
 
-				this.settings.orientation = getOrientation(player);
+			this.settings.orientation = getOrientation(player);
 
-				this.profiler.startSection("schematica");
-				if (this.settings.isRenderingSchematic || this.settings.isRenderingGuide) {
-					render();
-				}
-
-				this.profiler.endSection();
+			this.profiler.startSection("schematica");
+			SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+			if ((schematic != null && schematic.isRendering()) || this.settings.isRenderingGuide) {
+				render(schematic);
 			}
+
+			this.profiler.endSection();
 		}
 	}
 
@@ -64,7 +67,7 @@ public class RendererSchematicGlobal {
 		return 0;
 	}
 
-	private void render() {
+	public void render(SchematicWorld schematic) {
 		GL11.glPushMatrix();
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -72,7 +75,7 @@ public class RendererSchematicGlobal {
 		GL11.glTranslatef(-this.settings.getTranslationX(), -this.settings.getTranslationY(), -this.settings.getTranslationZ());
 
 		this.profiler.startSection("schematic");
-		if (this.settings.isRenderingSchematic) {
+		if (schematic.isRendering()) {
 			this.profiler.startSection("updateFrustrum");
 			updateFrustrum();
 
@@ -96,8 +99,8 @@ public class RendererSchematicGlobal {
 		RenderHelper.createBuffers();
 
 		this.profiler.startSection("dataPrep");
-		if (this.settings.isRenderingSchematic) {
-			RenderHelper.drawCuboidOutline(RenderHelper.VEC_ZERO, this.settings.schematic.dimensions(), RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
+		if (schematic.isRendering()) {
+			RenderHelper.drawCuboidOutline(RenderHelper.VEC_ZERO, Schematica.proxy.getActiveSchematic().dimensions(), RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
 		}
 
 		if (this.settings.isRenderingGuide) {

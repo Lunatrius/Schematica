@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.client.gui;
 
 import com.github.lunatrius.schematica.Settings;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiSlot;
@@ -12,16 +13,15 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 class GuiSchematicMaterialsSlot extends GuiSlot {
-	private final Settings settings = Settings.instance;
-	private final FontRenderer fontRenderer = this.settings.minecraft.fontRenderer;
-	private final TextureManager renderEngine = this.settings.minecraft.renderEngine;
+	private final FontRenderer fontRenderer = Settings.instance.minecraft.fontRenderer;
+	private final TextureManager renderEngine = Settings.instance.minecraft.renderEngine;
 
 	private final GuiSchematicMaterials guiSchematicMaterials;
 
 	protected int selectedIndex = -1;
 
 	public GuiSchematicMaterialsSlot(GuiSchematicMaterials par1) {
-		super(Settings.instance.minecraft, par1.width, par1.height, 16, par1.height - 34, 24);
+		super(Minecraft.getMinecraft(), par1.width, par1.height, 16, par1.height - 34, 24);
 		this.guiSchematicMaterials = par1;
 		this.selectedIndex = -1;
 	}

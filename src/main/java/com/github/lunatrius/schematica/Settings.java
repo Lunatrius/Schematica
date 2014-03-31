@@ -1,8 +1,5 @@
 package com.github.lunatrius.schematica;
 
-import com.github.lunatrius.schematica.client.gui.GuiSchematicControl;
-import com.github.lunatrius.schematica.client.gui.GuiSchematicLoad;
-import com.github.lunatrius.schematica.client.gui.GuiSchematicSave;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
 import com.github.lunatrius.schematica.lib.Reference;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
@@ -10,12 +7,10 @@ import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCache;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.io.File;
@@ -27,12 +22,6 @@ import java.util.List;
 public class Settings {
 	public static final Settings instance = new Settings();
 
-	public KeyBinding[] keyBindings = new KeyBinding[] {
-			new KeyBinding("schematica.key.load", Keyboard.KEY_DIVIDE, "schematica.key.category"),
-			new KeyBinding("schematica.key.save", Keyboard.KEY_MULTIPLY, "schematica.key.category"),
-			new KeyBinding("schematica.key.control", Keyboard.KEY_SUBTRACT, "schematica.key.category")
-	};
-
 	public static final File SCHEMATIC_DIRECTORY = new File(Minecraft.getMinecraft().mcDataDir, "/schematics/");
 	public static final File TEXTURE_DIRECTORY = new File(Minecraft.getMinecraft().mcDataDir, "/resources/mod/schematica/");
 	public static final RenderItem renderItem = new RenderItem();
@@ -40,7 +29,6 @@ public class Settings {
 	private final Vector3f translationVector = new Vector3f();
 	public Minecraft minecraft = Minecraft.getMinecraft();
 	public ChunkCache mcWorldCache = null;
-	public SchematicWorld schematic = null;
 	public Vector3f playerPosition = new Vector3f();
 	public RendererSchematicChunk[][][] rendererSchematicChunk = null;
 	public final List<RendererSchematicChunk> sortedRendererSchematicChunk = new ArrayList<RendererSchematicChunk>();
@@ -52,8 +40,6 @@ public class Settings {
 	public int rotationRender = 0;
 	public int orientation = 0;
 	public Vector3f offset = new Vector3f();
-	public boolean isRenderingSchematic = false;
-	public int renderingLayer = -1;
 	public boolean isRenderingGuide = false;
 	public int chatLines = 0;
 	public boolean isPrinterEnabled = true;
@@ -72,45 +58,18 @@ public class Settings {
 		this.isPrinterEnabled = true;
 		this.isSaveEnabled = true;
 		this.isLoadEnabled = true;
-		this.isRenderingSchematic = false;
 		this.isRenderingGuide = false;
-		this.schematic = null;
+		Schematica.proxy.setActiveSchematic(null);
 		this.renderBlocks = null;
 		this.rendererSchematicChunk = null;
 		this.mcWorldCache = null;
 	}
 
-	public void keyboardEvent(KeyBinding keybinding) {
-		if (this.minecraft.currentScreen == null) {
-			for (int i = 0; i < this.keyBindings.length; i++) {
-				if (keybinding == this.keyBindings[i]) {
-					keyboardEvent(i);
-					break;
-				}
-			}
-		}
-	}
-
-	public void keyboardEvent(int key) {
-		switch (key) {
-		case 0:
-			this.minecraft.displayGuiScreen(new GuiSchematicLoad(this.minecraft.currentScreen));
-			break;
-
-		case 1:
-			this.minecraft.displayGuiScreen(new GuiSchematicSave(this.minecraft.currentScreen));
-			break;
-
-		case 2:
-			this.minecraft.displayGuiScreen(new GuiSchematicControl(this.minecraft.currentScreen));
-			break;
-		}
-	}
-
 	public void createRendererSchematicChunk() {
-		int width = (this.schematic.getWidth() - 1) / RendererSchematicChunk.CHUNK_WIDTH + 1;
-		int height = (this.schematic.getHeight() - 1) / RendererSchematicChunk.CHUNK_HEIGHT + 1;
-		int length = (this.schematic.getLength() - 1) / RendererSchematicChunk.CHUNK_LENGTH + 1;
+		SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+		int width = (schematic.getWidth() - 1) / RendererSchematicChunk.CHUNK_WIDTH + 1;
+		int height = (schematic.getHeight() - 1) / RendererSchematicChunk.CHUNK_HEIGHT + 1;
+		int length = (schematic.getLength() - 1) / RendererSchematicChunk.CHUNK_LENGTH + 1;
 
 		this.rendererSchematicChunk = new RendererSchematicChunk[width][height][length];
 
@@ -122,7 +81,7 @@ public class Settings {
 		for (x = 0; x < width; x++) {
 			for (y = 0; y < height; y++) {
 				for (z = 0; z < length; z++) {
-					this.sortedRendererSchematicChunk.add(this.rendererSchematicChunk[x][y][z] = new RendererSchematicChunk(this.schematic, x, y, z));
+					this.sortedRendererSchematicChunk.add(this.rendererSchematicChunk[x][y][z] = new RendererSchematicChunk(schematic, x, y, z));
 				}
 			}
 		}
@@ -136,15 +95,16 @@ public class Settings {
 			if (tagCompound != null) {
 				Reference.logger.info(tagCompound);
 
-				this.schematic = SchematicFormat.readFromFile(new File(filename));
+				SchematicWorld schematic = SchematicFormat.readFromFile(new File(filename));
+				Schematica.proxy.setActiveSchematic(schematic);
 
-				Reference.logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", filename, this.schematic.getWidth(), this.schematic.getHeight(), this.schematic.getLength()));
+				Reference.logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", filename, schematic.getWidth(), schematic.getHeight(), schematic.getLength()));
 
-				this.renderBlocks = new RenderBlocks(this.schematic);
+				this.renderBlocks = new RenderBlocks(schematic);
 
 				createRendererSchematicChunk();
 
-				this.isRenderingSchematic = true;
+				schematic.setRendering(true);
 			}
 		} catch (Exception e) {
 			Reference.logger.fatal("Failed to load schematic!", e);
@@ -278,19 +238,20 @@ public class Settings {
 		this.offset.y = (int) Math.floor(this.playerPosition.y) - 1;
 		this.offset.z = (int) Math.floor(this.playerPosition.z);
 
-		if (this.schematic != null) {
+		SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+		if (schematic != null) {
 			switch (this.rotationRender) {
 			case 0:
-				this.offset.x -= this.schematic.getWidth();
+				this.offset.x -= schematic.getWidth();
 				this.offset.z += 1;
 				break;
 			case 1:
-				this.offset.x -= this.schematic.getWidth();
-				this.offset.z -= this.schematic.getLength();
+				this.offset.x -= schematic.getWidth();
+				this.offset.z -= schematic.getLength();
 				break;
 			case 2:
 				this.offset.x += 1;
-				this.offset.z -= this.schematic.getLength();
+				this.offset.z -= schematic.getLength();
 				break;
 			case 3:
 				this.offset.x += 1;
@@ -302,28 +263,11 @@ public class Settings {
 		}
 	}
 
-	public void toggleRendering() {
-		this.isRenderingSchematic = !this.isRenderingSchematic && (this.schematic != null);
-	}
-
 	public void reloadChunkCache() {
-		if (this.schematic != null) {
-			this.mcWorldCache = new ChunkCache(this.minecraft.theWorld, (int) this.offset.x - 1, (int) this.offset.y - 1, (int) this.offset.z - 1, (int) this.offset.x + this.schematic.getWidth() + 1, (int) this.offset.y + this.schematic.getHeight() + 1, (int) this.offset.z + this.schematic.getLength() + 1, 0);
+		SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+		if (schematic != null) {
+			this.mcWorldCache = new ChunkCache(this.minecraft.theWorld, (int) this.offset.x - 1, (int) this.offset.y - 1, (int) this.offset.z - 1, (int) this.offset.x + schematic.getWidth() + 1, (int) this.offset.y + schematic.getHeight() + 1, (int) this.offset.z + schematic.getLength() + 1, 0);
 			refreshSchematic();
-		}
-	}
-
-	public void flipWorld() {
-		if (this.schematic != null) {
-			this.schematic.flip();
-			createRendererSchematicChunk();
-		}
-	}
-
-	public void rotateWorld() {
-		if (this.schematic != null) {
-			this.schematic.rotate();
-			createRendererSchematicChunk();
 		}
 	}
 }

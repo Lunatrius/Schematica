@@ -4,6 +4,7 @@ import com.github.lunatrius.schematica.config.Config;
 import com.google.common.base.Throwables;
 import org.apache.logging.log4j.Logger;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -34,4 +35,5 @@ public class Reference {
 
 	public static Logger logger = null;
 	public static Config config = null;
+	public static File schematicDirectory = new File(".", "schematics");
 }

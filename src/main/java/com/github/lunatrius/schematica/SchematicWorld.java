@@ -21,6 +21,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntitySkull;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
@@ -40,6 +41,10 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SchematicWorld extends World {
+	public class SchematicWorldRendererData {
+		public boolean foobar;
+	}
+
 	// private static final AnvilSaveHandler SAVE_HANDLER = new AnvilSaveHandler(Minecraft.getMinecraft().mcDataDir, "tmp/schematica", false);
 	private static final WorldSettings WORLD_SETTINGS = new WorldSettings(0, WorldSettings.GameType.CREATIVE, false, false, WorldType.FLAT);
 	private static final Comparator<ItemStack> BLOCK_COMPARATOR = new Comparator<ItemStack>() {
@@ -51,7 +56,6 @@ public class SchematicWorld extends World {
 
 	public static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.grass);
 
-	private final Settings settings = Settings.instance;
 	private ItemStack icon;
 	private short[][][] blocks;
 	private byte[][][] metadata;
@@ -60,6 +64,9 @@ public class SchematicWorld extends World {
 	private short width;
 	private short length;
 	private short height;
+
+	private boolean isRendering;
+	private int renderingLayer;
 
 	public SchematicWorld() {
 		// TODO: revert if any issues arise
@@ -71,6 +78,9 @@ public class SchematicWorld extends World {
 		this.width = 0;
 		this.length = 0;
 		this.height = 0;
+
+		this.isRendering = false;
+		this.renderingLayer = -1;
 	}
 
 	public SchematicWorld(ItemStack icon, short[][][] blocks, byte[][][] metadata, List<TileEntity> tileEntities, short width, short height, short length) {
@@ -241,17 +251,18 @@ public class SchematicWorld extends World {
 		if (x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length) {
 			return 0;
 		}
-		return (this.blocks[x][y][z]) & 0xFFF;
+		return this.blocks[x][y][z];
 	}
 
 	private int getBlockId(int x, int y, int z) {
-		if (x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length) {
+		if (getRenderingLayer() != -1 && getRenderingLayer() != y) {
 			return 0;
 		}
-		if (this.settings.renderingLayer != -1 && this.settings.renderingLayer != y) {
-			return 0;
-		}
-		return (this.blocks[x][y][z]) & 0xFFF;
+		return getBlockIdRaw(x, y, z);
+	}
+
+	public Block getBlockRaw(int x, int y, int z) {
+		return GameData.blockRegistry.get(getBlockIdRaw(x, y, z));
 	}
 
 	@Override
@@ -392,6 +403,35 @@ public class SchematicWorld extends World {
 
 	public List<ItemStack> getBlockList() {
 		return this.blockList;
+	}
+
+	public boolean toggleRendering() {
+		this.isRendering = !this.isRendering;
+		return this.isRendering;
+	}
+
+	public boolean isRendering() {
+		return this.isRendering;
+	}
+
+	public void setRendering(boolean isRendering) {
+		this.isRendering = isRendering;
+	}
+
+	public int getRenderingLayer() {
+		return this.renderingLayer;
+	}
+
+	public void setRenderingLayer(int renderingLayer) {
+		this.renderingLayer = renderingLayer;
+	}
+
+	public void decrementRenderingLayer() {
+		this.renderingLayer = MathHelper.clamp_int(this.renderingLayer - 1, -1, getHeight() - 1);
+	}
+
+	public void incrementRenderingLayer() {
+		this.renderingLayer = MathHelper.clamp_int(this.renderingLayer + 1, -1, getHeight() - 1);
 	}
 
 	public void refreshChests() {

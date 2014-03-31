@@ -1,6 +1,5 @@
 package com.github.lunatrius.schematica.client.renderer;
 
-import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.lib.Reference;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Vector3f;
@@ -31,8 +30,6 @@ public class RenderHelper {
 	public static final int LINE_ALL = LINE_DOWN_WEST | LINE_UP_WEST | LINE_DOWN_EAST | LINE_UP_EAST | LINE_DOWN_NORTH | LINE_UP_NORTH | LINE_DOWN_SOUTH | LINE_UP_SOUTH | LINE_NORTH_WEST | LINE_NORTH_EAST | LINE_SOUTH_WEST | LINE_SOUTH_EAST;
 
 	public static final Vector3f VEC_ZERO = new Vector3f(0, 0, 0);
-
-	private static final Settings settings = Settings.instance;
 
 	private static int quadSize = 0;
 	private static float[] quadVertexBuffer = null;

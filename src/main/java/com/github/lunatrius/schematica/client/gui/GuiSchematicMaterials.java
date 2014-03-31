@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.client.gui;
 
-import com.github.lunatrius.schematica.Settings;
+import com.github.lunatrius.schematica.SchematicWorld;
+import com.github.lunatrius.schematica.Schematica;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -22,8 +23,9 @@ public class GuiSchematicMaterials extends GuiScreen {
 
 	public GuiSchematicMaterials(GuiScreen guiScreen) {
 		this.prevGuiScreen = guiScreen;
-		if (Settings.instance.schematic != null) {
-			this.blockList = Settings.instance.schematic.getBlockList();
+		SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+		if (schematic != null) {
+			this.blockList = schematic.getBlockList();
 		} else {
 			this.blockList = new ArrayList<ItemStack>();
 		}

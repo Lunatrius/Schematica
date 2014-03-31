@@ -1,5 +1,6 @@
-package com.github.lunatrius.schematica;
+package com.github.lunatrius.schematica.client.events;
 
+import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.lib.Reference;
 import com.github.lunatrius.schematica.lib.Strings;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

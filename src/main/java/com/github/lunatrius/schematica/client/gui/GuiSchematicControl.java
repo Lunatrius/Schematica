@@ -1,15 +1,18 @@
 package com.github.lunatrius.schematica.client.gui;
 
+import com.github.lunatrius.schematica.SchematicWorld;
+import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.Settings;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.MathHelper;
 
 public class GuiSchematicControl extends GuiScreen {
 	private final Settings settings = Settings.instance;
 	@SuppressWarnings("unused")
 	private final GuiScreen prevGuiScreen;
+
+	private final SchematicWorld schematic;
 
 	private int centerX = 0;
 	private int centerY = 0;
@@ -53,6 +56,7 @@ public class GuiSchematicControl extends GuiScreen {
 
 	public GuiSchematicControl(GuiScreen guiScreen) {
 		this.prevGuiScreen = guiScreen;
+		this.schematic = Schematica.proxy.getActiveSchematic();
 	}
 
 	@Override
@@ -97,7 +101,7 @@ public class GuiSchematicControl extends GuiScreen {
 		this.btnIncLayer = new GuiButton(id++, this.width - 35, this.height - 150, 25, 20, I18n.format("schematica.gui.increase"));
 		this.buttonList.add(this.btnIncLayer);
 
-		this.btnHide = new GuiButton(id++, this.width - 90, this.height - 105, 80, 20, I18n.format(this.settings.isRenderingSchematic ? "schematica.gui.hide" : "schematica.gui.show"));
+		this.btnHide = new GuiButton(id++, this.width - 90, this.height - 105, 80, 20, I18n.format(this.schematic != null && this.schematic.isRendering() ? "schematica.gui.hide" : "schematica.gui.show"));
 		this.buttonList.add(this.btnHide);
 
 		this.btnMove = new GuiButton(id++, this.width - 90, this.height - 80, 80, 20, I18n.format("schematica.gui.movehere"));
@@ -115,15 +119,15 @@ public class GuiSchematicControl extends GuiScreen {
 		this.btnPrint = new GuiButton(id++, 10, this.height - 30, 80, 20, I18n.format(this.settings.isPrinting ? "schematica.gui.disable" : "schematica.gui.enable"));
 		this.buttonList.add(this.btnPrint);
 
-		this.btnDecLayer.enabled = this.settings.schematic != null;
-		this.btnIncLayer.enabled = this.settings.schematic != null;
-		this.btnHide.enabled = this.settings.schematic != null;
-		this.btnMove.enabled = this.settings.schematic != null;
+		this.btnDecLayer.enabled = this.schematic != null;
+		this.btnIncLayer.enabled = this.schematic != null;
+		this.btnHide.enabled = this.schematic != null;
+		this.btnMove.enabled = this.schematic != null;
 		// this.btnFlip.enabled = this.settings.schematic != null;
 		this.btnFlip.enabled = false;
-		this.btnRotate.enabled = this.settings.schematic != null;
-		this.btnMaterials.enabled = this.settings.schematic != null;
-		this.btnPrint.enabled = this.settings.schematic != null && this.settings.isPrinterEnabled;
+		this.btnRotate.enabled = this.schematic != null;
+		this.btnMaterials.enabled = this.schematic != null;
+		this.btnPrint.enabled = this.schematic != null && this.settings.isPrinterEnabled;
 	}
 
 	@Override
@@ -157,30 +161,33 @@ public class GuiSchematicControl extends GuiScreen {
 				this.incrementZ = (this.incrementZ + 1) % this.settings.increments.length;
 				this.btnAmountZ.displayString = Integer.toString(this.settings.increments[this.incrementZ]);
 			} else if (guiButton.id == this.btnDecLayer.id) {
-				if (this.settings.schematic != null) {
-					this.settings.renderingLayer = MathHelper.clamp_int(this.settings.renderingLayer - 1, -1, this.settings.schematic.getHeight() - 1);
-				} else {
-					this.settings.renderingLayer = -1;
+				if (this.schematic != null) {
+					this.schematic.decrementRenderingLayer();
 				}
 				this.settings.refreshSchematic();
 			} else if (guiButton.id == this.btnIncLayer.id) {
-				if (this.settings.schematic != null) {
-					this.settings.renderingLayer = MathHelper.clamp_int(this.settings.renderingLayer + 1, -1, this.settings.schematic.getHeight() - 1);
-				} else {
-					this.settings.renderingLayer = -1;
+				if (this.schematic != null) {
+					this.schematic.incrementRenderingLayer();
 				}
 				this.settings.refreshSchematic();
 			} else if (guiButton.id == this.btnHide.id) {
-				this.settings.toggleRendering();
-				this.btnHide.displayString = I18n.format(this.settings.isRenderingSchematic ? "schematica.gui.hide" : "schematica.gui.show");
+				this.btnHide.displayString = I18n.format(this.schematic != null && this.schematic.toggleRendering() ? "schematica.gui.hide" : "schematica.gui.show");
 			} else if (guiButton.id == this.btnMove.id) {
 				this.settings.moveHere();
 			} else if (guiButton.id == this.btnFlip.id) {
-				this.settings.flipWorld();
+				SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+				if (schematic != null) {
+					schematic.flip();
+					this.settings.createRendererSchematicChunk();
+				}
 			} else if (guiButton.id == this.btnRotate.id) {
-				this.settings.rotateWorld();
+				SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+				if (schematic != null) {
+					schematic.rotate();
+					this.settings.createRendererSchematicChunk();
+				}
 			} else if (guiButton.id == this.btnMaterials.id) {
-				this.settings.minecraft.displayGuiScreen(new GuiSchematicMaterials(this));
+				this.mc.displayGuiScreen(new GuiSchematicMaterials(this));
 			} else if (guiButton.id == this.btnPrint.id && this.settings.isPrinterEnabled) {
 				this.settings.isPrinting = !this.settings.isPrinting;
 				this.btnPrint.displayString = I18n.format(this.settings.isPrinting ? "schematica.gui.disable" : "schematica.gui.enable");
@@ -198,7 +205,8 @@ public class GuiSchematicControl extends GuiScreen {
 		drawCenteredString(this.fontRendererObj, this.strLayers, this.width - 50, this.height - 165, 0xFFFFFF);
 		drawCenteredString(this.fontRendererObj, this.strOperations, this.width - 50, this.height - 120, 0xFFFFFF);
 
-		drawCenteredString(this.fontRendererObj, this.settings.renderingLayer < 0 ? this.strAll : Integer.toString(this.settings.renderingLayer + 1), this.width - 50, this.height - 145, 0xFFFFFF);
+		int renderingLayer = this.schematic != null ? this.schematic.getRenderingLayer() : -1;
+		drawCenteredString(this.fontRendererObj, renderingLayer < 0 ? this.strAll : Integer.toString(renderingLayer + 1), this.width - 50, this.height - 145, 0xFFFFFF);
 
 		drawString(this.fontRendererObj, this.strX, this.centerX - 65, this.centerY - 24, 0xFFFFFF);
 		drawString(this.fontRendererObj, Integer.toString((int) this.settings.offset.x), this.centerX + 55, this.centerY - 24, 0xFFFFFF);

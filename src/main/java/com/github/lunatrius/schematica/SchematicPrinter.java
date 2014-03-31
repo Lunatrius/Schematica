@@ -25,35 +25,40 @@ public class SchematicPrinter {
 
 	private final Settings settings = Settings.instance;
 
+	private boolean isEnabled;
+	private boolean isPrinting;
+
 	public boolean print() {
 		int minX, maxX, minY, maxY, minZ, maxZ, x, y, z, wx, wy, wz, blockMetadata, slot;
 		Block blockId;
 		boolean isSneaking;
 		EntityClientPlayerMP player = this.settings.minecraft.thePlayer;
 		World world = this.settings.minecraft.theWorld;
+		SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
 
 		syncSneaking(player, true);
 
 		minX = Math.max(0, (int) this.settings.getTranslationX() - 3);
-		maxX = Math.min(this.settings.schematic.getWidth(), (int) this.settings.getTranslationX() + 3);
+		maxX = Math.min(schematic.getWidth(), (int) this.settings.getTranslationX() + 3);
 		minY = Math.max(0, (int) this.settings.getTranslationY() - 3);
-		maxY = Math.min(this.settings.schematic.getHeight(), (int) this.settings.getTranslationY() + 3);
+		maxY = Math.min(schematic.getHeight(), (int) this.settings.getTranslationY() + 3);
 		minZ = Math.max(0, (int) this.settings.getTranslationZ() - 3);
-		maxZ = Math.min(this.settings.schematic.getLength(), (int) this.settings.getTranslationZ() + 3);
+		maxZ = Math.min(schematic.getLength(), (int) this.settings.getTranslationZ() + 3);
 
 		slot = player.inventory.currentItem;
 		isSneaking = player.isSneaking();
 
+		int renderingLayer = schematic.getRenderingLayer();
 		for (y = minY; y <= maxY; y++) {
-			if (this.settings.renderingLayer >= 0) {
-				if (y != this.settings.renderingLayer) {
+			if (renderingLayer >= 0) {
+				if (y != renderingLayer) {
 					continue;
 				}
 			}
 
 			for (x = minX; x <= maxX; x++) {
 				for (z = minZ; z <= maxZ; z++) {
-					blockId = this.settings.schematic.getBlock(x, y, z);
+					blockId = schematic.getBlock(x, y, z);
 
 					wx = (int) this.settings.offset.x + x;
 					wy = (int) this.settings.offset.y + y;
@@ -64,7 +69,7 @@ public class SchematicPrinter {
 						continue;
 					}
 
-					blockMetadata = this.settings.schematic.getBlockMetadata(x, y, z);
+					blockMetadata = schematic.getBlockMetadata(x, y, z);
 					if (placeBlock(this.settings.minecraft, world, player, wx, wy, wz, getMappedId(blockId), blockMetadata)) {
 						if (!Reference.config.placeInstantly) {
 							player.inventory.currentItem = slot;
