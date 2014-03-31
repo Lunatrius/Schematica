@@ -22,8 +22,6 @@ import java.util.List;
 public class Settings {
 	public static final Settings instance = new Settings();
 
-	public static final File SCHEMATIC_DIRECTORY = new File(Minecraft.getMinecraft().mcDataDir, "/schematics/");
-	public static final File TEXTURE_DIRECTORY = new File(Minecraft.getMinecraft().mcDataDir, "/resources/mod/schematica/");
 	public static final RenderItem renderItem = new RenderItem();
 
 	private final Vector3f translationVector = new Vector3f();

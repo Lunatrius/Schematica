@@ -32,7 +32,7 @@ public class GuiSchematicLoad extends GuiScreen {
 	private final String strTitle = I18n.format("schematica.gui.title");
 	private final String strFolderInfo = I18n.format("schematica.gui.folderInfo");
 
-	protected File currentDirectory = Settings.SCHEMATIC_DIRECTORY;
+	protected File currentDirectory = Reference.schematicDirectory;
 	protected final List<GuiSchematicEntry> schematicFiles = new ArrayList<GuiSchematicEntry>();
 
 	public GuiSchematicLoad(GuiScreen guiScreen) {
@@ -63,14 +63,14 @@ public class GuiSchematicLoad extends GuiScreen {
 				try {
 					Class c = Class.forName("java.awt.Desktop");
 					Object m = c.getMethod("getDesktop").invoke(null);
-					c.getMethod("browse", URI.class).invoke(m, Settings.SCHEMATIC_DIRECTORY.toURI());
+					c.getMethod("browse", URI.class).invoke(m, Reference.schematicDirectory.toURI());
 				} catch (Throwable e) {
 					success = true;
 				}
 
 				if (success) {
 					Reference.logger.info("Opening via Sys class!");
-					Sys.openURL("file://" + Settings.SCHEMATIC_DIRECTORY.getAbsolutePath());
+					Sys.openURL("file://" + Reference.schematicDirectory.getAbsolutePath());
 				}
 			} else if (guiButton.id == this.btnDone.id) {
 				if (this.settings.isLoadEnabled) {
@@ -111,7 +111,7 @@ public class GuiSchematicLoad extends GuiScreen {
 		this.schematicFiles.clear();
 
 		try {
-			if (!this.currentDirectory.getCanonicalPath().equals(Settings.SCHEMATIC_DIRECTORY.getCanonicalPath())) {
+			if (!this.currentDirectory.getCanonicalPath().equals(Reference.schematicDirectory.getCanonicalPath())) {
 				this.schematicFiles.add(new GuiSchematicEntry("..", Items.lava_bucket, 0, true));
 			}
 		} catch (IOException e) {
