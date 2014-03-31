@@ -1,9 +1,7 @@
 package com.github.lunatrius.schematica.config;
 
 import com.github.lunatrius.core.config.Configuration;
-import com.google.common.base.Joiner;
 import net.minecraft.block.Block;
-import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Property;
 
 import java.io.File;

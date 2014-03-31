@@ -10,16 +10,14 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.MinecraftForge;
@@ -27,14 +25,17 @@ import net.minecraftforge.common.MinecraftForge;
 import java.io.File;
 import java.lang.reflect.Field;
 
-@Mod(modid = "Schematica")
+@Mod(modid = Reference.MODID, name = Reference.NAME)
 public class Schematica {
 	private final Settings settings = Settings.instance;
 	private final Profiler profiler = this.settings.minecraft.mcProfiler;
 	private int ticks = -1;
 
-	@Instance("Schematica")
+	@Instance(Reference.MODID)
 	public static Schematica instance;
+
+	@SidedProxy(serverSide = Reference.PROXY_COMMON, clientSide = Reference.PROXY_CLIENT)
+	public static CommonProxy proxy;
 
 	private Field sortedWorldRenderers = null;
 

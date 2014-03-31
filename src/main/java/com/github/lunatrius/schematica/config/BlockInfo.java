@@ -1,6 +1,5 @@
 package com.github.lunatrius.schematica.config;
 
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
