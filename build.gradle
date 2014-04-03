@@ -53,6 +53,10 @@ minecraft {
         assetDir = run_location.replace("{modid}", config.mod.id).replace("{mcversion}", config.version.minecraft) + "assets"
 }
 
+jar {
+    appendix = "universal"
+}
+
 processResources {
     from (sourceSets.main.resources.srcDirs) {
         include "mcmod.info"
@@ -110,11 +114,13 @@ task signJar(dependsOn: "reobf") {
 
 task deobfJar(type: Jar) {
     from sourceSets.main.output
+    appendix = "universal"
     classifier = "deobf"
 }
 
 task sourceJar(type: Jar) {
     from sourceSets.main.allSource
+    appendix = "universal"
     classifier = "src"
 }
 
