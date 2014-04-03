@@ -210,9 +210,6 @@ public class RendererSchematicChunk {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		this.profiler.endSection();
-
-		// TODO: remove if there are no issues
-		// this.minecraft.renderEngine.resetBoundTexture();
 	}
 
 	public void renderBlocks(int renderPass, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
@@ -220,7 +217,6 @@ public class RendererSchematicChunk {
 		RenderBlocks renderBlocks = this.settings.renderBlocks;
 
 		int x, y, z, wx, wy, wz;
-		// int blockId, mcBlockId;
 		int sides;
 		Block block, mcBlock;
 		Vector3f zero = new Vector3f();
@@ -339,7 +335,6 @@ public class RendererSchematicChunk {
 		IBlockAccess mcWorld = this.settings.mcWorldCache;
 
 		int x, y, z;
-		int mcBlockId;
 		Block mcBlock;
 
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, Reference.config.alpha);

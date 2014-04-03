@@ -41,10 +41,11 @@ public class TickHandler {
 			SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
 			if (this.minecraft.thePlayer != null && schematic != null && schematic.isRendering()) {
 				this.minecraft.mcProfiler.startSection("printer");
-				if (Settings.instance.isPrinterEnabled && Settings.instance.isPrinting && this.ticks-- < 0) {
+				SchematicPrinter printer = SchematicPrinter.INSTANCE;
+				if (printer.isEnabled() && printer.isPrinting() && this.ticks-- < 0) {
 					this.ticks = Reference.config.placeDelay;
 
-					SchematicPrinter.INSTANCE.print();
+					printer.print();
 				}
 
 				this.minecraft.mcProfiler.endStartSection("checkDirty");
@@ -56,7 +57,6 @@ public class TickHandler {
 				this.minecraft.mcProfiler.endSection();
 			}
 			this.minecraft.mcProfiler.endSection();
-
 		}
 	}
 

@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -19,7 +20,7 @@ import java.util.Collections;
 public class RendererSchematicGlobal {
 	private final Minecraft minecraft = Minecraft.getMinecraft();
 	private final Settings settings = Settings.instance;
-	private final Profiler profiler = this.settings.minecraft.mcProfiler;
+	private final Profiler profiler = this.minecraft.mcProfiler;
 
 	private final Frustrum frustrum = new Frustrum();
 	private final RendererSchematicChunkSorter rendererSchematicChunkSorter = new RendererSchematicChunkSorter();
@@ -46,25 +47,25 @@ public class RendererSchematicGlobal {
 		}
 	}
 
-	private int getOrientation(EntityPlayer player) {
-		if (player.rotationPitch < -45) {
-			return 1;
-		} else if (player.rotationPitch > 45) {
-			return 0;
+	private ForgeDirection getOrientation(EntityPlayer player) {
+		if (player.rotationPitch > 45) {
+			return ForgeDirection.DOWN;
+		} else if (player.rotationPitch < -45) {
+			return ForgeDirection.UP;
 		} else {
 			switch (MathHelper.floor_double(player.rotationYaw / 90.0 + 0.5) & 3) {
 			case 0:
-				return 2;
+				return ForgeDirection.SOUTH;
 			case 1:
-				return 5;
+				return ForgeDirection.WEST;
 			case 2:
-				return 3;
+				return ForgeDirection.NORTH;
 			case 3:
-				return 4;
+				return ForgeDirection.EAST;
 			}
 		}
 
-		return 0;
+		return ForgeDirection.UNKNOWN;
 	}
 
 	public void render(SchematicWorld schematic) {
@@ -75,7 +76,7 @@ public class RendererSchematicGlobal {
 		GL11.glTranslatef(-this.settings.getTranslationX(), -this.settings.getTranslationY(), -this.settings.getTranslationZ());
 
 		this.profiler.startSection("schematic");
-		if (schematic.isRendering()) {
+		if (schematic != null && schematic.isRendering()) {
 			this.profiler.startSection("updateFrustrum");
 			updateFrustrum();
 
@@ -99,7 +100,7 @@ public class RendererSchematicGlobal {
 		RenderHelper.createBuffers();
 
 		this.profiler.startSection("dataPrep");
-		if (schematic.isRendering()) {
+		if (schematic != null && schematic.isRendering()) {
 			RenderHelper.drawCuboidOutline(RenderHelper.VEC_ZERO, Schematica.proxy.getActiveSchematic().dimensions(), RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
 		}
 

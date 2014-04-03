@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.gui;
 
+import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.SchematicWorld;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.Settings;
@@ -13,6 +14,7 @@ public class GuiSchematicControl extends GuiScreen {
 	private final GuiScreen prevGuiScreen;
 
 	private final SchematicWorld schematic;
+	private final SchematicPrinter printer;
 
 	private int centerX = 0;
 	private int centerY = 0;
@@ -57,6 +59,7 @@ public class GuiSchematicControl extends GuiScreen {
 	public GuiSchematicControl(GuiScreen guiScreen) {
 		this.prevGuiScreen = guiScreen;
 		this.schematic = Schematica.proxy.getActiveSchematic();
+		this.printer = SchematicPrinter.INSTANCE;
 	}
 
 	@Override
@@ -116,7 +119,7 @@ public class GuiSchematicControl extends GuiScreen {
 		this.btnMaterials = new GuiButton(id++, 10, this.height - 70, 80, 20, I18n.format("schematica.gui.materials"));
 		this.buttonList.add(this.btnMaterials);
 
-		this.btnPrint = new GuiButton(id++, 10, this.height - 30, 80, 20, I18n.format(this.settings.isPrinting ? "schematica.gui.disable" : "schematica.gui.enable"));
+		this.btnPrint = new GuiButton(id++, 10, this.height - 30, 80, 20, I18n.format(this.printer.isPrinting() ? "schematica.gui.disable" : "schematica.gui.enable"));
 		this.buttonList.add(this.btnPrint);
 
 		this.btnDecLayer.enabled = this.schematic != null;
@@ -127,7 +130,7 @@ public class GuiSchematicControl extends GuiScreen {
 		this.btnFlip.enabled = false;
 		this.btnRotate.enabled = this.schematic != null;
 		this.btnMaterials.enabled = this.schematic != null;
-		this.btnPrint.enabled = this.schematic != null && this.settings.isPrinterEnabled;
+		this.btnPrint.enabled = this.schematic != null && this.printer.isEnabled();
 	}
 
 	@Override
@@ -175,22 +178,20 @@ public class GuiSchematicControl extends GuiScreen {
 			} else if (guiButton.id == this.btnMove.id) {
 				this.settings.moveHere();
 			} else if (guiButton.id == this.btnFlip.id) {
-				SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
-				if (schematic != null) {
-					schematic.flip();
+				if (this.schematic != null) {
+					this.schematic.flip();
 					this.settings.createRendererSchematicChunk();
 				}
 			} else if (guiButton.id == this.btnRotate.id) {
-				SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
-				if (schematic != null) {
-					schematic.rotate();
+				if (this.schematic != null) {
+					this.schematic.rotate();
 					this.settings.createRendererSchematicChunk();
 				}
 			} else if (guiButton.id == this.btnMaterials.id) {
 				this.mc.displayGuiScreen(new GuiSchematicMaterials(this));
-			} else if (guiButton.id == this.btnPrint.id && this.settings.isPrinterEnabled) {
-				this.settings.isPrinting = !this.settings.isPrinting;
-				this.btnPrint.displayString = I18n.format(this.settings.isPrinting ? "schematica.gui.disable" : "schematica.gui.enable");
+			} else if (guiButton.id == this.btnPrint.id && this.printer.isEnabled()) {
+				boolean isPrinting = this.printer.togglePrinting();
+				this.btnPrint.displayString = I18n.format(isPrinting ? "schematica.gui.disable" : "schematica.gui.enable");
 			}
 		}
 	}

@@ -9,7 +9,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockSlab;
-import net.minecraft.block.BlockStairs;
 import net.minecraft.client.multiplayer.ChunkProviderClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -531,53 +530,5 @@ public class SchematicWorld extends World {
 
 	public Vector3f dimensions() {
 		return new Vector3f(this.width, this.height, this.length);
-	}
-
-	public static boolean isBlock(Object item) {
-		return item == Blocks.planks || item == Blocks.sandstone || item == Blocks.wool || item == Blocks.stonebrick || item == Blocks.stained_hardened_clay;
-	}
-
-	public static boolean isStair(Object item) {
-		return item instanceof BlockStairs;
-	}
-
-	public static boolean isSlab(Object item) {
-		return item == Blocks.stone_slab || item == Blocks.wooden_slab;
-	}
-
-	public static boolean isDoubleSlab(Object item) {
-		return item == Blocks.double_stone_slab || item == Blocks.double_wooden_slab;
-	}
-
-	public static boolean isPistonBase(Object item) {
-		return item == Blocks.sticky_piston || item == Blocks.piston;
-	}
-
-	public static boolean isRedstoneRepeater(Object item) {
-		return item == Blocks.powered_repeater || item == Blocks.unpowered_repeater;
-	}
-
-	public static boolean isTorch(Object item) {
-		return item == Blocks.redstone_torch || item == Blocks.unlit_redstone_torch || item == Blocks.torch;
-	}
-
-	public static boolean isContainer(Object item) {
-		return item == Blocks.lit_furnace || item == Blocks.furnace || item == Blocks.dispenser || item == Blocks.chest || item == Blocks.ender_chest || item == Blocks.trapped_chest;
-	}
-
-	public static boolean isButton(Object item) {
-		return item == Blocks.stone_button || item == Blocks.wooden_button;
-	}
-
-	public static boolean isPumpkin(Object item) {
-		return item == Blocks.pumpkin || item == Blocks.lit_pumpkin;
-	}
-
-	public static boolean isFluidContainer(Object item) {
-		return item == Items.water_bucket || item == Items.lava_bucket;
-	}
-
-	public static boolean isMetadataSensitive(Object item) {
-		return item == Blocks.anvil || item == Blocks.trapdoor || isTorch(item) || isBlock(item) || isSlab(item) || isDoubleSlab(item) || isPistonBase(item) || isRedstoneRepeater(item) || isContainer(item) || isButton(item) || isPumpkin(item);
 	}
 }

@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCache;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.io.File;
@@ -36,14 +37,12 @@ public class Settings {
 	public Vector3f pointMin = new Vector3f();
 	public Vector3f pointMax = new Vector3f();
 	public int rotationRender = 0;
-	public int orientation = 0;
+	public ForgeDirection orientation = ForgeDirection.UNKNOWN;
 	public Vector3f offset = new Vector3f();
 	public boolean isRenderingGuide = false;
 	public int chatLines = 0;
-	public boolean isPrinterEnabled = true;
 	public boolean isSaveEnabled = true;
 	public boolean isLoadEnabled = true;
-	public boolean isPrinting = false;
 	public int[] increments = {
 			1, 5, 15, 50, 250
 	};
@@ -53,7 +52,7 @@ public class Settings {
 
 	public void reset() {
 		this.chatLines = 0;
-		this.isPrinterEnabled = true;
+		SchematicPrinter.INSTANCE.setEnabled(true);
 		this.isSaveEnabled = true;
 		this.isLoadEnabled = true;
 		this.isRenderingGuide = false;
@@ -61,6 +60,10 @@ public class Settings {
 		this.renderBlocks = null;
 		this.rendererSchematicChunk = null;
 		this.mcWorldCache = null;
+		while (this.sortedRendererSchematicChunk.size() > 0) {
+			this.sortedRendererSchematicChunk.remove(0).delete();
+		}
+		SchematicPrinter.INSTANCE.setSchematic(null);
 	}
 
 	public void createRendererSchematicChunk() {
@@ -103,6 +106,8 @@ public class Settings {
 				createRendererSchematicChunk();
 
 				schematic.setRendering(true);
+
+				SchematicPrinter.INSTANCE.setSchematic(schematic);
 			}
 		} catch (Exception e) {
 			Reference.logger.fatal("Failed to load schematic!", e);

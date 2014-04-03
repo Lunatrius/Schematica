@@ -1,6 +1,20 @@
 package com.github.lunatrius.schematica.config;
 
+import com.github.lunatrius.schematica.lib.Strings;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockButton;
+import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockDispenser;
+import net.minecraft.block.BlockEnderChest;
+import net.minecraft.block.BlockFurnace;
+import net.minecraft.block.BlockHopper;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockPistonBase;
+import net.minecraft.block.BlockPumpkin;
+import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -10,12 +24,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.lunatrius.schematica.config.PlacementData.PlacementType;
+
 public class BlockInfo {
 	public static final List<Block> BLOCK_LIST_IGNORE_BLOCK = new ArrayList<Block>();
 	public static final List<Block> BLOCK_LIST_IGNORE_METADATA = new ArrayList<Block>();
 	public static final Map<Block, Item> BLOCK_ITEM_MAP = new HashMap<Block, Item>();
+	public static final Map<Class, PlacementData> CLASS_PLACEMENT_MAP = new HashMap<Class, PlacementData>();
+	public static final Map<Item, PlacementData> ITEM_PLACEMENT_MAP = new HashMap<Item, PlacementData>();
 
-	private static String prefix = "minecraft";
+	private static String modId = Strings.MINECRAFT;
+
+	public static void setModId(String modId) {
+		BlockInfo.modId = modId;
+	}
 
 	public static void populateIgnoredBlocks() {
 		BLOCK_LIST_IGNORE_BLOCK.clear();
@@ -30,7 +52,19 @@ public class BlockInfo {
 	}
 
 	private static boolean addIgnoredBlock(Block block) {
+		if (block == null) {
+			return false;
+		}
+
 		return BLOCK_LIST_IGNORE_BLOCK.add(block);
+	}
+
+	private static boolean addIgnoredBlock(String blockName) {
+		if (!Strings.MINECRAFT.equals(modId) && !Loader.isModLoaded(modId)) {
+			return false;
+		}
+
+		return addIgnoredBlock(GameData.blockRegistry.get(String.format("%s:%s", modId, blockName)));
 	}
 
 	public static void populateIgnoredBlockMetadata() {
@@ -104,7 +138,19 @@ public class BlockInfo {
 	}
 
 	private static boolean addIgnoredBlockMetadata(Block block) {
+		if (block == null) {
+			return false;
+		}
+
 		return BLOCK_LIST_IGNORE_METADATA.add(block);
+	}
+
+	private static boolean addIgnoredBlockMetadata(String blockName) {
+		if (!Strings.MINECRAFT.equals(modId) && !Loader.isModLoaded(modId)) {
+			return false;
+		}
+
+		return addIgnoredBlockMetadata(GameData.blockRegistry.get(String.format("%s:%s", modId, blockName)));
 	}
 
 	public static void populateBlockItemMap() {
@@ -142,17 +188,156 @@ public class BlockInfo {
 		addBlockItemMapping(Blocks.skull, Items.skull);
 	}
 
-	private static Item addBlockItemMapping(Block block, Block item) {
-		return BLOCK_ITEM_MAP.put(block, Item.getItemFromBlock(item));
+	private static Item addBlockItemMapping(Block block, Item item) {
+		if (block == null || item == null) {
+			return null;
+		}
+
+		return BLOCK_ITEM_MAP.put(block, item);
 	}
 
-	private static Item addBlockItemMapping(Block block, Item item) {
-		return BLOCK_ITEM_MAP.put(block, item);
+	private static Item addBlockItemMapping(Block block, Block item) {
+		return addBlockItemMapping(block, Item.getItemFromBlock(item));
+	}
+
+	private static Item addBlockItemMapping(Object blockObj, Object itemObj) {
+		if (!Strings.MINECRAFT.equals(modId) && !Loader.isModLoaded(modId)) {
+			return null;
+		}
+
+		Block block = null;
+		Item item = null;
+
+		if (blockObj instanceof Block) {
+			block = (Block) blockObj;
+		} else if (blockObj instanceof String) {
+			block = GameData.blockRegistry.get(String.format("%s:%s", modId, blockObj));
+		}
+
+		if (itemObj instanceof Item) {
+			item = (Item) itemObj;
+		} else if (itemObj instanceof Block) {
+			item = Item.getItemFromBlock((Block) itemObj);
+		} else if (itemObj instanceof String) {
+			String formattedName = String.format("%s:%s", modId, itemObj);
+			item = GameData.itemRegistry.get(formattedName);
+			if (item == null) {
+				item = Item.getItemFromBlock(GameData.blockRegistry.get(formattedName));
+			}
+		}
+
+		return addBlockItemMapping(block, item);
+	}
+
+	public static Item getItemFromBlock(Block block) {
+		if (BLOCK_ITEM_MAP.containsKey(block)) {
+			return BLOCK_ITEM_MAP.get(block);
+		}
+
+		return Item.getItemFromBlock(block);
+	}
+
+	public static void populatePlacementMaps() {
+		ITEM_PLACEMENT_MAP.clear();
+
+		/**
+		 * minecraft
+		 */
+		addPlacementMapping(BlockButton.class, new PlacementData(PlacementType.BLOCK, -1, -1, 3, 4, 1, 2).setMaskMeta(0x7));
+		addPlacementMapping(BlockChest.class, new PlacementData(PlacementType.PLAYER, -1, -1, 3, 2, 5, 4));
+		addPlacementMapping(BlockDispenser.class, new PlacementData(PlacementType.PISTON, 0, 1, 2, 3, 4, 5).setMaskMeta(0x7));
+		addPlacementMapping(BlockEnderChest.class, new PlacementData(PlacementType.PLAYER, -1, -1, 3, 2, 5, 4));
+		addPlacementMapping(BlockFurnace.class, new PlacementData(PlacementType.PLAYER, -1, -1, 3, 2, 5, 4));
+		addPlacementMapping(BlockHopper.class, new PlacementData(PlacementType.BLOCK, 0, 1, 2, 3, 4, 5).setMaskMeta(0x7));
+		addPlacementMapping(BlockLog.class, new PlacementData(PlacementType.BLOCK, 0, 0, 8, 8, 4, 4).setMaskMeta(0xC));
+		addPlacementMapping(BlockPistonBase.class, new PlacementData(PlacementType.PISTON, 0, 1, 2, 3, 4, 5).setMaskMeta(0x7));
+		addPlacementMapping(BlockPumpkin.class, new PlacementData(PlacementType.PLAYER, -1, -1, 0, 2, 3, 1).setMaskMeta(0xF));
+		addPlacementMapping(BlockStairs.class, new PlacementData(PlacementType.PLAYER, -1, -1, 3, 2, 1, 0).setOffset(0x4, 0.0f, 1.0f).setMaskMeta(0x3));
+		addPlacementMapping(BlockTorch.class, new PlacementData(PlacementType.BLOCK, 5, -1, 3, 4, 1, 2).setMaskMeta(0xF));
+
+		addPlacementMapping(Blocks.dirt, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Blocks.planks, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Blocks.sandstone, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Blocks.wool, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Blocks.stone_slab, new PlacementData(PlacementType.BLOCK).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x7).setMaskMetaInHand(0x7));
+		addPlacementMapping(Blocks.stained_glass, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Blocks.trapdoor, new PlacementData(PlacementType.BLOCK, -1, -1, 1, 0, 3, 2).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x3));
+		addPlacementMapping(Blocks.stonebrick, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Blocks.fence_gate, new PlacementData(PlacementType.PLAYER, -1, -1, 2, 0, 1, 3).setMaskMeta(0x3));
+		addPlacementMapping(Blocks.wooden_slab, new PlacementData(PlacementType.BLOCK).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x7).setMaskMetaInHand(0x7));
+		addPlacementMapping(Blocks.anvil, new PlacementData(PlacementType.PLAYER, -1, -1, 1, 3, 0, 2).setMaskMeta(0x3).setMaskMetaInHand(0xC).setBitShiftMetaInHand(2));
+		addPlacementMapping(Blocks.stained_hardened_clay, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Blocks.stained_glass_pane, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Items.repeater, new PlacementData(PlacementType.PLAYER, -1, -1, 0, 2, 3, 1).setMaskMeta(0x3));
+	}
+
+	public static PlacementData addPlacementMapping(Class clazz, PlacementData data) {
+		if (clazz == null || data == null) {
+			return null;
+		}
+
+		return CLASS_PLACEMENT_MAP.put(clazz, data);
+	}
+
+	public static PlacementData addPlacementMapping(Item item, PlacementData data) {
+		if (item == null || data == null) {
+			return null;
+		}
+
+		return ITEM_PLACEMENT_MAP.put(item, data);
+	}
+
+	public static PlacementData addPlacementMapping(Block block, PlacementData data) {
+		return addPlacementMapping(Item.getItemFromBlock(block), data);
+	}
+
+	public static PlacementData addPlacementMapping(Object itemObj, PlacementData data) {
+		if (itemObj == null || data == null) {
+			return null;
+		}
+
+		Item item = null;
+
+		if (itemObj instanceof Item) {
+			item = (Item) itemObj;
+		} else if (itemObj instanceof Block) {
+			item = Item.getItemFromBlock((Block) itemObj);
+		} else if (itemObj instanceof String) {
+			String formattedName = String.format("%s:%s", modId, itemObj);
+			item = GameData.itemRegistry.get(formattedName);
+			if (item == null) {
+				item = Item.getItemFromBlock(GameData.blockRegistry.get(formattedName));
+			}
+		}
+
+		return addPlacementMapping(item, data);
+	}
+
+	public static PlacementData getPlacementDataFromItem(Item item) {
+		Block block = Block.getBlockFromItem(item);
+		PlacementData data = null;
+
+		for (Class clazz : CLASS_PLACEMENT_MAP.keySet()) {
+			if (clazz.isInstance(block)) {
+				data = CLASS_PLACEMENT_MAP.get(clazz);
+				break;
+			}
+		}
+
+		for (Item i : ITEM_PLACEMENT_MAP.keySet()) {
+			if (i == item) {
+				data = ITEM_PLACEMENT_MAP.get(i);
+				break;
+			}
+		}
+
+		return data;
 	}
 
 	static {
 		populateIgnoredBlocks();
 		populateIgnoredBlockMetadata();
 		populateBlockItemMap();
+		populatePlacementMaps();
 	}
 }
