@@ -26,22 +26,27 @@ configFile.withReader {
 }
 
 ext.build = System.getenv().BUILD_NUMBER ?: "dev"
+ext.modversion = "${config.version.major}.${config.version.minor}.${config.version.micro}.${build}"
 
 group = "com.github.lunatrius"
-version = "${config.version.major}.${config.version.minor}.${config.version.micro}.${build}"
-archivesBaseName = "[${config.version.minecraft}]${config.mod.id}"
+version = "${config.version.minecraft}-${modversion}"
+archivesBaseName = config.mod.id
 
 repositories {
     ivy {
-        url "http://mc.lunatri.us/files/mods/forge"
-        layout "pattern", {
-            artifact "[module]/%5B${config.version.minecraft}%5D[module]-universal-[revision]-deobf(.[ext])"
-        }
+        name = "lunatrius' ivy repo"
+        url "http://mc.lunatri.us/files"
     }
 }
 
 dependencies {
-    compile group: group, name: "LunatriusCore", version: "${config.version.lunatriuscore}"
+    compile group: group, name: "LunatriusCore", version: "${config.version.minecraft}-${config.version.lunatriuscore}", classifier: "deobf"
+}
+
+idea {
+    module {
+        downloadSources = true
+    }
 }
 
 minecraft {
@@ -54,7 +59,7 @@ minecraft {
 }
 
 jar {
-    appendix = "universal"
+    classifier = "universal"
 }
 
 processResources {
@@ -63,7 +68,7 @@ processResources {
         include "version.properties"
 
         expand (["modid": config.mod.id,
-            "version": version,
+            "version": modversion,
             "mcversion": config.version.minecraft,
             "forgeversion": config.version.forge,
             "coreversion": config.version.lunatriuscore
@@ -114,14 +119,12 @@ task signJar(dependsOn: "reobf") {
 
 task deobfJar(type: Jar) {
     from sourceSets.main.output
-    appendix = "universal"
     classifier = "deobf"
 }
 
 task sourceJar(type: Jar) {
     from sourceSets.main.allSource
-    appendix = "universal"
-    classifier = "src"
+    classifier = "source"
 }
 
 task release(dependsOn: ["sourceJar", "deobfJar", "signJar"], type: Copy) {
