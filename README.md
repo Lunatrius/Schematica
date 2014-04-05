@@ -38,6 +38,9 @@ The Java JDK is used to compile Schematica.
 3. Open up your command line and run `javac`. If it spews out a bunch of possible options and the usage, then you're good to go. If not try the steps again.
 
 #### Setup Gradle
+***
+You may skip this entire section and use the provided Gradle wrapper instead (use `gradlew` instead of `gradle`).
+***
 Gradle is used to execute the various build tasks when compiling Schematica.
 
 1. Download and install Gradle.
@@ -82,7 +85,7 @@ This section assumes that you're using the command-line version of Git.
 2. Execute `gradle build`. If you did everything right, `BUILD SUCCESSFUL` will be displayed after it finishes. This should be relatively quick.
     * If you see `BUILD FAILED`, check the error output (it should be right around `BUILD FAILED`), fix everything (if possible), and try again.
 3. Go to `mcdev\Schematica\build\libs`.
-    * You should see a `.jar` file named `[#.#.#]Schematica-#.#.#.#.jar`.
+    * You should see a `.jar` file named `Schematica-#.#.#-#.#.#.#-universal.jar`.
 4. Copy the jar into your Minecraft mods folder, and you are done!
 
 #### Updating Your Repository
