@@ -124,7 +124,7 @@ task deobfJar(type: Jar) {
 
 task sourceJar(type: Jar) {
     from sourceSets.main.allSource
-    classifier = "source"
+    classifier = "sources"
 }
 
 task release(dependsOn: ["sourceJar", "deobfJar", "signJar"], type: Copy) {
