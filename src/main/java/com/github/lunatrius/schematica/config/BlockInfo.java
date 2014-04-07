@@ -135,7 +135,6 @@ public class BlockInfo {
 		addIgnoredBlockMetadata(Blocks.potatoes);
 		addIgnoredBlockMetadata(Blocks.wooden_button);
 		addIgnoredBlockMetadata(Blocks.anvil);
-                addIgnoredBlockMetadata(Blocks.quartz_block);
 	}
 
 	private static boolean addIgnoredBlockMetadata(Block block) {
