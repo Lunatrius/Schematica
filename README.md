@@ -109,6 +109,20 @@ So you found a bug in the code? Think you can make it more efficient? Want to he
 5. Click `Click to create a pull request for this comparison`, enter your pull request title, and create a detailed description explaining what you changed.
 6. Click `Send pull request`, and wait for feedback!
 
+##### Instructions/Advice when submitting a Pull Request (PR)
+I use [this](https://gist.github.com/460be5119b93d73c24ab) IDEA formatting. To be short:
+
+* tabs for indentation
+* braces on same lines
+
+When you finish up your PR you'll want to [squash](http://davidwalsh.name/squash-commits-git) them into a single commit (unless it makes sense to have them split).
+
+1. Make sure your working directory is clean by executing `git status`.
+2. Execute `git rebase -i HEAD~X` where `X` is the amount of your commits. This will make sure you squash only your own commits.
+3. You should now see a list of all your commits, prefixed with `pick`. Change all instances of `pick` (excluding the first!) into `squash` or simply `s`. Then save/quit the editor once.
+4. A second screen should show up, displaying all the commit messages (you may edit them, delete or add some). After your done save/quit the editor again.
+5. If git successfuly rebased things simply push your cleaned up commits by executing `git push -f`.
+
 #### Creating an Issue
 Crashing? Have a suggestion? Found a bug? Create an issue now!
 
