@@ -1,7 +1,7 @@
 package com.github.lunatrius.schematica.world.schematic;
 
-import com.github.lunatrius.schematica.SchematicWorld;
 import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;

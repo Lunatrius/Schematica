@@ -1,6 +1,6 @@
 package com.github.lunatrius.schematica.world.schematic;
 
-import com.github.lunatrius.schematica.SchematicWorld;
+import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.nbt.NBTTagCompound;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 

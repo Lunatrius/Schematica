@@ -1,4 +1,4 @@
-package com.github.lunatrius.schematica;
+package com.github.lunatrius.schematica.world;
 
 import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.lib.Reference;

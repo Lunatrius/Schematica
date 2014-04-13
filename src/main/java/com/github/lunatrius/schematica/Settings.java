@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica;
 
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
 import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.client.Minecraft;

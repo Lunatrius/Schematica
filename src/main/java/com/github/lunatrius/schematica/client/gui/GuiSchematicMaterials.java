@@ -1,7 +1,7 @@
 package com.github.lunatrius.schematica.client.gui;
 
-import com.github.lunatrius.schematica.SchematicWorld;
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;

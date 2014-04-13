@@ -1,11 +1,11 @@
 package com.github.lunatrius.schematica.client;
 
 import com.github.lunatrius.schematica.CommonProxy;
-import com.github.lunatrius.schematica.SchematicWorld;
 import com.github.lunatrius.schematica.client.events.ChatEventHandler;
 import com.github.lunatrius.schematica.client.events.KeyInputHandler;
 import com.github.lunatrius.schematica.client.events.TickHandler;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
+import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.client.Minecraft;

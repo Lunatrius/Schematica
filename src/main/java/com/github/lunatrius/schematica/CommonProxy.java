@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica;
 
 import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 

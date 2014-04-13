@@ -1,11 +1,11 @@
 package com.github.lunatrius.schematica.client.events;
 
 import com.github.lunatrius.schematica.SchematicPrinter;
-import com.github.lunatrius.schematica.SchematicWorld;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
 import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;

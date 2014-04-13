@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica;
 import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.config.PlacementData;
 import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.client.Minecraft;

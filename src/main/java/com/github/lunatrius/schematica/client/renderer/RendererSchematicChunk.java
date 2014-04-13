@@ -1,8 +1,8 @@
 package com.github.lunatrius.schematica.client.renderer;
 
-import com.github.lunatrius.schematica.SchematicWorld;
 import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
