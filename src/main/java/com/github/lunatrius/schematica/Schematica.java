@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica;
 
+import com.github.lunatrius.core.version.VersionChecker;
 import com.github.lunatrius.schematica.config.Config;
 import com.github.lunatrius.schematica.lib.Reference;
 import cpw.mods.fml.common.Mod;
@@ -9,8 +10,6 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-
-import java.io.File;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME)
 public class Schematica {
@@ -22,11 +21,11 @@ public class Schematica {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		File suggestedConfigurationFile = event.getSuggestedConfigurationFile();
+		VersionChecker.registerMod(event.getModMetadata());
 
 		Reference.logger = event.getModLog();
 
-		Reference.config = new Config(suggestedConfigurationFile);
+		Reference.config = new Config(event.getSuggestedConfigurationFile());
 		Reference.config.save();
 
 		proxy.registerKeybindings();
