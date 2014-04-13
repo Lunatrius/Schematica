@@ -130,12 +130,16 @@ public class BlockInfo {
 		addIgnoredBlockMetadata(Blocks.spruce_stairs);
 		addIgnoredBlockMetadata(Blocks.birch_stairs);
 		addIgnoredBlockMetadata(Blocks.jungle_stairs);
+		addIgnoredBlockMetadata(Blocks.command_block);
 		addIgnoredBlockMetadata(Blocks.flower_pot);
 		addIgnoredBlockMetadata(Blocks.carrots);
 		addIgnoredBlockMetadata(Blocks.potatoes);
 		addIgnoredBlockMetadata(Blocks.wooden_button);
 		addIgnoredBlockMetadata(Blocks.anvil);
+		addIgnoredBlockMetadata(Blocks.trapped_chest);
+		addIgnoredBlockMetadata(Blocks.hopper);
 		addIgnoredBlockMetadata(Blocks.quartz_stairs);
+		addIgnoredBlockMetadata(Blocks.dropper);
 	}
 
 	private static boolean addIgnoredBlockMetadata(Block block) {
@@ -173,6 +177,7 @@ public class BlockInfo {
 		addBlockItemMapping(Blocks.iron_door, Items.iron_door);
 		addBlockItemMapping(Blocks.wall_sign, Items.sign);
 		addBlockItemMapping(Blocks.unlit_redstone_torch, Blocks.redstone_torch);
+		addBlockItemMapping(Blocks.reeds, Items.reeds);
 		addBlockItemMapping(Blocks.unpowered_repeater, Items.repeater);
 		addBlockItemMapping(Blocks.powered_repeater, Items.repeater);
 		addBlockItemMapping(Blocks.pumpkin_stem, Items.pumpkin_seeds);
