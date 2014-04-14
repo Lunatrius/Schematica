@@ -99,14 +99,14 @@ public class SchematicPrinter {
 
 			for (x = minX; x < maxX; x++) {
 				for (z = minZ; z < maxZ; z++) {
-					if (this.timeout[x][y][z] > 0) {
-						this.timeout[x][y][z] -= Reference.config.placeDelay;
-						continue;
-					}
-
 					Block block = this.schematic.getBlock(x, y, z);
 
 					if (block == Blocks.air) {
+						continue;
+					}
+
+					if (this.timeout[x][y][z] > 0) {
+						this.timeout[x][y][z] -= Reference.config.placeDelay;
 						continue;
 					}
 
