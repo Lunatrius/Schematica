@@ -121,7 +121,7 @@ public class SchematicPrinter {
 
 					int metadata = this.schematic.getBlockMetadata(x, y, z);
 					if (placeBlock(this.minecraft, world, player, wx, wy, wz, BlockInfo.getItemFromBlock(block), metadata)) {
-						this.timeout[x][y][z] = 10;
+						this.timeout[x][y][z] = (byte) Reference.config.timeout;
 						if (!Reference.config.placeInstantly) {
 							player.inventory.currentItem = slot;
 							syncSneaking(player, isSneaking);
