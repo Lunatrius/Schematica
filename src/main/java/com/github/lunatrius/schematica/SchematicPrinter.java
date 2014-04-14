@@ -66,8 +66,14 @@ public class SchematicPrinter {
 	public void setSchematic(SchematicWorld schematic) {
 		this.isPrinting = false;
 		this.schematic = schematic;
+		refresh();
+	}
+
+	public void refresh() {
 		if (this.schematic != null) {
-			this.timeout = new byte[schematic.getWidth()][schematic.getHeight()][schematic.getLength()];
+			this.timeout = new byte[this.schematic.getWidth()][this.schematic.getHeight()][this.schematic.getLength()];
+		} else {
+			this.timeout = null;
 		}
 	}
 

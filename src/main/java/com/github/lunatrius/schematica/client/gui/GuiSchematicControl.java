@@ -181,11 +181,13 @@ public class GuiSchematicControl extends GuiScreen {
 				if (this.schematic != null) {
 					this.schematic.flip();
 					this.settings.createRendererSchematicChunk();
+					SchematicPrinter.INSTANCE.refresh();
 				}
 			} else if (guiButton.id == this.btnRotate.id) {
 				if (this.schematic != null) {
 					this.schematic.rotate();
 					this.settings.createRendererSchematicChunk();
+					SchematicPrinter.INSTANCE.refresh();
 				}
 			} else if (guiButton.id == this.btnMaterials.id) {
 				this.mc.displayGuiScreen(new GuiSchematicMaterials(this));
