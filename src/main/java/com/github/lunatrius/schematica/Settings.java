@@ -30,7 +30,6 @@ public class Settings {
 	public Minecraft minecraft = Minecraft.getMinecraft();
 	public ChunkCache mcWorldCache = null;
 	public Vector3f playerPosition = new Vector3f();
-	public RendererSchematicChunk[][][] rendererSchematicChunk = null;
 	public final List<RendererSchematicChunk> sortedRendererSchematicChunk = new ArrayList<RendererSchematicChunk>();
 	public RenderBlocks renderBlocks = null;
 	public Vector3f pointA = new Vector3f();
@@ -59,7 +58,6 @@ public class Settings {
 		this.isRenderingGuide = false;
 		Schematica.proxy.setActiveSchematic(null);
 		this.renderBlocks = null;
-		this.rendererSchematicChunk = null;
 		this.mcWorldCache = null;
 		while (this.sortedRendererSchematicChunk.size() > 0) {
 			this.sortedRendererSchematicChunk.remove(0).delete();
@@ -73,8 +71,6 @@ public class Settings {
 		int height = (schematic.getHeight() - 1) / RendererSchematicChunk.CHUNK_HEIGHT + 1;
 		int length = (schematic.getLength() - 1) / RendererSchematicChunk.CHUNK_LENGTH + 1;
 
-		this.rendererSchematicChunk = new RendererSchematicChunk[width][height][length];
-
 		while (this.sortedRendererSchematicChunk.size() > 0) {
 			this.sortedRendererSchematicChunk.remove(0).delete();
 		}
@@ -83,7 +79,7 @@ public class Settings {
 		for (x = 0; x < width; x++) {
 			for (y = 0; y < height; y++) {
 				for (z = 0; z < length; z++) {
-					this.sortedRendererSchematicChunk.add(this.rendererSchematicChunk[x][y][z] = new RendererSchematicChunk(schematic, x, y, z));
+					this.sortedRendererSchematicChunk.add(new RendererSchematicChunk(schematic, x, y, z));
 				}
 			}
 		}
