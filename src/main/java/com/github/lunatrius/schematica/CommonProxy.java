@@ -15,7 +15,7 @@ public class CommonProxy {
 	}
 
 	public void createFolders() {
-		Reference.schematicDirectory = new File(getDataDirectory(), "schematics");
+		Reference.schematicDirectory = Reference.config.schematicDirectory;
 
 		if (!Reference.schematicDirectory.exists()) {
 			if (!Reference.schematicDirectory.mkdirs()) {

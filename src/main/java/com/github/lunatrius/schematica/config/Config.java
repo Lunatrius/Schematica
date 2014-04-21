@@ -1,9 +1,12 @@
 package com.github.lunatrius.schematica.config;
 
 import com.github.lunatrius.core.config.Configuration;
+import com.github.lunatrius.core.lib.Reference;
+import com.github.lunatrius.schematica.Schematica;
 import net.minecraftforge.common.config.Property;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Config extends Configuration {
 	public final Property propEnableAlpha;
@@ -17,6 +20,7 @@ public class Config extends Configuration {
 	public final Property propPlaceAdjacent;
 	public final Property propDrawQuads;
 	public final Property propDrawLines;
+	public final Property propSchematicDirectory;
 
 	public boolean enableAlpha = false;
 	public float alpha = 1.0f;
@@ -29,9 +33,18 @@ public class Config extends Configuration {
 	public boolean placeAdjacent = true;
 	public boolean drawQuads = true;
 	public boolean drawLines = true;
+	public File schematicDirectory = new File(Schematica.proxy.getDataDirectory(), "schematics");
 
 	public Config(File file) {
 		super(file);
+
+		String directory;
+		try {
+			directory = this.schematicDirectory.getCanonicalPath();
+		} catch (IOException e) {
+			Reference.logger.info("Failed to get path!");
+			directory = this.schematicDirectory.getAbsolutePath();
+		}
 
 		this.propEnableAlpha = get("general", "alphaEnabled", this.enableAlpha, "Enable transparent textures.");
 		this.propAlpha = get("general", "alpha", this.alpha, 0.0, 1.0, "Alpha value used when rendering the schematic (example: 1.0 = opaque, 0.5 = half transparent, 0.0 = transparent).");
@@ -44,6 +57,7 @@ public class Config extends Configuration {
 		this.propPlaceAdjacent = get("general", "placeAdjacent", this.placeAdjacent, "Place blocks only if there is an adjacent block next to it.");
 		this.propDrawQuads = get("general", "drawQuads", this.drawQuads, "Draw surface areas.");
 		this.propDrawLines = get("general", "drawLines", this.drawLines, "Draw outlines.");
+		this.propSchematicDirectory = get("general", "schematicDirectory", directory, "Schematic directory.");
 
 		this.enableAlpha = this.propEnableAlpha.getBoolean(this.enableAlpha);
 		this.alpha = (float) this.propAlpha.getDouble(this.alpha);
@@ -56,5 +70,6 @@ public class Config extends Configuration {
 		this.placeAdjacent = this.propPlaceAdjacent.getBoolean(this.placeAdjacent);
 		this.drawQuads = this.propDrawQuads.getBoolean(this.drawQuads);
 		this.drawLines = this.propDrawLines.getBoolean(this.drawLines);
+		this.schematicDirectory = new File(this.propSchematicDirectory.getString());
 	}
 }
