@@ -88,7 +88,9 @@ public class RendererSchematicChunk {
 	}
 
 	public void delete() {
-		GL11.glDeleteLists(this.glList, 3);
+		if (this.glList != -1) {
+			GL11.glDeleteLists(this.glList, 3);
+		}
 	}
 
 	public AxisAlignedBB getBoundingBox() {
