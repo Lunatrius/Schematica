@@ -30,8 +30,14 @@ public class TickHandler {
 
 	@SubscribeEvent
 	public void clientConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-		Reference.logger.info("Resetting client settings.");
-		Settings.instance.reset();
+		Reference.logger.info("Scheduling client settings reset.");
+		Settings.instance.isPendingReset = true;
+	}
+
+	@SubscribeEvent
+	public void clientDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
+		Reference.logger.info("Scheduling client settings reset.");
+		Settings.instance.isPendingReset = true;
 	}
 
 	@SubscribeEvent
@@ -56,6 +62,12 @@ public class TickHandler {
 
 				this.minecraft.mcProfiler.endSection();
 			}
+
+			if (Settings.instance.isPendingReset) {
+				Settings.instance.reset();
+				Settings.instance.isPendingReset = false;
+			}
+
 			this.minecraft.mcProfiler.endSection();
 		}
 	}

@@ -43,6 +43,7 @@ public class Settings {
 	public int chatLines = 0;
 	public boolean isSaveEnabled = true;
 	public boolean isLoadEnabled = true;
+	public boolean isPendingReset = false;
 	public int[] increments = {
 			1, 5, 15, 50, 250
 	};
