@@ -6,6 +6,7 @@ import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockSlab;
@@ -212,6 +213,12 @@ public class SchematicWorld extends World {
 
 					if (block instanceof BlockSlab) {
 						itemDamage &= 0x07;
+					}
+
+					if (block instanceof BlockDoublePlant) {
+						if ((itemDamage & 0x08) == 0x08) {
+							continue;
+						}
 					}
 
 					if (block == Blocks.cocoa) {
