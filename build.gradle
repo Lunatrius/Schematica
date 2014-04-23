@@ -11,7 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:1.1-SNAPSHOT"
+        classpath "net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT"
     }
 }
 
@@ -53,9 +53,9 @@ minecraft {
     version = "${config.version.minecraft}-${config.version.forge}"
 
     if (!project.hasProperty("run_location"))
-        assetDir = "run/assets"
+    assetDir = "run/assets"
     else
-        assetDir = run_location.replace("{modid}", config.mod.id).replace("{mcversion}", config.version.minecraft) + "assets"
+    assetDir = run_location.replace("{modid}", config.mod.id).replace("{mcversion}", config.version.minecraft) + "assets"
 }
 
 jar {
@@ -72,7 +72,7 @@ processResources {
             "mcversion": config.version.minecraft,
             "forgeversion": config.version.forge,
             "coreversion": config.version.lunatriuscore
-        ])
+	    ])
     }
 
     from (sourceSets.main.resources.srcDirs) {
@@ -82,18 +82,18 @@ processResources {
 }
 
 if (!project.hasProperty("keystore_location"))
-    ext.keystore_location = "."
+ext.keystore_location = "."
 
 if (!project.hasProperty("keystore_alias"))
-    ext.keystore_alias = ""
+ext.keystore_alias = ""
 
 if (!project.hasProperty("keystore_password"))
-    ext.keystore_password = ""
+ext.keystore_password = ""
 
 if (!project.hasProperty("release_location"))
-    ext.release_location = "."
+ext.release_location = "."
 else
-    ext.release_location = release_location.replace("{modid}", config.mod.id).replace("{mcversion}", config.version.minecraft).replace("{version}", version)
+ext.release_location = release_location.replace("{modid}", config.mod.id).replace("{mcversion}", config.version.minecraft).replace("{version}", version)
 
 task signJar(dependsOn: "reobf") {
     inputs.file jar.getArchivePath()
