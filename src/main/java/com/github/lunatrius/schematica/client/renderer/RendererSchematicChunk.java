@@ -211,6 +211,10 @@ public class RendererSchematicChunk {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
+		// re-set alpha func... beacons set it to (GL_GREATER, 0.5f)
+		// EntityRenderer sets it to (GL_GREATER, 0.1f) before dispatching the event
+		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+
 		this.profiler.endSection();
 	}
 
