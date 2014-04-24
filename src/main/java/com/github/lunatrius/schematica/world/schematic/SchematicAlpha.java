@@ -3,6 +3,8 @@ package com.github.lunatrius.schematica.world.schematic;
 import com.github.lunatrius.schematica.lib.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.registry.GameData;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -10,9 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SchematicAlpha extends SchematicFormat {
 	@Override
@@ -116,10 +115,10 @@ public class SchematicAlpha extends SchematicFormat {
 			} catch (Exception e) {
 				int pos = tileEntity.xCoord + (tileEntity.yCoord * world.getLength() + tileEntity.zCoord) * world.getWidth();
 				if (--count > 0) {
-					Block block = GameData.blockRegistry.get(localBlocks[pos]);
-					Reference.logger.error(String.format("Block %s[%s] with TileEntity %s failed to save! Replacing with bedrock...", block, block != null ? GameData.blockRegistry.getNameForObject(block) : "?", tileEntity.getClass().getName()), e);
+					Block block = (Block) GameData.getBlockRegistry().getObject(localBlocks[pos]);
+					Reference.logger.error(String.format("Block %s[%s] with TileEntity %s failed to save! Replacing with bedrock...", block, block != null ? GameData.getBlockRegistry().getNameForObject(block) : "?", tileEntity.getClass().getName()), e);
 				}
-				localBlocks[pos] = (byte) GameData.blockRegistry.getId(Blocks.bedrock);
+				localBlocks[pos] = (byte) GameData.getBlockRegistry().getId(Blocks.bedrock);
 				localMetadata[pos] = 0;
 				extraBlocks[pos] = 0;
 			}

@@ -5,6 +5,14 @@ import com.github.lunatrius.schematica.lib.Reference;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.BlockLog;
@@ -30,14 +38,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.storage.SaveHandlerMP;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.util.vector.Vector3f;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 public class SchematicWorld extends World {
 	public class SchematicWorldRendererData {
@@ -129,12 +129,12 @@ public class SchematicWorld extends World {
 			}
 		}
 
-		icon = new ItemStack(GameData.blockRegistry.get(name), 1, damage);
+		icon = new ItemStack(GameData.getBlockRegistry().getObject(name), 1, damage);
 		if (icon.getItem() != null) {
 			return icon;
 		}
 
-		icon = new ItemStack(GameData.itemRegistry.get(name), 1, damage);
+		icon = new ItemStack(GameData.getItemRegistry().getObject(name), 1, damage);
 		if (icon.getItem() != null) {
 			return icon;
 		}
@@ -162,7 +162,7 @@ public class SchematicWorld extends World {
 			NBTTagCompound tagCompound = CompressedStreamTools.readCompressed(stream);
 
 			return getIconFromNBT(tagCompound);
-		} catch (Exception e) {
+		} catch (IOException e) {
 			Reference.logger.error("Failed to read schematic icon!", e);
 		}
 
@@ -261,12 +261,12 @@ public class SchematicWorld extends World {
 	}
 
 	public Block getBlockRaw(int x, int y, int z) {
-		return GameData.blockRegistry.get(getBlockIdRaw(x, y, z));
+		return GameData.getBlockRegistry().getRaw(getBlockIdRaw(x, y, z));
 	}
 
 	@Override
 	public Block getBlock(int x, int y, int z) {
-		return GameData.blockRegistry.get(getBlockId(x, y, z));
+		return GameData.getBlockRegistry().getObjectById(getBlockId(x, y, z));
 	}
 
 	@Override
@@ -446,47 +446,47 @@ public class SchematicWorld extends World {
 
 	public void flip() {
 		/*
-		int tmp;
-		for (int x = 0; x < this.width; x++) {
-			for (int y = 0; y < this.height; y++) {
-				for (int z = 0; z < (this.length + 1) / 2; z++) {
-					tmp = this.blocks[x][y][z];
-					this.blocks[x][y][z] = this.blocks[x][y][this.length - 1 - z];
-					this.blocks[x][y][this.length - 1 - z] = tmp;
+		 int tmp;
+		 for (int x = 0; x < this.width; x++) {
+		 for (int y = 0; y < this.height; y++) {
+		 for (int z = 0; z < (this.length + 1) / 2; z++) {
+		 tmp = this.blocks[x][y][z];
+		 this.blocks[x][y][z] = this.blocks[x][y][this.length - 1 - z];
+		 this.blocks[x][y][this.length - 1 - z] = tmp;
 
-					if (z == this.length - 1 - z) {
-						this.metadata[x][y][z] = BlockInfo.getTransformedMetadataFlip(this.blocks[x][y][z], this.metadata[x][y][z]);
-					} else {
-						tmp = this.metadata[x][y][z];
-						this.metadata[x][y][z] = BlockInfo.getTransformedMetadataFlip(this.blocks[x][y][z], this.metadata[x][y][this.length - 1 - z]);
-						this.metadata[x][y][this.length - 1 - z] = BlockInfo.getTransformedMetadataFlip(this.blocks[x][y][this.length - 1 - z], tmp);
-					}
-				}
-			}
-		}
+		 if (z == this.length - 1 - z) {
+		 this.metadata[x][y][z] = BlockInfo.getTransformedMetadataFlip(this.blocks[x][y][z], this.metadata[x][y][z]);
+		 } else {
+		 tmp = this.metadata[x][y][z];
+		 this.metadata[x][y][z] = BlockInfo.getTransformedMetadataFlip(this.blocks[x][y][z], this.metadata[x][y][this.length - 1 - z]);
+		 this.metadata[x][y][this.length - 1 - z] = BlockInfo.getTransformedMetadataFlip(this.blocks[x][y][this.length - 1 - z], tmp);
+		 }
+		 }
+		 }
+		 }
 
-		TileEntity tileEntity;
-		for (int i = 0; i < this.tileEntities.size(); i++) {
-			tileEntity = this.tileEntities.get(i);
-			tileEntity.zCoord = this.length - 1 - tileEntity.zCoord;
-			tileEntity.blockMetadata = this.metadata[tileEntity.xCoord][tileEntity.yCoord][tileEntity.zCoord];
+		 TileEntity tileEntity;
+		 for (int i = 0; i < this.tileEntities.size(); i++) {
+		 tileEntity = this.tileEntities.get(i);
+		 tileEntity.zCoord = this.length - 1 - tileEntity.zCoord;
+		 tileEntity.blockMetadata = this.metadata[tileEntity.xCoord][tileEntity.yCoord][tileEntity.zCoord];
 
-			if (tileEntity instanceof TileEntitySkull && tileEntity.blockMetadata == 0x1) {
-				TileEntitySkull skullTileEntity = (TileEntitySkull) tileEntity;
-				int angle = skullTileEntity.func_82119_b();
-				int base = 0;
-				if (angle <= 7) {
-					base = 4;
-				} else {
-					base = 12;
-				}
+		 if (tileEntity instanceof TileEntitySkull && tileEntity.blockMetadata == 0x1) {
+		 TileEntitySkull skullTileEntity = (TileEntitySkull) tileEntity;
+		 int angle = skullTileEntity.func_82119_b();
+		 int base = 0;
+		 if (angle <= 7) {
+		 base = 4;
+		 } else {
+		 base = 12;
+		 }
 
-				skullTileEntity.setSkullRotation((2 * base - angle) & 15);
-			}
-		}
+		 skullTileEntity.setSkullRotation((2 * base - angle) & 15);
+		 }
+		 }
 
-		refreshChests();
-		*/
+		 refreshChests();
+		 */
 	}
 
 	public void rotate() {
