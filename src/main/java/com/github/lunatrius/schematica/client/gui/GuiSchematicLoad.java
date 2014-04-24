@@ -4,11 +4,6 @@ import com.github.lunatrius.schematica.FileFilterSchematic;
 import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.lib.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -16,6 +11,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import org.lwjgl.Sys;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiSchematicLoad extends GuiScreen {
 	private static final FileFilterSchematic FILE_FILTER_FOLDER = new FileFilterSchematic(true);

@@ -1,13 +1,8 @@
 package com.github.lunatrius.schematica.config;
 
-import com.github.lunatrius.schematica.config.PlacementData.PlacementType;
 import com.github.lunatrius.schematica.lib.Strings;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameData;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockChest;
@@ -23,6 +18,13 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.github.lunatrius.schematica.config.PlacementData.PlacementType;
 
 public class BlockInfo {
 	public static final List<Block> BLOCK_LIST_IGNORE_BLOCK = new ArrayList<Block>();
@@ -62,7 +64,7 @@ public class BlockInfo {
 			return false;
 		}
 
-		return addIgnoredBlock(GameData.getBlockRegistry().getObject(String.format("%s:%s", modId, blockName)));
+		return addIgnoredBlock(GameData.blockRegistry.get(String.format("%s:%s", modId, blockName)));
 	}
 
 	public static void populateIgnoredBlockMetadata() {
@@ -153,7 +155,7 @@ public class BlockInfo {
 			return false;
 		}
 
-		return addIgnoredBlockMetadata(GameData.getBlockRegistry().getObject(String.format("%s:%s", modId, blockName)));
+		return addIgnoredBlockMetadata(GameData.blockRegistry.get(String.format("%s:%s", modId, blockName)));
 	}
 
 	public static void populateBlockItemMap() {
@@ -215,7 +217,7 @@ public class BlockInfo {
 		if (blockObj instanceof Block) {
 			block = (Block) blockObj;
 		} else if (blockObj instanceof String) {
-			block = GameData.getBlockRegistry().getObject(String.format("%s:%s", modId, blockObj));
+			block = GameData.blockRegistry.get(String.format("%s:%s", modId, blockObj));
 		}
 
 		if (itemObj instanceof Item) {
@@ -224,9 +226,9 @@ public class BlockInfo {
 			item = Item.getItemFromBlock((Block) itemObj);
 		} else if (itemObj instanceof String) {
 			String formattedName = String.format("%s:%s", modId, itemObj);
-			item = GameData.getItemRegistry().getRaw(formattedName);
+			item = GameData.itemRegistry.get(formattedName);
 			if (item == null) {
-				item = Item.getItemFromBlock(GameData.getBlockRegistry().getObject(formattedName));
+				item = Item.getItemFromBlock(GameData.blockRegistry.get(formattedName));
 			}
 		}
 
@@ -309,9 +311,9 @@ public class BlockInfo {
 			item = Item.getItemFromBlock((Block) itemObj);
 		} else if (itemObj instanceof String) {
 			String formattedName = String.format("%s:%s", modId, itemObj);
-			item = GameData.getItemRegistry().getRaw(formattedName);
+			item = GameData.itemRegistry.get(formattedName);
 			if (item == null) {
-				item = Item.getItemFromBlock(GameData.getBlockRegistry().getObject(formattedName));
+				item = Item.getItemFromBlock(GameData.blockRegistry.get(formattedName));
 			}
 		}
 

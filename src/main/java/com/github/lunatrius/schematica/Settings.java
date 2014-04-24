@@ -5,11 +5,6 @@ import com.github.lunatrius.schematica.lib.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import cpw.mods.fml.common.registry.GameData;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -19,6 +14,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCache;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.util.vector.Vector3f;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Settings {
 	public static final Settings instance = new Settings();
@@ -44,7 +45,7 @@ public class Settings {
 	public boolean isLoadEnabled = true;
 	public boolean isPendingReset = false;
 	public int[] increments = {
-		1, 5, 15, 50, 250
+			1, 5, 15, 50, 250
 	};
 
 	private Settings() {
@@ -136,7 +137,7 @@ public class Settings {
 			for (int x = minX; x <= maxX; x++) {
 				for (int y = minY; y <= maxY; y++) {
 					for (int z = minZ; z <= maxZ; z++) {
-						blocks[x - minX][y - minY][z - minZ] = (short) GameData.getBlockRegistry().getId(this.minecraft.theWorld.getBlock(x, y, z));
+						blocks[x - minX][y - minY][z - minZ] = (short) GameData.blockRegistry.getId(this.minecraft.theWorld.getBlock(x, y, z));
 						metadata[x - minX][y - minY][z - minZ] = (byte) this.minecraft.theWorld.getBlockMetadata(x, y, z);
 						tileEntity = this.minecraft.theWorld.getTileEntity(x, y, z);
 						if (tileEntity != null) {
@@ -214,22 +215,22 @@ public class Settings {
 		point.z = (int) Math.floor(this.playerPosition.z);
 
 		switch (this.rotationRender) {
-			case 0:
-				point.x -= 1;
-				point.z += 1;
-				break;
-			case 1:
-				point.x -= 1;
-				point.z -= 1;
-				break;
-			case 2:
-				point.x += 1;
-				point.z -= 1;
-				break;
-			case 3:
-				point.x += 1;
-				point.z += 1;
-				break;
+		case 0:
+			point.x -= 1;
+			point.z += 1;
+			break;
+		case 1:
+			point.x -= 1;
+			point.z -= 1;
+			break;
+		case 2:
+			point.x += 1;
+			point.z -= 1;
+			break;
+		case 3:
+			point.x += 1;
+			point.z += 1;
+			break;
 		}
 	}
 
@@ -241,22 +242,22 @@ public class Settings {
 		SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
 		if (schematic != null) {
 			switch (this.rotationRender) {
-				case 0:
-					this.offset.x -= schematic.getWidth();
-					this.offset.z += 1;
-					break;
-				case 1:
-					this.offset.x -= schematic.getWidth();
-					this.offset.z -= schematic.getLength();
-					break;
-				case 2:
-					this.offset.x += 1;
-					this.offset.z -= schematic.getLength();
-					break;
-				case 3:
-					this.offset.x += 1;
-					this.offset.z += 1;
-					break;
+			case 0:
+				this.offset.x -= schematic.getWidth();
+				this.offset.z += 1;
+				break;
+			case 1:
+				this.offset.x -= schematic.getWidth();
+				this.offset.z -= schematic.getLength();
+				break;
+			case 2:
+				this.offset.x += 1;
+				this.offset.z -= schematic.getLength();
+				break;
+			case 3:
+				this.offset.x += 1;
+				this.offset.z += 1;
+				break;
 			}
 
 			reloadChunkCache();
