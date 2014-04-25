@@ -130,12 +130,12 @@ public class SchematicWorld extends World {
 			}
 		}
 
-		icon = new ItemStack(GameData.blockRegistry.get(name), 1, damage);
+		icon = new ItemStack(GameData.getBlockRegistry().getObject(name), 1, damage);
 		if (icon.getItem() != null) {
 			return icon;
 		}
 
-		icon = new ItemStack(GameData.itemRegistry.get(name), 1, damage);
+		icon = new ItemStack(GameData.getItemRegistry().getObject(name), 1, damage);
 		if (icon.getItem() != null) {
 			return icon;
 		}
@@ -268,12 +268,12 @@ public class SchematicWorld extends World {
 	}
 
 	public Block getBlockRaw(int x, int y, int z) {
-		return GameData.blockRegistry.get(getBlockIdRaw(x, y, z));
+		return GameData.getBlockRegistry().getRaw(getBlockIdRaw(x, y, z));
 	}
 
 	@Override
 	public Block getBlock(int x, int y, int z) {
-		return GameData.blockRegistry.get(getBlockId(x, y, z));
+		return GameData.getBlockRegistry().getObjectById(getBlockId(x, y, z));
 	}
 
 	@Override
