@@ -64,7 +64,7 @@ public class BlockInfo {
 			return false;
 		}
 
-		return addIgnoredBlock(GameData.blockRegistry.get(String.format("%s:%s", modId, blockName)));
+		return addIgnoredBlock(GameData.getBlockRegistry().getObject(String.format("%s:%s", modId, blockName)));
 	}
 
 	public static void populateIgnoredBlockMetadata() {
@@ -155,7 +155,7 @@ public class BlockInfo {
 			return false;
 		}
 
-		return addIgnoredBlockMetadata(GameData.blockRegistry.get(String.format("%s:%s", modId, blockName)));
+		return addIgnoredBlockMetadata(GameData.getBlockRegistry().getObject(String.format("%s:%s", modId, blockName)));
 	}
 
 	public static void populateBlockItemMap() {
@@ -217,7 +217,7 @@ public class BlockInfo {
 		if (blockObj instanceof Block) {
 			block = (Block) blockObj;
 		} else if (blockObj instanceof String) {
-			block = GameData.blockRegistry.get(String.format("%s:%s", modId, blockObj));
+			block = GameData.getBlockRegistry().getObject(String.format("%s:%s", modId, blockObj));
 		}
 
 		if (itemObj instanceof Item) {
@@ -226,9 +226,9 @@ public class BlockInfo {
 			item = Item.getItemFromBlock((Block) itemObj);
 		} else if (itemObj instanceof String) {
 			String formattedName = String.format("%s:%s", modId, itemObj);
-			item = GameData.itemRegistry.get(formattedName);
+			item = GameData.getItemRegistry().getObject(formattedName);
 			if (item == null) {
-				item = Item.getItemFromBlock(GameData.blockRegistry.get(formattedName));
+				item = Item.getItemFromBlock(GameData.getBlockRegistry().getObject(formattedName));
 			}
 		}
 
@@ -312,9 +312,9 @@ public class BlockInfo {
 			item = Item.getItemFromBlock((Block) itemObj);
 		} else if (itemObj instanceof String) {
 			String formattedName = String.format("%s:%s", modId, itemObj);
-			item = GameData.itemRegistry.get(formattedName);
+			item = GameData.getItemRegistry().getObject(formattedName);
 			if (item == null) {
-				item = Item.getItemFromBlock(GameData.blockRegistry.get(formattedName));
+				item = Item.getItemFromBlock(GameData.getBlockRegistry().getObject(formattedName));
 			}
 		}
 
