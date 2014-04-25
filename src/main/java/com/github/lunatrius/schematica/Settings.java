@@ -137,7 +137,7 @@ public class Settings {
 			for (int x = minX; x <= maxX; x++) {
 				for (int y = minY; y <= maxY; y++) {
 					for (int z = minZ; z <= maxZ; z++) {
-						blocks[x - minX][y - minY][z - minZ] = (short) GameData.blockRegistry.getId(this.minecraft.theWorld.getBlock(x, y, z));
+						blocks[x - minX][y - minY][z - minZ] = (short) GameData.getBlockRegistry().getId(this.minecraft.theWorld.getBlock(x, y, z));
 						metadata[x - minX][y - minY][z - minZ] = (byte) this.minecraft.theWorld.getBlockMetadata(x, y, z);
 						tileEntity = this.minecraft.theWorld.getTileEntity(x, y, z);
 						if (tileEntity != null) {
