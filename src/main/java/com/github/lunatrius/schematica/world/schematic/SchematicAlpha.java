@@ -116,10 +116,10 @@ public class SchematicAlpha extends SchematicFormat {
 			} catch (Exception e) {
 				int pos = tileEntity.xCoord + (tileEntity.yCoord * world.getLength() + tileEntity.zCoord) * world.getWidth();
 				if (--count > 0) {
-					Block block = GameData.blockRegistry.get(localBlocks[pos]);
-					Reference.logger.error(String.format("Block %s[%s] with TileEntity %s failed to save! Replacing with bedrock...", block, block != null ? GameData.blockRegistry.getNameForObject(block) : "?", tileEntity.getClass().getName()), e);
+					Block block = GameData.getBlockRegistry().getObjectById(localBlocks[pos]);
+					Reference.logger.error(String.format("Block %s[%s] with TileEntity %s failed to save! Replacing with bedrock...", block, block != null ? GameData.getBlockRegistry().getNameForObject(block) : "?", tileEntity.getClass().getName()), e);
 				}
-				localBlocks[pos] = (byte) GameData.blockRegistry.getId(Blocks.bedrock);
+				localBlocks[pos] = (byte) GameData.getBlockRegistry().getId(Blocks.bedrock);
 				localMetadata[pos] = 0;
 				extraBlocks[pos] = 0;
 			}
