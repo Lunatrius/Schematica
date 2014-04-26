@@ -41,10 +41,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SchematicWorld extends World {
-	public class SchematicWorldRendererData {
-		public boolean foobar;
-	}
-
 	// private static final AnvilSaveHandler SAVE_HANDLER = new AnvilSaveHandler(Minecraft.getMinecraft().mcDataDir, "tmp/schematica", false);
 	private static final WorldSettings WORLD_SETTINGS = new WorldSettings(0, WorldSettings.GameType.CREATIVE, false, false, WorldType.FLAT);
 	private static final Comparator<ItemStack> BLOCK_COMPARATOR = new Comparator<ItemStack>() {
