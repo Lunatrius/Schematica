@@ -118,19 +118,29 @@ public class GuiSchematicLoad extends GuiScreen {
 			Reference.logger.error("Failed to add GuiSchematicEntry!", e);
 		}
 
-		for (File file : this.currentDirectory.listFiles(FILE_FILTER_FOLDER)) {
-			name = file.getName();
+		File[] filesFolders = this.currentDirectory.listFiles(FILE_FILTER_FOLDER);
+		if (filesFolders == null) {
+			Reference.logger.error(String.format("listFiles returned null (directory: %s)!", this.currentDirectory));
+		} else {
+			for (File file : filesFolders) {
+				if (file == null) {
+					continue;
+				}
 
-			item = file == null || file.listFiles() == null || file.listFiles().length == 0 ? Items.bucket : Items.water_bucket;
+				name = file.getName();
 
-			this.schematicFiles.add(new GuiSchematicEntry(name, item, 0, file.isDirectory()));
+				File[] files = file.listFiles();
+				item = (files == null || files.length == 0) ? Items.bucket : Items.water_bucket;
+
+				this.schematicFiles.add(new GuiSchematicEntry(name, item, 0, file.isDirectory()));
+			}
 		}
 
-		File[] files = this.currentDirectory.listFiles(FILE_FILTER_SCHEMATIC);
-		if (files.length == 0) {
+		File[] filesSchematics = this.currentDirectory.listFiles(FILE_FILTER_SCHEMATIC);
+		if (filesSchematics == null || filesSchematics.length == 0) {
 			this.schematicFiles.add(new GuiSchematicEntry(I18n.format("schematica.gui.noschematic"), Blocks.dirt, 0, false));
 		} else {
-			for (File file : files) {
+			for (File file : filesSchematics) {
 				name = file.getName();
 
 				this.schematicFiles.add(new GuiSchematicEntry(name, SchematicWorld.getIconFromFile(file), file.isDirectory()));
