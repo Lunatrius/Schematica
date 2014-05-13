@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.renderer;
 
+import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.lib.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
@@ -19,7 +20,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector3f;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
