@@ -8,7 +8,6 @@ import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -23,8 +22,6 @@ import java.util.List;
 
 public class Settings {
 	public static final Settings instance = new Settings();
-
-	public static final RenderItem renderItem = new RenderItem();
 
 	private final Vector3f translationVector = new Vector3f();
 	public Minecraft minecraft = Minecraft.getMinecraft();

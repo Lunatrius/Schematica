@@ -2,14 +2,9 @@ package com.github.lunatrius.schematica.client.gui;
 
 import com.github.lunatrius.schematica.Settings;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiSlot;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.item.ItemStack;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class GuiSchematicLoadSlot extends GuiSlot {
 	private final Settings settings = Settings.instance;
@@ -69,32 +64,8 @@ public class GuiSchematicLoadSlot extends GuiSlot {
 			schematicName = schematicName.replaceAll("(?i)\\.schematic$", "");
 		}
 
-		drawItemStack(x, y, schematic.getItemStack());
+		GuiHelper.drawItemStack(this.renderEngine, this.fontRenderer, x, y, schematic.getItemStack());
 
 		this.guiSchematicLoad.drawString(this.settings.minecraft.fontRenderer, schematicName, x + 24, y + 6, 0x00FFFFFF);
-	}
-
-	private void drawItemStack(int x, int y, ItemStack itemStack) {
-		drawItemStackSlot(x, y);
-
-		if (itemStack != null) {
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-			RenderHelper.enableGUIStandardItemLighting();
-			Settings.renderItem.renderItemIntoGUI(this.fontRenderer, this.renderEngine, itemStack, x + 2, y + 2);
-			RenderHelper.disableStandardItemLighting();
-			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		}
-	}
-
-	private void drawItemStackSlot(int x, int y) {
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.renderEngine.bindTexture(Gui.statIcons);
-		Tessellator var10 = Tessellator.instance;
-		var10.startDrawingQuads();
-		var10.addVertexWithUV(x + 1 + 0, y + 1 + 18, 0, 0 * 0.0078125F, 18 * 0.0078125F);
-		var10.addVertexWithUV(x + 1 + 18, y + 1 + 18, 0, 18 * 0.0078125F, 18 * 0.0078125F);
-		var10.addVertexWithUV(x + 1 + 18, y + 1 + 0, 0, 18 * 0.0078125F, 0 * 0.0078125F);
-		var10.addVertexWithUV(x + 1 + 0, y + 1 + 0, 0, 0 * 0.0078125F, 0 * 0.0078125F);
-		var10.draw();
 	}
 }
