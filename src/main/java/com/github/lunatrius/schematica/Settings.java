@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica;
 
+import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
 import com.github.lunatrius.schematica.lib.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
@@ -13,7 +14,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.ChunkCache;
 import net.minecraftforge.common.util.ForgeDirection;
-import org.lwjgl.util.vector.Vector3f;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -177,7 +177,7 @@ public class Settings {
 	}
 
 	public Vector3f getTranslationVector() {
-		Vector3f.sub(this.playerPosition, this.offset, this.translationVector);
+		this.translationVector.set(this.playerPosition).sub(this.offset);
 		return this.translationVector;
 	}
 

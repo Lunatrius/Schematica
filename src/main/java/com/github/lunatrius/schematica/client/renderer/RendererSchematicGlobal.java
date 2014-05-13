@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.renderer;
 
+import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.world.SchematicWorld;
@@ -13,7 +14,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector3f;
 
 import java.util.Collections;
 
@@ -105,23 +105,21 @@ public class RendererSchematicGlobal {
 		}
 
 		if (this.settings.isRenderingGuide) {
-			Vector3f start = new Vector3f();
-			Vector3f end = new Vector3f();
+			Vector3f start;
+			Vector3f end;
 
-			Vector3f.sub(this.settings.pointMin, this.settings.offset, start);
-			Vector3f.sub(this.settings.pointMax, this.settings.offset, end);
-			end.translate(1, 1, 1);
+			start = this.settings.pointMin.clone().sub(this.settings.offset);
+			end = this.settings.pointMax.clone().sub(this.settings.offset);
+			end.add(1, 1, 1);
 			RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.0f, 0.75f, 0.0f, 0.25f);
 
-			Vector3f.sub(this.settings.pointA, this.settings.offset, start);
-			Vector3f.sub(this.settings.pointA, this.settings.offset, end);
-			end.translate(1, 1, 1);
+			start = this.settings.pointA.clone().sub(this.settings.offset);
+			end = start.clone().add(1, 1, 1);
 			RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
 			RenderHelper.drawCuboidSurface(start, end, RenderHelper.QUAD_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
 
-			Vector3f.sub(this.settings.pointB, this.settings.offset, start);
-			Vector3f.sub(this.settings.pointB, this.settings.offset, end);
-			end.translate(1, 1, 1);
+			start = this.settings.pointB.clone().sub(this.settings.offset);
+			end = start.clone().add(1, 1, 1);
 			RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
 			RenderHelper.drawCuboidSurface(start, end, RenderHelper.QUAD_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
 		}

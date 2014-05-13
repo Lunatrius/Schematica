@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.world;
 
+import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.lib.Reference;
 import cpw.mods.fml.common.registry.GameData;
@@ -30,7 +31,6 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.storage.SaveHandlerMP;
 import net.minecraftforge.common.util.ForgeDirection;
-import org.lwjgl.util.vector.Vector3f;
 
 import java.io.File;
 import java.io.FileInputStream;

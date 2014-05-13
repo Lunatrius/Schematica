@@ -1,8 +1,8 @@
 package com.github.lunatrius.schematica.client.renderer;
 
+import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.schematica.lib.Reference;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.util.vector.Vector3f;
 
 import java.nio.FloatBuffer;
 
