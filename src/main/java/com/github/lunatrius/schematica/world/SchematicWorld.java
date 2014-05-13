@@ -264,7 +264,7 @@ public class SchematicWorld extends World {
 	}
 
 	public Block getBlockRaw(int x, int y, int z) {
-		return GameData.getBlockRegistry().getRaw(getBlockIdRaw(x, y, z));
+		return GameData.getBlockRegistry().getObjectById(getBlockIdRaw(x, y, z));
 	}
 
 	@Override
