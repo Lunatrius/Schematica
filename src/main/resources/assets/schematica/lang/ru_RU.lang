@@ -1,7 +1,7 @@
 # GUI
 schematica.gui.openFolder=Открыть папку со схемами
 schematica.gui.done=Готово
-schematica.gui.title=Выберите файл Schematic
+schematica.gui.title=Выберите файл схемы
 schematica.gui.folderInfo=(Место хранения схем)
 schematica.gui.noschematic=-- Нет схем --
 schematica.gui.increase=+
@@ -18,7 +18,7 @@ schematica.gui.layers=Слои
 schematica.gui.operations=Операции
 schematica.gui.point.red=Красная точка
 schematica.gui.point.blue=Синяя точка
-schematica.gui.saveselection=Сохранить схему выделенной области. 
+schematica.gui.saveselection=Сохранить схему выделенной области 
 schematica.gui.enable=Включить
 schematica.gui.disable=Выключить
 schematica.gui.x=X:
@@ -30,7 +30,7 @@ schematica.gui.materialamount=Количество
 schematica.gui.printer=Принтер
 
 # Keys
-# schematica.key.category=Schematica
+schematica.key.category=Schematica
 schematica.key.load=Загрузить схему
 schematica.key.save=Сохранить схему
 schematica.key.control=Манипулирование схемой
