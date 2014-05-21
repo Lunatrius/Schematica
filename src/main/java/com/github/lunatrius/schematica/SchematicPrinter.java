@@ -283,7 +283,7 @@ public class SchematicPrinter {
 			}
 		}
 
-		if (itemStack.stackSize == 0 && success) {
+		if (itemStack != null && itemStack.stackSize == 0 && success) {
 			player.inventory.mainInventory[player.inventory.currentItem] = null;
 		}
 
