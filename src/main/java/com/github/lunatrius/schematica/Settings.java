@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.ChunkCache;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.io.File;
@@ -25,7 +24,6 @@ public class Settings {
 
 	private final Vector3f translationVector = new Vector3f();
 	public Minecraft minecraft = Minecraft.getMinecraft();
-	public ChunkCache mcWorldCache = null;
 	public Vector3f playerPosition = new Vector3f();
 	public final List<RendererSchematicChunk> sortedRendererSchematicChunk = new ArrayList<RendererSchematicChunk>();
 	public RenderBlocks renderBlocks = null;
@@ -56,7 +54,6 @@ public class Settings {
 		this.isRenderingGuide = false;
 		Schematica.proxy.setActiveSchematic(null);
 		this.renderBlocks = null;
-		this.mcWorldCache = null;
 		while (this.sortedRendererSchematicChunk.size() > 0) {
 			this.sortedRendererSchematicChunk.remove(0).delete();
 		}
@@ -256,16 +253,6 @@ public class Settings {
 				this.offset.z += 1;
 				break;
 			}
-
-			reloadChunkCache();
-		}
-	}
-
-	public void reloadChunkCache() {
-		SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
-		if (schematic != null) {
-			this.mcWorldCache = new ChunkCache(this.minecraft.theWorld, (int) this.offset.x - 1, (int) this.offset.y - 1, (int) this.offset.z - 1, (int) this.offset.x + schematic.getWidth() + 1, (int) this.offset.y + schematic.getHeight() + 1, (int) this.offset.z + schematic.getLength() + 1, 0);
-			refreshSchematic();
 		}
 	}
 }

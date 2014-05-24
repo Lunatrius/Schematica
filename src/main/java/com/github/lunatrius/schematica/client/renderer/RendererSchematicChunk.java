@@ -219,7 +219,7 @@ public class RendererSchematicChunk {
 	}
 
 	public void renderBlocks(int renderPass, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
-		IBlockAccess mcWorld = this.settings.mcWorldCache;
+		IBlockAccess mcWorld = this.minecraft.theWorld;
 		RenderBlocks renderBlocks = this.settings.renderBlocks;
 
 		int x, y, z, wx, wy, wz;
@@ -338,7 +338,7 @@ public class RendererSchematicChunk {
 			return;
 		}
 
-		IBlockAccess mcWorld = this.settings.mcWorldCache;
+		IBlockAccess mcWorld = this.minecraft.theWorld;
 
 		int x, y, z;
 		Block mcBlock;
