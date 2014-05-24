@@ -274,8 +274,7 @@ public class SchematicWorld extends World {
 
 	@Override
 	public TileEntity getTileEntity(int x, int y, int z) {
-		for (int i = 0; i < this.tileEntities.size(); i++) {
-			TileEntity tileEntity = this.tileEntities.get(i);
+		for (TileEntity tileEntity : this.tileEntities) {
 			if (tileEntity.xCoord == x && tileEntity.yCoord == y && tileEntity.zCoord == z) {
 				return tileEntity;
 			}
@@ -437,10 +436,7 @@ public class SchematicWorld extends World {
 	}
 
 	public void refreshChests() {
-		TileEntity tileEntity;
-		for (int i = 0; i < this.tileEntities.size(); i++) {
-			tileEntity = this.tileEntities.get(i);
-
+		for (TileEntity tileEntity : this.tileEntities) {
 			if (tileEntity instanceof TileEntityChest) {
 				TileEntityChest tileEntityChest = (TileEntityChest) tileEntity;
 				tileEntityChest.adjacentChestChecked = false;
@@ -511,10 +507,8 @@ public class SchematicWorld extends World {
 		this.blocks = localBlocks;
 		this.metadata = localMetadata;
 
-		TileEntity tileEntity;
 		int coord;
-		for (int i = 0; i < this.tileEntities.size(); i++) {
-			tileEntity = this.tileEntities.get(i);
+		for (TileEntity tileEntity : this.tileEntities) {
 			coord = tileEntity.zCoord;
 			tileEntity.zCoord = tileEntity.xCoord;
 			tileEntity.xCoord = this.length - 1 - coord;
