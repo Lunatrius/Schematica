@@ -442,7 +442,9 @@ public class SchematicWorld extends World {
 			tileEntity = this.tileEntities.get(i);
 
 			if (tileEntity instanceof TileEntityChest) {
-				((TileEntityChest) tileEntity).checkForAdjacentChests();
+				TileEntityChest tileEntityChest = (TileEntityChest) tileEntity;
+				tileEntityChest.adjacentChestChecked = false;
+				tileEntityChest.checkForAdjacentChests();
 			}
 		}
 	}
