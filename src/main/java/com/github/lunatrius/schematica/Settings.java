@@ -8,6 +8,7 @@ import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -135,14 +136,20 @@ public class Settings {
 						metadata[x - minX][y - minY][z - minZ] = (byte) this.minecraft.theWorld.getBlockMetadata(x, y, z);
 						tileEntity = this.minecraft.theWorld.getTileEntity(x, y, z);
 						if (tileEntity != null) {
-							tileEntityNBT = new NBTTagCompound();
-							tileEntity.writeToNBT(tileEntityNBT);
+							try {
+								tileEntityNBT = new NBTTagCompound();
+								tileEntity.writeToNBT(tileEntityNBT);
 
-							tileEntity = TileEntity.createAndLoadEntity(tileEntityNBT);
-							tileEntity.xCoord -= minX;
-							tileEntity.yCoord -= minY;
-							tileEntity.zCoord -= minZ;
-							tileEntities.add(tileEntity);
+								tileEntity = TileEntity.createAndLoadEntity(tileEntityNBT);
+								tileEntity.xCoord -= minX;
+								tileEntity.yCoord -= minY;
+								tileEntity.zCoord -= minZ;
+								tileEntities.add(tileEntity);
+							} catch (Exception e) {
+								Reference.logger.error("Error while trying to save tile entity " + tileEntity + "!", e);
+								blocks[x - minX][y - minY][z - minZ] = (short) GameData.getBlockRegistry().getId(Blocks.bedrock);
+								metadata[x - minX][y - minY][z - minZ] = 0;
+							}
 						}
 					}
 				}
