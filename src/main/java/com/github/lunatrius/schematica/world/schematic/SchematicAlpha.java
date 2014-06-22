@@ -12,7 +12,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class SchematicAlpha extends SchematicFormat {
 	@Override
@@ -43,6 +46,16 @@ public class SchematicAlpha extends SchematicFormat {
 		short[][][] blocks = new short[width][height][length];
 		byte[][][] metadata = new byte[width][height][length];
 
+		Short id = null;
+		Map<Short, Short> oldToNew = new HashMap<Short, Short>();
+		if (tagCompound.hasKey("SchematicaMapping")) {
+			NBTTagCompound mapping = tagCompound.getCompoundTag("SchematicaMapping");
+			Set<String> names = mapping.func_150296_c();
+			for (String name : names) {
+				oldToNew.put(mapping.getShort(name), (short) GameData.getBlockRegistry().getId(name));
+			}
+		}
+
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				for (int z = 0; z < length; z++) {
@@ -50,6 +63,9 @@ public class SchematicAlpha extends SchematicFormat {
 					metadata[x][y][z] = (byte) ((localMetadata[x + (y * length + z) * width]) & 0xFF);
 					if (extra) {
 						blocks[x][y][z] |= ((extraBlocks[x + (y * length + z) * width]) & 0xFF) << 8;
+					}
+					if ((id = oldToNew.get(blocks[x][y][z])) != null) {
+						blocks[x][y][z] = id;
 					}
 				}
 			}
@@ -85,6 +101,7 @@ public class SchematicAlpha extends SchematicFormat {
 		byte extraBlocks[] = new byte[size];
 		byte extraBlocksNibble[] = new byte[(int) Math.ceil(size / 2.0)];
 		boolean extra = false;
+		NBTTagCompound mapping = new NBTTagCompound();
 
 		for (int x = 0; x < world.getWidth(); x++) {
 			for (int y = 0; y < world.getHeight(); y++) {
@@ -94,6 +111,7 @@ public class SchematicAlpha extends SchematicFormat {
 					if ((extraBlocks[x + (y * world.getLength() + z) * world.getWidth()] = (byte) (world.getBlockIdRaw(x, y, z) >> 8)) > 0) {
 						extra = true;
 					}
+					mapping.setShort(GameData.getBlockRegistry().getNameForObject(world.getBlockRaw(x, y, z)), (short) world.getBlockIdRaw(x, y, z));
 				}
 			}
 		}
@@ -133,6 +151,7 @@ public class SchematicAlpha extends SchematicFormat {
 		}
 		tagCompound.setTag("Entities", new NBTTagList());
 		tagCompound.setTag("TileEntities", tileEntitiesList);
+		tagCompound.setTag("SchematicaMapping", mapping);
 
 		return true;
 	}
