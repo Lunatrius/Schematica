@@ -39,10 +39,11 @@ public class SchematicAlpha extends SchematicFormat {
 		byte localBlocks[] = tagCompound.getByteArray(BLOCKS);
 		byte localMetadata[] = tagCompound.getByteArray(DATA);
 
-		boolean extra = tagCompound.hasKey(ADD_BLOCKS_SCHEMATICA) || tagCompound.hasKey(ADD_BLOCKS);
+		boolean extra = false;
 		byte extraBlocks[] = null;
 		byte extraBlocksNibble[] = null;
 		if (tagCompound.hasKey(ADD_BLOCKS)) {
+			extra = true;
 			extraBlocksNibble = tagCompound.getByteArray(ADD_BLOCKS);
 			extraBlocks = new byte[extraBlocksNibble.length * 2];
 			for (int i = 0; i < extraBlocksNibble.length; i++) {
@@ -50,6 +51,7 @@ public class SchematicAlpha extends SchematicFormat {
 				extraBlocks[i * 2 + 1] = (byte) (extraBlocksNibble[i] & 0xF);
 			}
 		} else if (tagCompound.hasKey(ADD_BLOCKS_SCHEMATICA)) {
+			extra = true;
 			extraBlocks = tagCompound.getByteArray(ADD_BLOCKS_SCHEMATICA);
 		}
 
@@ -73,11 +75,9 @@ public class SchematicAlpha extends SchematicFormat {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				for (int z = 0; z < length; z++) {
-					blocks[x][y][z] = (short) ((localBlocks[x + (y * length + z) * width]) & 0xFF);
-					metadata[x][y][z] = (byte) ((localMetadata[x + (y * length + z) * width]) & 0xFF);
-					if (extra) {
-						blocks[x][y][z] |= ((extraBlocks[x + (y * length + z) * width]) & 0xFF) << 8;
-					}
+					int index = x + (y * length + z) * width;
+					blocks[x][y][z] = (short) ((localBlocks[index] & 0xFF) | (extra ? ((extraBlocks[index] & 0xFF) << 8) : 0));
+					metadata[x][y][z] = (byte) (localMetadata[index] & 0xFF);
 					if ((id = oldToNew.get(blocks[x][y][z])) != null) {
 						blocks[x][y][z] = id;
 					}
@@ -120,12 +120,14 @@ public class SchematicAlpha extends SchematicFormat {
 		for (int x = 0; x < world.getWidth(); x++) {
 			for (int y = 0; y < world.getHeight(); y++) {
 				for (int z = 0; z < world.getLength(); z++) {
-					localBlocks[x + (y * world.getLength() + z) * world.getWidth()] = (byte) world.getBlockIdRaw(x, y, z);
-					localMetadata[x + (y * world.getLength() + z) * world.getWidth()] = (byte) world.getBlockMetadata(x, y, z);
-					if ((extraBlocks[x + (y * world.getLength() + z) * world.getWidth()] = (byte) (world.getBlockIdRaw(x, y, z) >> 8)) > 0) {
+					int index = x + (y * world.getLength() + z) * world.getWidth();
+					int blockId = world.getBlockIdRaw(x, y, z);
+					localBlocks[index] = (byte) blockId;
+					localMetadata[index] = (byte) world.getBlockMetadata(x, y, z);
+					if ((extraBlocks[index] = (byte) (blockId >> 8)) > 0) {
 						extra = true;
 					}
-					mapping.setShort(GameData.getBlockRegistry().getNameForObject(world.getBlockRaw(x, y, z)), (short) world.getBlockIdRaw(x, y, z));
+					mapping.setShort(GameData.getBlockRegistry().getNameForObject(world.getBlockRaw(x, y, z)), (short) blockId);
 				}
 			}
 		}
