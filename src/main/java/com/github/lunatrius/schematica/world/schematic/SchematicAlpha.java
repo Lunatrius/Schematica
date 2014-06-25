@@ -47,7 +47,7 @@ public class SchematicAlpha extends SchematicFormat {
 			extraBlocksNibble = tagCompound.getByteArray(ADD_BLOCKS);
 			extraBlocks = new byte[extraBlocksNibble.length * 2];
 			for (int i = 0; i < extraBlocksNibble.length; i++) {
-				extraBlocks[i * 2 + 0] = (byte) ((extraBlocksNibble[i] >> 4) & 0xF);
+				extraBlocks[i * 2] = (byte) ((extraBlocksNibble[i] >> 4) & 0xF);
 				extraBlocks[i * 2 + 1] = (byte) (extraBlocksNibble[i] & 0xF);
 			}
 		} else if (tagCompound.hasKey(ADD_BLOCKS_SCHEMATICA)) {
@@ -134,9 +134,9 @@ public class SchematicAlpha extends SchematicFormat {
 
 		for (int i = 0; i < extraBlocksNibble.length; i++) {
 			if (i * 2 + 1 < extraBlocks.length) {
-				extraBlocksNibble[i] = (byte) ((extraBlocks[i * 2 + 0] << 4) | extraBlocks[i * 2 + 1]);
+				extraBlocksNibble[i] = (byte) ((extraBlocks[i * 2] << 4) | extraBlocks[i * 2 + 1]);
 			} else {
-				extraBlocksNibble[i] = (byte) (extraBlocks[i * 2 + 0] << 4);
+				extraBlocksNibble[i] = (byte) (extraBlocks[i * 2] << 4);
 			}
 		}
 
