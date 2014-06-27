@@ -127,7 +127,12 @@ public class SchematicAlpha extends SchematicFormat {
 					if ((extraBlocks[index] = (byte) (blockId >> 8)) > 0) {
 						extra = true;
 					}
-					mapping.setShort(GameData.getBlockRegistry().getNameForObject(world.getBlockRaw(x, y, z)), (short) blockId);
+
+                    String name = GameData.getBlockRegistry().getNameForObject(blockId);
+                    if(!mapping.hasKey(name))
+                    {
+                        mapping.setShort(name, (short) blockId);
+                    }
 				}
 			}
 		}
