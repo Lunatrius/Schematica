@@ -20,7 +20,7 @@ import java.util.zip.GZIPOutputStream;
 
 public abstract class SchematicFormat {
 	public static final Map<String, SchematicFormat> FORMATS = new HashMap<String, SchematicFormat>();
-    public static final String MATERIALS = "Materials";
+	public static final String MATERIALS = "Materials";
 	public static final String FORMAT_CLASSIC = "Classic";
 	public static final String FORMAT_ALPHA = "Alpha";
 	public static String FORMAT_DEFAULT;
