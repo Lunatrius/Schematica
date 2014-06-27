@@ -20,6 +20,7 @@ import java.util.zip.GZIPOutputStream;
 
 public abstract class SchematicFormat {
 	public static final Map<String, SchematicFormat> FORMATS = new HashMap<String, SchematicFormat>();
+	public static final String MATERIALS = "Materials";
 	public static final String FORMAT_CLASSIC = "Classic";
 	public static final String FORMAT_ALPHA = "Alpha";
 	public static String FORMAT_DEFAULT;
@@ -32,7 +33,7 @@ public abstract class SchematicFormat {
 		try {
 			InputStream stream = new FileInputStream(file);
 			NBTTagCompound tagCompound = CompressedStreamTools.readCompressed(stream);
-			String format = tagCompound.getString("Materials");
+			String format = tagCompound.getString(MATERIALS);
 			SchematicFormat schematicFormat = FORMATS.get(format);
 
 			if (schematicFormat == null) {
