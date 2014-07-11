@@ -53,9 +53,9 @@ minecraft {
     version = "${config.version.minecraft}-${config.version.forge}"
 
     if (!project.hasProperty("run_location"))
-        assetDir = "run/assets"
+        runDir = "run"
     else
-        assetDir = run_location.replace("{modid}", config.mod.id).replace("{mcversion}", config.version.minecraft) + "assets"
+        runDir = run_location.replace("{modid}", config.mod.id).replace("{mcversion}", config.version.minecraft)
 }
 
 jar {
