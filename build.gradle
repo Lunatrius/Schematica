@@ -2,22 +2,22 @@ buildscript {
     repositories {
         mavenCentral()
         maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
+            name = 'forge'
+            url = 'http://files.minecraftforge.net/maven'
         }
         maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+            name = 'sonatype'
+            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
         }
     }
     dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT"
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
     }
 }
 
-apply plugin: "forge"
+apply plugin: 'forge'
 
-ext.configFile = file "build.properties"
+ext.configFile = file 'build.properties'
 
 configFile.withReader {
     def prop = new Properties()
@@ -25,22 +25,21 @@ configFile.withReader {
     ext.config = new ConfigSlurper().parse prop
 }
 
-ext.build = System.getenv().BUILD_NUMBER ?: "dev"
+ext.build = System.getenv().BUILD_NUMBER ?: 'git'
 ext.modversion = "${config.version.major}.${config.version.minor}.${config.version.micro}.${build}"
 
-group = "com.github.lunatrius"
+group = 'com.github.lunatrius'
 version = "${config.version.minecraft}-${modversion}"
-archivesBaseName = config.mod.id
 
 repositories {
     ivy {
-        name = "lunatrius' ivy repo"
-        url "http://mc.lunatri.us/files"
+        name = 'lunatrius\' ivy repo'
+        url 'http://mc.lunatri.us/files'
     }
 }
 
 dependencies {
-    compile group: group, name: "LunatriusCore", version: "${config.version.minecraft}-${config.version.lunatriuscore}", classifier: "deobf"
+    compile group: group, name: 'LunatriusCore', version: "${config.version.minecraft}-${config.version.lunatriuscore}", classifier: 'dev'
 }
 
 idea {
@@ -49,66 +48,73 @@ idea {
     }
 }
 
+def commonManifest = {
+    if (config.extra.fmlat) {
+        attributes 'FMLAT': config.extra.fmlat
+    }
+}
+
 minecraft {
     version = "${config.version.minecraft}-${config.version.forge}"
 
-    if (!project.hasProperty("run_location"))
-        runDir = "run"
+    if (!project.hasProperty('run_location'))
+        runDir = 'run'
     else
-        runDir = run_location.replace("{modid}", config.mod.id).replace("{mcversion}", config.version.minecraft)
+        runDir = run_location.replace('{modid}', project.name).replace('{mcversion}', config.version.minecraft)
 }
 
 jar {
-    classifier = "universal"
+    classifier = config.extra.classifier ?: 'universal'
+    manifest commonManifest
 }
 
 processResources {
     // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
 
     from (sourceSets.main.resources.srcDirs) {
-        include "mcmod.info"
-        include "version.properties"
+        include 'mcmod.info'
+        include 'version.properties'
 
-        expand (["modid": config.mod.id,
-            "version": modversion,
-            "mcversion": config.version.minecraft,
-            "forgeversion": config.version.forge,
-            "minforgeversion": config.version.minforge ?: config.version.forge,
-            "coreversion": config.version.lunatriuscore
+        expand (['modid': project.name,
+            'version': modversion,
+            'mcversion': config.version.minecraft,
+            'forgeversion': config.version.forge,
+            'minforgeversion': config.version.minforge ?: config.version.forge,
+            'coreversion': config.version.lunatriuscore
         ])
     }
 
     from (sourceSets.main.resources.srcDirs) {
-        exclude "mcmod.info"
-        exclude "version.properties"
+        exclude 'mcmod.info'
+        exclude 'version.properties'
     }
 }
 
-if (!project.hasProperty("keystore_location"))
-    ext.keystore_location = "."
+if (!project.hasProperty('keystore_location'))
+    ext.keystore_location = '.'
 
-if (!project.hasProperty("keystore_alias"))
-    ext.keystore_alias = ""
+if (!project.hasProperty('keystore_alias'))
+    ext.keystore_alias = ''
 
-if (!project.hasProperty("keystore_password"))
-    ext.keystore_password = ""
+if (!project.hasProperty('keystore_password'))
+    ext.keystore_password = ''
 
-if (!project.hasProperty("release_location"))
-    ext.release_location = "."
+if (!project.hasProperty('release_location'))
+    ext.release_location = '.'
 else
-    ext.release_location = release_location.replace("{modid}", config.mod.id).replace("{mcversion}", config.version.minecraft).replace("{version}", version)
+    ext.release_location = release_location.replace('{modid}', project.name).replace('{mcversion}', config.version.minecraft).replace('{version}', version)
 
-task signJar(dependsOn: "reobf") {
+task signJar(dependsOn: 'reobf') {
     inputs.file jar.getArchivePath()
     inputs.file keystore_location
-    inputs.property "keystore_alias", keystore_alias
-    inputs.property "keystore_password", keystore_password
+    inputs.property 'keystore_alias', keystore_alias
+    inputs.property 'keystore_password', keystore_password
     outputs.file jar.getArchivePath()
 
     onlyIf {
-        return keystore_location != "."
+        return keystore_location != '.'
     }
 
     doLast {
@@ -122,25 +128,27 @@ task signJar(dependsOn: "reobf") {
     }
 }
 
-task deobfJar(type: Jar) {
+task devJar(type: Jar) {
     from sourceSets.main.output
-    classifier = "deobf"
+    classifier = 'dev'
+    manifest commonManifest
 }
 
 task sourceJar(type: Jar) {
     from sourceSets.main.allSource
-    classifier = "sources"
+    classifier = 'sources'
+    manifest commonManifest
 }
 
-task release(dependsOn: ["sourceJar", "deobfJar", "signJar"], type: Copy) {
+task release(dependsOn: ['sourceJar', 'devJar', 'signJar'], type: Copy) {
     from project.tasks.jar.destinationDir
     into project.file(project.release_location)
 
     eachFile { file ->
-        logger.info "copying ${file}"
+        logger.lifecycle "copying ${file}"
     }
 
     onlyIf {
-        return project.release_location != "."
+        return project.release_location != '.'
     }
 }

@@ -1,43 +1,43 @@
-package com.github.lunatrius.schematica;
+package com.github.lunatrius.schematica.proxy;
 
-import com.github.lunatrius.schematica.lib.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
 import java.io.File;
 
-public class CommonProxy {
+public class ServerProxy extends CommonProxy {
+	@Override
+	public void setConfigEntryClasses() {
+	}
+
+	@Override
 	public void registerKeybindings() {
 	}
 
+	@Override
 	public void registerEvents() {
 	}
 
-	public void createFolders() {
-		Reference.schematicDirectory = Reference.config.schematicDirectory;
-
-		if (!Reference.schematicDirectory.exists()) {
-			if (!Reference.schematicDirectory.mkdirs()) {
-				Reference.logger.info("Could not create schematic directory [%s]!", Reference.schematicDirectory.getAbsolutePath());
-			}
-		}
-	}
-
+	@Override
 	public File getDataDirectory() {
 		return MinecraftServer.getServer().getFile(".");
 	}
 
+	@Override
 	public void setActiveSchematic(SchematicWorld world) {
 	}
 
+	@Override
 	public void setActiveSchematic(SchematicWorld world, EntityPlayer player) {
 	}
 
+	@Override
 	public SchematicWorld getActiveSchematic() {
 		return null;
 	}
 
+	@Override
 	public SchematicWorld getActiveSchematic(EntityPlayer player) {
 		return null;
 	}

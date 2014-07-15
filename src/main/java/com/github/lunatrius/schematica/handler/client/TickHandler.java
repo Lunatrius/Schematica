@@ -1,9 +1,10 @@
-package com.github.lunatrius.schematica.client.events;
+package com.github.lunatrius.schematica.handler.client;
 
 import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
+import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.lib.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -49,7 +50,7 @@ public class TickHandler {
 				this.minecraft.mcProfiler.startSection("printer");
 				SchematicPrinter printer = SchematicPrinter.INSTANCE;
 				if (printer.isEnabled() && printer.isPrinting() && this.ticks-- < 0) {
-					this.ticks = Reference.config.placeDelay;
+					this.ticks = ConfigurationHandler.placeDelay;
 
 					printer.print();
 				}

@@ -2,7 +2,7 @@ package com.github.lunatrius.schematica;
 
 import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.config.PlacementData;
-import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
@@ -112,7 +112,7 @@ public class SchematicPrinter {
 					}
 
 					if (this.timeout[x][y][z] > 0) {
-						this.timeout[x][y][z] -= Reference.config.placeDelay;
+						this.timeout[x][y][z] -= ConfigurationHandler.placeDelay;
 						continue;
 					}
 
@@ -127,8 +127,8 @@ public class SchematicPrinter {
 
 					int metadata = this.schematic.getBlockMetadata(x, y, z);
 					if (placeBlock(this.minecraft, world, player, wx, wy, wz, BlockInfo.getItemFromBlock(block), metadata)) {
-						this.timeout[x][y][z] = (byte) Reference.config.timeout;
-						if (!Reference.config.placeInstantly) {
+						this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
+						if (!ConfigurationHandler.placeInstantly) {
 							player.inventory.currentItem = slot;
 							syncSneaking(player, isSneaking);
 							return true;
@@ -224,7 +224,7 @@ public class SchematicPrinter {
 			}
 		}
 
-		if (direction != ForgeDirection.UNKNOWN || !Reference.config.placeAdjacent) {
+		if (direction != ForgeDirection.UNKNOWN || !ConfigurationHandler.placeAdjacent) {
 			return placeBlock(minecraft, world, player, x, y, z, direction, 0.0f, offsetY, 0.0f);
 		}
 
