@@ -1,9 +1,8 @@
-package com.github.lunatrius.schematica.client.events;
+package com.github.lunatrius.schematica.handler.client;
 
 import com.github.lunatrius.schematica.client.gui.GuiSchematicControl;
 import com.github.lunatrius.schematica.client.gui.GuiSchematicLoad;
 import com.github.lunatrius.schematica.client.gui.GuiSchematicSave;
-import com.github.lunatrius.schematica.lib.Strings;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -13,9 +12,14 @@ import org.lwjgl.input.Keyboard;
 import static cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 
 public class KeyInputHandler {
-	private static final KeyBinding KEY_BINDING_LOAD = new KeyBinding(Strings.KEY_LOAD, Keyboard.KEY_DIVIDE, Strings.KEY_CATEGORY);
-	private static final KeyBinding KEY_BINDING_SAVE = new KeyBinding(Strings.KEY_SAVE, Keyboard.KEY_MULTIPLY, Strings.KEY_CATEGORY);
-	private static final KeyBinding KEY_BINDING_CONTROL = new KeyBinding(Strings.KEY_CONTROL, Keyboard.KEY_SUBTRACT, Strings.KEY_CATEGORY);
+	public static final String CATEGORY = "schematica.key.category";
+	public static final String LOAD = "schematica.key.load";
+	public static final String SAVE = "schematica.key.save";
+	public static final String CONTROL = "schematica.key.control";
+
+	private static final KeyBinding KEY_BINDING_LOAD = new KeyBinding(LOAD, Keyboard.KEY_DIVIDE, CATEGORY);
+	private static final KeyBinding KEY_BINDING_SAVE = new KeyBinding(SAVE, Keyboard.KEY_MULTIPLY, CATEGORY);
+	private static final KeyBinding KEY_BINDING_CONTROL = new KeyBinding(CONTROL, Keyboard.KEY_SUBTRACT, CATEGORY);
 
 	public static final KeyBinding[] KEY_BINDINGS = new KeyBinding[] {
 			KEY_BINDING_LOAD, KEY_BINDING_SAVE, KEY_BINDING_CONTROL

@@ -1,7 +1,7 @@
 package com.github.lunatrius.schematica.client.gui;
 
 import com.github.lunatrius.schematica.Settings;
-import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -217,7 +217,7 @@ public class GuiSchematicSave extends GuiScreen {
 				this.btnSave.enabled = this.settings.isRenderingGuide;
 			} else if (guiButton.id == this.btnSave.id) {
 				String path = this.tfFilename.getText() + ".schematic";
-				if (this.settings.saveSchematic(Reference.schematicDirectory, path, this.settings.pointMin, this.settings.pointMax)) {
+				if (this.settings.saveSchematic(ConfigurationHandler.schematicDirectory, path, this.settings.pointMin, this.settings.pointMax)) {
 					this.filename = "";
 					this.tfFilename.setText(this.filename);
 				}

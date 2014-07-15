@@ -1,11 +1,12 @@
-package com.github.lunatrius.schematica.client;
+package com.github.lunatrius.schematica.proxy;
 
-import com.github.lunatrius.schematica.CommonProxy;
-import com.github.lunatrius.schematica.client.events.ChatEventHandler;
-import com.github.lunatrius.schematica.client.events.KeyInputHandler;
-import com.github.lunatrius.schematica.client.events.TickHandler;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
+import com.github.lunatrius.schematica.handler.ConfigurationHandler;
+import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
+import com.github.lunatrius.schematica.handler.client.KeyInputHandler;
+import com.github.lunatrius.schematica.handler.client.TickHandler;
 import com.github.lunatrius.schematica.world.SchematicWorld;
+import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.client.Minecraft;
@@ -20,6 +21,14 @@ public class ClientProxy extends CommonProxy {
 	private SchematicWorld schematicWorld = null;
 
 	@Override
+	public void setConfigEntryClasses() {
+		ConfigurationHandler.propAlpha.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
+		ConfigurationHandler.propBlockDelta.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
+		ConfigurationHandler.propPlaceDelay.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
+		ConfigurationHandler.propTimeout.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
+	}
+
+	@Override
 	public void registerKeybindings() {
 		for (KeyBinding keyBinding : KeyInputHandler.KEY_BINDINGS) {
 			ClientRegistry.registerKeyBinding(keyBinding);
@@ -30,6 +39,7 @@ public class ClientProxy extends CommonProxy {
 	public void registerEvents() {
 		FMLCommonHandler.instance().bus().register(new KeyInputHandler());
 		FMLCommonHandler.instance().bus().register(new TickHandler());
+		FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
 
 		this.rendererSchematicGlobal = new RendererSchematicGlobal();
 		MinecraftForge.EVENT_BUS.register(this.rendererSchematicGlobal);

@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica.client.renderer;
 
 import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.schematica.Settings;
+import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.lib.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -275,44 +276,44 @@ public class RendererSchematicChunk {
 						boolean isAirBlock = mcWorld.isAirBlock(wx, wy, wz);
 
 						if (!isAirBlock) {
-							if (Reference.config.highlight && renderPass == 2) {
-								if (block == Blocks.air && Reference.config.highlightAir) {
+							if (ConfigurationHandler.highlight && renderPass == 2) {
+								if (block == Blocks.air && ConfigurationHandler.highlightAir) {
 									zero.set(x, y, z);
 									size.set(x + 1, y + 1, z + 1);
-									if (Reference.config.drawQuads) {
+									if (ConfigurationHandler.drawQuads) {
 										RenderHelper.drawCuboidSurface(zero, size, RenderHelper.QUAD_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
 									}
-									if (Reference.config.drawLines) {
+									if (ConfigurationHandler.drawLines) {
 										RenderHelper.drawCuboidOutline(zero, size, RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
 									}
 								} else if (block != mcBlock) {
 									zero.set(x, y, z);
 									size.set(x + 1, y + 1, z + 1);
-									if (Reference.config.drawQuads) {
+									if (ConfigurationHandler.drawQuads) {
 										RenderHelper.drawCuboidSurface(zero, size, sides, 1.0f, 0.0f, 0.0f, 0.25f);
 									}
-									if (Reference.config.drawLines) {
+									if (ConfigurationHandler.drawLines) {
 										RenderHelper.drawCuboidOutline(zero, size, sides, 1.0f, 0.0f, 0.0f, 0.25f);
 									}
 								} else if (this.schematic.getBlockMetadata(x, y, z) != mcWorld.getBlockMetadata(wx, wy, wz)) {
 									zero.set(x, y, z);
 									size.set(x + 1, y + 1, z + 1);
-									if (Reference.config.drawQuads) {
+									if (ConfigurationHandler.drawQuads) {
 										RenderHelper.drawCuboidSurface(zero, size, sides, 0.75f, 0.35f, 0.0f, 0.25f);
 									}
-									if (Reference.config.drawLines) {
+									if (ConfigurationHandler.drawLines) {
 										RenderHelper.drawCuboidOutline(zero, size, sides, 0.75f, 0.35f, 0.0f, 0.25f);
 									}
 								}
 							}
 						} else if (block != Blocks.air) {
-							if (Reference.config.highlight && renderPass == 2) {
+							if (ConfigurationHandler.highlight && renderPass == 2) {
 								zero.set(x, y, z);
 								size.set(x + 1, y + 1, z + 1);
-								if (Reference.config.drawQuads) {
+								if (ConfigurationHandler.drawQuads) {
 									RenderHelper.drawCuboidSurface(zero, size, sides, 0.0f, 0.75f, 1.0f, 0.25f);
 								}
-								if (Reference.config.drawLines) {
+								if (ConfigurationHandler.drawLines) {
 									RenderHelper.drawCuboidOutline(zero, size, sides, 0.0f, 0.75f, 1.0f, 0.25f);
 								}
 							}
@@ -343,7 +344,7 @@ public class RendererSchematicChunk {
 		int x, y, z;
 		Block mcBlock;
 
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, Reference.config.alpha);
+		GL11.glColor4f(1.0f, 1.0f, 1.0f, ConfigurationHandler.alpha);
 
 		try {
 			for (TileEntity tileEntity : this.tileEntities) {
@@ -372,7 +373,7 @@ public class RendererSchematicChunk {
 						} catch (Exception e) {
 							Reference.logger.error("Failed to render a tile entity!", e);
 						}
-						GL11.glColor4f(1.0f, 1.0f, 1.0f, Reference.config.alpha);
+						GL11.glColor4f(1.0f, 1.0f, 1.0f, ConfigurationHandler.alpha);
 					}
 				}
 			}
@@ -382,7 +383,7 @@ public class RendererSchematicChunk {
 	}
 
 	private void bindTexture() {
-		if (!Reference.config.enableAlpha) {
+		if (!ConfigurationHandler.enableAlpha) {
 			this.minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
 			return;
 		}

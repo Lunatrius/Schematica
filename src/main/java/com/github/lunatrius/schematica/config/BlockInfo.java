@@ -1,6 +1,5 @@
 package com.github.lunatrius.schematica.config;
 
-import com.github.lunatrius.schematica.lib.Strings;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
@@ -27,13 +26,15 @@ import java.util.Map;
 import static com.github.lunatrius.schematica.config.PlacementData.PlacementType;
 
 public class BlockInfo {
+	public static final String MINECRAFT = "minecraft";
+
 	public static final List<Block> BLOCK_LIST_IGNORE_BLOCK = new ArrayList<Block>();
 	public static final List<Block> BLOCK_LIST_IGNORE_METADATA = new ArrayList<Block>();
 	public static final Map<Block, Item> BLOCK_ITEM_MAP = new HashMap<Block, Item>();
 	public static final Map<Class, PlacementData> CLASS_PLACEMENT_MAP = new HashMap<Class, PlacementData>();
 	public static final Map<Item, PlacementData> ITEM_PLACEMENT_MAP = new HashMap<Item, PlacementData>();
 
-	private static String modId = Strings.MINECRAFT;
+	private static String modId = MINECRAFT;
 
 	public static void setModId(String modId) {
 		BlockInfo.modId = modId;
@@ -60,7 +61,7 @@ public class BlockInfo {
 	}
 
 	private static boolean addIgnoredBlock(String blockName) {
-		if (!Strings.MINECRAFT.equals(modId) && !Loader.isModLoaded(modId)) {
+		if (!MINECRAFT.equals(modId) && !Loader.isModLoaded(modId)) {
 			return false;
 		}
 
@@ -151,7 +152,7 @@ public class BlockInfo {
 	}
 
 	private static boolean addIgnoredBlockMetadata(String blockName) {
-		if (!Strings.MINECRAFT.equals(modId) && !Loader.isModLoaded(modId)) {
+		if (!MINECRAFT.equals(modId) && !Loader.isModLoaded(modId)) {
 			return false;
 		}
 
@@ -209,7 +210,7 @@ public class BlockInfo {
 	}
 
 	private static Item addBlockItemMapping(Object blockObj, Object itemObj) {
-		if (!Strings.MINECRAFT.equals(modId) && !Loader.isModLoaded(modId)) {
+		if (!MINECRAFT.equals(modId) && !Loader.isModLoaded(modId)) {
 			return null;
 		}
 

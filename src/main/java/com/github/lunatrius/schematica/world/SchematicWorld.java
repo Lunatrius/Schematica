@@ -314,6 +314,11 @@ public class SchematicWorld extends World {
 	}
 
 	@Override
+	protected int func_152379_p() {
+		return 0;
+	}
+
+	@Override
 	public boolean isAirBlock(int x, int y, int z) {
 		Block block = getBlock(x, y, z);
 		if (block == null) {
