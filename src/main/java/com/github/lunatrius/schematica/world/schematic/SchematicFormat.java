@@ -2,18 +2,14 @@ package com.github.lunatrius.schematica.world.schematic;
 
 import com.github.lunatrius.schematica.lib.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 
-import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPOutputStream;
@@ -61,10 +57,7 @@ public abstract class SchematicFormat {
 			DataOutputStream dataOutputStream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 
 			try {
-				Method method = ReflectionHelper.findMethod(NBTTagCompound.class, null, new String[] {
-						"func_150298_a", "a"
-				}, String.class, NBTBase.class, DataOutput.class);
-				method.invoke(null, "Schematic", tagCompound, dataOutputStream);
+				NBTTagCompound.func_150298_a("Schematic", tagCompound, dataOutputStream);
 			} finally {
 				dataOutputStream.close();
 			}
