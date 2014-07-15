@@ -1,4 +1,4 @@
-# GUI
+# gui - general
 schematica.gui.openFolder=เปิดโฟลเดอร์ Schematic
 schematica.gui.done=เสร็จสิ้น
 schematica.gui.title=เลือกไฟล์ Schematic ที่ต้องการ
@@ -29,7 +29,45 @@ schematica.gui.materialname=ส่วนประกอบ
 schematica.gui.materialamount=จำนวน
 schematica.gui.printer=การปริ๊น
 
-# Keys
+# gui - config - categories
+# schematica.config.category.render=Rendering
+# schematica.config.category.render.tooltip=Render related settings.
+# schematica.config.category.printer=Printer
+# schematica.config.category.printer.tooltip=Printer related settings.
+# schematica.config.category.general=General
+# schematica.config.category.general.tooltip=General settings.
+
+# gui - config - render
+# schematica.config.alphaEnabled=Alpha Enabled
+# schematica.config.alphaEnabled.tooltip=Enable transparent textures.
+# schematica.config.alpha=Alpha
+# schematica.config.alpha.tooltip=Alpha value used when rendering the schematic (1.0 = opaque, 0.5 = half transparent, 0.0 = transparent).
+# schematica.config.highlight=Highlight Blocks
+# schematica.config.highlight.tooltip=Highlight invalid placed blocks and to be placed blocks.
+# schematica.config.highlightAir=Highlight Air
+# schematica.config.highlightAir.tooltip=Highlight blocks that should be air.
+# schematica.config.blockDelta=Block Delta
+# schematica.config.blockDelta.tooltip=Delta value used for highlighting (if you experience z-fighting increase this).
+# schematica.config.drawQuads=Draw Quads
+# schematica.config.drawQuads.tooltip=Draw surface areas.
+# schematica.config.drawLines=Draw Lines
+# schematica.config.drawLines.tooltip=Draw outlines.
+
+# gui - config - printer
+# schematica.config.placeDelay=Placement Delay
+# schematica.config.placeDelay.tooltip=Delay between placement attempts (in ticks).
+# schematica.config.timeout=Timeout
+# schematica.config.timeout.tooltip=Timeout before re-trying failed blocks.
+# schematica.config.placeInstantly=Place Instantly
+# schematica.config.placeInstantly.tooltip=Place all blocks that can be placed in one tick.
+# schematica.config.placeAdjacent=Place Only Adjacent
+# schematica.config.placeAdjacent.tooltip=Place blocks only if there is an adjacent block next to them.
+
+# gui - config - general
+# schematica.config.schematicDirectory=Schematic Directory
+# schematica.config.schematicDirectory.tooltip=Schematic directory.
+
+# keys
 # schematica.key.category=Schematica
 schematica.key.load=เปิดไฟล์ Schematic
 schematica.key.save=บันทึกไฟล์ Schematic
