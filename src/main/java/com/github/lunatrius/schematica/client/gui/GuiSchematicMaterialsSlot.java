@@ -1,16 +1,12 @@
 package com.github.lunatrius.schematica.client.gui;
 
-import com.github.lunatrius.schematica.Settings;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 
 class GuiSchematicMaterialsSlot extends GuiSlot {
-	private final FontRenderer fontRenderer = Settings.instance.minecraft.fontRenderer;
-	private final TextureManager renderEngine = Settings.instance.minecraft.renderEngine;
+	private final Minecraft minecraft = Minecraft.getMinecraft();
 
 	private final GuiSchematicMaterials guiSchematicMaterials;
 
@@ -58,9 +54,9 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 			itemName = "Unknown";
 		}
 
-		GuiHelper.drawItemStack(this.renderEngine, this.fontRenderer, x, y, itemStack);
+		GuiHelper.drawItemStack(this.minecraft.renderEngine, this.minecraft.fontRenderer, x, y, itemStack);
 
-		this.guiSchematicMaterials.drawString(this.fontRenderer, itemName, x + 24, y + 6, 16777215);
-		this.guiSchematicMaterials.drawString(this.fontRenderer, amount, x + 215 - this.fontRenderer.getStringWidth(amount), y + 6, 16777215);
+		this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, itemName, x + 24, y + 6, 16777215);
+		this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amount, x + 215 - this.minecraft.fontRenderer.getStringWidth(amount), y + 6, 16777215);
 	}
 }

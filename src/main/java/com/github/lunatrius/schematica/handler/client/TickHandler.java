@@ -6,6 +6,7 @@ import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -23,19 +24,19 @@ public class TickHandler {
 	}
 
 	@SubscribeEvent
-	public void clientConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+	public void onClientConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
 		Reference.logger.info("Scheduling client settings reset.");
-		Settings.instance.isPendingReset = true;
+		ClientProxy.isPendingReset = true;
 	}
 
 	@SubscribeEvent
-	public void clientDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
+	public void onClientDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
 		Reference.logger.info("Scheduling client settings reset.");
-		Settings.instance.isPendingReset = true;
+		ClientProxy.isPendingReset = true;
 	}
 
 	@SubscribeEvent
-	public void clientTick(TickEvent.ClientTickEvent event) {
+	public void onClientTick(TickEvent.ClientTickEvent event) {
 		if (event.phase == TickEvent.Phase.END) {
 			this.minecraft.mcProfiler.startSection("schematica");
 			SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
@@ -57,9 +58,9 @@ public class TickHandler {
 				this.minecraft.mcProfiler.endSection();
 			}
 
-			if (Settings.instance.isPendingReset) {
-				Settings.instance.reset();
-				Settings.instance.isPendingReset = false;
+			if (ClientProxy.isPendingReset) {
+				Schematica.proxy.resetSettings();
+				ClientProxy.isPendingReset = false;
 			}
 
 			this.minecraft.mcProfiler.endSection();

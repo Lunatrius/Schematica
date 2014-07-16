@@ -28,7 +28,7 @@ public class KeyInputHandler {
 	private final Minecraft minecraft = Minecraft.getMinecraft();
 
 	@SubscribeEvent
-	public void keyInput(KeyInputEvent event) {
+	public void onKeyInput(KeyInputEvent event) {
 		for (KeyBinding keyBinding : KEY_BINDINGS) {
 			if (keyBinding.isPressed()) {
 				if (this.minecraft.currentScreen == null) {

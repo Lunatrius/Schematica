@@ -9,6 +9,9 @@ import net.minecraft.server.MinecraftServer;
 import java.io.File;
 
 public abstract class CommonProxy {
+	public boolean isSaveEnabled = true;
+	public boolean isLoadEnabled = true;
+
 	public abstract void setConfigEntryClasses();
 
 	public abstract void registerKeybindings();
@@ -25,6 +28,11 @@ public abstract class CommonProxy {
 
 	public File getDataDirectory() {
 		return MinecraftServer.getServer().getFile(".");
+	}
+
+	public void resetSettings() {
+		this.isSaveEnabled = true;
+		this.isLoadEnabled = true;
 	}
 
 	public abstract void setActiveSchematic(SchematicWorld world);
