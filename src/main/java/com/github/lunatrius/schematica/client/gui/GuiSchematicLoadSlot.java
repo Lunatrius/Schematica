@@ -1,22 +1,18 @@
 package com.github.lunatrius.schematica.client.gui;
 
-import com.github.lunatrius.schematica.Settings;
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureManager;
 
 public class GuiSchematicLoadSlot extends GuiSlot {
-	private final Settings settings = Settings.instance;
-	private final FontRenderer fontRenderer = this.settings.minecraft.fontRenderer;
-	private final TextureManager renderEngine = this.settings.minecraft.renderEngine;
+	private final Minecraft minecraft = Minecraft.getMinecraft();
 
 	private final GuiSchematicLoad guiSchematicLoad;
 
 	protected int selectedIndex = -1;
 
 	public GuiSchematicLoadSlot(GuiSchematicLoad guiSchematicLoad) {
-		super(Settings.instance.minecraft, guiSchematicLoad.width, guiSchematicLoad.height, 16, guiSchematicLoad.height - 40, 24);
+		super(Minecraft.getMinecraft(), guiSchematicLoad.width, guiSchematicLoad.height, 16, guiSchematicLoad.height - 40, 24);
 		this.guiSchematicLoad = guiSchematicLoad;
 	}
 
@@ -64,8 +60,8 @@ public class GuiSchematicLoadSlot extends GuiSlot {
 			schematicName = schematicName.replaceAll("(?i)\\.schematic$", "");
 		}
 
-		GuiHelper.drawItemStack(this.renderEngine, this.fontRenderer, x, y, schematic.getItemStack());
+		GuiHelper.drawItemStack(this.minecraft.renderEngine, this.minecraft.fontRenderer, x, y, schematic.getItemStack());
 
-		this.guiSchematicLoad.drawString(this.settings.minecraft.fontRenderer, schematicName, x + 24, y + 6, 0x00FFFFFF);
+		this.guiSchematicLoad.drawString(this.minecraft.fontRenderer, schematicName, x + 24, y + 6, 0x00FFFFFF);
 	}
 }

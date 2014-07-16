@@ -52,14 +52,6 @@ public class Settings {
 	@Deprecated
 	public boolean isRenderingGuide = false;
 	@Deprecated
-	public int chatLines = 0;
-	@Deprecated
-	public boolean isSaveEnabled = true;
-	@Deprecated
-	public boolean isLoadEnabled = true;
-	@Deprecated
-	public boolean isPendingReset = false;
-	@Deprecated
 	public int[] increments = {
 			1, 5, 15, 50, 250
 	};
@@ -70,17 +62,12 @@ public class Settings {
 
 	@Deprecated
 	public void reset() {
-		this.chatLines = 0;
-		SchematicPrinter.INSTANCE.setEnabled(true);
-		this.isSaveEnabled = true;
-		this.isLoadEnabled = true;
+		Schematica.proxy.resetSettings();
 		this.isRenderingGuide = false;
-		Schematica.proxy.setActiveSchematic(null);
 		this.renderBlocks = null;
 		while (this.sortedRendererSchematicChunk.size() > 0) {
 			this.sortedRendererSchematicChunk.remove(0).delete();
 		}
-		SchematicPrinter.INSTANCE.setSchematic(null);
 	}
 
 	@Deprecated

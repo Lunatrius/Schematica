@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.proxy;
 
+import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
@@ -17,8 +18,9 @@ import net.minecraftforge.common.MinecraftForge;
 import java.io.File;
 
 public class ClientProxy extends CommonProxy {
-	private RendererSchematicGlobal rendererSchematicGlobal = null;
 	private SchematicWorld schematicWorld = null;
+	public static boolean isPendingReset = false;
+	public static RendererSchematicGlobal rendererSchematicGlobal = null;
 
 	@Override
 	public void setConfigEntryClasses() {
@@ -41,14 +43,26 @@ public class ClientProxy extends CommonProxy {
 		FMLCommonHandler.instance().bus().register(new TickHandler());
 		FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
 
-		this.rendererSchematicGlobal = new RendererSchematicGlobal();
-		MinecraftForge.EVENT_BUS.register(this.rendererSchematicGlobal);
+		rendererSchematicGlobal = new RendererSchematicGlobal();
+		MinecraftForge.EVENT_BUS.register(rendererSchematicGlobal);
 		MinecraftForge.EVENT_BUS.register(new ChatEventHandler());
 	}
 
 	@Override
 	public File getDataDirectory() {
 		return Minecraft.getMinecraft().mcDataDir;
+	}
+
+	@Override
+	public void resetSettings() {
+		super.resetSettings();
+
+		ChatEventHandler.chatLines = 0;
+
+		SchematicPrinter.INSTANCE.setEnabled(true);
+		SchematicPrinter.INSTANCE.setSchematic(null);
+
+		setActiveSchematic(null);
 	}
 
 	@Override

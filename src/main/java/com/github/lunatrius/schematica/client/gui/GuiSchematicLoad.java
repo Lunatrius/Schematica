@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.client.gui;
 
 import com.github.lunatrius.schematica.FileFilterSchematic;
+import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.lib.Reference;
@@ -74,7 +75,7 @@ public class GuiSchematicLoad extends GuiScreen {
 					Sys.openURL("file://" + ConfigurationHandler.schematicDirectory.getAbsolutePath());
 				}
 			} else if (guiButton.id == this.btnDone.id) {
-				if (this.settings.isLoadEnabled) {
+				if (Schematica.proxy.isLoadEnabled) {
 					loadSchematic();
 				}
 				this.mc.displayGuiScreen(this.prevGuiScreen);
