@@ -60,17 +60,17 @@ public class GuiSchematicLoad extends GuiScreen {
 	protected void actionPerformed(GuiButton guiButton) {
 		if (guiButton.enabled) {
 			if (guiButton.id == this.btnOpenDir.id) {
-				boolean success = false;
+				boolean retry = false;
 
 				try {
 					Class c = Class.forName("java.awt.Desktop");
 					Object m = c.getMethod("getDesktop").invoke(null);
 					c.getMethod("browse", URI.class).invoke(m, ConfigurationHandler.schematicDirectory.toURI());
 				} catch (Throwable e) {
-					success = true;
+					retry = true;
 				}
 
-				if (success) {
+				if (retry) {
 					Reference.logger.info("Opening via Sys class!");
 					Sys.openURL("file://" + ConfigurationHandler.schematicDirectory.getAbsolutePath());
 				}
