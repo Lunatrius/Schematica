@@ -4,6 +4,7 @@ import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
@@ -221,7 +222,7 @@ public class RendererSchematicChunk {
 
 	public void renderBlocks(int renderPass, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
 		IBlockAccess mcWorld = this.minecraft.theWorld;
-		RenderBlocks renderBlocks = this.settings.renderBlocks;
+		RenderBlocks renderBlocks = ClientProxy.rendererSchematicGlobal.renderBlocks;
 
 		int x, y, z, wx, wy, wz;
 		int sides;

@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.client.gui;
 import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.Settings;
+import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -138,28 +139,28 @@ public class GuiSchematicControl extends GuiScreen {
 		if (guiButton.enabled) {
 			if (guiButton.id == this.btnDecX.id) {
 				this.settings.offset.x -= this.settings.increments[this.incrementX];
-				this.settings.refreshSchematic();
+				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnIncX.id) {
 				this.settings.offset.x += this.settings.increments[this.incrementX];
-				this.settings.refreshSchematic();
+				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnAmountX.id) {
 				this.incrementX = (this.incrementX + 1) % this.settings.increments.length;
 				this.btnAmountX.displayString = Integer.toString(this.settings.increments[this.incrementX]);
 			} else if (guiButton.id == this.btnDecY.id) {
 				this.settings.offset.y -= this.settings.increments[this.incrementY];
-				this.settings.refreshSchematic();
+				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnIncY.id) {
 				this.settings.offset.y += this.settings.increments[this.incrementY];
-				this.settings.refreshSchematic();
+				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnAmountY.id) {
 				this.incrementY = (this.incrementY + 1) % this.settings.increments.length;
 				this.btnAmountY.displayString = Integer.toString(this.settings.increments[this.incrementY]);
 			} else if (guiButton.id == this.btnDecZ.id) {
 				this.settings.offset.z -= this.settings.increments[this.incrementZ];
-				this.settings.refreshSchematic();
+				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnIncZ.id) {
 				this.settings.offset.z += this.settings.increments[this.incrementZ];
-				this.settings.refreshSchematic();
+				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnAmountZ.id) {
 				this.incrementZ = (this.incrementZ + 1) % this.settings.increments.length;
 				this.btnAmountZ.displayString = Integer.toString(this.settings.increments[this.incrementZ]);
@@ -167,27 +168,27 @@ public class GuiSchematicControl extends GuiScreen {
 				if (this.schematic != null) {
 					this.schematic.decrementRenderingLayer();
 				}
-				this.settings.refreshSchematic();
+				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnIncLayer.id) {
 				if (this.schematic != null) {
 					this.schematic.incrementRenderingLayer();
 				}
-				this.settings.refreshSchematic();
+				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnHide.id) {
 				this.btnHide.displayString = I18n.format(this.schematic != null && this.schematic.toggleRendering() ? "schematica.gui.hide" : "schematica.gui.show");
 			} else if (guiButton.id == this.btnMove.id) {
 				this.settings.moveHere();
-				this.settings.refreshSchematic();
+				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnFlip.id) {
 				if (this.schematic != null) {
 					this.schematic.flip();
-					this.settings.createRendererSchematicChunk();
+					ClientProxy.rendererSchematicGlobal.createRendererSchematicChunks(this.schematic);
 					SchematicPrinter.INSTANCE.refresh();
 				}
 			} else if (guiButton.id == this.btnRotate.id) {
 				if (this.schematic != null) {
 					this.schematic.rotate();
-					this.settings.createRendererSchematicChunk();
+					ClientProxy.rendererSchematicGlobal.createRendererSchematicChunks(this.schematic);
 					SchematicPrinter.INSTANCE.refresh();
 				}
 			} else if (guiButton.id == this.btnMaterials.id) {

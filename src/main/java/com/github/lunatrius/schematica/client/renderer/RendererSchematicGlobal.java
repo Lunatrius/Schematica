@@ -7,6 +7,7 @@ import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.culling.Frustrum;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.profiler.Profiler;
@@ -15,7 +16,9 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class RendererSchematicGlobal {
 	private final Minecraft minecraft = Minecraft.getMinecraft();
@@ -23,6 +26,8 @@ public class RendererSchematicGlobal {
 	private final Profiler profiler = this.minecraft.mcProfiler;
 
 	private final Frustrum frustrum = new Frustrum();
+	public RenderBlocks renderBlocks = null;
+	public final List<RendererSchematicChunk> sortedRendererSchematicChunk = new ArrayList<RendererSchematicChunk>();
 	private final RendererSchematicChunkSorter rendererSchematicChunkSorter = new RendererSchematicChunkSorter();
 
 	@SubscribeEvent
@@ -88,7 +93,7 @@ public class RendererSchematicGlobal {
 			this.profiler.endStartSection("render");
 			int pass;
 			for (pass = 0; pass < 3; pass++) {
-				for (RendererSchematicChunk renderer : this.settings.sortedRendererSchematicChunk) {
+				for (RendererSchematicChunk renderer : this.sortedRendererSchematicChunk) {
 					renderer.render(pass);
 				}
 			}
@@ -166,19 +171,49 @@ public class RendererSchematicGlobal {
 
 	private void updateFrustrum() {
 		this.frustrum.setPosition(this.settings.getTranslationX(), this.settings.getTranslationY(), this.settings.getTranslationZ());
-		for (RendererSchematicChunk rendererSchematicChunk : this.settings.sortedRendererSchematicChunk) {
+		for (RendererSchematicChunk rendererSchematicChunk : this.sortedRendererSchematicChunk) {
 			rendererSchematicChunk.isInFrustrum = this.frustrum.isBoundingBoxInFrustum(rendererSchematicChunk.getBoundingBox());
 		}
 	}
 
 	private void sortAndUpdate() {
-		Collections.sort(this.settings.sortedRendererSchematicChunk, this.rendererSchematicChunkSorter);
+		Collections.sort(this.sortedRendererSchematicChunk, this.rendererSchematicChunkSorter);
 
-		for (RendererSchematicChunk rendererSchematicChunk : this.settings.sortedRendererSchematicChunk) {
+		for (RendererSchematicChunk rendererSchematicChunk : this.sortedRendererSchematicChunk) {
 			if (rendererSchematicChunk.getDirty()) {
 				rendererSchematicChunk.updateRenderer();
 				break;
 			}
+		}
+	}
+
+	public void createRendererSchematicChunks(SchematicWorld schematic) {
+		int width = (schematic.getWidth() - 1) / RendererSchematicChunk.CHUNK_WIDTH + 1;
+		int height = (schematic.getHeight() - 1) / RendererSchematicChunk.CHUNK_HEIGHT + 1;
+		int length = (schematic.getLength() - 1) / RendererSchematicChunk.CHUNK_LENGTH + 1;
+
+		destroyRendererSchematicChunks();
+
+		this.renderBlocks = new RenderBlocks(schematic);
+		for (int y = 0; y < height; y++) {
+			for (int z = 0; z < length; z++) {
+				for (int x = 0; x < width; x++) {
+					this.sortedRendererSchematicChunk.add(new RendererSchematicChunk(schematic, x, y, z));
+				}
+			}
+		}
+	}
+
+	public void destroyRendererSchematicChunks() {
+		this.renderBlocks = null;
+		while (this.sortedRendererSchematicChunk.size() > 0) {
+			this.sortedRendererSchematicChunk.remove(0).delete();
+		}
+	}
+
+	public void refresh() {
+		for (RendererSchematicChunk renderer : this.sortedRendererSchematicChunk) {
+			renderer.setDirty();
 		}
 	}
 }
