@@ -74,7 +74,7 @@ public class TickHandler {
 			for (WorldRenderer worldRenderer : renderers) {
 				if (worldRenderer != null && worldRenderer.needsUpdate && count++ < 125) {
 					AxisAlignedBB worldRendererBoundingBox = worldRenderer.rendererBoundingBox.getOffsetBoundingBox(-Settings.instance.offset.x, -Settings.instance.offset.y, -Settings.instance.offset.z);
-					for (RendererSchematicChunk renderer : Settings.instance.sortedRendererSchematicChunk) {
+					for (RendererSchematicChunk renderer : ClientProxy.rendererSchematicGlobal.sortedRendererSchematicChunk) {
 						if (!renderer.getDirty() && renderer.getBoundingBox().intersectsWith(worldRendererBoundingBox)) {
 							renderer.setDirty();
 						}

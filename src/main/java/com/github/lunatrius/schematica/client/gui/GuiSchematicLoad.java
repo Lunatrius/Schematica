@@ -156,7 +156,7 @@ public class GuiSchematicLoad extends GuiScreen {
 		try {
 			if (selectedIndex >= 0 && selectedIndex < this.schematicFiles.size()) {
 				GuiSchematicEntry schematic = this.schematicFiles.get(selectedIndex);
-				this.settings.loadSchematic((new File(this.currentDirectory, schematic.getName())).getCanonicalPath());
+				Schematica.proxy.loadSchematic(null, this.currentDirectory, schematic.getName());
 			}
 		} catch (Exception e) {
 			Reference.logger.error("Failed to load schematic!", e);

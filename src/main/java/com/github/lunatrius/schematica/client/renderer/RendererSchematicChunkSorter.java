@@ -8,21 +8,21 @@ import java.util.Comparator;
 public class RendererSchematicChunkSorter implements Comparator {
 	private final Settings settings = Settings.instance;
 
-	public int doCompare(RendererSchematicChunk par1RendererSchematicChunk, RendererSchematicChunk par2RendererSchematicChunk) {
-		if (par1RendererSchematicChunk.isInFrustrum && !par2RendererSchematicChunk.isInFrustrum) {
+	public int doCompare(RendererSchematicChunk rendererSchematicChunk1, RendererSchematicChunk rendererSchematicChunk2) {
+		if (rendererSchematicChunk1.isInFrustrum && !rendererSchematicChunk2.isInFrustrum) {
 			return -1;
-		} else if (!par1RendererSchematicChunk.isInFrustrum && par2RendererSchematicChunk.isInFrustrum) {
+		} else if (!rendererSchematicChunk1.isInFrustrum && rendererSchematicChunk2.isInFrustrum) {
 			return 1;
 		} else {
 			Vector3f position = this.settings.playerPosition.clone().sub(this.settings.offset);
-			double dist1 = par1RendererSchematicChunk.distanceToPoint(position);
-			double dist2 = par2RendererSchematicChunk.distanceToPoint(position);
+			double dist1 = rendererSchematicChunk1.distanceToPoint(position);
+			double dist2 = rendererSchematicChunk2.distanceToPoint(position);
 			return dist1 > dist2 ? 1 : (dist1 < dist2 ? -1 : 0);
 		}
 	}
 
 	@Override
-	public int compare(Object par1Obj, Object par2Obj) {
-		return doCompare((RendererSchematicChunk) par1Obj, (RendererSchematicChunk) par2Obj);
+	public int compare(Object obj1, Object obj2) {
+		return doCompare((RendererSchematicChunk) obj1, (RendererSchematicChunk) obj2);
 	}
 }

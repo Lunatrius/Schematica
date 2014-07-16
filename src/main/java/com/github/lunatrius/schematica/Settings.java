@@ -1,24 +1,9 @@
 package com.github.lunatrius.schematica;
 
 import com.github.lunatrius.core.util.vector.Vector3f;
-import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
-import com.github.lunatrius.schematica.lib.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
-import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 @Deprecated
 public class Settings {
@@ -31,10 +16,6 @@ public class Settings {
 	public Minecraft minecraft = Minecraft.getMinecraft();
 	@Deprecated
 	public Vector3f playerPosition = new Vector3f();
-	@Deprecated
-	public final List<RendererSchematicChunk> sortedRendererSchematicChunk = new ArrayList<RendererSchematicChunk>();
-	@Deprecated
-	public RenderBlocks renderBlocks = null;
 	@Deprecated
 	public Vector3f pointA = new Vector3f();
 	@Deprecated
@@ -61,135 +42,6 @@ public class Settings {
 	}
 
 	@Deprecated
-	public void reset() {
-		Schematica.proxy.resetSettings();
-		this.isRenderingGuide = false;
-		this.renderBlocks = null;
-		while (this.sortedRendererSchematicChunk.size() > 0) {
-			this.sortedRendererSchematicChunk.remove(0).delete();
-		}
-	}
-
-	@Deprecated
-	public void createRendererSchematicChunk() {
-		SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
-		int width = (schematic.getWidth() - 1) / RendererSchematicChunk.CHUNK_WIDTH + 1;
-		int height = (schematic.getHeight() - 1) / RendererSchematicChunk.CHUNK_HEIGHT + 1;
-		int length = (schematic.getLength() - 1) / RendererSchematicChunk.CHUNK_LENGTH + 1;
-
-		while (this.sortedRendererSchematicChunk.size() > 0) {
-			this.sortedRendererSchematicChunk.remove(0).delete();
-		}
-
-		int x, y, z;
-		for (x = 0; x < width; x++) {
-			for (y = 0; y < height; y++) {
-				for (z = 0; z < length; z++) {
-					this.sortedRendererSchematicChunk.add(new RendererSchematicChunk(schematic, x, y, z));
-				}
-			}
-		}
-	}
-
-	@Deprecated
-	public boolean loadSchematic(String filename) {
-		try {
-			InputStream stream = new FileInputStream(filename);
-			NBTTagCompound tagCompound = CompressedStreamTools.readCompressed(stream);
-
-			if (tagCompound != null) {
-				Reference.logger.info(tagCompound);
-
-				SchematicWorld schematic = SchematicFormat.readFromFile(new File(filename));
-				Schematica.proxy.setActiveSchematic(schematic);
-
-				Reference.logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", filename, schematic.getWidth(), schematic.getHeight(), schematic.getLength()));
-
-				this.renderBlocks = new RenderBlocks(schematic);
-
-				createRendererSchematicChunk();
-
-				schematic.setRendering(true);
-
-				SchematicPrinter.INSTANCE.setSchematic(schematic);
-			}
-		} catch (Exception e) {
-			Reference.logger.fatal("Failed to load schematic!", e);
-			reset();
-			return false;
-		}
-
-		return true;
-	}
-
-	@Deprecated
-	public boolean saveSchematic(File directory, String filename, Vector3f from, Vector3f to) {
-		try {
-			int minX = (int) Math.min(from.x, to.x);
-			int maxX = (int) Math.max(from.x, to.x);
-			int minY = (int) Math.min(from.y, to.y);
-			int maxY = (int) Math.max(from.y, to.y);
-			int minZ = (int) Math.min(from.z, to.z);
-			int maxZ = (int) Math.max(from.z, to.z);
-			short width = (short) (Math.abs(maxX - minX) + 1);
-			short height = (short) (Math.abs(maxY - minY) + 1);
-			short length = (short) (Math.abs(maxZ - minZ) + 1);
-
-			short[][][] blocks = new short[width][height][length];
-			byte[][][] metadata = new byte[width][height][length];
-			List<TileEntity> tileEntities = new ArrayList<TileEntity>();
-			TileEntity tileEntity = null;
-			NBTTagCompound tileEntityNBT = null;
-
-			for (int x = minX; x <= maxX; x++) {
-				for (int y = minY; y <= maxY; y++) {
-					for (int z = minZ; z <= maxZ; z++) {
-						blocks[x - minX][y - minY][z - minZ] = (short) GameData.getBlockRegistry().getId(this.minecraft.theWorld.getBlock(x, y, z));
-						metadata[x - minX][y - minY][z - minZ] = (byte) this.minecraft.theWorld.getBlockMetadata(x, y, z);
-						tileEntity = this.minecraft.theWorld.getTileEntity(x, y, z);
-						if (tileEntity != null) {
-							try {
-								tileEntityNBT = new NBTTagCompound();
-								tileEntity.writeToNBT(tileEntityNBT);
-
-								tileEntity = TileEntity.createAndLoadEntity(tileEntityNBT);
-								tileEntity.xCoord -= minX;
-								tileEntity.yCoord -= minY;
-								tileEntity.zCoord -= minZ;
-								tileEntities.add(tileEntity);
-							} catch (Exception e) {
-								Reference.logger.error("Error while trying to save tile entity " + tileEntity + "!", e);
-								blocks[x - minX][y - minY][z - minZ] = (short) GameData.getBlockRegistry().getId(Blocks.bedrock);
-								metadata[x - minX][y - minY][z - minZ] = 0;
-							}
-						}
-					}
-				}
-			}
-
-			String iconName = "";
-
-			try {
-				String[] parts = filename.split(";");
-				if (parts.length == 2) {
-					iconName = parts[0];
-					filename = parts[1];
-				}
-			} catch (Exception e) {
-				Reference.logger.error("Failed to parse icon data!", e);
-			}
-
-			SchematicWorld schematicOut = new SchematicWorld(iconName, blocks, metadata, tileEntities, width, height, length);
-
-			SchematicFormat.writeToFile(directory, filename, schematicOut);
-		} catch (Exception e) {
-			Reference.logger.error("Failed to save schematic!", e);
-			return false;
-		}
-		return true;
-	}
-
-	@Deprecated
 	public Vector3f getTranslationVector() {
 		this.translationVector.set(this.playerPosition).sub(this.offset);
 		return this.translationVector;
@@ -208,13 +60,6 @@ public class Settings {
 	@Deprecated
 	public float getTranslationZ() {
 		return this.playerPosition.z - this.offset.z;
-	}
-
-	@Deprecated
-	public void refreshSchematic() {
-		for (RendererSchematicChunk renderer : this.sortedRendererSchematicChunk) {
-			renderer.setDirty();
-		}
 	}
 
 	@Deprecated

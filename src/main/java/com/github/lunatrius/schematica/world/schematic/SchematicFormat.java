@@ -44,7 +44,7 @@ public abstract class SchematicFormat {
 		return null;
 	}
 
-	public static SchematicWorld readFromFile(String directory, String filename) {
+	public static SchematicWorld readFromFile(File directory, String filename) {
 		return readFromFile(new File(directory, filename));
 	}
 

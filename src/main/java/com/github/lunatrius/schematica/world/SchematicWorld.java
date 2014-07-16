@@ -386,6 +386,10 @@ public class SchematicWorld extends World {
 		return block.isSideSolid(this, x, y, z, side);
 	}
 
+	public void setIcon(ItemStack icon) {
+		this.icon = icon;
+	}
+
 	public ItemStack getIcon() {
 		return this.icon;
 	}
