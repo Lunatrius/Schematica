@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.gui;
 
+import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.Settings;
@@ -10,6 +11,8 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 
 public class GuiSchematicControl extends GuiScreen {
+	private static final Vector3i ZERO = new Vector3i();
+
 	private final Settings settings = Settings.instance;
 	@SuppressWarnings("unused")
 	private final GuiScreen prevGuiScreen;
@@ -105,7 +108,7 @@ public class GuiSchematicControl extends GuiScreen {
 		this.btnIncLayer = new GuiButton(id++, this.width - 35, this.height - 150, 25, 20, I18n.format("schematica.gui.increase"));
 		this.buttonList.add(this.btnIncLayer);
 
-		this.btnHide = new GuiButton(id++, this.width - 90, this.height - 105, 80, 20, I18n.format(this.schematic != null && this.schematic.isRendering() ? "schematica.gui.hide" : "schematica.gui.show"));
+		this.btnHide = new GuiButton(id++, this.width - 90, this.height - 105, 80, 20, I18n.format(this.schematic != null && this.schematic.isRendering ? "schematica.gui.hide" : "schematica.gui.show"));
 		this.buttonList.add(this.btnHide);
 
 		this.btnMove = new GuiButton(id++, this.width - 90, this.height - 80, 80, 20, I18n.format("schematica.gui.movehere"));
@@ -123,6 +126,18 @@ public class GuiSchematicControl extends GuiScreen {
 		this.btnPrint = new GuiButton(id++, 10, this.height - 30, 80, 20, I18n.format(this.printer.isPrinting() ? "schematica.gui.disable" : "schematica.gui.enable"));
 		this.buttonList.add(this.btnPrint);
 
+		this.btnDecX.enabled = this.schematic != null;
+		this.btnAmountX.enabled = this.schematic != null;
+		this.btnIncX.enabled = this.schematic != null;
+
+		this.btnDecY.enabled = this.schematic != null;
+		this.btnAmountY.enabled = this.schematic != null;
+		this.btnIncY.enabled = this.schematic != null;
+
+		this.btnDecZ.enabled = this.schematic != null;
+		this.btnAmountZ.enabled = this.schematic != null;
+		this.btnIncZ.enabled = this.schematic != null;
+
 		this.btnDecLayer.enabled = this.schematic != null;
 		this.btnIncLayer.enabled = this.schematic != null;
 		this.btnHide.enabled = this.schematic != null;
@@ -138,28 +153,28 @@ public class GuiSchematicControl extends GuiScreen {
 	protected void actionPerformed(GuiButton guiButton) {
 		if (guiButton.enabled) {
 			if (guiButton.id == this.btnDecX.id) {
-				this.settings.offset.x -= this.settings.increments[this.incrementX];
+				this.schematic.position.x -= this.settings.increments[this.incrementX];
 				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnIncX.id) {
-				this.settings.offset.x += this.settings.increments[this.incrementX];
+				this.schematic.position.x += this.settings.increments[this.incrementX];
 				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnAmountX.id) {
 				this.incrementX = (this.incrementX + 1) % this.settings.increments.length;
 				this.btnAmountX.displayString = Integer.toString(this.settings.increments[this.incrementX]);
 			} else if (guiButton.id == this.btnDecY.id) {
-				this.settings.offset.y -= this.settings.increments[this.incrementY];
+				this.schematic.position.y -= this.settings.increments[this.incrementY];
 				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnIncY.id) {
-				this.settings.offset.y += this.settings.increments[this.incrementY];
+				this.schematic.position.y += this.settings.increments[this.incrementY];
 				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnAmountY.id) {
 				this.incrementY = (this.incrementY + 1) % this.settings.increments.length;
 				this.btnAmountY.displayString = Integer.toString(this.settings.increments[this.incrementY]);
 			} else if (guiButton.id == this.btnDecZ.id) {
-				this.settings.offset.z -= this.settings.increments[this.incrementZ];
+				this.schematic.position.z -= this.settings.increments[this.incrementZ];
 				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnIncZ.id) {
-				this.settings.offset.z += this.settings.increments[this.incrementZ];
+				this.schematic.position.z += this.settings.increments[this.incrementZ];
 				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnAmountZ.id) {
 				this.incrementZ = (this.incrementZ + 1) % this.settings.increments.length;
@@ -177,7 +192,7 @@ public class GuiSchematicControl extends GuiScreen {
 			} else if (guiButton.id == this.btnHide.id) {
 				this.btnHide.displayString = I18n.format(this.schematic != null && this.schematic.toggleRendering() ? "schematica.gui.hide" : "schematica.gui.show");
 			} else if (guiButton.id == this.btnMove.id) {
-				this.settings.moveHere();
+				this.settings.moveHere(this.schematic);
 				ClientProxy.rendererSchematicGlobal.refresh();
 			} else if (guiButton.id == this.btnFlip.id) {
 				if (this.schematic != null) {
@@ -210,17 +225,18 @@ public class GuiSchematicControl extends GuiScreen {
 		drawCenteredString(this.fontRendererObj, this.strLayers, this.width - 50, this.height - 165, 0xFFFFFF);
 		drawCenteredString(this.fontRendererObj, this.strOperations, this.width - 50, this.height - 120, 0xFFFFFF);
 
-		int renderingLayer = this.schematic != null ? this.schematic.getRenderingLayer() : -1;
+		int renderingLayer = this.schematic != null ? this.schematic.renderingLayer : -1;
 		drawCenteredString(this.fontRendererObj, renderingLayer < 0 ? this.strAll : Integer.toString(renderingLayer + 1), this.width - 50, this.height - 145, 0xFFFFFF);
 
+		Vector3i position = this.schematic != null ? this.schematic.position : ZERO;
 		drawString(this.fontRendererObj, this.strX, this.centerX - 65, this.centerY - 24, 0xFFFFFF);
-		drawString(this.fontRendererObj, Integer.toString((int) this.settings.offset.x), this.centerX + 55, this.centerY - 24, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString(position.x), this.centerX + 55, this.centerY - 24, 0xFFFFFF);
 
 		drawString(this.fontRendererObj, this.strY, this.centerX - 65, this.centerY + 1, 0xFFFFFF);
-		drawString(this.fontRendererObj, Integer.toString((int) this.settings.offset.y), this.centerX + 55, this.centerY + 1, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString(position.y), this.centerX + 55, this.centerY + 1, 0xFFFFFF);
 
 		drawString(this.fontRendererObj, this.strZ, this.centerX - 65, this.centerY + 26, 0xFFFFFF);
-		drawString(this.fontRendererObj, Integer.toString((int) this.settings.offset.z), this.centerX + 55, this.centerY + 26, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString(position.z), this.centerX + 55, this.centerY + 26, 0xFFFFFF);
 
 		super.drawScreen(par1, par2, par3);
 	}

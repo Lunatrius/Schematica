@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.client.gui;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
+import com.github.lunatrius.schematica.proxy.ClientProxy;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -136,13 +137,13 @@ public class GuiSchematicSave extends GuiScreen {
 		this.btnIncBZ = new GuiButton(id++, this.centerX + 100, this.centerY + 20, 30, 20, I18n.format("schematica.gui.increase"));
 		this.buttonList.add(this.btnIncBZ);
 
-		this.btnEnable = new GuiButton(id++, this.width - 210, this.height - 30, 50, 20, I18n.format(this.settings.isRenderingGuide ? "schematica.gui.disable" : "schematica.gui.enable"));
+		this.btnEnable = new GuiButton(id++, this.width - 210, this.height - 30, 50, 20, I18n.format(ClientProxy.isRenderingGuide ? "schematica.gui.disable" : "schematica.gui.enable"));
 		this.buttonList.add(this.btnEnable);
 
 		this.tfFilename = new GuiTextField(this.fontRendererObj, this.width - 155, this.height - 29, 100, 18);
 
 		this.btnSave = new GuiButton(id++, this.width - 50, this.height - 30, 40, 20, I18n.format("schematica.gui.save"));
-		this.btnSave.enabled = this.settings.isRenderingGuide;
+		this.btnSave.enabled = ClientProxy.isRenderingGuide;
 		this.buttonList.add(this.btnSave);
 
 		this.tfFilename.setMaxStringLength(1024);
@@ -213,9 +214,9 @@ public class GuiSchematicSave extends GuiScreen {
 				this.incrementBZ = (this.incrementBZ + 1) % this.settings.increments.length;
 				this.btnAmountBZ.displayString = Integer.toString(this.settings.increments[this.incrementBZ]);
 			} else if (guiButton.id == this.btnEnable.id) {
-				this.settings.isRenderingGuide = !this.settings.isRenderingGuide && Schematica.proxy.isSaveEnabled;
-				this.btnEnable.displayString = I18n.format(this.settings.isRenderingGuide ? "schematica.gui.disable" : "schematica.gui.enable");
-				this.btnSave.enabled = this.settings.isRenderingGuide;
+				ClientProxy.isRenderingGuide = !ClientProxy.isRenderingGuide && Schematica.proxy.isSaveEnabled;
+				this.btnEnable.displayString = I18n.format(ClientProxy.isRenderingGuide ? "schematica.gui.disable" : "schematica.gui.enable");
+				this.btnSave.enabled = ClientProxy.isRenderingGuide;
 			} else if (guiButton.id == this.btnSave.id) {
 				String path = this.tfFilename.getText() + ".schematic";
 				if (Schematica.proxy.saveSchematic(null, ConfigurationHandler.schematicDirectory, path, this.mc.theWorld, this.settings.pointMin, this.settings.pointMax)) {

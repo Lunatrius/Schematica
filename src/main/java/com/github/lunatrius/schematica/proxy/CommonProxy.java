@@ -1,6 +1,6 @@
 package com.github.lunatrius.schematica.proxy;
 
-import com.github.lunatrius.core.util.vector.Vector3f;
+import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.lib.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
@@ -43,14 +43,14 @@ public abstract class CommonProxy {
 		this.isLoadEnabled = true;
 	}
 
-	public SchematicWorld getSchematicFromWorld(World world, Vector3f from, Vector3f to) {
+	public SchematicWorld getSchematicFromWorld(World world, Vector3i from, Vector3i to) {
 		try {
-			int minX = (int) Math.min(from.x, to.x);
-			int maxX = (int) Math.max(from.x, to.x);
-			int minY = (int) Math.min(from.y, to.y);
-			int maxY = (int) Math.max(from.y, to.y);
-			int minZ = (int) Math.min(from.z, to.z);
-			int maxZ = (int) Math.max(from.z, to.z);
+			int minX = Math.min(from.x, to.x);
+			int maxX = Math.max(from.x, to.x);
+			int minY = Math.min(from.y, to.y);
+			int maxY = Math.max(from.y, to.y);
+			int minZ = Math.min(from.z, to.z);
+			int maxZ = Math.max(from.z, to.z);
 			short width = (short) (Math.abs(maxX - minX) + 1);
 			short height = (short) (Math.abs(maxY - minY) + 1);
 			short length = (short) (Math.abs(maxZ - minZ) + 1);
@@ -94,7 +94,7 @@ public abstract class CommonProxy {
 		return null;
 	}
 
-	public abstract boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, Vector3f from, Vector3f to);
+	public abstract boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, Vector3i from, Vector3i to);
 
 	public abstract boolean loadSchematic(EntityPlayer player, File directory, String filename);
 

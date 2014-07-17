@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.proxy;
 
 import com.github.lunatrius.core.util.vector.Vector3f;
+import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
@@ -17,15 +18,54 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.io.File;
 
 public class ClientProxy extends CommonProxy {
-	private SchematicWorld schematicWorld = null;
-	public static boolean isPendingReset = false;
 	public static RendererSchematicGlobal rendererSchematicGlobal = null;
+	public static boolean isRenderingGuide = false;
+	public static boolean isPendingReset = false;
+
+	public static final Vector3f playerPosition = new Vector3f();
+	public static ForgeDirection orientation = ForgeDirection.UNKNOWN;
+	public static int rotationRender = 0;
+
+	private SchematicWorld schematicWorld = null;
+
+	public static void setPlayerData(EntityPlayer player, float partialTicks) {
+		playerPosition.x = (float) (player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks);
+		playerPosition.y = (float) (player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks);
+		playerPosition.z = (float) (player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks);
+
+		orientation = getOrientation(player);
+
+		rotationRender = MathHelper.floor_double(player.rotationYaw / 90) & 3;
+	}
+
+	private static ForgeDirection getOrientation(EntityPlayer player) {
+		if (player.rotationPitch > 45) {
+			return ForgeDirection.DOWN;
+		} else if (player.rotationPitch < -45) {
+			return ForgeDirection.UP;
+		} else {
+			switch (MathHelper.floor_double(player.rotationYaw / 90.0 + 0.5) & 3) {
+			case 0:
+				return ForgeDirection.SOUTH;
+			case 1:
+				return ForgeDirection.WEST;
+			case 2:
+				return ForgeDirection.NORTH;
+			case 3:
+				return ForgeDirection.EAST;
+			}
+		}
+
+		return ForgeDirection.UNKNOWN;
+	}
 
 	@Override
 	public void setConfigEntryClasses() {
@@ -73,7 +113,7 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@Override
-	public boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, Vector3f from, Vector3f to) {
+	public boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, Vector3i from, Vector3i to) {
 		try {
 			String iconName = "";
 
@@ -110,7 +150,7 @@ public class ClientProxy extends CommonProxy {
 		Schematica.proxy.setActiveSchematic(schematic);
 		rendererSchematicGlobal.createRendererSchematicChunks(schematic);
 		SchematicPrinter.INSTANCE.setSchematic(schematic);
-		schematic.setRendering(true);
+		schematic.isRendering = true;
 
 		return true;
 	}
