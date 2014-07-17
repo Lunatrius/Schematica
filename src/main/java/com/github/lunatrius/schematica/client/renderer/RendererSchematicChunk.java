@@ -41,10 +41,11 @@ public class RendererSchematicChunk {
 	public final Vector3f centerPosition = new Vector3f();
 
 	private final Settings settings = Settings.instance;
-	private final Minecraft minecraft = this.settings.minecraft;
+	private final Minecraft minecraft = Minecraft.getMinecraft();
 	private final Profiler profiler = this.minecraft.mcProfiler;
 	private final SchematicWorld schematic;
 	private final List<TileEntity> tileEntities = new ArrayList<TileEntity>();
+	private final Vector3f distance = new Vector3f();
 
 	private final AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
 
@@ -141,7 +142,7 @@ public class RendererSchematicChunk {
 				minZ = (int) this.boundingBox.minZ;
 				maxZ = Math.min((int) this.boundingBox.maxZ, this.schematic.getLength());
 
-				int renderingLayer = this.schematic.getRenderingLayer();
+				int renderingLayer = this.schematic.renderingLayer;
 				if (renderingLayer >= 0) {
 					if (renderingLayer >= minY && renderingLayer < maxY) {
 						minY = renderingLayer;
@@ -195,7 +196,7 @@ public class RendererSchematicChunk {
 			return;
 		}
 
-		if (distanceToPoint(this.settings.getTranslationVector()) > 25600) {
+		if (distanceToPoint(this.distance.set(ClientProxy.playerPosition).sub(this.schematic.position.toVector3f())) > 25600) {
 			return;
 		}
 
@@ -241,9 +242,9 @@ public class RendererSchematicChunk {
 					try {
 						block = this.schematic.getBlock(x, y, z);
 
-						wx = (int) this.settings.offset.x + x;
-						wy = (int) this.settings.offset.y + y;
-						wz = (int) this.settings.offset.z + z;
+						wx = this.schematic.position.x + x;
+						wy = this.schematic.position.y + y;
+						wz = this.schematic.position.z + z;
 
 						mcBlock = mcWorld.getBlock(wx, wy, wz);
 
@@ -353,14 +354,14 @@ public class RendererSchematicChunk {
 				y = tileEntity.yCoord;
 				z = tileEntity.zCoord;
 
-				int renderingLayer = this.schematic.getRenderingLayer();
+				int renderingLayer = this.schematic.renderingLayer;
 				if (renderingLayer >= 0) {
 					if (renderingLayer != y) {
 						continue;
 					}
 				}
 
-				mcBlock = mcWorld.getBlock(x + (int) this.settings.offset.x, y + (int) this.settings.offset.y, z + (int) this.settings.offset.z);
+				mcBlock = mcWorld.getBlock(x + this.schematic.position.x, y + this.schematic.position.y, z + this.schematic.position.z);
 
 				if (mcBlock == Blocks.air) {
 					TileEntitySpecialRenderer tileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRenderer(tileEntity);

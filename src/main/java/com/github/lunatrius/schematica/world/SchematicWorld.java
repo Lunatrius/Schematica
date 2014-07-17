@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.world;
 
 import com.github.lunatrius.core.util.vector.Vector3f;
+import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.lib.Reference;
 import cpw.mods.fml.common.registry.GameData;
@@ -61,8 +62,9 @@ public class SchematicWorld extends World {
 	private short length;
 	private short height;
 
-	private boolean isRendering;
-	private int renderingLayer;
+	public final Vector3i position = new Vector3i();
+	public boolean isRendering;
+	public int renderingLayer;
 
 	public SchematicWorld() {
 		// TODO: revert if any issues arise
@@ -257,7 +259,7 @@ public class SchematicWorld extends World {
 	}
 
 	private int getBlockId(int x, int y, int z) {
-		if (getRenderingLayer() != -1 && getRenderingLayer() != y) {
+		if (this.renderingLayer != -1 && this.renderingLayer != y) {
 			return 0;
 		}
 		return getBlockIdRaw(x, y, z);
@@ -418,22 +420,6 @@ public class SchematicWorld extends World {
 	public boolean toggleRendering() {
 		this.isRendering = !this.isRendering;
 		return this.isRendering;
-	}
-
-	public boolean isRendering() {
-		return this.isRendering;
-	}
-
-	public void setRendering(boolean isRendering) {
-		this.isRendering = isRendering;
-	}
-
-	public int getRenderingLayer() {
-		return this.renderingLayer;
-	}
-
-	public void setRenderingLayer(int renderingLayer) {
-		this.renderingLayer = renderingLayer;
 	}
 
 	public void decrementRenderingLayer() {

@@ -3,17 +3,15 @@ package com.github.lunatrius.schematica.client.renderer;
 import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.Settings;
+import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.culling.Frustrum;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.profiler.Profiler;
-import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -34,17 +32,11 @@ public class RendererSchematicGlobal {
 	public void onRender(RenderWorldLastEvent event) {
 		EntityPlayerSP player = this.minecraft.thePlayer;
 		if (player != null) {
-			this.settings.playerPosition.x = (float) (player.lastTickPosX + (player.posX - player.lastTickPosX) * event.partialTicks);
-			this.settings.playerPosition.y = (float) (player.lastTickPosY + (player.posY - player.lastTickPosY) * event.partialTicks);
-			this.settings.playerPosition.z = (float) (player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * event.partialTicks);
-
-			this.settings.rotationRender = MathHelper.floor_double(player.rotationYaw / 90) & 3;
-
-			this.settings.orientation = getOrientation(player);
+			ClientProxy.setPlayerData(player, event.partialTicks);
 
 			this.profiler.startSection("schematica");
 			SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
-			if ((schematic != null && schematic.isRendering()) || this.settings.isRenderingGuide) {
+			if ((schematic != null && schematic.isRendering) || ClientProxy.isRenderingGuide) {
 				render(schematic);
 			}
 
@@ -52,42 +44,28 @@ public class RendererSchematicGlobal {
 		}
 	}
 
-	private ForgeDirection getOrientation(EntityPlayer player) {
-		if (player.rotationPitch > 45) {
-			return ForgeDirection.DOWN;
-		} else if (player.rotationPitch < -45) {
-			return ForgeDirection.UP;
-		} else {
-			switch (MathHelper.floor_double(player.rotationYaw / 90.0 + 0.5) & 3) {
-			case 0:
-				return ForgeDirection.SOUTH;
-			case 1:
-				return ForgeDirection.WEST;
-			case 2:
-				return ForgeDirection.NORTH;
-			case 3:
-				return ForgeDirection.EAST;
-			}
-		}
-
-		return ForgeDirection.UNKNOWN;
-	}
-
 	public void render(SchematicWorld schematic) {
 		GL11.glPushMatrix();
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glEnable(GL11.GL_BLEND);
 
-		GL11.glTranslatef(-this.settings.getTranslationX(), -this.settings.getTranslationY(), -this.settings.getTranslationZ());
+		Vector3f playerPosition = ClientProxy.playerPosition.clone();
+		Vector3f extra = new Vector3f();
+		if (schematic != null) {
+			extra.add(schematic.position.toVector3f());
+			playerPosition.sub(extra);
+		}
+
+		GL11.glTranslatef(-playerPosition.x, -playerPosition.y, -playerPosition.z);
 
 		this.profiler.startSection("schematic");
-		if (schematic != null && schematic.isRendering()) {
+		if (schematic != null && schematic.isRendering) {
 			this.profiler.startSection("updateFrustrum");
-			updateFrustrum();
+			updateFrustrum(schematic);
 
 			this.profiler.endStartSection("sortAndUpdate");
 			if (RendererSchematicChunk.getCanUpdate()) {
-				sortAndUpdate();
+				sortAndUpdate(schematic);
 			}
 
 			this.profiler.endStartSection("render");
@@ -105,25 +83,24 @@ public class RendererSchematicGlobal {
 		RenderHelper.createBuffers();
 
 		this.profiler.startSection("dataPrep");
-		if (schematic != null && schematic.isRendering()) {
-			RenderHelper.drawCuboidOutline(RenderHelper.VEC_ZERO, Schematica.proxy.getActiveSchematic().dimensions(), RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
+		if (schematic != null && schematic.isRendering) {
+			RenderHelper.drawCuboidOutline(RenderHelper.VEC_ZERO, schematic.dimensions(), RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.75f, 0.25f);
 		}
 
-		if (this.settings.isRenderingGuide) {
+		if (ClientProxy.isRenderingGuide) {
 			Vector3f start;
 			Vector3f end;
 
-			start = this.settings.pointMin.clone().sub(this.settings.offset);
-			end = this.settings.pointMax.clone().sub(this.settings.offset);
-			end.add(1, 1, 1);
+			start = this.settings.pointMin.toVector3f().sub(extra);
+			end = this.settings.pointMax.toVector3f().sub(extra).add(1, 1, 1);
 			RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.0f, 0.75f, 0.0f, 0.25f);
 
-			start = this.settings.pointA.clone().sub(this.settings.offset);
+			start = this.settings.pointA.toVector3f().sub(extra);
 			end = start.clone().add(1, 1, 1);
 			RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
 			RenderHelper.drawCuboidSurface(start, end, RenderHelper.QUAD_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
 
-			start = this.settings.pointB.clone().sub(this.settings.offset);
+			start = this.settings.pointB.toVector3f().sub(extra);
 			end = start.clone().add(1, 1, 1);
 			RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
 			RenderHelper.drawCuboidSurface(start, end, RenderHelper.QUAD_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
@@ -169,14 +146,15 @@ public class RendererSchematicGlobal {
 		GL11.glPopMatrix();
 	}
 
-	private void updateFrustrum() {
-		this.frustrum.setPosition(this.settings.getTranslationX(), this.settings.getTranslationY(), this.settings.getTranslationZ());
+	private void updateFrustrum(SchematicWorld schematic) {
+		this.frustrum.setPosition(ClientProxy.playerPosition.x - schematic.position.x, ClientProxy.playerPosition.y - schematic.position.y, ClientProxy.playerPosition.z - schematic.position.z);
 		for (RendererSchematicChunk rendererSchematicChunk : this.sortedRendererSchematicChunk) {
 			rendererSchematicChunk.isInFrustrum = this.frustrum.isBoundingBoxInFrustum(rendererSchematicChunk.getBoundingBox());
 		}
 	}
 
-	private void sortAndUpdate() {
+	private void sortAndUpdate(SchematicWorld schematic) {
+		this.rendererSchematicChunkSorter.setSchematic(schematic);
 		Collections.sort(this.sortedRendererSchematicChunk, this.rendererSchematicChunkSorter);
 
 		for (RendererSchematicChunk rendererSchematicChunk : this.sortedRendererSchematicChunk) {

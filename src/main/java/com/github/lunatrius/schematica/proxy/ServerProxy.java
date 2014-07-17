@@ -1,6 +1,6 @@
 package com.github.lunatrius.schematica.proxy;
 
-import com.github.lunatrius.core.util.vector.Vector3f;
+import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
@@ -27,7 +27,7 @@ public class ServerProxy extends CommonProxy {
 	}
 
 	@Override
-	public boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, Vector3f from, Vector3f to) {
+	public boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, Vector3i from, Vector3i to) {
 		return false;
 	}
 

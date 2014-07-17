@@ -161,6 +161,6 @@ public class GuiSchematicLoad extends GuiScreen {
 		} catch (Exception e) {
 			Reference.logger.error("Failed to load schematic!", e);
 		}
-		this.settings.moveHere();
+		this.settings.moveHere(Schematica.proxy.getActiveSchematic());
 	}
 }

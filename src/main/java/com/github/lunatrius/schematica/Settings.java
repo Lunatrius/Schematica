@@ -1,9 +1,8 @@
 package com.github.lunatrius.schematica;
 
-import com.github.lunatrius.core.util.vector.Vector3f;
+import com.github.lunatrius.core.util.vector.Vector3i;
+import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.world.SchematicWorld;
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.common.util.ForgeDirection;
 
 @Deprecated
 public class Settings {
@@ -11,27 +10,13 @@ public class Settings {
 	public static final Settings instance = new Settings();
 
 	@Deprecated
-	private final Vector3f translationVector = new Vector3f();
+	public Vector3i pointA = new Vector3i();
 	@Deprecated
-	public Minecraft minecraft = Minecraft.getMinecraft();
+	public Vector3i pointB = new Vector3i();
 	@Deprecated
-	public Vector3f playerPosition = new Vector3f();
+	public Vector3i pointMin = new Vector3i();
 	@Deprecated
-	public Vector3f pointA = new Vector3f();
-	@Deprecated
-	public Vector3f pointB = new Vector3f();
-	@Deprecated
-	public Vector3f pointMin = new Vector3f();
-	@Deprecated
-	public Vector3f pointMax = new Vector3f();
-	@Deprecated
-	public int rotationRender = 0;
-	@Deprecated
-	public ForgeDirection orientation = ForgeDirection.UNKNOWN;
-	@Deprecated
-	public Vector3f offset = new Vector3f();
-	@Deprecated
-	public boolean isRenderingGuide = false;
+	public Vector3i pointMax = new Vector3i();
 	@Deprecated
 	public int[] increments = {
 			1, 5, 15, 50, 250
@@ -39,27 +24,6 @@ public class Settings {
 
 	@Deprecated
 	private Settings() {
-	}
-
-	@Deprecated
-	public Vector3f getTranslationVector() {
-		this.translationVector.set(this.playerPosition).sub(this.offset);
-		return this.translationVector;
-	}
-
-	@Deprecated
-	public float getTranslationX() {
-		return this.playerPosition.x - this.offset.x;
-	}
-
-	@Deprecated
-	public float getTranslationY() {
-		return this.playerPosition.y - this.offset.y;
-	}
-
-	@Deprecated
-	public float getTranslationZ() {
-		return this.playerPosition.z - this.offset.z;
 	}
 
 	@Deprecated
@@ -74,12 +38,12 @@ public class Settings {
 	}
 
 	@Deprecated
-	public void moveHere(Vector3f point) {
-		point.x = (int) Math.floor(this.playerPosition.x);
-		point.y = (int) Math.floor(this.playerPosition.y - 1);
-		point.z = (int) Math.floor(this.playerPosition.z);
+	public void moveHere(Vector3i point) {
+		point.x = (int) Math.floor(ClientProxy.playerPosition.x);
+		point.y = (int) Math.floor(ClientProxy.playerPosition.y - 1);
+		point.z = (int) Math.floor(ClientProxy.playerPosition.z);
 
-		switch (this.rotationRender) {
+		switch (ClientProxy.rotationRender) {
 		case 0:
 			point.x -= 1;
 			point.z += 1;
@@ -100,29 +64,29 @@ public class Settings {
 	}
 
 	@Deprecated
-	public void moveHere() {
-		this.offset.x = (int) Math.floor(this.playerPosition.x);
-		this.offset.y = (int) Math.floor(this.playerPosition.y) - 1;
-		this.offset.z = (int) Math.floor(this.playerPosition.z);
+	public void moveHere(SchematicWorld schematic) {
+		Vector3i position = schematic.position;
+		position.x = (int) Math.floor(ClientProxy.playerPosition.x);
+		position.y = (int) Math.floor(ClientProxy.playerPosition.y) - 1;
+		position.z = (int) Math.floor(ClientProxy.playerPosition.z);
 
-		SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
 		if (schematic != null) {
-			switch (this.rotationRender) {
+			switch (ClientProxy.rotationRender) {
 			case 0:
-				this.offset.x -= schematic.getWidth();
-				this.offset.z += 1;
+				position.x -= schematic.getWidth();
+				position.z += 1;
 				break;
 			case 1:
-				this.offset.x -= schematic.getWidth();
-				this.offset.z -= schematic.getLength();
+				position.x -= schematic.getWidth();
+				position.z -= schematic.getLength();
 				break;
 			case 2:
-				this.offset.x += 1;
-				this.offset.z -= schematic.getLength();
+				position.x += 1;
+				position.z -= schematic.getLength();
 				break;
 			case 3:
-				this.offset.x += 1;
-				this.offset.z += 1;
+				position.x += 1;
+				position.z += 1;
 				break;
 			}
 		}

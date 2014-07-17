@@ -1,8 +1,10 @@
 package com.github.lunatrius.schematica;
 
+import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.config.PlacementData;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
+import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
@@ -30,7 +32,6 @@ public class SchematicPrinter {
 	public static final SchematicPrinter INSTANCE = new SchematicPrinter();
 
 	private final Minecraft minecraft = Minecraft.getMinecraft();
-	private final Settings settings = Settings.instance;
 
 	private boolean isEnabled;
 	private boolean isPrinting;
@@ -85,17 +86,18 @@ public class SchematicPrinter {
 
 		syncSneaking(player, true);
 
-		minX = Math.max(0, (int) this.settings.getTranslationX() - 3);
-		maxX = Math.min(this.schematic.getWidth(), (int) this.settings.getTranslationX() + 3);
-		minY = Math.max(0, (int) this.settings.getTranslationY() - 3);
-		maxY = Math.min(this.schematic.getHeight(), (int) this.settings.getTranslationY() + 3);
-		minZ = Math.max(0, (int) this.settings.getTranslationZ() - 3);
-		maxZ = Math.min(this.schematic.getLength(), (int) this.settings.getTranslationZ() + 3);
+		Vector3i trans = ClientProxy.playerPosition.sub(this.schematic.position.toVector3f()).toVector3i();
+		minX = Math.max(0, trans.x - 3);
+		maxX = Math.min(this.schematic.getWidth(), trans.x + 4);
+		minY = Math.max(0, trans.y - 3);
+		maxY = Math.min(this.schematic.getHeight(), trans.y + 4);
+		minZ = Math.max(0, trans.z - 3);
+		maxZ = Math.min(this.schematic.getLength(), trans.z + 4);
 
 		slot = player.inventory.currentItem;
 		isSneaking = player.isSneaking();
 
-		int renderingLayer = this.schematic.getRenderingLayer();
+		int renderingLayer = this.schematic.renderingLayer;
 		for (y = minY; y < maxY; y++) {
 			if (renderingLayer >= 0) {
 				if (y != renderingLayer) {
@@ -116,9 +118,9 @@ public class SchematicPrinter {
 						continue;
 					}
 
-					wx = (int) this.settings.offset.x + x;
-					wy = (int) this.settings.offset.y + y;
-					wz = (int) this.settings.offset.z + z;
+					wx = this.schematic.position.x + x;
+					wy = this.schematic.position.y + y;
+					wz = this.schematic.position.z + z;
 
 					Block realBlock = world.getBlock(wx, wy, wz);
 					if (!world.isAirBlock(wx, wy, wz) && realBlock != null && !realBlock.canPlaceBlockAt(world, wx, wy, wz)) {
@@ -232,8 +234,6 @@ public class SchematicPrinter {
 	}
 
 	private boolean isValidOrientation(EntityPlayer player, int x, int y, int z, PlacementData data, int metadata) {
-		ForgeDirection orientation = this.settings.orientation;
-
 		if (data != null) {
 			switch (data.type) {
 			case BLOCK: {
@@ -241,7 +241,7 @@ public class SchematicPrinter {
 			}
 
 			case PLAYER: {
-				Integer integer = data.mapping.get(orientation);
+				Integer integer = data.mapping.get(ClientProxy.orientation);
 				if (integer != null) {
 					return integer == (metadata & data.maskMeta);
 				}
@@ -249,7 +249,7 @@ public class SchematicPrinter {
 			}
 
 			case PISTON: {
-				Integer integer = data.mapping.get(orientation);
+				Integer integer = data.mapping.get(ClientProxy.orientation);
 				if (integer != null) {
 					return BlockPistonBase.determineOrientation(null, x, y, z, player) == BlockPistonBase.getPistonOrientation(metadata);
 				}
