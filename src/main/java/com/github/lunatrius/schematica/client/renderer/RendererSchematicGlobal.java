@@ -2,7 +2,6 @@ package com.github.lunatrius.schematica.client.renderer;
 
 import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.schematica.Schematica;
-import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -20,7 +19,6 @@ import java.util.List;
 
 public class RendererSchematicGlobal {
 	private final Minecraft minecraft = Minecraft.getMinecraft();
-	private final Settings settings = Settings.instance;
 	private final Profiler profiler = this.minecraft.mcProfiler;
 
 	private final Frustrum frustrum = new Frustrum();
@@ -91,16 +89,16 @@ public class RendererSchematicGlobal {
 			Vector3f start;
 			Vector3f end;
 
-			start = this.settings.pointMin.toVector3f().sub(extra);
-			end = this.settings.pointMax.toVector3f().sub(extra).add(1, 1, 1);
+			start = ClientProxy.pointMin.toVector3f().sub(extra);
+			end = ClientProxy.pointMax.toVector3f().sub(extra).add(1, 1, 1);
 			RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.0f, 0.75f, 0.0f, 0.25f);
 
-			start = this.settings.pointA.toVector3f().sub(extra);
+			start = ClientProxy.pointA.toVector3f().sub(extra);
 			end = start.clone().add(1, 1, 1);
 			RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
 			RenderHelper.drawCuboidSurface(start, end, RenderHelper.QUAD_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
 
-			start = this.settings.pointB.toVector3f().sub(extra);
+			start = ClientProxy.pointB.toVector3f().sub(extra);
 			end = start.clone().add(1, 1, 1);
 			RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
 			RenderHelper.drawCuboidSurface(start, end, RenderHelper.QUAD_ALL, 0.0f, 0.0f, 0.75f, 0.25f);

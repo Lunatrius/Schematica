@@ -2,9 +2,9 @@ package com.github.lunatrius.schematica.client.gui;
 
 import com.github.lunatrius.schematica.FileFilterSchematic;
 import com.github.lunatrius.schematica.Schematica;
-import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -24,7 +24,6 @@ public class GuiSchematicLoad extends GuiScreen {
 	private static final FileFilterSchematic FILE_FILTER_FOLDER = new FileFilterSchematic(true);
 	private static final FileFilterSchematic FILE_FILTER_SCHEMATIC = new FileFilterSchematic(false);
 
-	private final Settings settings = Settings.instance;
 	private final GuiScreen prevGuiScreen;
 	private GuiSchematicLoadSlot guiSchematicLoadSlot;
 
@@ -161,6 +160,6 @@ public class GuiSchematicLoad extends GuiScreen {
 		} catch (Exception e) {
 			Reference.logger.error("Failed to load schematic!", e);
 		}
-		this.settings.moveHere(Schematica.proxy.getActiveSchematic());
+		ClientProxy.moveSchematicToPlayer(Schematica.proxy.getActiveSchematic());
 	}
 }

@@ -1,7 +1,6 @@
 package com.github.lunatrius.schematica.client.renderer;
 
 import com.github.lunatrius.core.util.vector.Vector3f;
-import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.lib.Reference;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
@@ -40,7 +39,6 @@ public class RendererSchematicChunk {
 
 	public final Vector3f centerPosition = new Vector3f();
 
-	private final Settings settings = Settings.instance;
 	private final Minecraft minecraft = Minecraft.getMinecraft();
 	private final Profiler profiler = this.minecraft.mcProfiler;
 	private final SchematicWorld schematic;
@@ -414,7 +412,6 @@ public class RendererSchematicChunk {
 
 				Map<String, TextureAtlasSprite> map = (Map<String, TextureAtlasSprite>) this.fieldMapTexturesStiched.get(this.minecraft.renderEngine.getTexture(TextureMap.locationBlocksTexture));
 				if (map == null) {
-					Settings.logger.logSevere("mapTexturesStiched is null!");
 					resourcePacks.put(resourcePackName, TextureMap.locationBlocksTexture);
 					return;
 				}
