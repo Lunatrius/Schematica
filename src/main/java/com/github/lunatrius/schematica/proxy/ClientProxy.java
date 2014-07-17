@@ -26,6 +26,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.io.File;
 
 public class ClientProxy extends CommonProxy {
+	// TODO: remove this and replace the 3 sepparate buttons with a single control
+	public static final int[] INCREMENTS = {
+			1, 5, 15, 50, 250
+	};
+
 	public static RendererSchematicGlobal rendererSchematicGlobal = null;
 	public static boolean isRenderingGuide = false;
 	public static boolean isPendingReset = false;
@@ -33,6 +38,11 @@ public class ClientProxy extends CommonProxy {
 	public static final Vector3f playerPosition = new Vector3f();
 	public static ForgeDirection orientation = ForgeDirection.UNKNOWN;
 	public static int rotationRender = 0;
+
+	public static final Vector3i pointA = new Vector3i();
+	public static final Vector3i pointB = new Vector3i();
+	public static final Vector3i pointMin = new Vector3i();
+	public static final Vector3i pointMax = new Vector3i();
 
 	private SchematicWorld schematicWorld = null;
 
@@ -65,6 +75,69 @@ public class ClientProxy extends CommonProxy {
 		}
 
 		return ForgeDirection.UNKNOWN;
+	}
+
+	public static void updatePoints() {
+		pointMin.x = Math.min(pointA.x, pointB.x);
+		pointMin.y = Math.min(pointA.y, pointB.y);
+		pointMin.z = Math.min(pointA.z, pointB.z);
+
+		pointMax.x = Math.max(pointA.x, pointB.x);
+		pointMax.y = Math.max(pointA.y, pointB.y);
+		pointMax.z = Math.max(pointA.z, pointB.z);
+	}
+
+	public static void movePointToPlayer(Vector3i point) {
+		point.x = (int) Math.floor(playerPosition.x);
+		point.y = (int) Math.floor(playerPosition.y - 1);
+		point.z = (int) Math.floor(playerPosition.z);
+
+		switch (rotationRender) {
+		case 0:
+			point.x -= 1;
+			point.z += 1;
+			break;
+		case 1:
+			point.x -= 1;
+			point.z -= 1;
+			break;
+		case 2:
+			point.x += 1;
+			point.z -= 1;
+			break;
+		case 3:
+			point.x += 1;
+			point.z += 1;
+			break;
+		}
+	}
+
+	public static void moveSchematicToPlayer(SchematicWorld schematic) {
+		Vector3i position = schematic.position;
+		position.x = (int) Math.floor(playerPosition.x);
+		position.y = (int) Math.floor(playerPosition.y) - 1;
+		position.z = (int) Math.floor(playerPosition.z);
+
+		if (schematic != null) {
+			switch (rotationRender) {
+			case 0:
+				position.x -= schematic.getWidth();
+				position.z += 1;
+				break;
+			case 1:
+				position.x -= schematic.getWidth();
+				position.z -= schematic.getLength();
+				break;
+			case 2:
+				position.x += 1;
+				position.z -= schematic.getLength();
+				break;
+			case 3:
+				position.x += 1;
+				position.z += 1;
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -107,9 +180,17 @@ public class ClientProxy extends CommonProxy {
 		SchematicPrinter.INSTANCE.setEnabled(true);
 		SchematicPrinter.INSTANCE.setSchematic(null);
 
-		ClientProxy.rendererSchematicGlobal.destroyRendererSchematicChunks();
+		rendererSchematicGlobal.destroyRendererSchematicChunks();
 
 		setActiveSchematic(null);
+
+		playerPosition.set(0, 0, 0);
+		orientation = ForgeDirection.UNKNOWN;
+		rotationRender = 0;
+
+		pointA.set(0, 0, 0);
+		pointB.set(0, 0, 0);
+		updatePoints();
 	}
 
 	@Override

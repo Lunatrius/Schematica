@@ -1,7 +1,6 @@
 package com.github.lunatrius.schematica.client.gui;
 
 import com.github.lunatrius.schematica.Schematica;
-import com.github.lunatrius.schematica.Settings;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import net.minecraft.client.gui.GuiButton;
@@ -10,7 +9,6 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 
 public class GuiSchematicSave extends GuiScreen {
-	private final Settings settings = Settings.instance;
 	@SuppressWarnings("unused")
 	private final GuiScreen prevGuiScreen;
 
@@ -83,7 +81,7 @@ public class GuiSchematicSave extends GuiScreen {
 		this.btnDecAX = new GuiButton(id++, this.centerX - 130, this.centerY - 30, 30, 20, I18n.format("schematica.gui.decrease"));
 		this.buttonList.add(this.btnDecAX);
 
-		this.btnAmountAX = new GuiButton(id++, this.centerX - 95, this.centerY - 30, 30, 20, Integer.toString(this.settings.increments[this.incrementAX]));
+		this.btnAmountAX = new GuiButton(id++, this.centerX - 95, this.centerY - 30, 30, 20, Integer.toString(ClientProxy.INCREMENTS[this.incrementAX]));
 		this.buttonList.add(this.btnAmountAX);
 
 		this.btnIncAX = new GuiButton(id++, this.centerX - 60, this.centerY - 30, 30, 20, I18n.format("schematica.gui.increase"));
@@ -92,7 +90,7 @@ public class GuiSchematicSave extends GuiScreen {
 		this.btnDecAY = new GuiButton(id++, this.centerX - 130, this.centerY - 5, 30, 20, I18n.format("schematica.gui.decrease"));
 		this.buttonList.add(this.btnDecAY);
 
-		this.btnAmountAY = new GuiButton(id++, this.centerX - 95, this.centerY - 5, 30, 20, Integer.toString(this.settings.increments[this.incrementAY]));
+		this.btnAmountAY = new GuiButton(id++, this.centerX - 95, this.centerY - 5, 30, 20, Integer.toString(ClientProxy.INCREMENTS[this.incrementAY]));
 		this.buttonList.add(this.btnAmountAY);
 
 		this.btnIncAY = new GuiButton(id++, this.centerX - 60, this.centerY - 5, 30, 20, I18n.format("schematica.gui.increase"));
@@ -101,7 +99,7 @@ public class GuiSchematicSave extends GuiScreen {
 		this.btnDecAZ = new GuiButton(id++, this.centerX - 130, this.centerY + 20, 30, 20, I18n.format("schematica.gui.decrease"));
 		this.buttonList.add(this.btnDecAZ);
 
-		this.btnAmountAZ = new GuiButton(id++, this.centerX - 95, this.centerY + 20, 30, 20, Integer.toString(this.settings.increments[this.incrementAZ]));
+		this.btnAmountAZ = new GuiButton(id++, this.centerX - 95, this.centerY + 20, 30, 20, Integer.toString(ClientProxy.INCREMENTS[this.incrementAZ]));
 		this.buttonList.add(this.btnAmountAZ);
 
 		this.btnIncAZ = new GuiButton(id++, this.centerX - 60, this.centerY + 20, 30, 20, I18n.format("schematica.gui.increase"));
@@ -113,7 +111,7 @@ public class GuiSchematicSave extends GuiScreen {
 		this.btnDecBX = new GuiButton(id++, this.centerX + 30, this.centerY - 30, 30, 20, I18n.format("schematica.gui.decrease"));
 		this.buttonList.add(this.btnDecBX);
 
-		this.btnAmountBX = new GuiButton(id++, this.centerX + 65, this.centerY - 30, 30, 20, Integer.toString(this.settings.increments[this.incrementBX]));
+		this.btnAmountBX = new GuiButton(id++, this.centerX + 65, this.centerY - 30, 30, 20, Integer.toString(ClientProxy.INCREMENTS[this.incrementBX]));
 		this.buttonList.add(this.btnAmountBX);
 
 		this.btnIncBX = new GuiButton(id++, this.centerX + 100, this.centerY - 30, 30, 20, I18n.format("schematica.gui.increase"));
@@ -122,7 +120,7 @@ public class GuiSchematicSave extends GuiScreen {
 		this.btnDecBY = new GuiButton(id++, this.centerX + 30, this.centerY - 5, 30, 20, I18n.format("schematica.gui.decrease"));
 		this.buttonList.add(this.btnDecBY);
 
-		this.btnAmountBY = new GuiButton(id++, this.centerX + 65, this.centerY - 5, 30, 20, Integer.toString(this.settings.increments[this.incrementBY]));
+		this.btnAmountBY = new GuiButton(id++, this.centerX + 65, this.centerY - 5, 30, 20, Integer.toString(ClientProxy.INCREMENTS[this.incrementBY]));
 		this.buttonList.add(this.btnAmountBY);
 
 		this.btnIncBY = new GuiButton(id++, this.centerX + 100, this.centerY - 5, 30, 20, I18n.format("schematica.gui.increase"));
@@ -131,7 +129,7 @@ public class GuiSchematicSave extends GuiScreen {
 		this.btnDecBZ = new GuiButton(id++, this.centerX + 30, this.centerY + 20, 30, 20, I18n.format("schematica.gui.decrease"));
 		this.buttonList.add(this.btnDecBZ);
 
-		this.btnAmountBZ = new GuiButton(id++, this.centerX + 65, this.centerY + 20, 30, 20, Integer.toString(this.settings.increments[this.incrementBZ]));
+		this.btnAmountBZ = new GuiButton(id++, this.centerX + 65, this.centerY + 20, 30, 20, Integer.toString(ClientProxy.INCREMENTS[this.incrementBZ]));
 		this.buttonList.add(this.btnAmountBZ);
 
 		this.btnIncBZ = new GuiButton(id++, this.centerX + 100, this.centerY + 20, 30, 20, I18n.format("schematica.gui.increase"));
@@ -154,72 +152,72 @@ public class GuiSchematicSave extends GuiScreen {
 	protected void actionPerformed(GuiButton guiButton) {
 		if (guiButton.enabled) {
 			if (guiButton.id == this.btnPointA.id) {
-				this.settings.moveHere(this.settings.pointA);
-				this.settings.updatePoints();
+				ClientProxy.movePointToPlayer(ClientProxy.pointA);
+				ClientProxy.updatePoints();
 			} else if (guiButton.id == this.btnDecAX.id) {
-				this.settings.pointA.x -= this.settings.increments[this.incrementAX];
-				this.settings.updatePoints();
+				ClientProxy.pointA.x -= ClientProxy.INCREMENTS[this.incrementAX];
+				ClientProxy.updatePoints();
 			} else if (guiButton.id == this.btnIncAX.id) {
-				this.settings.pointA.x += this.settings.increments[this.incrementAX];
-				this.settings.updatePoints();
+				ClientProxy.pointA.x += ClientProxy.INCREMENTS[this.incrementAX];
+				ClientProxy.updatePoints();
 			} else if (guiButton.id == this.btnAmountAX.id) {
-				this.incrementAX = (this.incrementAX + 1) % this.settings.increments.length;
-				this.btnAmountAX.displayString = Integer.toString(this.settings.increments[this.incrementAX]);
+				this.incrementAX = (this.incrementAX + 1) % ClientProxy.INCREMENTS.length;
+				this.btnAmountAX.displayString = Integer.toString(ClientProxy.INCREMENTS[this.incrementAX]);
 			} else if (guiButton.id == this.btnDecAY.id) {
-				this.settings.pointA.y -= this.settings.increments[this.incrementAY];
-				this.settings.updatePoints();
+				ClientProxy.pointA.y -= ClientProxy.INCREMENTS[this.incrementAY];
+				ClientProxy.updatePoints();
 			} else if (guiButton.id == this.btnIncAY.id) {
-				this.settings.pointA.y += this.settings.increments[this.incrementAY];
-				this.settings.updatePoints();
+				ClientProxy.pointA.y += ClientProxy.INCREMENTS[this.incrementAY];
+				ClientProxy.updatePoints();
 			} else if (guiButton.id == this.btnAmountAY.id) {
-				this.incrementAY = (this.incrementAY + 1) % this.settings.increments.length;
-				this.btnAmountAY.displayString = Integer.toString(this.settings.increments[this.incrementAY]);
+				this.incrementAY = (this.incrementAY + 1) % ClientProxy.INCREMENTS.length;
+				this.btnAmountAY.displayString = Integer.toString(ClientProxy.INCREMENTS[this.incrementAY]);
 			} else if (guiButton.id == this.btnDecAZ.id) {
-				this.settings.pointA.z -= this.settings.increments[this.incrementAZ];
-				this.settings.updatePoints();
+				ClientProxy.pointA.z -= ClientProxy.INCREMENTS[this.incrementAZ];
+				ClientProxy.updatePoints();
 			} else if (guiButton.id == this.btnIncAZ.id) {
-				this.settings.pointA.z += this.settings.increments[this.incrementAZ];
-				this.settings.updatePoints();
+				ClientProxy.pointA.z += ClientProxy.INCREMENTS[this.incrementAZ];
+				ClientProxy.updatePoints();
 			} else if (guiButton.id == this.btnAmountAZ.id) {
-				this.incrementAZ = (this.incrementAZ + 1) % this.settings.increments.length;
-				this.btnAmountAZ.displayString = Integer.toString(this.settings.increments[this.incrementAZ]);
+				this.incrementAZ = (this.incrementAZ + 1) % ClientProxy.INCREMENTS.length;
+				this.btnAmountAZ.displayString = Integer.toString(ClientProxy.INCREMENTS[this.incrementAZ]);
 			} else if (guiButton.id == this.btnPointB.id) {
-				this.settings.moveHere(this.settings.pointB);
-				this.settings.updatePoints();
+				ClientProxy.movePointToPlayer(ClientProxy.pointB);
+				ClientProxy.updatePoints();
 			} else if (guiButton.id == this.btnDecBX.id) {
-				this.settings.pointB.x -= this.settings.increments[this.incrementBX];
-				this.settings.updatePoints();
+				ClientProxy.pointB.x -= ClientProxy.INCREMENTS[this.incrementBX];
+				ClientProxy.updatePoints();
 			} else if (guiButton.id == this.btnIncBX.id) {
-				this.settings.pointB.x += this.settings.increments[this.incrementBX];
-				this.settings.updatePoints();
+				ClientProxy.pointB.x += ClientProxy.INCREMENTS[this.incrementBX];
+				ClientProxy.updatePoints();
 			} else if (guiButton.id == this.btnAmountBX.id) {
-				this.incrementBX = (this.incrementBX + 1) % this.settings.increments.length;
-				this.btnAmountBX.displayString = Integer.toString(this.settings.increments[this.incrementBX]);
+				this.incrementBX = (this.incrementBX + 1) % ClientProxy.INCREMENTS.length;
+				this.btnAmountBX.displayString = Integer.toString(ClientProxy.INCREMENTS[this.incrementBX]);
 			} else if (guiButton.id == this.btnDecBY.id) {
-				this.settings.pointB.y -= this.settings.increments[this.incrementBY];
-				this.settings.updatePoints();
+				ClientProxy.pointB.y -= ClientProxy.INCREMENTS[this.incrementBY];
+				ClientProxy.updatePoints();
 			} else if (guiButton.id == this.btnIncBY.id) {
-				this.settings.pointB.y += this.settings.increments[this.incrementBY];
-				this.settings.updatePoints();
+				ClientProxy.pointB.y += ClientProxy.INCREMENTS[this.incrementBY];
+				ClientProxy.updatePoints();
 			} else if (guiButton.id == this.btnAmountBY.id) {
-				this.incrementBY = (this.incrementBY + 1) % this.settings.increments.length;
-				this.btnAmountBY.displayString = Integer.toString(this.settings.increments[this.incrementBY]);
+				this.incrementBY = (this.incrementBY + 1) % ClientProxy.INCREMENTS.length;
+				this.btnAmountBY.displayString = Integer.toString(ClientProxy.INCREMENTS[this.incrementBY]);
 			} else if (guiButton.id == this.btnDecBZ.id) {
-				this.settings.pointB.z -= this.settings.increments[this.incrementBZ];
-				this.settings.updatePoints();
+				ClientProxy.pointB.z -= ClientProxy.INCREMENTS[this.incrementBZ];
+				ClientProxy.updatePoints();
 			} else if (guiButton.id == this.btnIncBZ.id) {
-				this.settings.pointB.z += this.settings.increments[this.incrementBZ];
-				this.settings.updatePoints();
+				ClientProxy.pointB.z += ClientProxy.INCREMENTS[this.incrementBZ];
+				ClientProxy.updatePoints();
 			} else if (guiButton.id == this.btnAmountBZ.id) {
-				this.incrementBZ = (this.incrementBZ + 1) % this.settings.increments.length;
-				this.btnAmountBZ.displayString = Integer.toString(this.settings.increments[this.incrementBZ]);
+				this.incrementBZ = (this.incrementBZ + 1) % ClientProxy.INCREMENTS.length;
+				this.btnAmountBZ.displayString = Integer.toString(ClientProxy.INCREMENTS[this.incrementBZ]);
 			} else if (guiButton.id == this.btnEnable.id) {
 				ClientProxy.isRenderingGuide = !ClientProxy.isRenderingGuide && Schematica.proxy.isSaveEnabled;
 				this.btnEnable.displayString = I18n.format(ClientProxy.isRenderingGuide ? "schematica.gui.disable" : "schematica.gui.enable");
 				this.btnSave.enabled = ClientProxy.isRenderingGuide;
 			} else if (guiButton.id == this.btnSave.id) {
 				String path = this.tfFilename.getText() + ".schematic";
-				if (Schematica.proxy.saveSchematic(null, ConfigurationHandler.schematicDirectory, path, this.mc.theWorld, this.settings.pointMin, this.settings.pointMax)) {
+				if (Schematica.proxy.saveSchematic(null, ConfigurationHandler.schematicDirectory, path, this.mc.theWorld, ClientProxy.pointMin, ClientProxy.pointMax)) {
 					this.filename = "";
 					this.tfFilename.setText(this.filename);
 				}
@@ -253,22 +251,22 @@ public class GuiSchematicSave extends GuiScreen {
 		drawString(this.fontRendererObj, this.strSaveSelection, this.width - 205, this.height - 45, 0xFFFFFF);
 
 		drawString(this.fontRendererObj, this.strX, this.centerX - 145, this.centerY - 24, 0xFFFFFF);
-		drawString(this.fontRendererObj, Integer.toString((int) this.settings.pointA.x), this.centerX - 25, this.centerY - 24, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString(ClientProxy.pointA.x), this.centerX - 25, this.centerY - 24, 0xFFFFFF);
 
 		drawString(this.fontRendererObj, this.strY, this.centerX - 145, this.centerY + 1, 0xFFFFFF);
-		drawString(this.fontRendererObj, Integer.toString((int) this.settings.pointA.y), this.centerX - 25, this.centerY + 1, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString(ClientProxy.pointA.y), this.centerX - 25, this.centerY + 1, 0xFFFFFF);
 
 		drawString(this.fontRendererObj, this.strZ, this.centerX - 145, this.centerY + 26, 0xFFFFFF);
-		drawString(this.fontRendererObj, Integer.toString((int) this.settings.pointA.z), this.centerX - 25, this.centerY + 26, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString(ClientProxy.pointA.z), this.centerX - 25, this.centerY + 26, 0xFFFFFF);
 
 		drawString(this.fontRendererObj, this.strX, this.centerX + 15, this.centerY - 24, 0xFFFFFF);
-		drawString(this.fontRendererObj, Integer.toString((int) this.settings.pointB.x), this.centerX + 135, this.centerY - 24, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString(ClientProxy.pointB.x), this.centerX + 135, this.centerY - 24, 0xFFFFFF);
 
 		drawString(this.fontRendererObj, this.strY, this.centerX + 15, this.centerY + 1, 0xFFFFFF);
-		drawString(this.fontRendererObj, Integer.toString((int) this.settings.pointB.y), this.centerX + 135, this.centerY + 1, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString(ClientProxy.pointB.y), this.centerX + 135, this.centerY + 1, 0xFFFFFF);
 
 		drawString(this.fontRendererObj, this.strZ, this.centerX + 15, this.centerY + 26, 0xFFFFFF);
-		drawString(this.fontRendererObj, Integer.toString((int) this.settings.pointB.z), this.centerX + 135, this.centerY + 26, 0xFFFFFF);
+		drawString(this.fontRendererObj, Integer.toString(ClientProxy.pointB.z), this.centerX + 135, this.centerY + 26, 0xFFFFFF);
 
 		this.tfFilename.drawTextBox();
 
