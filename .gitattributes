@@ -1,0 +1,26 @@
+# default
+* text eol=auto
+
+# git
+.gitattributes text eol=lf
+.gitignore text eol=lf
+
+# sources
+*.java text eol=lf
+
+# resources
+*.lang text eol=lf
+*.cfg text eol=lf
+*.info text eol=lf
+*.mcmeta text eol=lf
+*.md text eol=lf
+*.xml text eol=lf
+
+# scripts
+*.bat text eol=crlf
+*.gradle text eol=lf
+*.properties text eol=lf
+
+# binaries
+*.png binary
+*.jar binary
