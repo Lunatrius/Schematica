@@ -31,6 +31,8 @@ ext.modversion = "${config.version.major}.${config.version.minor}.${config.versi
 group = 'com.github.lunatrius'
 version = "${config.version.minecraft}-${modversion}"
 
+compileJava.options.encoding = 'UTF-8'
+
 repositories {
     ivy {
         name = 'lunatrius\' ivy repo'
