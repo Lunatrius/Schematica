@@ -46,18 +46,31 @@ public class ConfigurationHandler {
 
 	public static Configuration configuration;
 
-	public static boolean enableAlpha = false;
-	public static float alpha = 1.0f;
-	public static boolean highlight = true;
-	public static boolean highlightAir = true;
-	public static float blockDelta = 0.005f;
-	public static int placeDelay = 1;
-	public static int timeout = 10;
-	public static boolean placeInstantly = false;
-	public static boolean placeAdjacent = true;
-	public static boolean drawQuads = true;
-	public static boolean drawLines = true;
-	public static File schematicDirectory = new File(Schematica.proxy.getDataDirectory(), "schematics");
+	public static final boolean ENABLEALPHA_DEFAULT = false;
+	public static final double ALPHA_DEFAULT = 1.0;
+	public static final boolean HIGHLIGHT_DEFAULT = true;
+	public static final boolean HIGHLIGHTAIR_DEFAULT = true;
+	public static final double BLOCKDELTA_DEFAULT = 0.005;
+	public static final int PLACEDELAY_DEFAULT = 1;
+	public static final int TIMEOUT_DEFAULT = 10;
+	public static final boolean PLACEINSTANTLY_DEFAULT = false;
+	public static final boolean PLACEADJACENT_DEFAULT = true;
+	public static final boolean DRAWQUADS_DEFAULT = true;
+	public static final boolean DRAWLINES_DEFAULT = true;
+	public static final File SCHEMATICDIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), "schematics");
+
+	public static boolean enableAlpha = ENABLEALPHA_DEFAULT;
+	public static float alpha = (float) ALPHA_DEFAULT;
+	public static boolean highlight = HIGHLIGHT_DEFAULT;
+	public static boolean highlightAir = HIGHLIGHTAIR_DEFAULT;
+	public static float blockDelta = (float) BLOCKDELTA_DEFAULT;
+	public static int placeDelay = PLACEDELAY_DEFAULT;
+	public static int timeout = TIMEOUT_DEFAULT;
+	public static boolean placeInstantly = PLACEINSTANTLY_DEFAULT;
+	public static boolean placeAdjacent = PLACEADJACENT_DEFAULT;
+	public static boolean drawQuads = DRAWQUADS_DEFAULT;
+	public static boolean drawLines = DRAWLINES_DEFAULT;
+	public static File schematicDirectory = SCHEMATICDIRECTORY_DEFAULT;
 
 	public static Property propEnableAlpha = null;
 	public static Property propAlpha = null;
@@ -80,54 +93,54 @@ public class ConfigurationHandler {
 	}
 
 	private static void loadConfiguration() {
-		propEnableAlpha = configuration.get(CATEGORY_RENDER, ALPHA_ENABLED, enableAlpha, ALPHA_ENABLED_DESC);
+		propEnableAlpha = configuration.get(CATEGORY_RENDER, ALPHA_ENABLED, ENABLEALPHA_DEFAULT, ALPHA_ENABLED_DESC);
 		propEnableAlpha.setLanguageKey(String.format("%s.%s", LANG_PREFIX, ALPHA_ENABLED));
 		propEnableAlpha.setShowInGui(false);
-		enableAlpha = propEnableAlpha.getBoolean(enableAlpha);
+		enableAlpha = propEnableAlpha.getBoolean(ENABLEALPHA_DEFAULT);
 
-		propAlpha = configuration.get(CATEGORY_RENDER, ALPHA, alpha, ALPHA_DESC, 0.0, 1.0);
+		propAlpha = configuration.get(CATEGORY_RENDER, ALPHA, ALPHA_DEFAULT, ALPHA_DESC, 0.0, 1.0);
 		propAlpha.setLanguageKey(String.format("%s.%s", LANG_PREFIX, ALPHA));
 		propAlpha.setShowInGui(false);
-		alpha = (float) propAlpha.getDouble(alpha);
+		alpha = (float) propAlpha.getDouble(ALPHA_DEFAULT);
 
-		propHighlight = configuration.get(CATEGORY_RENDER, HIGHLIGHT, highlight, HIGHLIGHT_DESC);
+		propHighlight = configuration.get(CATEGORY_RENDER, HIGHLIGHT, HIGHLIGHT_DEFAULT, HIGHLIGHT_DESC);
 		propHighlight.setLanguageKey(String.format("%s.%s", LANG_PREFIX, HIGHLIGHT));
-		highlight = propHighlight.getBoolean(highlight);
+		highlight = propHighlight.getBoolean(HIGHLIGHT_DEFAULT);
 
-		propHighlightAir = configuration.get(CATEGORY_RENDER, HIGHLIGHT_AIR, highlightAir, HIGHLIGHT_AIR_DESC);
+		propHighlightAir = configuration.get(CATEGORY_RENDER, HIGHLIGHT_AIR, HIGHLIGHTAIR_DEFAULT, HIGHLIGHT_AIR_DESC);
 		propHighlightAir.setLanguageKey(String.format("%s.%s", LANG_PREFIX, HIGHLIGHT_AIR));
-		highlightAir = propHighlightAir.getBoolean(highlightAir);
+		highlightAir = propHighlightAir.getBoolean(HIGHLIGHTAIR_DEFAULT);
 
-		propBlockDelta = configuration.get(CATEGORY_RENDER, BLOCK_DELTA, blockDelta, BLOCK_DELTA_DESC, 0.0, 0.2);
+		propBlockDelta = configuration.get(CATEGORY_RENDER, BLOCK_DELTA, BLOCKDELTA_DEFAULT, BLOCK_DELTA_DESC, 0.0, 0.2);
 		propBlockDelta.setLanguageKey(String.format("%s.%s", LANG_PREFIX, BLOCK_DELTA));
-		blockDelta = (float) propBlockDelta.getDouble(blockDelta);
+		blockDelta = (float) propBlockDelta.getDouble(BLOCKDELTA_DEFAULT);
 
-		propDrawQuads = configuration.get(CATEGORY_RENDER, DRAW_QUADS, drawQuads, DRAW_QUADS_DESC);
+		propDrawQuads = configuration.get(CATEGORY_RENDER, DRAW_QUADS, DRAWQUADS_DEFAULT, DRAW_QUADS_DESC);
 		propDrawQuads.setLanguageKey(String.format("%s.%s", LANG_PREFIX, DRAW_QUADS));
-		drawQuads = propDrawQuads.getBoolean(drawQuads);
+		drawQuads = propDrawQuads.getBoolean(DRAWQUADS_DEFAULT);
 
-		propDrawLines = configuration.get(CATEGORY_RENDER, DRAW_LINES, drawLines, DRAW_LINES_DESC);
+		propDrawLines = configuration.get(CATEGORY_RENDER, DRAW_LINES, DRAWLINES_DEFAULT, DRAW_LINES_DESC);
 		propDrawLines.setLanguageKey(String.format("%s.%s", LANG_PREFIX, DRAW_LINES));
-		drawLines = propDrawLines.getBoolean(drawLines);
+		drawLines = propDrawLines.getBoolean(DRAWLINES_DEFAULT);
 
-		propPlaceDelay = configuration.get(CATEGORY_PRINTER, PLACE_DELAY, placeDelay, PLACE_DELAY_DESC, 0, 20);
+		propPlaceDelay = configuration.get(CATEGORY_PRINTER, PLACE_DELAY, PLACEDELAY_DEFAULT, PLACE_DELAY_DESC, 0, 20);
 		propPlaceDelay.setLanguageKey(String.format("%s.%s", LANG_PREFIX, PLACE_DELAY));
-		placeDelay = propPlaceDelay.getInt(placeDelay);
+		placeDelay = propPlaceDelay.getInt(PLACEDELAY_DEFAULT);
 
-		propTimeout = configuration.get(CATEGORY_PRINTER, TIMEOUT, timeout, TIMEOUT_DESC, 0, 100);
+		propTimeout = configuration.get(CATEGORY_PRINTER, TIMEOUT, TIMEOUT_DEFAULT, TIMEOUT_DESC, 0, 100);
 		propTimeout.setLanguageKey(String.format("%s.%s", LANG_PREFIX, TIMEOUT));
-		timeout = propTimeout.getInt(timeout);
+		timeout = propTimeout.getInt(TIMEOUT_DEFAULT);
 
-		propPlaceInstantly = configuration.get(CATEGORY_PRINTER, PLACE_INSTANTLY, placeInstantly, PLACE_INSTANTLY_DESC);
+		propPlaceInstantly = configuration.get(CATEGORY_PRINTER, PLACE_INSTANTLY, PLACEINSTANTLY_DEFAULT, PLACE_INSTANTLY_DESC);
 		propPlaceInstantly.setLanguageKey(String.format("%s.%s", LANG_PREFIX, PLACE_INSTANTLY));
-		placeInstantly = propPlaceInstantly.getBoolean(placeInstantly);
+		placeInstantly = propPlaceInstantly.getBoolean(PLACEINSTANTLY_DEFAULT);
 
-		propPlaceAdjacent = configuration.get(CATEGORY_PRINTER, PLACE_ADJACENT, placeAdjacent, PLACE_ADJACENT_DESC);
+		propPlaceAdjacent = configuration.get(CATEGORY_PRINTER, PLACE_ADJACENT, PLACEADJACENT_DEFAULT, PLACE_ADJACENT_DESC);
 		propPlaceAdjacent.setLanguageKey(String.format("%s.%s", LANG_PREFIX, PLACE_ADJACENT));
-		placeAdjacent = propPlaceAdjacent.getBoolean(placeAdjacent);
+		placeAdjacent = propPlaceAdjacent.getBoolean(PLACEADJACENT_DEFAULT);
 
 		try {
-			schematicDirectory = schematicDirectory.getCanonicalFile();
+			schematicDirectory = SCHEMATICDIRECTORY_DEFAULT.getCanonicalFile();
 		} catch (IOException e) {
 			Reference.logger.warn("Could not canonize file path!", e);
 		}
