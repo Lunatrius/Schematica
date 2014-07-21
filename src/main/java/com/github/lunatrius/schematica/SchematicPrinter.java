@@ -86,7 +86,7 @@ public class SchematicPrinter {
 
 		syncSneaking(player, true);
 
-		Vector3i trans = ClientProxy.playerPosition.sub(this.schematic.position.toVector3f()).toVector3i();
+		Vector3i trans = ClientProxy.playerPosition.clone().sub(this.schematic.position.x, this.schematic.position.y, this.schematic.position.z).toVector3i();
 		minX = Math.max(0, trans.x - 3);
 		maxX = Math.min(this.schematic.getWidth(), trans.x + 4);
 		minY = Math.max(0, trans.y - 3);
