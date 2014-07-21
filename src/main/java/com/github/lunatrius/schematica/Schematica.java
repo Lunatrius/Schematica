@@ -22,15 +22,14 @@ public class Schematica {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		VersionChecker.registerMod(event.getModMetadata(), Reference.FORGE);
-
 		Reference.logger = event.getModLog();
-
 		ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 		proxy.setConfigEntryClasses();
 
 		proxy.registerKeybindings();
 		proxy.createFolders();
+
+		VersionChecker.registerMod(event.getModMetadata(), Reference.FORGE);
 	}
 
 	@EventHandler
