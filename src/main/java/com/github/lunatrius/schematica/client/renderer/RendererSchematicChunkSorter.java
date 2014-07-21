@@ -18,8 +18,8 @@ public class RendererSchematicChunkSorter implements Comparator {
 			return 1;
 		} else {
 			this.position.set(ClientProxy.playerPosition).sub(this.schematicPosition);
-			double dist1 = rendererSchematicChunk1.distanceToPoint(this.position);
-			double dist2 = rendererSchematicChunk2.distanceToPoint(this.position);
+			double dist1 = this.position.sub(rendererSchematicChunk1.centerPosition).lengthSquared();
+			double dist2 = this.position.sub(rendererSchematicChunk2.centerPosition).lengthSquared();
 			return dist1 > dist2 ? 1 : (dist1 < dist2 ? -1 : 0);
 		}
 	}

@@ -114,13 +114,6 @@ public class RendererSchematicChunk {
 		return this.needsUpdate;
 	}
 
-	public float distanceToPoint(Vector3f vector) {
-		float x = vector.x - this.centerPosition.x;
-		float y = vector.y - this.centerPosition.y;
-		float z = vector.z - this.centerPosition.z;
-		return x * x + y * y + z * z;
-	}
-
 	public void updateRenderer() {
 		if (this.needsUpdate) {
 			this.needsUpdate = false;
@@ -194,7 +187,7 @@ public class RendererSchematicChunk {
 			return;
 		}
 
-		if (distanceToPoint(this.distance.set(ClientProxy.playerPosition).sub(this.schematic.position.toVector3f())) > 25600) {
+		if (this.distance.set(ClientProxy.playerPosition).sub(this.schematic.position.x, this.schematic.position.y, this.schematic.position.z).sub(this.centerPosition).lengthSquared() > 25600) {
 			return;
 		}
 
