@@ -492,7 +492,11 @@ public class SchematicWorld extends World {
 		for (int y = 0; y < this.height; y++) {
 			for (int z = 0; z < this.length; z++) {
 				for (int x = 0; x < this.width; x++) {
-					getBlock(x, y, this.length - 1 - z).rotateBlock(this, x, y, this.length - 1 - z, ForgeDirection.UP);
+					try {
+						getBlock(x, y, this.length - 1 - z).rotateBlock(this, x, y, this.length - 1 - z, ForgeDirection.UP);
+					} catch (Exception e) {
+						Reference.logger.debug("Failed to rotate block!", e);
+					}
 					localBlocks[z][y][x] = this.blocks[x][y][this.length - 1 - z];
 					localMetadata[z][y][x] = this.metadata[x][y][this.length - 1 - z];
 				}
