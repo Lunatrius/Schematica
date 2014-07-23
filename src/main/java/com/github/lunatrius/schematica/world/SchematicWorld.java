@@ -3,7 +3,7 @@ package com.github.lunatrius.schematica.world;
 import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.config.BlockInfo;
-import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.reference.Reference;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
