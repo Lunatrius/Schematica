@@ -1,7 +1,7 @@
 package com.github.lunatrius.schematica.client.gui;
 
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
-import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.reference.Reference;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.IConfigElement;
 import net.minecraft.client.gui.GuiScreen;

@@ -1,7 +1,7 @@
 package com.github.lunatrius.schematica.handler;
 
 import com.github.lunatrius.schematica.Schematica;
-import com.github.lunatrius.schematica.lib.Reference;
+import com.github.lunatrius.schematica.reference.Reference;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
