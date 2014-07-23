@@ -88,9 +88,13 @@ public class SchematicAlpha extends SchematicFormat {
 		NBTTagList tileEntitiesList = tagCompound.getTagList(TILE_ENTITIES, Constants.NBT.TAG_COMPOUND);
 
 		for (int i = 0; i < tileEntitiesList.tagCount(); i++) {
-			TileEntity tileEntity = TileEntity.createAndLoadEntity(tileEntitiesList.getCompoundTagAt(i));
-			if (tileEntity != null) {
-				tileEntities.add(tileEntity);
+			try {
+				TileEntity tileEntity = TileEntity.createAndLoadEntity(tileEntitiesList.getCompoundTagAt(i));
+				if (tileEntity != null) {
+					tileEntities.add(tileEntity);
+				}
+			} catch (Exception e) {
+				Reference.logger.error("TileEntity failed to load properly!", e);
 			}
 		}
 
