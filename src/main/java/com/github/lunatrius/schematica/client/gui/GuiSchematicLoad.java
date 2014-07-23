@@ -154,12 +154,16 @@ public class GuiSchematicLoad extends GuiScreen {
 
 		try {
 			if (selectedIndex >= 0 && selectedIndex < this.schematicFiles.size()) {
-				GuiSchematicEntry schematic = this.schematicFiles.get(selectedIndex);
-				Schematica.proxy.loadSchematic(null, this.currentDirectory, schematic.getName());
+				GuiSchematicEntry schematicEntry = this.schematicFiles.get(selectedIndex);
+				if (Schematica.proxy.loadSchematic(null, this.currentDirectory, schematicEntry.getName())) {
+					SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+					if (schematic != null) {
+						ClientProxy.moveSchematicToPlayer(schematic);
+					}
+				}
 			}
 		} catch (Exception e) {
 			Reference.logger.error("Failed to load schematic!", e);
 		}
-		ClientProxy.moveSchematicToPlayer(Schematica.proxy.getActiveSchematic());
 	}
 }
