@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.reference;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Reference {
@@ -12,5 +13,5 @@ public class Reference {
 	public static final String PROXY_CLIENT = "com.github.lunatrius.schematica.proxy.ClientProxy";
 	public static final String GUI_FACTORY = "com.github.lunatrius.schematica.client.gui.GuiFactory";
 
-	public static Logger logger = null;
+	public static Logger logger = LogManager.getLogger(Reference.MODID);
 }
