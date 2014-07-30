@@ -1,74 +1,74 @@
 # gui - general
-# schematica.gui.openFolder=Åpne tegningsmappen
-# schematica.gui.done=Ferdig
-# schematica.gui.title=Velg tegningsfil
-# schematica.gui.folderInfo=(Plasser tegningsfiler her)
-# schematica.gui.noschematic=-- Ingen tegninger --
+schematica.gui.openFolder=Åpne tegningsmappen
+schematica.gui.done=Ferdig
+schematica.gui.title=Velg tegningsfil
+schematica.gui.folderInfo=(Plasser tegningsfiler her)
+schematica.gui.noschematic=-- Ingen tegninger --
 schematica.gui.increase=+
 schematica.gui.decrease=-
-# schematica.gui.hide=Skjul
+schematica.gui.hide=Skjul
 schematica.gui.all=ALLE
 schematica.gui.show=Vis
 schematica.gui.movehere=Flytt hit
-# schematica.gui.flip=Vend
-# schematica.gui.rotate=Roter
+schematica.gui.flip=Vend
+schematica.gui.rotate=Roter
 schematica.gui.save=Lagre
-# schematica.gui.moveschematic=Flytt tegning
-# schematica.gui.layers=Lag
-# schematica.gui.operations=Operasjoner
-# schematica.gui.point.red=Rødt punkt
-# schematica.gui.point.blue=Blått punkt
-# schematica.gui.saveselection=Lagre utvalget som en tegning
+schematica.gui.moveschematic=Flytt tegning
+schematica.gui.layers=Lag
+schematica.gui.operations=Operasjoner
+schematica.gui.point.red=Rødt punkt
+schematica.gui.point.blue=Blått punkt
+schematica.gui.saveselection=Lagre utvalget som en tegning
 schematica.gui.enable=Aktiver
 schematica.gui.disable=Deaktiver
 schematica.gui.x=X:
 schematica.gui.y=Y:
 schematica.gui.z=Z:
-# schematica.gui.materials=Materialer
-# schematica.gui.materialname=Materiale
-# schematica.gui.materialamount=Mengde
-# schematica.gui.printer=Printer
+schematica.gui.materials=Materialer
+schematica.gui.materialname=Materiale
+schematica.gui.materialamount=Mengde
+schematica.gui.printer=Printer
 
 # gui - config - categories
-# schematica.config.category.render=Gjengivelse
-# schematica.config.category.render.tooltip=Gjengivelsesrelaterte innstillinger.
-# schematica.config.category.printer=Printer
-# schematica.config.category.printer.tooltip=Printer-relaterte innstillinger.
-# schematica.config.category.general=Generelt
-# schematica.config.category.general.tooltip=Generelle innstillinger.
+schematica.config.category.render=Gjengivelse
+schematica.config.category.render.tooltip=Gjengivelsesrelaterte innstillinger.
+schematica.config.category.printer=Printer
+schematica.config.category.printer.tooltip=Printer-relaterte innstillinger.
+schematica.config.category.general=Generelt
+schematica.config.category.general.tooltip=Generelle innstillinger.
 
 # gui - config - render
-# schematica.config.alphaEnabled=Alpha aktivert
-# schematica.config.alphaEnabled.tooltip=Aktiver gjennomsiktige teksturer.
-# schematica.config.alpha=Alpha
-# schematica.config.alpha.tooltip=Alpha-verdi brukt ved gjengivelse av tegningen (1.0 = ugjennomsiktig, 0.5 = halvgjennomsiktig, 0.0 = gjennomsiktig).
-# schematica.config.highlight=Marker blokker
-# schematica.config.highlight.tooltip=Marker ugyldig plasserte blokker og blokker som skal plasseres.
-# schematica.config.highlightAir=Marker luft
-# schematica.config.highlightAir.tooltip=Marker blokker som bør være luft.
-# schematica.config.blockDelta=Block Delta
-# schematica.config.blockDelta.tooltip=Delta-verdi brukt for markering (hvis du opplever z-kollisjoner, øk dette).
-# schematica.config.drawQuads=Tegn overflater
-# schematica.config.drawQuads.tooltip=Tegn overflateområder.
-# schematica.config.drawLines=Tegn linjer
-# schematica.config.drawLines.tooltip=Tegn kantlinjer.
+schematica.config.alphaEnabled=Alpha aktivert
+schematica.config.alphaEnabled.tooltip=Aktiver gjennomsiktige teksturer.
+schematica.config.alpha=Alpha
+schematica.config.alpha.tooltip=Alpha-verdi brukt ved gjengivelse av tegningen (1.0 = ugjennomsiktig, 0.5 = halvgjennomsiktig, 0.0 = gjennomsiktig).
+schematica.config.highlight=Marker blokker
+schematica.config.highlight.tooltip=Marker ugyldig plasserte blokker og blokker som skal plasseres.
+schematica.config.highlightAir=Marker luft
+schematica.config.highlightAir.tooltip=Marker blokker som bør være luft.
+schematica.config.blockDelta=Block Delta
+schematica.config.blockDelta.tooltip=Delta-verdi brukt for markering (hvis du opplever z-kollisjoner, øk dette).
+schematica.config.drawQuads=Tegn overflater
+schematica.config.drawQuads.tooltip=Tegn overflateområder.
+schematica.config.drawLines=Tegn linjer
+schematica.config.drawLines.tooltip=Tegn kantlinjer.
 
 # gui - config - printer
-# schematica.config.placeDelay=Plasseringsforsinkelse
-# schematica.config.placeDelay.tooltip=Forsinkelse mellom plasseringsforsøk (i ticks).
-# schematica.config.timeout=Tidsavbrudd
-# schematica.config.timeout.tooltip=Tidsavbrudd før nytt forsøk på å plassere blokker.
-# schematica.config.placeInstantly=Plasser umiddelbart
-# schematica.config.placeInstantly.tooltip=Plasser alle blokker som kan bli plassert i ett tikk.
-# schematica.config.placeAdjacent=Plasser kun tilstøtende
-# schematica.config.placeAdjacent.tooltip=Plasser kun blokker hvis det er en tilstøtende blokk ved siden av dem.
+schematica.config.placeDelay=Plasseringsforsinkelse
+schematica.config.placeDelay.tooltip=Forsinkelse mellom plasseringsforsøk (i ticks).
+schematica.config.timeout=Tidsavbrudd
+schematica.config.timeout.tooltip=Tidsavbrudd før nytt forsøk på å plassere blokker.
+schematica.config.placeInstantly=Plasser umiddelbart
+schematica.config.placeInstantly.tooltip=Plasser alle blokker som kan bli plassert i ett tikk.
+schematica.config.placeAdjacent=Plasser kun tilstøtende
+schematica.config.placeAdjacent.tooltip=Plasser kun blokker hvis det er en tilstøtende blokk ved siden av dem.
 
 # gui - config - general
-# schematica.config.schematicDirectory=Tegningskatalog
-# schematica.config.schematicDirectory.tooltip=Tegningskatalog.
+schematica.config.schematicDirectory=Tegningskatalog
+schematica.config.schematicDirectory.tooltip=Tegningskatalog.
 
 # keys
-# schematica.key.category=Schematica
-# schematica.key.load=Last tegning
-# schematica.key.save=Lagre tegning
-# schematica.key.control=Manipuler tegning
+schematica.key.category=Schematica
+schematica.key.load=Last tegning
+schematica.key.save=Lagre tegning
+schematica.key.control=Manipuler tegning
