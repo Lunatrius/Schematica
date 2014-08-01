@@ -195,8 +195,9 @@ public class SchematicWorld extends World {
 						itemDamage = 0;
 					}
 
-					if (BlockInfo.BLOCK_ITEM_MAP.containsKey(block)) {
-						item = BlockInfo.BLOCK_ITEM_MAP.get(block);
+					Item tmp = BlockInfo.BLOCK_ITEM_MAP.get(block);
+					if (tmp != null) {
+						item = tmp;
 						Block blockFromItem = Block.getBlockFromItem(item);
 						if (blockFromItem != Blocks.air) {
 							block = blockFromItem;
