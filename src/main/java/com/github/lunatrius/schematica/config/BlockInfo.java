@@ -281,6 +281,7 @@ public class BlockInfo {
 		addPlacementMapping(Blocks.stained_hardened_clay, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
 		addPlacementMapping(Blocks.stained_glass_pane, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
 		addPlacementMapping(Items.repeater, new PlacementData(PlacementType.PLAYER, -1, -1, 0, 2, 3, 1).setMaskMeta(0x3));
+		addPlacementMapping(Items.comparator, new PlacementData(PlacementType.PLAYER, -1, -1, 0, 2, 3, 1).setMaskMeta(0x3));
 	}
 
 	public static PlacementData addPlacementMapping(Class clazz, PlacementData data) {
