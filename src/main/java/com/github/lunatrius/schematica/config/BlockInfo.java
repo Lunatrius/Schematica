@@ -239,8 +239,9 @@ public class BlockInfo {
 	}
 
 	public static Item getItemFromBlock(Block block) {
-		if (BLOCK_ITEM_MAP.containsKey(block)) {
-			return BLOCK_ITEM_MAP.get(block);
+		Item item = BLOCK_ITEM_MAP.get(block);
+		if (item != null) {
+			return item;
 		}
 
 		return Item.getItemFromBlock(block);
