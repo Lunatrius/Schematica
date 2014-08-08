@@ -12,7 +12,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
@@ -29,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SchematicPrinter {
+	public static final int WILDCARD_METADATA = -1;
+
 	public static final SchematicPrinter INSTANCE = new SchematicPrinter();
 
 	private final Minecraft minecraft = Minecraft.getMinecraft();
@@ -109,7 +110,7 @@ public class SchematicPrinter {
 				for (z = minZ; z < maxZ; z++) {
 					Block block = this.schematic.getBlock(x, y, z);
 
-					if (block == Blocks.air) {
+					if (this.schematic.isAirBlock(x, y, z)) {
 						continue;
 					}
 
@@ -123,7 +124,7 @@ public class SchematicPrinter {
 					wz = this.schematic.position.z + z;
 
 					Block realBlock = world.getBlock(wx, wy, wz);
-					if (!world.isAirBlock(wx, wy, wz) && realBlock != null && !realBlock.canPlaceBlockAt(world, wx, wy, wz)) {
+					if (!realBlock.isReplaceable(world, wx, wy, wz)) {
 						continue;
 					}
 
@@ -200,6 +201,8 @@ public class SchematicPrinter {
 		float offsetY = 0.0f;
 
 		if (solidSides.length > 0) {
+			int metadata = WILDCARD_METADATA;
+
 			if (data != null) {
 				ForgeDirection[] validDirections = data.getValidDirections(solidSides, itemDamage);
 				if (validDirections.length > 0) {
@@ -209,20 +212,14 @@ public class SchematicPrinter {
 				offsetY = data.getOffsetFromMetadata(itemDamage);
 
 				if (data.maskMetaInHand != -1) {
-					if (!swapToItem(player.inventory, item, data.getMetaInHand(itemDamage))) {
-						return false;
-					}
-				} else {
-					if (!swapToItem(player.inventory, item)) {
-						return false;
-					}
+					metadata = data.getMetaInHand(itemDamage);
 				}
 			} else {
 				direction = solidSides[0];
+			}
 
-				if (!swapToItem(player.inventory, item)) {
-					return false;
-				}
+			if (!swapToItem(player.inventory, item, metadata)) {
+				return false;
 			}
 		}
 
@@ -304,27 +301,9 @@ public class SchematicPrinter {
 		return false;
 	}
 
-	private boolean swapToItem(InventoryPlayer inventory, Item item) {
-		int slot = getInventorySlotWithItem(inventory, item);
-		if (slot > -1 && slot < 9) {
-			inventory.currentItem = slot;
-			return true;
-		}
-		return false;
-	}
-
 	private int getInventorySlotWithItem(InventoryPlayer inventory, Item item, int itemDamage) {
 		for (int i = 0; i < inventory.mainInventory.length; i++) {
-			if (inventory.mainInventory[i] != null && inventory.mainInventory[i].getItem() == item && inventory.mainInventory[i].getItemDamage() == itemDamage) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	private int getInventorySlotWithItem(InventoryPlayer inventory, Item item) {
-		for (int i = 0; i < inventory.mainInventory.length; i++) {
-			if (inventory.mainInventory[i] != null && inventory.mainInventory[i].getItem() == item) {
+			if (inventory.mainInventory[i] != null && inventory.mainInventory[i].getItem() == item && (itemDamage == WILDCARD_METADATA || inventory.mainInventory[i].getItemDamage() == itemDamage)) {
 				return i;
 			}
 		}
