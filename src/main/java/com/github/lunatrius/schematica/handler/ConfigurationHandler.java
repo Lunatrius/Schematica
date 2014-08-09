@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica.handler;
 
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.reference.Reference;
+import com.google.common.primitives.Ints;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
@@ -9,6 +10,8 @@ import net.minecraftforge.common.config.Property;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 public class ConfigurationHandler {
 	public static final String CATEGORY_RENDER = "render";
@@ -38,6 +41,8 @@ public class ConfigurationHandler {
 	public static final String PLACE_INSTANTLY_DESC = "Place all blocks that can be placed in one tick.";
 	public static final String PLACE_ADJACENT = "placeAdjacent";
 	public static final String PLACE_ADJACENT_DESC = "Place blocks only if there is an adjacent block next to them.";
+	public static final String SWAP_SLOTS = "swapSlots";
+	public static final String SWAP_SLOTS_DESC = "The printer will use these slots to swap out items in the inventory.";
 
 	public static final String SCHEMATIC_DIRECTORY = "schematicDirectory";
 	public static final String SCHEMATIC_DIRECTORY_DESC = "Schematic directory.";
@@ -55,6 +60,7 @@ public class ConfigurationHandler {
 	public static final int TIMEOUT_DEFAULT = 10;
 	public static final boolean PLACEINSTANTLY_DEFAULT = false;
 	public static final boolean PLACEADJACENT_DEFAULT = true;
+	public static final int[] SWAPSLOTS_DEFAULT = new int[] { };
 	public static final boolean DRAWQUADS_DEFAULT = true;
 	public static final boolean DRAWLINES_DEFAULT = true;
 	public static final File SCHEMATICDIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), "schematics");
@@ -68,6 +74,8 @@ public class ConfigurationHandler {
 	public static int timeout = TIMEOUT_DEFAULT;
 	public static boolean placeInstantly = PLACEINSTANTLY_DEFAULT;
 	public static boolean placeAdjacent = PLACEADJACENT_DEFAULT;
+	public static int[] swapSlots = SWAPSLOTS_DEFAULT;
+	public static Queue<Integer> swapSlotsQueue = new ArrayDeque<Integer>();
 	public static boolean drawQuads = DRAWQUADS_DEFAULT;
 	public static boolean drawLines = DRAWLINES_DEFAULT;
 	public static File schematicDirectory = SCHEMATICDIRECTORY_DEFAULT;
@@ -81,6 +89,7 @@ public class ConfigurationHandler {
 	public static Property propTimeout = null;
 	public static Property propPlaceInstantly = null;
 	public static Property propPlaceAdjacent = null;
+	public static Property propSwapSlots = null;
 	public static Property propDrawQuads = null;
 	public static Property propDrawLines = null;
 	public static Property propSchematicDirectory = null;
@@ -138,6 +147,11 @@ public class ConfigurationHandler {
 		propPlaceAdjacent = configuration.get(CATEGORY_PRINTER, PLACE_ADJACENT, PLACEADJACENT_DEFAULT, PLACE_ADJACENT_DESC);
 		propPlaceAdjacent.setLanguageKey(String.format("%s.%s", LANG_PREFIX, PLACE_ADJACENT));
 		placeAdjacent = propPlaceAdjacent.getBoolean(PLACEADJACENT_DEFAULT);
+
+		propSwapSlots = configuration.get(CATEGORY_PRINTER, SWAP_SLOTS, SWAPSLOTS_DEFAULT, SWAP_SLOTS_DESC, 0, 8);
+		propSwapSlots.setLanguageKey(String.format("%s.%s", LANG_PREFIX, SWAP_SLOTS));
+		swapSlots = propSwapSlots.getIntList();
+		swapSlotsQueue = new ArrayDeque<Integer>(Ints.asList(swapSlots));
 
 		try {
 			schematicDirectory = SCHEMATICDIRECTORY_DEFAULT.getCanonicalFile();
