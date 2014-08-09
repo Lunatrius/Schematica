@@ -29,6 +29,20 @@ import java.util.List;
 
 public class SchematicPrinter {
 	public static final int WILDCARD_METADATA = -1;
+	public static final int SIZE_CRAFTING_OUT = 1;
+	public static final int SIZE_CRAFTING_IN = 4;
+	public static final int SIZE_ARMOR = 4;
+	public static final int SIZE_INVENTORY = 3 * 9;
+	public static final int SIZE_HOTBAR = 9;
+
+	public static final int SLOT_OFFSET_CRAFTING_OUT = 0;
+	public static final int SLOT_OFFSET_CRAFTING_IN = SLOT_OFFSET_CRAFTING_OUT + SIZE_CRAFTING_OUT;
+	public static final int SLOT_OFFSET_ARMOR = SLOT_OFFSET_CRAFTING_IN + SIZE_CRAFTING_IN;
+	public static final int SLOT_OFFSET_INVENTORY = SLOT_OFFSET_ARMOR + SIZE_ARMOR;
+	public static final int SLOT_OFFSET_HOTBAR = SLOT_OFFSET_INVENTORY + SIZE_INVENTORY;
+
+	public static final int INV_OFFSET_HOTBAR = 0;
+	public static final int INV_OFFSET_INVENTORY = INV_OFFSET_HOTBAR + 9;
 
 	public static final SchematicPrinter INSTANCE = new SchematicPrinter();
 
@@ -293,10 +307,18 @@ public class SchematicPrinter {
 	}
 
 	private boolean swapToItem(InventoryPlayer inventory, Item item, int itemDamage) {
+		return swapToItem(inventory, item, itemDamage, true);
+	}
+
+	private boolean swapToItem(InventoryPlayer inventory, Item item, int itemDamage, boolean swapSlots) {
 		int slot = getInventorySlotWithItem(inventory, item, itemDamage);
-		if (slot > -1 && slot < 9) {
+		if (slot >= INV_OFFSET_HOTBAR && slot < INV_OFFSET_HOTBAR + SIZE_HOTBAR) {
 			inventory.currentItem = slot;
 			return true;
+		} else if (swapSlots && slot >= INV_OFFSET_INVENTORY && slot < INV_OFFSET_INVENTORY + SIZE_INVENTORY) {
+			if (swapSlots(inventory, slot)) {
+				return swapToItem(inventory, item, itemDamage, false);
+			}
 		}
 		return false;
 	}
@@ -308,5 +330,48 @@ public class SchematicPrinter {
 			}
 		}
 		return -1;
+	}
+
+	private boolean swapSlots(InventoryPlayer inventory, int from) {
+		if (ConfigurationHandler.swapSlotsQueue.size() > 0) {
+			int slot = ConfigurationHandler.swapSlotsQueue.poll() % SIZE_HOTBAR;
+			ConfigurationHandler.swapSlotsQueue.offer(slot);
+
+			ItemStack itemStack = inventory.mainInventory[slot + INV_OFFSET_HOTBAR];
+			swapSlots(from, slot, itemStack == null || itemStack.stackSize == 0);
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean swapSlots(int from, int to, boolean targetEmpty) {
+		if (from >= INV_OFFSET_HOTBAR && from < INV_OFFSET_HOTBAR + SIZE_HOTBAR) {
+			from = SLOT_OFFSET_HOTBAR + (from - INV_OFFSET_HOTBAR);
+		} else if (from >= INV_OFFSET_INVENTORY && from < INV_OFFSET_INVENTORY + SIZE_INVENTORY) {
+			from = SLOT_OFFSET_INVENTORY + (from - INV_OFFSET_INVENTORY);
+		} else {
+			return false;
+		}
+
+		if (to >= INV_OFFSET_HOTBAR && to < INV_OFFSET_HOTBAR + SIZE_HOTBAR) {
+			to = SLOT_OFFSET_HOTBAR + (to - INV_OFFSET_HOTBAR);
+		} else if (to >= INV_OFFSET_INVENTORY && to < INV_OFFSET_INVENTORY + SIZE_INVENTORY) {
+			to = SLOT_OFFSET_INVENTORY + (to - INV_OFFSET_INVENTORY);
+		} else {
+			return false;
+		}
+
+		clickSlot(from);
+		clickSlot(to);
+		if (!targetEmpty) {
+			clickSlot(from);
+		}
+
+		return true;
+	}
+
+	private ItemStack clickSlot(int slot) {
+		return this.minecraft.playerController.windowClick(this.minecraft.thePlayer.inventoryContainer.windowId, slot, 0, 0, this.minecraft.thePlayer);
 	}
 }
