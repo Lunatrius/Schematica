@@ -62,6 +62,8 @@ schematica.config.placeInstantly=Plasser umiddelbart
 schematica.config.placeInstantly.tooltip=Plasser alle blokker som kan bli plassert i ett tikk.
 schematica.config.placeAdjacent=Plasser kun tilstøtende
 schematica.config.placeAdjacent.tooltip=Plasser kun blokker hvis det er en tilstøtende blokk ved siden av dem.
+# schematica.config.swapSlots=Swap Slots
+# schematica.config.swapSlots.tooltip=The printer will use these slots to swap out items in the inventory.
 
 # gui - config - general
 schematica.config.schematicDirectory=Tegningskatalog
