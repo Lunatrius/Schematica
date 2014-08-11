@@ -64,13 +64,15 @@ public class KeyInputHandler {
 		if (this.minecraft.gameSettings.keyBindPickBlock.isPressed()) {
 			try {
 				final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+				boolean revert = true;
 
 				if (schematic != null) {
-					final boolean revert = pickBlock(schematic, 1.0f);
-					if (revert) {
-						final int eventButton = Mouse.getEventButton();
-						KeyBinding.onTick(eventButton - 100);
-					}
+					revert = pickBlock(schematic, 1.0f);
+				}
+
+				if (revert) {
+					final int eventButton = Mouse.getEventButton();
+					KeyBinding.onTick(eventButton - 100);
 				}
 			} catch (Exception e) {
 				Reference.logger.error("Could not pick block!", e);
