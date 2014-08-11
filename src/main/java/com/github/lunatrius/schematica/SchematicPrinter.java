@@ -312,6 +312,14 @@ public class SchematicPrinter {
 
 	private boolean swapToItem(InventoryPlayer inventory, Item item, int itemDamage, boolean swapSlots) {
 		int slot = getInventorySlotWithItem(inventory, item, itemDamage);
+
+		if (this.minecraft.playerController.isInCreativeMode() && (slot < INV_OFFSET_HOTBAR || slot >= INV_OFFSET_HOTBAR + SIZE_HOTBAR) && ConfigurationHandler.swapSlotsQueue.size() > 0) {
+			inventory.currentItem = getNextSlot();
+			inventory.setInventorySlotContents(inventory.currentItem, new ItemStack(item, 1, itemDamage));
+			this.minecraft.playerController.sendSlotPacket(inventory.getStackInSlot(inventory.currentItem), SLOT_OFFSET_HOTBAR + inventory.currentItem);
+			return true;
+		}
+
 		if (slot >= INV_OFFSET_HOTBAR && slot < INV_OFFSET_HOTBAR + SIZE_HOTBAR) {
 			inventory.currentItem = slot;
 			return true;
@@ -334,8 +342,7 @@ public class SchematicPrinter {
 
 	private boolean swapSlots(InventoryPlayer inventory, int from) {
 		if (ConfigurationHandler.swapSlotsQueue.size() > 0) {
-			int slot = ConfigurationHandler.swapSlotsQueue.poll() % SIZE_HOTBAR;
-			ConfigurationHandler.swapSlotsQueue.offer(slot);
+			int slot = getNextSlot();
 
 			ItemStack itemStack = inventory.mainInventory[slot + INV_OFFSET_HOTBAR];
 			swapSlots(from, slot, itemStack == null || itemStack.stackSize == 0);
@@ -343,6 +350,12 @@ public class SchematicPrinter {
 		}
 
 		return false;
+	}
+
+	private int getNextSlot() {
+		int slot = ConfigurationHandler.swapSlotsQueue.poll() % SIZE_HOTBAR;
+		ConfigurationHandler.swapSlotsQueue.offer(slot);
+		return slot;
 	}
 
 	private boolean swapSlots(int from, int to, boolean targetEmpty) {
