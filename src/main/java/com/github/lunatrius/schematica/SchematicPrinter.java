@@ -122,12 +122,6 @@ public class SchematicPrinter {
 
 			for (x = minX; x < maxX; x++) {
 				for (z = minZ; z < maxZ; z++) {
-					Block block = this.schematic.getBlock(x, y, z);
-
-					if (this.schematic.isAirBlock(x, y, z)) {
-						continue;
-					}
-
 					if (this.timeout[x][y][z] > 0) {
 						this.timeout[x][y][z] -= ConfigurationHandler.placeDelay;
 						continue;
@@ -137,14 +131,39 @@ public class SchematicPrinter {
 					wy = this.schematic.position.y + y;
 					wz = this.schematic.position.z + z;
 
-					Block realBlock = world.getBlock(wx, wy, wz);
+					final Block block = this.schematic.getBlock(x, y, z);
+					final Block realBlock = world.getBlock(wx, wy, wz);
+					final int metadata = this.schematic.getBlockMetadata(x, y, z);
+					final int realMetadata = world.getBlockMetadata(wx, wy, wz);
+
+					if (block == realBlock && metadata == realMetadata) {
+						continue;
+					}
+
+					if (!world.isAirBlock(wx, wy, wz) && this.minecraft.playerController.isInCreativeMode()) {
+						this.minecraft.playerController.clickBlock(wx, wy, wz, 0);
+						this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
+
+						if (!ConfigurationHandler.destroyInstantly) {
+							player.inventory.currentItem = slot;
+							syncSneaking(player, isSneaking);
+							return true;
+						}
+
+						continue;
+					}
+
+					if (this.schematic.isAirBlock(x, y, z)) {
+						continue;
+					}
+
 					if (!realBlock.isReplaceable(world, wx, wy, wz)) {
 						continue;
 					}
 
-					int metadata = this.schematic.getBlockMetadata(x, y, z);
 					if (placeBlock(this.minecraft, world, player, wx, wy, wz, BlockInfo.getItemFromBlock(block), metadata)) {
 						this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
+
 						if (!ConfigurationHandler.placeInstantly) {
 							player.inventory.currentItem = slot;
 							syncSneaking(player, isSneaking);

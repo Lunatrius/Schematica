@@ -39,6 +39,8 @@ public class ConfigurationHandler {
 	public static final String TIMEOUT_DESC = "Timeout before re-trying failed blocks.";
 	public static final String PLACE_INSTANTLY = "placeInstantly";
 	public static final String PLACE_INSTANTLY_DESC = "Place all blocks that can be placed in one tick.";
+	public static final String DESTROY_INSTANTLY = "destroyInstantly";
+	public static final String DESTROY_INSTANTLY_DESC = "Destroy all blocks that can be destroyed in one tick.";
 	public static final String PLACE_ADJACENT = "placeAdjacent";
 	public static final String PLACE_ADJACENT_DESC = "Place blocks only if there is an adjacent block next to them.";
 	public static final String SWAP_SLOTS = "swapSlots";
@@ -56,13 +58,14 @@ public class ConfigurationHandler {
 	public static final boolean HIGHLIGHT_DEFAULT = true;
 	public static final boolean HIGHLIGHTAIR_DEFAULT = true;
 	public static final double BLOCKDELTA_DEFAULT = 0.005;
+	public static final boolean DRAWQUADS_DEFAULT = true;
+	public static final boolean DRAWLINES_DEFAULT = true;
 	public static final int PLACEDELAY_DEFAULT = 1;
 	public static final int TIMEOUT_DEFAULT = 10;
 	public static final boolean PLACEINSTANTLY_DEFAULT = false;
+	public static final boolean DESTROYINSTANTLY_DEFAULT = false;
 	public static final boolean PLACEADJACENT_DEFAULT = true;
 	public static final int[] SWAPSLOTS_DEFAULT = new int[] { };
-	public static final boolean DRAWQUADS_DEFAULT = true;
-	public static final boolean DRAWLINES_DEFAULT = true;
 	public static final File SCHEMATICDIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), "schematics");
 
 	public static boolean enableAlpha = ENABLEALPHA_DEFAULT;
@@ -70,14 +73,15 @@ public class ConfigurationHandler {
 	public static boolean highlight = HIGHLIGHT_DEFAULT;
 	public static boolean highlightAir = HIGHLIGHTAIR_DEFAULT;
 	public static float blockDelta = (float) BLOCKDELTA_DEFAULT;
+	public static boolean drawQuads = DRAWQUADS_DEFAULT;
+	public static boolean drawLines = DRAWLINES_DEFAULT;
 	public static int placeDelay = PLACEDELAY_DEFAULT;
 	public static int timeout = TIMEOUT_DEFAULT;
 	public static boolean placeInstantly = PLACEINSTANTLY_DEFAULT;
+	public static boolean destroyInstantly = DESTROYINSTANTLY_DEFAULT;
 	public static boolean placeAdjacent = PLACEADJACENT_DEFAULT;
 	public static int[] swapSlots = SWAPSLOTS_DEFAULT;
 	public static Queue<Integer> swapSlotsQueue = new ArrayDeque<Integer>();
-	public static boolean drawQuads = DRAWQUADS_DEFAULT;
-	public static boolean drawLines = DRAWLINES_DEFAULT;
 	public static File schematicDirectory = SCHEMATICDIRECTORY_DEFAULT;
 
 	public static Property propEnableAlpha = null;
@@ -85,13 +89,14 @@ public class ConfigurationHandler {
 	public static Property propHighlight = null;
 	public static Property propHighlightAir = null;
 	public static Property propBlockDelta = null;
+	public static Property propDrawQuads = null;
+	public static Property propDrawLines = null;
 	public static Property propPlaceDelay = null;
 	public static Property propTimeout = null;
 	public static Property propPlaceInstantly = null;
+	public static Property propDestroyInstantly = null;
 	public static Property propPlaceAdjacent = null;
 	public static Property propSwapSlots = null;
-	public static Property propDrawQuads = null;
-	public static Property propDrawLines = null;
 	public static Property propSchematicDirectory = null;
 
 	public static void init(File configFile) {
@@ -143,6 +148,10 @@ public class ConfigurationHandler {
 		propPlaceInstantly = configuration.get(CATEGORY_PRINTER, PLACE_INSTANTLY, PLACEINSTANTLY_DEFAULT, PLACE_INSTANTLY_DESC);
 		propPlaceInstantly.setLanguageKey(String.format("%s.%s", LANG_PREFIX, PLACE_INSTANTLY));
 		placeInstantly = propPlaceInstantly.getBoolean(PLACEINSTANTLY_DEFAULT);
+
+		propDestroyInstantly = configuration.get(CATEGORY_PRINTER, DESTROY_INSTANTLY, DESTROYINSTANTLY_DEFAULT, DESTROY_INSTANTLY_DESC);
+		propDestroyInstantly.setLanguageKey(String.format("%s.%s", LANG_PREFIX, DESTROY_INSTANTLY));
+		destroyInstantly = propDestroyInstantly.getBoolean(DESTROYINSTANTLY_DEFAULT);
 
 		propPlaceAdjacent = configuration.get(CATEGORY_PRINTER, PLACE_ADJACENT, PLACEADJACENT_DEFAULT, PLACE_ADJACENT_DESC);
 		propPlaceAdjacent.setLanguageKey(String.format("%s.%s", LANG_PREFIX, PLACE_ADJACENT));
