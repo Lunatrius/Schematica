@@ -259,7 +259,7 @@ public class BlockInfo {
 		addPlacementMapping(BlockEnderChest.class, new PlacementData(PlacementType.PLAYER, -1, -1, 3, 2, 5, 4));
 		addPlacementMapping(BlockFurnace.class, new PlacementData(PlacementType.PLAYER, -1, -1, 3, 2, 5, 4));
 		addPlacementMapping(BlockHopper.class, new PlacementData(PlacementType.BLOCK, 0, 1, 2, 3, 4, 5).setMaskMeta(0x7));
-		addPlacementMapping(BlockLog.class, new PlacementData(PlacementType.BLOCK, 0, 0, 8, 8, 4, 4).setMaskMeta(0xC));
+		addPlacementMapping(BlockLog.class, new PlacementData(PlacementType.BLOCK, 0, 0, 8, 8, 4, 4).setMaskMeta(0xC).setMaskMetaInHand(0x3));
 		addPlacementMapping(BlockPistonBase.class, new PlacementData(PlacementType.PISTON, 0, 1, 2, 3, 4, 5).setMaskMeta(0x7));
 		addPlacementMapping(BlockPumpkin.class, new PlacementData(PlacementType.PLAYER, -1, -1, 0, 2, 3, 1).setMaskMeta(0xF));
 		addPlacementMapping(BlockStairs.class, new PlacementData(PlacementType.PLAYER, -1, -1, 3, 2, 1, 0).setOffset(0x4, 0.0f, 1.0f).setMaskMeta(0x3));
@@ -269,17 +269,28 @@ public class BlockInfo {
 		addPlacementMapping(Blocks.planks, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
 		addPlacementMapping(Blocks.sandstone, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
 		addPlacementMapping(Blocks.wool, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Blocks.yellow_flower, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Blocks.red_flower, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Blocks.double_stone_slab, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0x7));
 		addPlacementMapping(Blocks.stone_slab, new PlacementData(PlacementType.BLOCK).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x7).setMaskMetaInHand(0x7));
 		addPlacementMapping(Blocks.stained_glass, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Blocks.ladder, new PlacementData(PlacementType.BLOCK, -1, -1, 3, 2, 5, 4));
+		addPlacementMapping(Blocks.lever, new PlacementData(PlacementType.BLOCK, -1, -1, 3, 4, 1, 2).setMaskMeta(0x7));
+		addPlacementMapping(Blocks.snow_layer, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0x7));
 		addPlacementMapping(Blocks.trapdoor, new PlacementData(PlacementType.BLOCK, -1, -1, 1, 0, 3, 2).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x3));
 		addPlacementMapping(Blocks.monster_egg, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
 		addPlacementMapping(Blocks.stonebrick, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Blocks.tripwire_hook, new PlacementData(PlacementType.BLOCK, -1, -1, 0, 2, 3, 1).setMaskMeta(0x3));
 		addPlacementMapping(Blocks.quartz_block, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
 		addPlacementMapping(Blocks.fence_gate, new PlacementData(PlacementType.PLAYER, -1, -1, 2, 0, 1, 3).setMaskMeta(0x3));
+		addPlacementMapping(Blocks.double_wooden_slab, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
 		addPlacementMapping(Blocks.wooden_slab, new PlacementData(PlacementType.BLOCK).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x7).setMaskMetaInHand(0x7));
 		addPlacementMapping(Blocks.anvil, new PlacementData(PlacementType.PLAYER, -1, -1, 1, 3, 0, 2).setMaskMeta(0x3).setMaskMetaInHand(0xC).setBitShiftMetaInHand(2));
 		addPlacementMapping(Blocks.stained_hardened_clay, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Blocks.carpet, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
 		addPlacementMapping(Blocks.stained_glass_pane, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
+		addPlacementMapping(Items.wooden_door, new PlacementData(PlacementType.PLAYER, -1, -1, 3, 1, 2, 0).setMaskMeta(0x7));
+		addPlacementMapping(Items.iron_door, new PlacementData(PlacementType.PLAYER, -1, -1, 3, 1, 2, 0).setMaskMeta(0x7));
 		addPlacementMapping(Items.repeater, new PlacementData(PlacementType.PLAYER, -1, -1, 0, 2, 3, 1).setMaskMeta(0x3));
 		addPlacementMapping(Items.comparator, new PlacementData(PlacementType.PLAYER, -1, -1, 0, 2, 3, 1).setMaskMeta(0x3));
 	}
