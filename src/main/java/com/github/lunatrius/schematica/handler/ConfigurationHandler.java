@@ -42,7 +42,7 @@ public class ConfigurationHandler {
 	public static final String PLACE_INSTANTLY = "placeInstantly";
 	public static final String PLACE_INSTANTLY_DESC = "Place all blocks that can be placed in one tick.";
 	public static final String DESTROY_BLOCKS = "destroyBlocks";
-	public static final String DESTROY_BLOCKS_DESC = "The printer will destroy blocks in creative mode.";
+	public static final String DESTROY_BLOCKS_DESC = "The printer will destroy blocks (creative mode only).";
 	public static final String DESTROY_INSTANTLY = "destroyInstantly";
 	public static final String DESTROY_INSTANTLY_DESC = "Destroy all blocks that can be destroyed in one tick.";
 	public static final String PLACE_ADJACENT = "placeAdjacent";
