@@ -1,0 +1,80 @@
+# gui - general
+schematica.gui.openFolder=Schematic 폴더 열기
+schematica.gui.done=완료
+schematica.gui.title=Schematic 파일 선택
+schematica.gui.folderInfo=(여기에 schematic 파일을 놓으세요)
+schematica.gui.noschematic=-- Schematic 없음 --
+schematica.gui.increase=+
+schematica.gui.decrease=-
+schematica.gui.hide=숨기기
+schematica.gui.all=모두
+schematica.gui.show=표시
+schematica.gui.movehere=여기에 옮기기
+schematica.gui.flip=뒤집기
+schematica.gui.rotate=회전
+schematica.gui.save=저장
+schematica.gui.moveschematic=Schematic 이동
+schematica.gui.layers=레이어
+schematica.gui.operations=동작
+schematica.gui.point.red=빨간 점
+schematica.gui.point.blue=푸른 점
+schematica.gui.saveselection=선택 영역을 schematic으로 저장
+schematica.gui.enable=활성화
+schematica.gui.disable=비활성화
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
+schematica.gui.materials=재료
+schematica.gui.materialname=재료
+schematica.gui.materialamount=양
+schematica.gui.printer=프린터
+
+# gui - config - categories
+schematica.config.category.render=렌더링
+schematica.config.category.render.tooltip=렌더링 관련 설정.
+schematica.config.category.printer=프린터
+schematica.config.category.printer.tooltip=프린터 관련 설정.
+schematica.config.category.general=일반
+schematica.config.category.general.tooltip=일반 설정.
+
+# gui - config - render
+schematica.config.alphaEnabled=알파 활성화됨
+schematica.config.alphaEnabled.tooltip=투명한 텍스쳐 활성화.
+schematica.config.alpha=알파
+schematica.config.alpha.tooltip=알파 값은 schematic을 렌더링할 때 사용됩니다(1.0 = 불투명, 0.5 = 반투명, 0.0 = 투명).
+schematica.config.highlight=블럭 표시
+schematica.config.highlight.tooltip=놓아질 블럭과 잘못 놓아진 블럭을 표시합니다.
+schematica.config.highlightAir=공기 표시
+schematica.config.highlightAir.tooltip=공기여야 하는 블럭을 표시합니다.
+schematica.config.blockDelta=블럭 델타
+schematica.config.blockDelta.tooltip=표시에 쓰이는 델타 값 (만약 z-fighting 이 생기면 높이세요).
+schematica.config.drawQuads=표면 그리기
+schematica.config.drawQuads.tooltip=블럭 표면을 보여줍니다.
+schematica.config.drawLines=선 그리기
+schematica.config.drawLines.tooltip=외곽선을 보여줍니다.
+
+# gui - config - printer
+schematica.config.placeDelay=놓기 지연시간
+schematica.config.placeDelay.tooltip=놓기 시도간의 지연시간 (틱 단위).
+schematica.config.timeout=시간 제한
+schematica.config.timeout.tooltip=실패한 블럭을 재시도하기 전의 시간 제한.
+schematica.config.placeInstantly=즉시 놓기
+schematica.config.placeInstantly.tooltip=1틱 안에 가능한 모든 블럭을 놓기.
+schematica.config.destroyBlocks=블럭 부수기
+schematica.config.destroyBlocks.tooltip=프린터가 블럭을 부숩니다 (크리에이티브 모드 전용).
+schematica.config.destroyInstantly=즉시 부수기
+schematica.config.destroyInstantly.tooltip=1틱안에 가능한 모든 블럭을 부수기.
+schematica.config.placeAdjacent=접촉된 블럭만 놓기
+schematica.config.placeAdjacent.tooltip=접촉된 블럭이 있을 경우에만 블럭을 놓습니다.
+schematica.config.swapSlots=슬롯 바꾸기
+schematica.config.swapSlots.tooltip=프린터는 인벤토리의 아이템을 바꾸기 위해 이 슬롯들을 사용합니다.
+
+# gui - config - general
+schematica.config.schematicDirectory=Schematic 디렉토리
+schematica.config.schematicDirectory.tooltip=Schematic 디렉토리.
+
+# keys
+schematica.key.category=Schematica
+schematica.key.load=Schematic 불러오기
+schematica.key.save=Schematic 저장
+schematica.key.control=Schematic 조작
