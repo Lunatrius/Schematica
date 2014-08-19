@@ -103,7 +103,7 @@ public class KeyInputHandler {
 				final Block block = schematic.getBlock(objectMouseOver.blockX, objectMouseOver.blockY, objectMouseOver.blockZ);
 				final int metadata = schematic.getBlockMetadata(objectMouseOver.blockX, objectMouseOver.blockY, objectMouseOver.blockZ);
 				if (block == Blocks.double_stone_slab || block == Blocks.double_wooden_slab || block == Blocks.snow_layer) {
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(block, 1, metadata & 0x7));
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(block, 1, metadata & 0xF));
 				}
 
 				final int slot = player.inventoryContainer.inventorySlots.size() - 9 + player.inventory.currentItem;
