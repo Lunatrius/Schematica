@@ -271,7 +271,7 @@ public class BlockInfo {
 		addPlacementMapping(Blocks.wool, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
 		addPlacementMapping(Blocks.yellow_flower, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
 		addPlacementMapping(Blocks.red_flower, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
-		addPlacementMapping(Blocks.double_stone_slab, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0x7));
+		addPlacementMapping(Blocks.double_stone_slab, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
 		addPlacementMapping(Blocks.stone_slab, new PlacementData(PlacementType.BLOCK).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x7).setMaskMetaInHand(0x7));
 		addPlacementMapping(Blocks.stained_glass, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
 		addPlacementMapping(Blocks.ladder, new PlacementData(PlacementType.BLOCK, -1, -1, 3, 2, 5, 4));
