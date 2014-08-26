@@ -5,6 +5,7 @@ import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.config.PlacementData;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
+import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
@@ -94,81 +95,43 @@ public class SchematicPrinter {
 	}
 
 	public boolean print() {
-		int minX, maxX, minY, maxY, minZ, maxZ, x, y, z, wx, wy, wz, slot;
-		boolean isSneaking;
-		EntityClientPlayerMP player = this.minecraft.thePlayer;
-		World world = this.minecraft.theWorld;
+		final EntityClientPlayerMP player = this.minecraft.thePlayer;
+		final World world = this.minecraft.theWorld;
 
 		syncSneaking(player, true);
 
-		Vector3i trans = ClientProxy.playerPosition.clone().sub(this.schematic.position.x, this.schematic.position.y, this.schematic.position.z).toVector3i();
-		minX = Math.max(0, trans.x - 3);
-		maxX = Math.min(this.schematic.getWidth(), trans.x + 4);
-		minY = Math.max(0, trans.y - 3);
-		maxY = Math.min(this.schematic.getHeight(), trans.y + 4);
-		minZ = Math.max(0, trans.z - 3);
-		maxZ = Math.min(this.schematic.getLength(), trans.z + 4);
+		final Vector3i trans = ClientProxy.playerPosition.clone().sub(this.schematic.position.x, this.schematic.position.y, this.schematic.position.z).toVector3i();
+		final int minX = Math.max(0, trans.x - 3);
+		final int maxX = Math.min(this.schematic.getWidth(), trans.x + 4);
+		final int minY = Math.max(0, trans.y - 3);
+		final int maxY = Math.min(this.schematic.getHeight(), trans.y + 4);
+		final int minZ = Math.max(0, trans.z - 3);
+		final int maxZ = Math.min(this.schematic.getLength(), trans.z + 4);
 
-		slot = player.inventory.currentItem;
-		isSneaking = player.isSneaking();
+		final int slot = player.inventory.currentItem;
+		final boolean isSneaking = player.isSneaking();
 
-		int renderingLayer = this.schematic.renderingLayer;
-		for (y = minY; y < maxY; y++) {
+		final int renderingLayer = this.schematic.renderingLayer;
+		for (int y = minY; y < maxY; y++) {
 			if (renderingLayer >= 0) {
 				if (y != renderingLayer) {
 					continue;
 				}
 			}
 
-			for (x = minX; x < maxX; x++) {
-				for (z = minZ; z < maxZ; z++) {
-					if (this.timeout[x][y][z] > 0) {
-						this.timeout[x][y][z] -= ConfigurationHandler.placeDelay;
-						continue;
-					}
-
-					wx = this.schematic.position.x + x;
-					wy = this.schematic.position.y + y;
-					wz = this.schematic.position.z + z;
-
-					final Block block = this.schematic.getBlock(x, y, z);
-					final Block realBlock = world.getBlock(wx, wy, wz);
-					final int metadata = this.schematic.getBlockMetadata(x, y, z);
-					final int realMetadata = world.getBlockMetadata(wx, wy, wz);
-
-					if (block == realBlock && metadata == realMetadata) {
-						continue;
-					}
-
-					if (ConfigurationHandler.destroyBlocks && !world.isAirBlock(wx, wy, wz) && this.minecraft.playerController.isInCreativeMode()) {
-						this.minecraft.playerController.clickBlock(wx, wy, wz, 0);
-						this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
-
-						if (!ConfigurationHandler.destroyInstantly) {
+			for (int x = minX; x < maxX; x++) {
+				for (int z = minZ; z < maxZ; z++) {
+					try {
+						if (placeBlock(world, player, x, y, z)) {
 							player.inventory.currentItem = slot;
 							syncSneaking(player, isSneaking);
 							return true;
 						}
-
-						continue;
-					}
-
-					if (this.schematic.isAirBlock(x, y, z)) {
-						continue;
-					}
-
-					if (!realBlock.isReplaceable(world, wx, wy, wz)) {
-						continue;
-					}
-
-					if (placeBlock(this.minecraft, world, player, wx, wy, wz, BlockInfo.getItemFromBlock(block), metadata)) {
-						this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
-
-						if (!ConfigurationHandler.placeInstantly) {
-							player.inventory.currentItem = slot;
-							syncSneaking(player, isSneaking);
-							return true;
-						}
+					} catch (Exception e) {
+						Reference.logger.error("Could not place block!", e);
+						player.inventory.currentItem = slot;
+						syncSneaking(player, isSneaking);
+						return false;
 					}
 				}
 			}
@@ -177,6 +140,52 @@ public class SchematicPrinter {
 		player.inventory.currentItem = slot;
 		syncSneaking(player, isSneaking);
 		return true;
+	}
+
+	private boolean placeBlock(World world, EntityPlayer player, int x, int y, int z) {
+		if (this.timeout[x][y][z] > 0) {
+			this.timeout[x][y][z] -= ConfigurationHandler.placeDelay;
+			return false;
+		}
+
+		final int wx = this.schematic.position.x + x;
+		final int wy = this.schematic.position.y + y;
+		final int wz = this.schematic.position.z + z;
+
+		final Block block = this.schematic.getBlock(x, y, z);
+		final Block realBlock = world.getBlock(wx, wy, wz);
+		final int metadata = this.schematic.getBlockMetadata(x, y, z);
+		final int realMetadata = world.getBlockMetadata(wx, wy, wz);
+
+		if (block == realBlock && metadata == realMetadata) {
+			return false;
+		}
+
+		if (ConfigurationHandler.destroyBlocks && !world.isAirBlock(wx, wy, wz) && this.minecraft.playerController.isInCreativeMode()) {
+			this.minecraft.playerController.clickBlock(wx, wy, wz, 0);
+
+			this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
+
+			return !ConfigurationHandler.destroyInstantly;
+		}
+
+		if (this.schematic.isAirBlock(x, y, z)) {
+			return false;
+		}
+
+		if (!realBlock.isReplaceable(world, wx, wy, wz)) {
+			return false;
+		}
+
+		if (placeBlock(this.minecraft, world, player, wx, wy, wz, BlockInfo.getItemFromBlock(block), metadata)) {
+			this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
+
+			if (!ConfigurationHandler.placeInstantly) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private boolean isSolid(World world, int x, int y, int z, ForgeDirection side) {
