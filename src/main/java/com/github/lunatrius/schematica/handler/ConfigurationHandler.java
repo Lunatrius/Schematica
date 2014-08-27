@@ -116,12 +116,10 @@ public class ConfigurationHandler {
 	private static void loadConfiguration() {
 		propEnableAlpha = configuration.get(CATEGORY_RENDER, ALPHA_ENABLED, ENABLEALPHA_DEFAULT, ALPHA_ENABLED_DESC);
 		propEnableAlpha.setLanguageKey(String.format("%s.%s", LANG_PREFIX, ALPHA_ENABLED));
-		propEnableAlpha.setShowInGui(false);
 		enableAlpha = propEnableAlpha.getBoolean(ENABLEALPHA_DEFAULT);
 
 		propAlpha = configuration.get(CATEGORY_RENDER, ALPHA, ALPHA_DEFAULT, ALPHA_DESC, 0.0, 1.0);
 		propAlpha.setLanguageKey(String.format("%s.%s", LANG_PREFIX, ALPHA));
-		propAlpha.setShowInGui(false);
 		alpha = (float) propAlpha.getDouble(ALPHA_DEFAULT);
 
 		propHighlight = configuration.get(CATEGORY_RENDER, HIGHLIGHT, HIGHLIGHT_DEFAULT, HIGHLIGHT_DESC);
