@@ -1,11 +1,11 @@
 package com.github.lunatrius.schematica.client.renderer;
 
 import com.github.lunatrius.core.util.vector.Vector3f;
+import com.github.lunatrius.schematica.client.renderer.shader.ShaderProgram;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -18,20 +18,19 @@ import net.minecraft.init.Blocks;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class RendererSchematicChunk {
 	public static final int CHUNK_WIDTH = 16;
 	public static final int CHUNK_HEIGHT = 16;
 	public static final int CHUNK_LENGTH = 16;
+
+	private static final ShaderProgram SHADER_ALPHA = new ShaderProgram("schematica", null, "shaders/alpha.frag");
 
 	private static boolean canUpdate = false;
 
@@ -47,11 +46,10 @@ public class RendererSchematicChunk {
 
 	private final AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
 
-	private static final Map<String, ResourceLocation> resourcePacks = new HashMap<String, ResourceLocation>();
-	private Field fieldMapTexturesStiched;
-
 	private boolean needsUpdate = true;
 	private int glList = -1;
+	// TODO: move this away from GL lists
+	private int glListHighlight = -1;
 
 	public RendererSchematicChunk(SchematicWorld schematicWorld, int baseX, int baseY, int baseZ) {
 		this.schematic = schematicWorld;
@@ -79,18 +77,15 @@ public class RendererSchematicChunk {
 		}
 
 		this.glList = GL11.glGenLists(3);
-
-		try {
-			this.fieldMapTexturesStiched = ReflectionHelper.findField(TextureMap.class, "f", "field_94252_e", "mapUploadedSprites");
-		} catch (Exception ex) {
-			Reference.logger.fatal("Failed to initialize mapTexturesStiched!", ex);
-			this.fieldMapTexturesStiched = null;
-		}
+		this.glListHighlight = GL11.glGenLists(3);
 	}
 
 	public void delete() {
 		if (this.glList != -1) {
 			GL11.glDeleteLists(this.glList, 3);
+		}
+		if (this.glListHighlight != -1) {
+			GL11.glDeleteLists(this.glListHighlight, 3);
 		}
 	}
 
@@ -145,7 +140,9 @@ public class RendererSchematicChunk {
 
 				GL11.glNewList(this.glList + pass, GL11.GL_COMPILE);
 				renderBlocks(pass, minX, minY, minZ, maxX, maxY, maxZ);
+				GL11.glEndList();
 
+				GL11.glNewList(this.glListHighlight + pass, GL11.GL_COMPILE);
 				int quadCount = RenderHelper.getQuadCount();
 				int lineCount = RenderHelper.getLineCount();
 
@@ -195,8 +192,21 @@ public class RendererSchematicChunk {
 		GL11.glDisable(GL11.GL_LIGHTING);
 
 		this.profiler.startSection("blocks");
-		bindTexture();
+		this.minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+
+		if (OpenGlHelper.shadersSupported && ConfigurationHandler.enableAlpha) {
+			GL20.glUseProgram(SHADER_ALPHA.getProgram());
+			GL20.glUniform1f(GL20.glGetUniformLocation(SHADER_ALPHA.getProgram(), "alpha_multiplier"), ConfigurationHandler.alpha);
+		}
+
 		GL11.glCallList(this.glList + renderPass);
+
+		if (OpenGlHelper.shadersSupported && ConfigurationHandler.enableAlpha) {
+			GL20.glUseProgram(0);
+		}
+
+		this.profiler.endStartSection("highlight");
+		GL11.glCallList(this.glListHighlight + renderPass);
 
 		this.profiler.endStartSection("tileEntities");
 		renderTileEntities(renderPass);
@@ -373,92 +383,5 @@ public class RendererSchematicChunk {
 		} catch (Exception ex) {
 			Reference.logger.error("Failed to render tile entities!", ex);
 		}
-	}
-
-	private void bindTexture() {
-		if (!ConfigurationHandler.enableAlpha) {
-			this.minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-			return;
-		}
-
-		// TODO: work out alpha for multiple resource packs
-		this.minecraft.renderEngine.bindTexture(TextureMap.locationBlocksTexture);
-		/*
-		String resourcePackName = this.minecraft.getResourcePackRepository().getResourcePackName();
-
-		if (!resourcePacks.containsKey(resourcePackName)) {
-			String texturePackFileName = resourcePackName.replaceAll("(?i)[^a-z0-9]", "_") + "-" + (int) (this.settings.alpha * 255) + ".png";
-
-			try {
-				File outputfile = new File("assets/" + texturePackFileName);
-
-				ResourceManager manager = this.minecraft.getResourceManager();
-
-				Icon icon = Block.dirt.getIcon(0, 0);
-				float deltaU = icon.getMaxU() - icon.getMinU();
-				float deltaV = icon.getMaxV() - icon.getMinV();
-
-				int width = (int) Math.pow(2, Math.round(Math.log(icon.getIconWidth() / deltaU) / Math.log(2)));
-				int height = (int) Math.pow(2, Math.round(Math.log(icon.getIconHeight() / deltaV) / Math.log(2)));
-
-				BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-				Map<String, TextureAtlasSprite> map = (Map<String, TextureAtlasSprite>) this.fieldMapTexturesStiched.get(this.minecraft.renderEngine.getTexture(TextureMap.locationBlocksTexture));
-				if (map == null) {
-					resourcePacks.put(resourcePackName, TextureMap.locationBlocksTexture);
-					return;
-				}
-
-				Collection<TextureAtlasSprite> sprites = map.values();
-
-				for (TextureAtlasSprite sprite : sprites) {
-					ResourceLocation resourcelocation = new ResourceLocation(ForgeHooksClient.fixDomain("textures/blocks/", sprite.getIconName()) + ".png");
-
-					try {
-						sprite.load(manager, resourcelocation);
-					} catch (RuntimeException ignored) {
-					} catch (IOException ignored) {
-					}
-				}
-
-				for (TextureAtlasSprite sprite : sprites) {
-					if (sprite.getFrameCount() != 0) {
-						int[] data = sprite.getFrameTextureData(0);
-						int offsetX = sprite.getOriginX();
-						int offsetY = sprite.getOriginY();
-
-						int x, y;
-						int color, alpha, index = 0;
-
-						for (y = 0; y < sprite.getIconHeight(); y++) {
-							for (x = 0; x < sprite.getIconWidth(); x++) {
-								color = data[index++];
-								alpha = (color >> 24) & 0xFF;
-								alpha *= this.settings.alpha;
-								color = (color & 0x00FFFFFF) | (alpha << 24);
-								bufferedImage.setRGB(offsetX + x, offsetY + y, color);
-							}
-						}
-					}
-				}
-
-				ImageIO.write(bufferedImage, "png", outputfile);
-
-				for (TextureAtlasSprite sprite : sprites) {
-					if (!sprite.hasAnimationMetadata()) {
-						sprite.clearFramesTextureData();
-					}
-				}
-
-				resourcePacks.put(resourcePackName, new ResourceLocation(texturePackFileName));
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-
-		if (resourcePacks.containsKey(resourcePackName)) {
-			this.minecraft.renderEngine.bindTexture(resourcePacks.get(resourcePackName));
-		}
-		*/
 	}
 }
