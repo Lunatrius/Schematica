@@ -2,14 +2,11 @@ package com.github.lunatrius.schematica.world.schematic;
 
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.GZIPOutputStream;
@@ -27,10 +24,9 @@ public abstract class SchematicFormat {
 
 	public static SchematicWorld readFromFile(File file) {
 		try {
-			InputStream stream = new FileInputStream(file);
-			NBTTagCompound tagCompound = CompressedStreamTools.readCompressed(stream);
-			String format = tagCompound.getString(MATERIALS);
-			SchematicFormat schematicFormat = FORMATS.get(format);
+			final NBTTagCompound tagCompound = SchematicUtil.readTagCompoundFromFile(file);
+			final String format = tagCompound.getString(MATERIALS);
+			final SchematicFormat schematicFormat = FORMATS.get(format);
 
 			if (schematicFormat == null) {
 				throw new UnsupportedFormatException(format);

@@ -6,6 +6,7 @@ import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
+import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -144,7 +145,7 @@ public class GuiSchematicLoad extends GuiScreen {
 			for (File file : filesSchematics) {
 				name = file.getName();
 
-				this.schematicFiles.add(new GuiSchematicEntry(name, SchematicWorld.getIconFromFile(file), file.isDirectory()));
+				this.schematicFiles.add(new GuiSchematicEntry(name, SchematicUtil.getIconFromFile(file), file.isDirectory()));
 			}
 		}
 	}

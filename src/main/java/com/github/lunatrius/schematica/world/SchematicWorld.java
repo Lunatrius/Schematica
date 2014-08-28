@@ -4,6 +4,7 @@ import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.reference.Reference;
+import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -18,8 +19,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntitySkull;
@@ -33,9 +32,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.storage.SaveHandlerMP;
 import net.minecraftforge.common.util.ForgeDirection;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -109,63 +105,7 @@ public class SchematicWorld extends World {
 	}
 
 	public SchematicWorld(String iconName, short[][][] blocks, byte[][][] metadata, List<TileEntity> tileEntities, short width, short height, short length) {
-		this(getIconFromName(iconName), blocks, metadata, tileEntities, width, height, length);
-	}
-
-	public static ItemStack getIconFromName(String iconName) {
-		ItemStack icon;
-		String name = "";
-		int damage = 0;
-
-		String[] parts = iconName.split(",");
-		if (parts.length >= 1) {
-			name = parts[0];
-			if (parts.length >= 2) {
-				try {
-					damage = Integer.parseInt(parts[1]);
-				} catch (NumberFormatException ignored) {
-				}
-			}
-		}
-
-		icon = new ItemStack(GameData.getBlockRegistry().getObject(name), 1, damage);
-		if (icon.getItem() != null) {
-			return icon;
-		}
-
-		icon = new ItemStack(GameData.getItemRegistry().getObject(name), 1, damage);
-		if (icon.getItem() != null) {
-			return icon;
-		}
-
-		return SchematicWorld.DEFAULT_ICON.copy();
-	}
-
-	public static ItemStack getIconFromNBT(NBTTagCompound tagCompound) {
-		ItemStack icon = SchematicWorld.DEFAULT_ICON.copy();
-
-		if (tagCompound != null && tagCompound.hasKey("Icon")) {
-			icon.readFromNBT(tagCompound.getCompoundTag("Icon"));
-
-			if (icon.getItem() == null) {
-				icon = SchematicWorld.DEFAULT_ICON.copy();
-			}
-		}
-
-		return icon;
-	}
-
-	public static ItemStack getIconFromFile(File file) {
-		try {
-			InputStream stream = new FileInputStream(file);
-			NBTTagCompound tagCompound = CompressedStreamTools.readCompressed(stream);
-
-			return getIconFromNBT(tagCompound);
-		} catch (Exception e) {
-			Reference.logger.error("Failed to read schematic icon!", e);
-		}
-
-		return SchematicWorld.DEFAULT_ICON.copy();
+		this(SchematicUtil.getIconFromName(iconName), blocks, metadata, tileEntities, width, height, length);
 	}
 
 	private void generateBlockList() {
