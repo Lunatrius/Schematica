@@ -312,7 +312,7 @@ public class SchematicPrinter {
 		int side = direction.getOpposite().ordinal();
 
 		/* copypasted from n.m.client.Minecraft to sooth finicky servers */
-		success = !ForgeEventFactory.onPlayerInteract(minecraft.thePlayer, Action.RIGHT_CLICK_BLOCK, x, y, z, side).isCanceled();
+		success = !ForgeEventFactory.onPlayerInteract(minecraft.thePlayer, Action.RIGHT_CLICK_BLOCK, x, y, z, side, world).isCanceled();
 		if (success) {
 			// still not assured!
 			success = minecraft.playerController.onPlayerRightClick(player, world, itemStack, x, y, z, side, Vec3.createVectorHelper(x + offsetX, y + offsetY, z + offsetZ));
