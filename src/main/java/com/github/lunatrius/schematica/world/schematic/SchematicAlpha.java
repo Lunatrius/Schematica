@@ -33,7 +33,7 @@ public class SchematicAlpha extends SchematicFormat {
 
 	@Override
 	public SchematicWorld readFromNBT(NBTTagCompound tagCompound) {
-		ItemStack icon = SchematicWorld.getIconFromNBT(tagCompound);
+		ItemStack icon = SchematicUtil.getIconFromNBT(tagCompound);
 
 		byte localBlocks[] = tagCompound.getByteArray(BLOCKS);
 		byte localMetadata[] = tagCompound.getByteArray(DATA);

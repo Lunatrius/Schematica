@@ -12,6 +12,7 @@ import com.github.lunatrius.schematica.handler.client.TickHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
+import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -209,7 +210,7 @@ public class ClientProxy extends CommonProxy {
 			}
 
 			SchematicWorld schematic = getSchematicFromWorld(world, from, to);
-			schematic.setIcon(SchematicWorld.getIconFromName(iconName));
+			schematic.setIcon(SchematicUtil.getIconFromName(iconName));
 			SchematicFormat.writeToFile(directory, filename, schematic);
 
 			return true;
