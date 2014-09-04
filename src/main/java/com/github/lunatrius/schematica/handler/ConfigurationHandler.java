@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.handler;
 
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.google.common.primitives.Ints;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
@@ -15,45 +16,6 @@ import java.util.Queue;
 
 public class ConfigurationHandler {
 	public static final String VERSION = "1";
-
-	public static final String CATEGORY_RENDER = "render";
-	public static final String CATEGORY_PRINTER = "printer";
-	public static final String CATEGORY_GENERAL = "general";
-
-	public static final String ALPHA_ENABLED = "alphaEnabled";
-	public static final String ALPHA_ENABLED_DESC = "Enable transparent textures.";
-	public static final String ALPHA = "alpha";
-	public static final String ALPHA_DESC = "Alpha value used when rendering the schematic (1.0 = opaque, 0.5 = half transparent, 0.0 = transparent).";
-	public static final String HIGHLIGHT = "highlight";
-	public static final String HIGHLIGHT_DESC = "Highlight invalid placed blocks and to be placed blocks.";
-	public static final String HIGHLIGHT_AIR = "highlightAir";
-	public static final String HIGHLIGHT_AIR_DESC = "Highlight blocks that should be air.";
-	public static final String BLOCK_DELTA = "blockDelta";
-	public static final String BLOCK_DELTA_DESC = "Delta value used for highlighting (if you experience z-fighting increase this).";
-	public static final String DRAW_QUADS = "drawQuads";
-	public static final String DRAW_QUADS_DESC = "Draw surface areas.";
-	public static final String DRAW_LINES = "drawLines";
-	public static final String DRAW_LINES_DESC = "Draw outlines.";
-
-	public static final String PLACE_DELAY = "placeDelay";
-	public static final String PLACE_DELAY_DESC = "Delay between placement attempts (in ticks).";
-	public static final String TIMEOUT = "timeout";
-	public static final String TIMEOUT_DESC = "Timeout before re-trying failed blocks.";
-	public static final String PLACE_INSTANTLY = "placeInstantly";
-	public static final String PLACE_INSTANTLY_DESC = "Place all blocks that can be placed in one tick.";
-	public static final String DESTROY_BLOCKS = "destroyBlocks";
-	public static final String DESTROY_BLOCKS_DESC = "The printer will destroy blocks (creative mode only).";
-	public static final String DESTROY_INSTANTLY = "destroyInstantly";
-	public static final String DESTROY_INSTANTLY_DESC = "Destroy all blocks that can be destroyed in one tick.";
-	public static final String PLACE_ADJACENT = "placeAdjacent";
-	public static final String PLACE_ADJACENT_DESC = "Place blocks only if there is an adjacent block next to them.";
-	public static final String SWAP_SLOTS = "swapSlots";
-	public static final String SWAP_SLOTS_DESC = "The printer will use these slots to swap out items in the inventory.";
-
-	public static final String SCHEMATIC_DIRECTORY = "schematicDirectory";
-	public static final String SCHEMATIC_DIRECTORY_DESC = "Schematic directory.";
-
-	public static final String LANG_PREFIX = Reference.MODID.toLowerCase() + ".config";
 
 	public static Configuration configuration;
 
@@ -114,60 +76,60 @@ public class ConfigurationHandler {
 	}
 
 	private static void loadConfiguration() {
-		propEnableAlpha = configuration.get(CATEGORY_RENDER, ALPHA_ENABLED, ENABLEALPHA_DEFAULT, ALPHA_ENABLED_DESC);
-		propEnableAlpha.setLanguageKey(String.format("%s.%s", LANG_PREFIX, ALPHA_ENABLED));
+		propEnableAlpha = configuration.get(Names.Config.Category.RENDER, Names.Config.ALPHA_ENABLED, ENABLEALPHA_DEFAULT, Names.Config.ALPHA_ENABLED_DESC);
+		propEnableAlpha.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.ALPHA_ENABLED);
 		enableAlpha = propEnableAlpha.getBoolean(ENABLEALPHA_DEFAULT);
 
-		propAlpha = configuration.get(CATEGORY_RENDER, ALPHA, ALPHA_DEFAULT, ALPHA_DESC, 0.0, 1.0);
-		propAlpha.setLanguageKey(String.format("%s.%s", LANG_PREFIX, ALPHA));
+		propAlpha = configuration.get(Names.Config.Category.RENDER, Names.Config.ALPHA, ALPHA_DEFAULT, Names.Config.ALPHA_DESC, 0.0, 1.0);
+		propAlpha.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.ALPHA);
 		alpha = (float) propAlpha.getDouble(ALPHA_DEFAULT);
 
-		propHighlight = configuration.get(CATEGORY_RENDER, HIGHLIGHT, HIGHLIGHT_DEFAULT, HIGHLIGHT_DESC);
-		propHighlight.setLanguageKey(String.format("%s.%s", LANG_PREFIX, HIGHLIGHT));
+		propHighlight = configuration.get(Names.Config.Category.RENDER, Names.Config.HIGHLIGHT, HIGHLIGHT_DEFAULT, Names.Config.HIGHLIGHT_DESC);
+		propHighlight.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.HIGHLIGHT);
 		highlight = propHighlight.getBoolean(HIGHLIGHT_DEFAULT);
 
-		propHighlightAir = configuration.get(CATEGORY_RENDER, HIGHLIGHT_AIR, HIGHLIGHTAIR_DEFAULT, HIGHLIGHT_AIR_DESC);
-		propHighlightAir.setLanguageKey(String.format("%s.%s", LANG_PREFIX, HIGHLIGHT_AIR));
+		propHighlightAir = configuration.get(Names.Config.Category.RENDER, Names.Config.HIGHLIGHT_AIR, HIGHLIGHTAIR_DEFAULT, Names.Config.HIGHLIGHT_AIR_DESC);
+		propHighlightAir.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.HIGHLIGHT_AIR);
 		highlightAir = propHighlightAir.getBoolean(HIGHLIGHTAIR_DEFAULT);
 
-		propBlockDelta = configuration.get(CATEGORY_RENDER, BLOCK_DELTA, BLOCKDELTA_DEFAULT, BLOCK_DELTA_DESC, 0.0, 0.2);
-		propBlockDelta.setLanguageKey(String.format("%s.%s", LANG_PREFIX, BLOCK_DELTA));
+		propBlockDelta = configuration.get(Names.Config.Category.RENDER, Names.Config.BLOCK_DELTA, BLOCKDELTA_DEFAULT, Names.Config.BLOCK_DELTA_DESC, 0.0, 0.2);
+		propBlockDelta.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.BLOCK_DELTA);
 		blockDelta = (float) propBlockDelta.getDouble(BLOCKDELTA_DEFAULT);
 
-		propDrawQuads = configuration.get(CATEGORY_RENDER, DRAW_QUADS, DRAWQUADS_DEFAULT, DRAW_QUADS_DESC);
-		propDrawQuads.setLanguageKey(String.format("%s.%s", LANG_PREFIX, DRAW_QUADS));
+		propDrawQuads = configuration.get(Names.Config.Category.RENDER, Names.Config.DRAW_QUADS, DRAWQUADS_DEFAULT, Names.Config.DRAW_QUADS_DESC);
+		propDrawQuads.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DRAW_QUADS);
 		drawQuads = propDrawQuads.getBoolean(DRAWQUADS_DEFAULT);
 
-		propDrawLines = configuration.get(CATEGORY_RENDER, DRAW_LINES, DRAWLINES_DEFAULT, DRAW_LINES_DESC);
-		propDrawLines.setLanguageKey(String.format("%s.%s", LANG_PREFIX, DRAW_LINES));
+		propDrawLines = configuration.get(Names.Config.Category.RENDER, Names.Config.DRAW_LINES, DRAWLINES_DEFAULT, Names.Config.DRAW_LINES_DESC);
+		propDrawLines.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DRAW_LINES);
 		drawLines = propDrawLines.getBoolean(DRAWLINES_DEFAULT);
 
-		propPlaceDelay = configuration.get(CATEGORY_PRINTER, PLACE_DELAY, PLACEDELAY_DEFAULT, PLACE_DELAY_DESC, 0, 20);
-		propPlaceDelay.setLanguageKey(String.format("%s.%s", LANG_PREFIX, PLACE_DELAY));
+		propPlaceDelay = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_DELAY, PLACEDELAY_DEFAULT, Names.Config.PLACE_DELAY_DESC, 0, 20);
+		propPlaceDelay.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_DELAY);
 		placeDelay = propPlaceDelay.getInt(PLACEDELAY_DEFAULT);
 
-		propTimeout = configuration.get(CATEGORY_PRINTER, TIMEOUT, TIMEOUT_DEFAULT, TIMEOUT_DESC, 0, 100);
-		propTimeout.setLanguageKey(String.format("%s.%s", LANG_PREFIX, TIMEOUT));
+		propTimeout = configuration.get(Names.Config.Category.PRINTER, Names.Config.TIMEOUT, TIMEOUT_DEFAULT, Names.Config.TIMEOUT_DESC, 0, 100);
+		propTimeout.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TIMEOUT);
 		timeout = propTimeout.getInt(TIMEOUT_DEFAULT);
 
-		propPlaceInstantly = configuration.get(CATEGORY_PRINTER, PLACE_INSTANTLY, PLACEINSTANTLY_DEFAULT, PLACE_INSTANTLY_DESC);
-		propPlaceInstantly.setLanguageKey(String.format("%s.%s", LANG_PREFIX, PLACE_INSTANTLY));
+		propPlaceInstantly = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_INSTANTLY, PLACEINSTANTLY_DEFAULT, Names.Config.PLACE_INSTANTLY_DESC);
+		propPlaceInstantly.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_INSTANTLY);
 		placeInstantly = propPlaceInstantly.getBoolean(PLACEINSTANTLY_DEFAULT);
 
-		propDestroyBlocks = configuration.get(CATEGORY_PRINTER, DESTROY_BLOCKS, DESTROYBLOCKS_DEFAULT, DESTROY_BLOCKS_DESC);
-		propDestroyBlocks.setLanguageKey(String.format("%s.%s", LANG_PREFIX, DESTROY_BLOCKS));
+		propDestroyBlocks = configuration.get(Names.Config.Category.PRINTER, Names.Config.DESTROY_BLOCKS, DESTROYBLOCKS_DEFAULT, Names.Config.DESTROY_BLOCKS_DESC);
+		propDestroyBlocks.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DESTROY_BLOCKS);
 		destroyBlocks = propDestroyBlocks.getBoolean(DESTROYBLOCKS_DEFAULT);
 
-		propDestroyInstantly = configuration.get(CATEGORY_PRINTER, DESTROY_INSTANTLY, DESTROYINSTANTLY_DEFAULT, DESTROY_INSTANTLY_DESC);
-		propDestroyInstantly.setLanguageKey(String.format("%s.%s", LANG_PREFIX, DESTROY_INSTANTLY));
+		propDestroyInstantly = configuration.get(Names.Config.Category.PRINTER, Names.Config.DESTROY_INSTANTLY, DESTROYINSTANTLY_DEFAULT, Names.Config.DESTROY_INSTANTLY_DESC);
+		propDestroyInstantly.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DESTROY_INSTANTLY);
 		destroyInstantly = propDestroyInstantly.getBoolean(DESTROYINSTANTLY_DEFAULT);
 
-		propPlaceAdjacent = configuration.get(CATEGORY_PRINTER, PLACE_ADJACENT, PLACEADJACENT_DEFAULT, PLACE_ADJACENT_DESC);
-		propPlaceAdjacent.setLanguageKey(String.format("%s.%s", LANG_PREFIX, PLACE_ADJACENT));
+		propPlaceAdjacent = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_ADJACENT, PLACEADJACENT_DEFAULT, Names.Config.PLACE_ADJACENT_DESC);
+		propPlaceAdjacent.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_ADJACENT);
 		placeAdjacent = propPlaceAdjacent.getBoolean(PLACEADJACENT_DEFAULT);
 
-		propSwapSlots = configuration.get(CATEGORY_PRINTER, SWAP_SLOTS, SWAPSLOTS_DEFAULT, SWAP_SLOTS_DESC, 0, 8);
-		propSwapSlots.setLanguageKey(String.format("%s.%s", LANG_PREFIX, SWAP_SLOTS));
+		propSwapSlots = configuration.get(Names.Config.Category.PRINTER, Names.Config.SWAP_SLOTS, SWAPSLOTS_DEFAULT, Names.Config.SWAP_SLOTS_DESC, 0, 8);
+		propSwapSlots.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SWAP_SLOTS);
 		swapSlots = propSwapSlots.getIntList();
 		swapSlotsQueue = new ArrayDeque<Integer>(Ints.asList(swapSlots));
 
@@ -177,8 +139,8 @@ public class ConfigurationHandler {
 			Reference.logger.warn("Could not canonize file path!", e);
 		}
 
-		propSchematicDirectory = configuration.get(CATEGORY_GENERAL, SCHEMATIC_DIRECTORY, schematicDirectory.getAbsolutePath().replace("\\", "/"), SCHEMATIC_DIRECTORY_DESC);
-		propSchematicDirectory.setLanguageKey(String.format("%s.%s", LANG_PREFIX, SCHEMATIC_DIRECTORY));
+		propSchematicDirectory = configuration.get(Names.Config.Category.GENERAL, Names.Config.SCHEMATIC_DIRECTORY, schematicDirectory.getAbsolutePath().replace("\\", "/"), Names.Config.SCHEMATIC_DIRECTORY_DESC);
+		propSchematicDirectory.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SCHEMATIC_DIRECTORY);
 		schematicDirectory = new File(propSchematicDirectory.getString());
 
 		if (configuration.hasChanged()) {
