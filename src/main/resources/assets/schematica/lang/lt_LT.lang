@@ -28,6 +28,7 @@ schematica.gui.materials=Medþiagos
 schematica.gui.materialname=Medþiaga
 schematica.gui.materialamount=Kiekis
 # schematica.gui.printer=Printer
+# schematica.gui.unknownblock=Unknown Block
 
 # gui - config - categories
 # schematica.config.category.render=Rendering

@@ -28,6 +28,7 @@ schematica.gui.materials=Materiais
 schematica.gui.materialname=Material
 schematica.gui.materialamount=Quantidade
 schematica.gui.printer=Modo de construçăo automática
+# schematica.gui.unknownblock=Unknown Block
 
 # gui - config - categories
 # schematica.config.category.render=Rendering

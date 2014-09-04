@@ -28,6 +28,7 @@ schematica.gui.materials=Matériaux
 schematica.gui.materialname=Matériau
 schematica.gui.materialamount=Quantité
 schematica.gui.printer=Mode imprimante
+# schematica.gui.unknownblock=Unknown Block
 
 # gui - config - categories
 # schematica.config.category.render=Rendering

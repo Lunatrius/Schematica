@@ -28,6 +28,7 @@ schematica.gui.materials=ส่วนประกอบ
 schematica.gui.materialname=ส่วนประกอบ
 schematica.gui.materialamount=จำนวน
 schematica.gui.printer=การปริ๊น
+# schematica.gui.unknownblock=Unknown Block
 
 # gui - config - categories
 # schematica.config.category.render=Rendering

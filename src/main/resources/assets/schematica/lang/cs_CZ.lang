@@ -28,6 +28,7 @@ schematica.gui.materials=Materiály
 schematica.gui.materialname=Materiál
 schematica.gui.materialamount=Množství
 schematica.gui.printer=Tiskárna
+# schematica.gui.unknownblock=Unknown Block
 
 # gui - config - categories
 # schematica.config.category.render=Rendering
