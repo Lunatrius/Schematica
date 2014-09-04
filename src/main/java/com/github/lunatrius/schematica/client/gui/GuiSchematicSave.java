@@ -135,7 +135,7 @@ public class GuiSchematicSave extends GuiScreen {
 		this.btnIncBZ = new GuiButton(id++, this.centerX + 100, this.centerY + 20, 30, 20, I18n.format("schematica.gui.increase"));
 		this.buttonList.add(this.btnIncBZ);
 
-		this.btnEnable = new GuiButton(id++, this.width - 210, this.height - 30, 50, 20, I18n.format(ClientProxy.isRenderingGuide ? "schematica.gui.disable" : "schematica.gui.enable"));
+		this.btnEnable = new GuiButton(id++, this.width - 210, this.height - 30, 50, 20, I18n.format(ClientProxy.isRenderingGuide ? "schematica.gui.on" : "schematica.gui.off"));
 		this.buttonList.add(this.btnEnable);
 
 		this.tfFilename = new GuiTextField(this.fontRendererObj, this.width - 155, this.height - 29, 100, 18);
@@ -213,7 +213,7 @@ public class GuiSchematicSave extends GuiScreen {
 				this.btnAmountBZ.displayString = Integer.toString(ClientProxy.INCREMENTS[this.incrementBZ]);
 			} else if (guiButton.id == this.btnEnable.id) {
 				ClientProxy.isRenderingGuide = !ClientProxy.isRenderingGuide && Schematica.proxy.isSaveEnabled;
-				this.btnEnable.displayString = I18n.format(ClientProxy.isRenderingGuide ? "schematica.gui.disable" : "schematica.gui.enable");
+				this.btnEnable.displayString = I18n.format(ClientProxy.isRenderingGuide ? "schematica.gui.on" : "schematica.gui.off");
 				this.btnSave.enabled = ClientProxy.isRenderingGuide;
 			} else if (guiButton.id == this.btnSave.id) {
 				String path = this.tfFilename.getText() + ".schematic";

@@ -121,7 +121,7 @@ public class GuiSchematicControl extends GuiScreen {
 		this.btnMaterials = new GuiButton(id++, 10, this.height - 70, 80, 20, I18n.format("schematica.gui.materials"));
 		this.buttonList.add(this.btnMaterials);
 
-		this.btnPrint = new GuiButton(id++, 10, this.height - 30, 80, 20, I18n.format(this.printer.isPrinting() ? "schematica.gui.disable" : "schematica.gui.enable"));
+		this.btnPrint = new GuiButton(id++, 10, this.height - 30, 80, 20, I18n.format(this.printer.isPrinting() ? "schematica.gui.on" : "schematica.gui.off"));
 		this.buttonList.add(this.btnPrint);
 
 		this.btnDecX.enabled = this.schematic != null;
@@ -208,7 +208,7 @@ public class GuiSchematicControl extends GuiScreen {
 				this.mc.displayGuiScreen(new GuiSchematicMaterials(this));
 			} else if (guiButton.id == this.btnPrint.id && this.printer.isEnabled()) {
 				boolean isPrinting = this.printer.togglePrinting();
-				this.btnPrint.displayString = I18n.format(isPrinting ? "schematica.gui.disable" : "schematica.gui.enable");
+				this.btnPrint.displayString = I18n.format(isPrinting ? "schematica.gui.on" : "schematica.gui.off");
 			}
 		}
 	}
