@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.client.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 
 class GuiSchematicMaterialsSlot extends GuiSlot {
@@ -11,6 +12,8 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 	private final GuiSchematicMaterials guiSchematicMaterials;
 
 	protected int selectedIndex = -1;
+
+	private final String strUnknownBlock = I18n.format("schematica.gui.unknownblock");
 
 	public GuiSchematicMaterialsSlot(GuiSchematicMaterials par1) {
 		super(Minecraft.getMinecraft(), par1.width, par1.height, 16, par1.height - 34, 24);
@@ -51,7 +54,7 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 		if (itemStack != null && itemStack.getItem() != null) {
 			itemName = itemStack.getItem().getItemStackDisplayName(itemStack);
 		} else {
-			itemName = "Unknown";
+			itemName = this.strUnknownBlock;
 		}
 
 		GuiHelper.drawItemStack(this.minecraft.renderEngine, this.minecraft.fontRenderer, x, y, itemStack);

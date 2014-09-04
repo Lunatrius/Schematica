@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.client.gui;
 
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
+import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.IConfigElement;
@@ -18,7 +19,7 @@ public class GuiModConfig extends GuiConfig {
 	private static List<IConfigElement> getConfigElements() {
 		List<IConfigElement> elements = new ArrayList<IConfigElement>();
 		for (String name : ConfigurationHandler.configuration.getCategoryNames()) {
-			elements.add(new ConfigElement(ConfigurationHandler.configuration.getCategory(name).setLanguageKey(String.format("%s.category.%s", ConfigurationHandler.LANG_PREFIX, name))));
+			elements.add(new ConfigElement(ConfigurationHandler.configuration.getCategory(name).setLanguageKey(Names.Config.LANG_PREFIX + ".category." + name)));
 		}
 		return elements;
 	}

@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.world.schematic;
 
+import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.registry.GameData;
@@ -18,53 +19,40 @@ import java.util.Map;
 import java.util.Set;
 
 public class SchematicAlpha extends SchematicFormat {
-	public static final String ICON = "Icon";
-	public static final String BLOCKS = "Blocks";
-	public static final String DATA = "Data";
-	public static final String ADD_BLOCKS = "AddBlocks";
-	public static final String ADD_BLOCKS_SCHEMATICA = "Add";
-	public static final String WIDTH = "Width";
-	public static final String LENGTH = "Length";
-	public static final String HEIGHT = "Height";
-	public static final String MAPPING = "..."; // TODO: use this once MCEdit adds support for it
-	public static final String MAPPING_SCHEMATICA = "SchematicaMapping";
-	public static final String TILE_ENTITIES = "TileEntities";
-	public static final String ENTITIES = "Entities";
-
 	@Override
 	public SchematicWorld readFromNBT(NBTTagCompound tagCompound) {
 		ItemStack icon = SchematicUtil.getIconFromNBT(tagCompound);
 
-		byte localBlocks[] = tagCompound.getByteArray(BLOCKS);
-		byte localMetadata[] = tagCompound.getByteArray(DATA);
+		byte localBlocks[] = tagCompound.getByteArray(Names.NBT.BLOCKS);
+		byte localMetadata[] = tagCompound.getByteArray(Names.NBT.DATA);
 
 		boolean extra = false;
 		byte extraBlocks[] = null;
 		byte extraBlocksNibble[] = null;
-		if (tagCompound.hasKey(ADD_BLOCKS)) {
+		if (tagCompound.hasKey(Names.NBT.ADD_BLOCKS)) {
 			extra = true;
-			extraBlocksNibble = tagCompound.getByteArray(ADD_BLOCKS);
+			extraBlocksNibble = tagCompound.getByteArray(Names.NBT.ADD_BLOCKS);
 			extraBlocks = new byte[extraBlocksNibble.length * 2];
 			for (int i = 0; i < extraBlocksNibble.length; i++) {
 				extraBlocks[i * 2 + 0] = (byte) ((extraBlocksNibble[i] >> 4) & 0xF);
 				extraBlocks[i * 2 + 1] = (byte) (extraBlocksNibble[i] & 0xF);
 			}
-		} else if (tagCompound.hasKey(ADD_BLOCKS_SCHEMATICA)) {
+		} else if (tagCompound.hasKey(Names.NBT.ADD_BLOCKS_SCHEMATICA)) {
 			extra = true;
-			extraBlocks = tagCompound.getByteArray(ADD_BLOCKS_SCHEMATICA);
+			extraBlocks = tagCompound.getByteArray(Names.NBT.ADD_BLOCKS_SCHEMATICA);
 		}
 
-		short width = tagCompound.getShort(WIDTH);
-		short length = tagCompound.getShort(LENGTH);
-		short height = tagCompound.getShort(HEIGHT);
+		short width = tagCompound.getShort(Names.NBT.WIDTH);
+		short length = tagCompound.getShort(Names.NBT.LENGTH);
+		short height = tagCompound.getShort(Names.NBT.HEIGHT);
 
 		short[][][] blocks = new short[width][height][length];
 		byte[][][] metadata = new byte[width][height][length];
 
 		Short id = null;
 		Map<Short, Short> oldToNew = new HashMap<Short, Short>();
-		if (tagCompound.hasKey(MAPPING_SCHEMATICA)) {
-			NBTTagCompound mapping = tagCompound.getCompoundTag(MAPPING_SCHEMATICA);
+		if (tagCompound.hasKey(Names.NBT.MAPPING_SCHEMATICA)) {
+			NBTTagCompound mapping = tagCompound.getCompoundTag(Names.NBT.MAPPING_SCHEMATICA);
 			Set<String> names = mapping.func_150296_c();
 			for (String name : names) {
 				oldToNew.put(mapping.getShort(name), (short) GameData.getBlockRegistry().getId(name));
@@ -85,7 +73,7 @@ public class SchematicAlpha extends SchematicFormat {
 		}
 
 		List<TileEntity> tileEntities = new ArrayList<TileEntity>();
-		NBTTagList tileEntitiesList = tagCompound.getTagList(TILE_ENTITIES, Constants.NBT.TAG_COMPOUND);
+		NBTTagList tileEntitiesList = tagCompound.getTagList(Names.NBT.TILE_ENTITIES, Constants.NBT.TAG_COMPOUND);
 
 		for (int i = 0; i < tileEntitiesList.tagCount(); i++) {
 			try {
@@ -106,11 +94,11 @@ public class SchematicAlpha extends SchematicFormat {
 		NBTTagCompound tagCompoundIcon = new NBTTagCompound();
 		ItemStack icon = world.getIcon();
 		icon.writeToNBT(tagCompoundIcon);
-		tagCompound.setTag(ICON, tagCompoundIcon);
+		tagCompound.setTag(Names.NBT.ICON, tagCompoundIcon);
 
-		tagCompound.setShort(WIDTH, (short) world.getWidth());
-		tagCompound.setShort(LENGTH, (short) world.getLength());
-		tagCompound.setShort(HEIGHT, (short) world.getHeight());
+		tagCompound.setShort(Names.NBT.WIDTH, (short) world.getWidth());
+		tagCompound.setShort(Names.NBT.LENGTH, (short) world.getLength());
+		tagCompound.setShort(Names.NBT.HEIGHT, (short) world.getHeight());
 
 		int size = world.getWidth() * world.getLength() * world.getHeight();
 		byte localBlocks[] = new byte[size];
@@ -166,15 +154,15 @@ public class SchematicAlpha extends SchematicFormat {
 			}
 		}
 
-		tagCompound.setString(MATERIALS, FORMAT_ALPHA);
-		tagCompound.setByteArray(BLOCKS, localBlocks);
-		tagCompound.setByteArray(DATA, localMetadata);
+		tagCompound.setString(Names.NBT.MATERIALS, Names.NBT.FORMAT_ALPHA);
+		tagCompound.setByteArray(Names.NBT.BLOCKS, localBlocks);
+		tagCompound.setByteArray(Names.NBT.DATA, localMetadata);
 		if (extra) {
-			tagCompound.setByteArray(ADD_BLOCKS, extraBlocksNibble);
+			tagCompound.setByteArray(Names.NBT.ADD_BLOCKS, extraBlocksNibble);
 		}
-		tagCompound.setTag(ENTITIES, new NBTTagList());
-		tagCompound.setTag(TILE_ENTITIES, tileEntitiesList);
-		tagCompound.setTag(MAPPING_SCHEMATICA, mapping);
+		tagCompound.setTag(Names.NBT.ENTITIES, new NBTTagList());
+		tagCompound.setTag(Names.NBT.TILE_ENTITIES, tileEntitiesList);
+		tagCompound.setTag(Names.NBT.MAPPING_SCHEMATICA, mapping);
 
 		return true;
 	}
