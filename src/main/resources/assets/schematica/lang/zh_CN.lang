@@ -28,6 +28,7 @@ schematica.gui.materials=材料
 schematica.gui.materialname=材料
 schematica.gui.materialamount=数量
 schematica.gui.printer=投影
+# schematica.gui.unknownblock=Unknown Block
 
 # gui - config - categories
 # schematica.config.category.render=Rendering
