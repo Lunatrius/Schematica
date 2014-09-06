@@ -7,6 +7,7 @@ import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
+import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.client.Minecraft;
@@ -177,7 +178,13 @@ public class SchematicPrinter {
 			return false;
 		}
 
-		if (placeBlock(this.minecraft, world, player, wx, wy, wz, BlockInfo.getItemFromBlock(block), metadata)) {
+		final Item item = BlockInfo.getItemFromBlock(block);
+		if (item == null) {
+			Reference.logger.debug(GameData.getBlockRegistry().getNameForObject(block) + " is missing a mapping!");
+			return false;
+		}
+
+		if (placeBlock(this.minecraft, world, player, wx, wy, wz, item, metadata)) {
 			this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
 
 			if (!ConfigurationHandler.placeInstantly) {
