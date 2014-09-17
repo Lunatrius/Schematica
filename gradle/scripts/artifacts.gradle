@@ -1,0 +1,27 @@
+def commonManifest = {
+    if (project.hasProperty('extra_fmlat')) {
+        attributes 'FMLAT': project.extra_fmlat
+    }
+}
+
+jar {
+    classifier = project.hasProperty('extra_classifier') ? project.extra_classifier : 'universal'
+    manifest commonManifest
+}
+
+task devJar(dependsOn: 'classes', type: Jar) {
+    from sourceSets.main.output
+    classifier = 'dev'
+    manifest commonManifest
+}
+
+task sourceJar(dependsOn: 'classes', type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+    manifest commonManifest
+}
+
+artifacts {
+    archives devJar
+    archives sourceJar
+}

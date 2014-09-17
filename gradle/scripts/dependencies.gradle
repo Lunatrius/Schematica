@@ -1,0 +1,30 @@
+repositories {
+    ivy {
+        name = 'lunatrius\' ivy repo'
+        url 'http://mc.lunatri.us/files'
+    }
+}
+
+dependencies {
+    compile group: group, name: 'LunatriusCore', version: "${project.version_minecraft}-${project.version_lunatriuscore}", classifier: 'dev'
+}
+
+def addDependency(depFilename, depName, depPath) {
+    def depfile = new File('libs/' + depFilename)
+    if (depfile.isFile()) {
+        logger.lifecycle "Building with ${depName}..."
+
+        dependencies {
+            compile files(depfile)
+        }
+    } else {
+        logger.warn "Building without ${depName}..."
+
+        if (depPath != null) {
+            sourceSets.main.java.excludes += [depPath]
+            idea.module.excludeDirs += [file("src/main/java/${depPath}")]
+        }
+    }
+}
+
+// addDependency('example.jar', 'example', 'com/github/lunatrius/example/integration/test')

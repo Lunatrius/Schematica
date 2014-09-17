@@ -1,0 +1,36 @@
+if (!project.hasProperty('keystore_location'))
+    ext.keystore_location = '.'
+
+if (!project.hasProperty('keystore_alias'))
+    ext.keystore_alias = ''
+
+if (!project.hasProperty('keystore_password'))
+    ext.keystore_password = ''
+
+task signJars(dependsOn: ['jar', 'devJar', 'sourceJar']) {
+    inputs.dir jar.destinationDir
+    inputs.file keystore_location
+    inputs.property 'keystore_alias', keystore_alias
+    inputs.property 'keystore_password', keystore_password
+    outputs.dir devJar.destinationDir
+
+    onlyIf {
+        return keystore_location != '.'
+    }
+
+    doLast {
+        jar.destinationDir.eachFile { file ->
+            if (!file.getPath().endsWith('.jar'))
+                return;
+
+            logger.lifecycle "signing ${file}"
+            ant.signjar(
+                    destDir: file.getParentFile(),
+                    jar: file,
+                    keystore: keystore_location,
+                    alias: keystore_alias,
+                    storepass: keystore_password
+            )
+        }
+    }
+}
