@@ -8,7 +8,6 @@ import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -34,9 +33,7 @@ public abstract class CommonProxy {
 		}
 	}
 
-	public File getDataDirectory() {
-		return MinecraftServer.getServer().getFile(".");
-	}
+	public abstract File getDataDirectory();
 
 	public void resetSettings() {
 		this.isSaveEnabled = true;

@@ -25,6 +25,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.io.File;
+import java.io.IOException;
 
 public class ClientProxy extends CommonProxy {
 	// TODO: remove this and replace the 3 sepparate buttons with a single control
@@ -169,7 +170,13 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public File getDataDirectory() {
-		return Minecraft.getMinecraft().mcDataDir;
+		final File file = Minecraft.getMinecraft().mcDataDir;
+		try {
+			return file.getCanonicalFile();
+		} catch (IOException e) {
+			Reference.logger.info("Could not canonize path!", e);
+		}
+		return file;
 	}
 
 	@Override
