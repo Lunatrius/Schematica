@@ -1,12 +1,14 @@
 package com.github.lunatrius.schematica.proxy;
 
 import com.github.lunatrius.core.util.vector.Vector3i;
+import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
 import java.io.File;
+import java.io.IOException;
 
 public class ServerProxy extends CommonProxy {
 	@Override
@@ -23,7 +25,13 @@ public class ServerProxy extends CommonProxy {
 
 	@Override
 	public File getDataDirectory() {
-		return MinecraftServer.getServer().getFile(".");
+		final File file = MinecraftServer.getServer().getFile(".");
+		try {
+			return file.getCanonicalFile();
+		} catch (IOException e) {
+			Reference.logger.info("Could not canonize path!", e);
+		}
+		return file;
 	}
 
 	@Override

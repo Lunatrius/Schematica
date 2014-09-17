@@ -33,7 +33,8 @@ public class ConfigurationHandler {
 	public static final boolean DESTROYINSTANTLY_DEFAULT = false;
 	public static final boolean PLACEADJACENT_DEFAULT = true;
 	public static final int[] SWAPSLOTS_DEFAULT = new int[] { };
-	public static final File SCHEMATICDIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), "schematics");
+	public static final String SCHEMATICDIRECTORY_STR = "schematics";
+	public static final File SCHEMATICDIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATICDIRECTORY_STR);
 
 	public static boolean enableAlpha = ENABLEALPHA_DEFAULT;
 	public static float alpha = (float) ALPHA_DEFAULT;
@@ -133,15 +134,24 @@ public class ConfigurationHandler {
 		swapSlots = propSwapSlots.getIntList();
 		swapSlotsQueue = new ArrayDeque<Integer>(Ints.asList(swapSlots));
 
-		try {
-			schematicDirectory = SCHEMATICDIRECTORY_DEFAULT.getCanonicalFile();
-		} catch (IOException e) {
-			Reference.logger.warn("Could not canonize file path!", e);
-		}
-
-		propSchematicDirectory = configuration.get(Names.Config.Category.GENERAL, Names.Config.SCHEMATIC_DIRECTORY, schematicDirectory.getAbsolutePath().replace("\\", "/"), Names.Config.SCHEMATIC_DIRECTORY_DESC);
+		propSchematicDirectory = configuration.get(Names.Config.Category.GENERAL, Names.Config.SCHEMATIC_DIRECTORY, SCHEMATICDIRECTORY_STR, Names.Config.SCHEMATIC_DIRECTORY_DESC);
 		propSchematicDirectory.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SCHEMATIC_DIRECTORY);
 		schematicDirectory = new File(propSchematicDirectory.getString());
+
+		try {
+			schematicDirectory = schematicDirectory.getCanonicalFile();
+			final String schematicPath = schematicDirectory.getAbsolutePath();
+			final String dataPath = Schematica.proxy.getDataDirectory().getAbsolutePath();
+			if (schematicPath.contains(dataPath)) {
+				propSchematicDirectory.set(schematicPath.substring(dataPath.length()).replace("\\", "/").replaceAll("^/+", ""));
+			} else {
+				propSchematicDirectory.set(schematicPath.replace("\\", "/"));
+			}
+		} catch (IOException e) {
+			Reference.logger.warn("Could not canonize path!", e);
+		}
+
+		Schematica.proxy.createFolders();
 
 		if (configuration.hasChanged()) {
 			configuration.save();
