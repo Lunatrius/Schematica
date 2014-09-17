@@ -1,0 +1,45 @@
+apply plugin: 'forge'
+
+compileJava.options.encoding = 'UTF-8'
+
+idea {
+    module {
+        downloadSources = true
+    }
+}
+
+minecraft {
+    version = "${project.version_minecraft}-${project.version_forge}"
+
+    if (!project.hasProperty('run_location'))
+        runDir = 'run'
+    else
+        runDir = run_location.replace('{modid}', project.name).replace('{mcversion}', project.version_minecraft)
+
+    replaceIn 'reference/Reference.java'
+    replace '${version}', modversion
+    replace '${mcversion}', project.version_minecraft
+    replace '${forgeversion}', project.version_forge
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        expand(['modid'          : project.name,
+                'version'        : modversion,
+                'mcversion'      : project.version_minecraft,
+                'forgeversion'   : project.version_forge,
+                'minforgeversion': project.version_minforge ?: project.version_forge,
+                'coreversion'    : project.version_lunatriuscore
+        ])
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}

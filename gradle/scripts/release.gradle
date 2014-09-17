@@ -1,0 +1,17 @@
+if (!project.hasProperty('release_location'))
+    ext.release_location = '.'
+else
+    ext.release_location = release_location.replace('{modid}', project.name).replace('{mcversion}', project.version_minecraft).replace('{version}', version)
+
+task release(dependsOn: 'signJars', type: Copy) {
+    from project.tasks.jar.destinationDir
+    into project.file(project.release_location)
+
+    eachFile { file ->
+        logger.lifecycle "copying ${file}"
+    }
+
+    onlyIf {
+        return project.release_location != '.'
+    }
+}
