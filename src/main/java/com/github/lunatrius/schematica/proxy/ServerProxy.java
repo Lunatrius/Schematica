@@ -11,54 +11,54 @@ import java.io.File;
 import java.io.IOException;
 
 public class ServerProxy extends CommonProxy {
-	@Override
-	public void setConfigEntryClasses() {
-	}
+    @Override
+    public void setConfigEntryClasses() {
+    }
 
-	@Override
-	public void registerKeybindings() {
-	}
+    @Override
+    public void registerKeybindings() {
+    }
 
-	@Override
-	public void registerEvents() {
-	}
+    @Override
+    public void registerEvents() {
+    }
 
-	@Override
-	public File getDataDirectory() {
-		final File file = MinecraftServer.getServer().getFile(".");
-		try {
-			return file.getCanonicalFile();
-		} catch (IOException e) {
-			Reference.logger.info("Could not canonize path!", e);
-		}
-		return file;
-	}
+    @Override
+    public File getDataDirectory() {
+        final File file = MinecraftServer.getServer().getFile(".");
+        try {
+            return file.getCanonicalFile();
+        } catch (IOException e) {
+            Reference.logger.info("Could not canonize path!", e);
+        }
+        return file;
+    }
 
-	@Override
-	public boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, Vector3i from, Vector3i to) {
-		return false;
-	}
+    @Override
+    public boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, Vector3i from, Vector3i to) {
+        return false;
+    }
 
-	@Override
-	public boolean loadSchematic(EntityPlayer player, File directory, String filename) {
-		return false;
-	}
+    @Override
+    public boolean loadSchematic(EntityPlayer player, File directory, String filename) {
+        return false;
+    }
 
-	@Override
-	public void setActiveSchematic(SchematicWorld world) {
-	}
+    @Override
+    public void setActiveSchematic(SchematicWorld world) {
+    }
 
-	@Override
-	public void setActiveSchematic(SchematicWorld world, EntityPlayer player) {
-	}
+    @Override
+    public void setActiveSchematic(SchematicWorld world, EntityPlayer player) {
+    }
 
-	@Override
-	public SchematicWorld getActiveSchematic() {
-		return null;
-	}
+    @Override
+    public SchematicWorld getActiveSchematic() {
+        return null;
+    }
 
-	@Override
-	public SchematicWorld getActiveSchematic(EntityPlayer player) {
-		return null;
-	}
+    @Override
+    public SchematicWorld getActiveSchematic(EntityPlayer player) {
+        return null;
+    }
 }
