@@ -88,7 +88,7 @@ So you found a bug in the code? Think you can make it more efficient? Want to he
 ##### Instructions/Advice when submitting a Pull Request (PR)
 I use [this](https://gist.github.com/460be5119b93d73c24ab) IDEA formatting. To be short:
 
-* tabs for indentation
+* spaces for indentation
 * braces on same lines
 
 When you finish up your PR you'll want to [squash](http://davidwalsh.name/squash-commits-git) them into a single commit (unless it makes sense to have them split).
