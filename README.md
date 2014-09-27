@@ -6,8 +6,6 @@
 ### Compiling
 [Setup Java](#setup-java)
 
-[Setup Gradle](#setup-gradle)
-
 [Setup Git](#setup-git)
 
 [Setup Schematica](#setup-schematica)
@@ -37,28 +35,6 @@ The Java JDK is used to compile Schematica.
         7. Append `;%JAVA_HOME%\bin` EXACTLY AS SHOWN and click `Ok`. Make sure the location is correct; double-check just to make sure.
 3. Open up your command line and run `javac`. If it spews out a bunch of possible options and the usage, then you're good to go. If not try the steps again.
 
-#### Setup Gradle
-***
-You may skip this entire section and use the provided Gradle wrapper instead (use `gradlew` instead of `gradle`).
-***
-Gradle is used to execute the various build tasks when compiling Schematica.
-
-1. Download and install Gradle.
-    * [Windows/Mac download link](http://www.gradle.org/downloads). You only need the binaries, but choose whatever flavor you want.
-        * Unzip the package and put it wherever you want, eg `C:\Gradle`.
-    * Linux: Installation methods for certain popular flavors of Linux are listed below. If your distribution is not listed, follow the instructions specific to your package manager or install it manually [here](http://www.gradle.org/downloads).
-        * Gentoo: `emerge dev-java/gradle-bin`
-        * Archlinux: You'll have to install it from the [AUR](https://aur.archlinux.org/packages/gradle).
-        * Ubuntu/Debian: `apt-get install gradle`
-        * Fedora: Install Gradle manually from its website (see above), as Fedora ships a "broken" version of Gradle. Use `yum install gradle` only if you know what you're doing.
-2. Set up the environment.
-    * Windows: Set environment variables for Gradle.
-        1. Go back to `Environment Variables` and then create a new system variable.
-        2. For `Variable Name`, input `GRADLE_HOME`.
-        3. For `Variable Value`, input something similar to `C:\Gradle-1.10` exactly as shown (or wherever your Gradle installation is), and click `Ok`.
-        4. Scroll down to `Path` again, and append `;%GRADLE_HOME%\bin` EXACTLY AS SHOWN and click `Ok`. Once again, double-check the location.
-3. Open up your command line and run `gradle`. If it says "Welcome to Gradle [version].", then you're good to go. If not try the steps again.
-
 #### Setup Git
 Git is used to clone Schematica and update your local copy.
 
@@ -80,9 +56,9 @@ This section assumes that you're using the command-line version of Git.
 ***
 
 #### Compile Schematica
-1. Execute `gradle setupDevWorkspace`. This sets up Forge and downloads the necessary libraries to build Schematica. This might take some time, be patient.
+1. Execute `gradlew setupDevWorkspace`. This sets up Forge and downloads the necessary libraries to build Schematica. This might take some time, be patient.
     * You will generally only have to do this once until the Forge version in `build.properties` changes.
-2. Execute `gradle build`. If you did everything right, `BUILD SUCCESSFUL` will be displayed after it finishes. This should be relatively quick.
+2. Execute `gradlew build`. If you did everything right, `BUILD SUCCESSFUL` will be displayed after it finishes. This should be relatively quick.
     * If you see `BUILD FAILED`, check the error output (it should be right around `BUILD FAILED`), fix everything (if possible), and try again.
 3. Go to `mcdev\Schematica\build\libs`.
     * You should see a `.jar` file named `Schematica-#.#.#-#.#.#.#-universal.jar`.
