@@ -15,71 +15,71 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.AxisAlignedBB;
 
 public class TickHandler {
-	private final Minecraft minecraft = Minecraft.getMinecraft();
+    private final Minecraft minecraft = Minecraft.getMinecraft();
 
-	private int ticks = -1;
+    private int ticks = -1;
 
-	public TickHandler() {
-	}
+    public TickHandler() {
+    }
 
-	@SubscribeEvent
-	public void onClientConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-		Reference.logger.info("Scheduling client settings reset.");
-		ClientProxy.isPendingReset = true;
-	}
+    @SubscribeEvent
+    public void onClientConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+        Reference.logger.info("Scheduling client settings reset.");
+        ClientProxy.isPendingReset = true;
+    }
 
-	@SubscribeEvent
-	public void onClientDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-		Reference.logger.info("Scheduling client settings reset.");
-		ClientProxy.isPendingReset = true;
-	}
+    @SubscribeEvent
+    public void onClientDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
+        Reference.logger.info("Scheduling client settings reset.");
+        ClientProxy.isPendingReset = true;
+    }
 
-	@SubscribeEvent
-	public void onClientTick(TickEvent.ClientTickEvent event) {
-		if (event.phase == TickEvent.Phase.END) {
-			this.minecraft.mcProfiler.startSection("schematica");
-			SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
-			if (this.minecraft.thePlayer != null && schematic != null && schematic.isRendering) {
-				this.minecraft.mcProfiler.startSection("printer");
-				SchematicPrinter printer = SchematicPrinter.INSTANCE;
-				if (printer.isEnabled() && printer.isPrinting() && this.ticks-- < 0) {
-					this.ticks = ConfigurationHandler.placeDelay;
+    @SubscribeEvent
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            this.minecraft.mcProfiler.startSection("schematica");
+            SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+            if (this.minecraft.thePlayer != null && schematic != null && schematic.isRendering) {
+                this.minecraft.mcProfiler.startSection("printer");
+                SchematicPrinter printer = SchematicPrinter.INSTANCE;
+                if (printer.isEnabled() && printer.isPrinting() && this.ticks-- < 0) {
+                    this.ticks = ConfigurationHandler.placeDelay;
 
-					printer.print();
-				}
+                    printer.print();
+                }
 
-				this.minecraft.mcProfiler.endStartSection("checkDirty");
-				checkDirty(schematic);
+                this.minecraft.mcProfiler.endStartSection("checkDirty");
+                checkDirty(schematic);
 
-				this.minecraft.mcProfiler.endStartSection("canUpdate");
-				RendererSchematicChunk.setCanUpdate(true);
+                this.minecraft.mcProfiler.endStartSection("canUpdate");
+                RendererSchematicChunk.setCanUpdate(true);
 
-				this.minecraft.mcProfiler.endSection();
-			}
+                this.minecraft.mcProfiler.endSection();
+            }
 
-			if (ClientProxy.isPendingReset) {
-				Schematica.proxy.resetSettings();
-				ClientProxy.isPendingReset = false;
-			}
+            if (ClientProxy.isPendingReset) {
+                Schematica.proxy.resetSettings();
+                ClientProxy.isPendingReset = false;
+            }
 
-			this.minecraft.mcProfiler.endSection();
-		}
-	}
+            this.minecraft.mcProfiler.endSection();
+        }
+    }
 
-	private void checkDirty(SchematicWorld schematic) {
-		WorldRenderer[] renderers = this.minecraft.renderGlobal.sortedWorldRenderers;
-		if (renderers != null) {
-			int count = 0;
-			for (WorldRenderer worldRenderer : renderers) {
-				if (worldRenderer != null && worldRenderer.needsUpdate && count++ < 125) {
-					AxisAlignedBB worldRendererBoundingBox = worldRenderer.rendererBoundingBox.getOffsetBoundingBox(-schematic.position.x, -schematic.position.y, -schematic.position.z);
-					for (RendererSchematicChunk renderer : ClientProxy.rendererSchematicGlobal.sortedRendererSchematicChunk) {
-						if (!renderer.getDirty() && renderer.getBoundingBox().intersectsWith(worldRendererBoundingBox)) {
-							renderer.setDirty();
-						}
-					}
-				}
-			}
-		}
-	}
+    private void checkDirty(SchematicWorld schematic) {
+        WorldRenderer[] renderers = this.minecraft.renderGlobal.sortedWorldRenderers;
+        if (renderers != null) {
+            int count = 0;
+            for (WorldRenderer worldRenderer : renderers) {
+                if (worldRenderer != null && worldRenderer.needsUpdate && count++ < 125) {
+                    AxisAlignedBB worldRendererBoundingBox = worldRenderer.rendererBoundingBox.getOffsetBoundingBox(-schematic.position.x, -schematic.position.y, -schematic.position.z);
+                    for (RendererSchematicChunk renderer : ClientProxy.rendererSchematicGlobal.sortedRendererSchematicChunk) {
+                        if (!renderer.getDirty() && renderer.getBoundingBox().intersectsWith(worldRendererBoundingBox)) {
+                            renderer.setDirty();
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

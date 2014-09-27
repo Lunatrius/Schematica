@@ -9,26 +9,26 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 public class ChatEventHandler {
 
-	public static int chatLines = 0;
+    public static int chatLines = 0;
 
-	@SubscribeEvent
-	public void onClientChatReceivedEvent(ClientChatReceivedEvent event) {
-		if (chatLines < 20) {
-			chatLines++;
-			String message = event.message.getFormattedText();
-			Reference.logger.debug(String.format("Message #%d: %s", chatLines, message));
-			if (message.contains(Names.SBC.DISABLE_PRINTER)) {
-				Reference.logger.info("Printer is disabled on this server.");
-				SchematicPrinter.INSTANCE.setEnabled(false);
-			}
-			if (message.contains(Names.SBC.DISABLE_SAVE)) {
-				Reference.logger.info("Saving is disabled on this server.");
-				Schematica.proxy.isSaveEnabled = false;
-			}
-			if (message.contains(Names.SBC.DISABLE_LOAD)) {
-				Reference.logger.info("Loading is disabled on this server.");
-				Schematica.proxy.isLoadEnabled = false;
-			}
-		}
-	}
+    @SubscribeEvent
+    public void onClientChatReceivedEvent(ClientChatReceivedEvent event) {
+        if (chatLines < 20) {
+            chatLines++;
+            String message = event.message.getFormattedText();
+            Reference.logger.debug(String.format("Message #%d: %s", chatLines, message));
+            if (message.contains(Names.SBC.DISABLE_PRINTER)) {
+                Reference.logger.info("Printer is disabled on this server.");
+                SchematicPrinter.INSTANCE.setEnabled(false);
+            }
+            if (message.contains(Names.SBC.DISABLE_SAVE)) {
+                Reference.logger.info("Saving is disabled on this server.");
+                Schematica.proxy.isSaveEnabled = false;
+            }
+            if (message.contains(Names.SBC.DISABLE_LOAD)) {
+                Reference.logger.info("Loading is disabled on this server.");
+                Schematica.proxy.isLoadEnabled = false;
+            }
+        }
+    }
 }
