@@ -85,10 +85,15 @@ public class SchematicWorld extends World {
         this.blocks = blocks.clone();
         this.metadata = metadata.clone();
 
+        this.width = width;
+        this.length = length;
+        this.height = height;
+
         if (tileEntities != null) {
             this.tileEntities.addAll(tileEntities);
             for (TileEntity tileEntity : this.tileEntities) {
                 tileEntity.setWorldObj(this);
+                tileEntity.getBlockType();
                 try {
                     tileEntity.validate();
                 } catch (Exception e) {
@@ -96,10 +101,6 @@ public class SchematicWorld extends World {
                 }
             }
         }
-
-        this.width = width;
-        this.length = length;
-        this.height = height;
 
         generateBlockList();
     }
