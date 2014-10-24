@@ -33,6 +33,9 @@ public class ConfigurationHandler {
     public static final boolean DESTROYINSTANTLY_DEFAULT = false;
     public static final boolean PLACEADJACENT_DEFAULT = true;
     public static final int[] SWAPSLOTS_DEFAULT = new int[] { };
+    public static final boolean TOOLTIPENABLED_DEFAULT = true;
+    public static final double TOOLTIPX_DEFAULT = 100;
+    public static final double TOOLTIPY_DEFAULT = 0;
     public static final String SCHEMATICDIRECTORY_STR = "schematics";
     public static final File SCHEMATICDIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATICDIRECTORY_STR);
 
@@ -51,6 +54,9 @@ public class ConfigurationHandler {
     public static boolean placeAdjacent = PLACEADJACENT_DEFAULT;
     public static int[] swapSlots = SWAPSLOTS_DEFAULT;
     public static Queue<Integer> swapSlotsQueue = new ArrayDeque<Integer>();
+    public static boolean tooltipEnabled = TOOLTIPENABLED_DEFAULT;
+    public static float tooltipX = (float) TOOLTIPX_DEFAULT;
+    public static float tooltipY = (float) TOOLTIPY_DEFAULT;
     public static File schematicDirectory = SCHEMATICDIRECTORY_DEFAULT;
 
     public static Property propEnableAlpha = null;
@@ -67,6 +73,9 @@ public class ConfigurationHandler {
     public static Property propDestroyInstantly = null;
     public static Property propPlaceAdjacent = null;
     public static Property propSwapSlots = null;
+    public static Property propTooltipEnabled = null;
+    public static Property propTooltipX = null;
+    public static Property propTooltipY = null;
     public static Property propSchematicDirectory = null;
 
     public static void init(File configFile) {
@@ -133,6 +142,18 @@ public class ConfigurationHandler {
         propSwapSlots.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SWAP_SLOTS);
         swapSlots = propSwapSlots.getIntList();
         swapSlotsQueue = new ArrayDeque<Integer>(Ints.asList(swapSlots));
+
+        propTooltipEnabled = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_ENABLED, TOOLTIPENABLED_DEFAULT, Names.Config.TOOLTIP_ENABLED_DESC);
+        propTooltipEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TOOLTIP_ENABLED);
+        tooltipEnabled = propTooltipEnabled.getBoolean(TOOLTIPENABLED_DEFAULT);
+
+        propTooltipX = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_X, TOOLTIPX_DEFAULT, Names.Config.TOOLTIP_X_DESC, 0, 100);
+        propTooltipX.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TOOLTIP_X);
+        tooltipX = (float) propTooltipX.getDouble(TOOLTIPX_DEFAULT);
+
+        propTooltipY = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_Y, TOOLTIPY_DEFAULT, Names.Config.TOOLTIP_Y_DESC, 0, 100);
+        propTooltipY.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TOOLTIP_Y);
+        tooltipY = (float) propTooltipY.getDouble(TOOLTIPY_DEFAULT);
 
         propSchematicDirectory = configuration.get(Names.Config.Category.GENERAL, Names.Config.SCHEMATIC_DIRECTORY, SCHEMATICDIRECTORY_STR, Names.Config.SCHEMATIC_DIRECTORY_DESC);
         propSchematicDirectory.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SCHEMATIC_DIRECTORY);

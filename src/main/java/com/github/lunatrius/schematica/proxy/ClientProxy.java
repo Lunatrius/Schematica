@@ -8,6 +8,7 @@ import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
 import com.github.lunatrius.schematica.handler.client.KeyInputHandler;
+import com.github.lunatrius.schematica.handler.client.RenderTickHandler;
 import com.github.lunatrius.schematica.handler.client.TickHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
@@ -20,6 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -45,6 +47,8 @@ public class ClientProxy extends CommonProxy {
     public static final Vector3i pointB = new Vector3i();
     public static final Vector3i pointMin = new Vector3i();
     public static final Vector3i pointMax = new Vector3i();
+
+    public static MovingObjectPosition movingObjectPosition = null;
 
     private SchematicWorld schematicWorld = null;
 
@@ -115,12 +119,12 @@ public class ClientProxy extends CommonProxy {
     }
 
     public static void moveSchematicToPlayer(SchematicWorld schematic) {
-        Vector3i position = schematic.position;
-        position.x = (int) Math.floor(playerPosition.x);
-        position.y = (int) Math.floor(playerPosition.y) - 1;
-        position.z = (int) Math.floor(playerPosition.z);
-
         if (schematic != null) {
+            Vector3i position = schematic.position;
+            position.x = (int) Math.floor(playerPosition.x);
+            position.y = (int) Math.floor(playerPosition.y) - 1;
+            position.z = (int) Math.floor(playerPosition.z);
+
             switch (rotationRender) {
             case 0:
                 position.x -= schematic.getWidth();
@@ -148,6 +152,8 @@ public class ClientProxy extends CommonProxy {
         ConfigurationHandler.propBlockDelta.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
         ConfigurationHandler.propPlaceDelay.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
         ConfigurationHandler.propTimeout.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
+        ConfigurationHandler.propTooltipX.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
+        ConfigurationHandler.propTooltipY.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
     }
 
     @Override
@@ -161,6 +167,7 @@ public class ClientProxy extends CommonProxy {
     public void registerEvents() {
         FMLCommonHandler.instance().bus().register(new KeyInputHandler());
         FMLCommonHandler.instance().bus().register(new TickHandler());
+        FMLCommonHandler.instance().bus().register(new RenderTickHandler());
         FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
 
         rendererSchematicGlobal = new RendererSchematicGlobal();
