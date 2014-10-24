@@ -19,9 +19,6 @@ public class TickHandler {
 
     private int ticks = -1;
 
-    public TickHandler() {
-    }
-
     @SubscribeEvent
     public void onClientConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
         Reference.logger.info("Scheduling client settings reset.");
