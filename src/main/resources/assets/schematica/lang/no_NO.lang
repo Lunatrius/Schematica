@@ -35,6 +35,8 @@ schematica.config.category.render=Gjengivelse
 schematica.config.category.render.tooltip=Gjengivelsesrelaterte innstillinger.
 schematica.config.category.printer=Printer
 schematica.config.category.printer.tooltip=Printer-relaterte innstillinger.
+# schematica.config.category.tooltip=Tooltip
+# schematica.config.category.tooltip.tooltip=Tooltip related settings.
 schematica.config.category.general=Generelt
 schematica.config.category.general.tooltip=Generelle innstillinger.
 
@@ -69,6 +71,14 @@ schematica.config.placeAdjacent=Plasser kun tilstøtende
 schematica.config.placeAdjacent.tooltip=Plasser kun blokker hvis det er en tilstøtende blokk ved siden av dem.
 # schematica.config.swapSlots=Swap Slots
 # schematica.config.swapSlots.tooltip=The printer will use these slots to swap out items in the inventory.
+
+# gui - config - tooltip
+# schematica.config.tooltipEnabled=Tooltip Enabled
+# schematica.config.tooltipEnabled.tooltip=Display a tooltip when hovering over blocks in a schematic.
+# schematica.config.tooltipX=Tooltip X
+# schematica.config.tooltipX.tooltip=Relative tooltip X.
+# schematica.config.tooltipY=Tooltip Y
+# schematica.config.tooltipY.tooltip=Relative tooltip Y.
 
 # gui - config - general
 schematica.config.schematicDirectory=Tegningskatalog

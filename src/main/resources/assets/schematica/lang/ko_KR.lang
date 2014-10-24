@@ -35,6 +35,8 @@ schematica.config.category.render=렌더링
 schematica.config.category.render.tooltip=렌더링 관련 설정.
 schematica.config.category.printer=프린터
 schematica.config.category.printer.tooltip=프린터 관련 설정.
+# schematica.config.category.tooltip=Tooltip
+# schematica.config.category.tooltip.tooltip=Tooltip related settings.
 schematica.config.category.general=일반
 schematica.config.category.general.tooltip=일반 설정.
 
@@ -69,6 +71,14 @@ schematica.config.placeAdjacent=접촉된 블럭만 놓기
 schematica.config.placeAdjacent.tooltip=접촉된 블럭이 있을 경우에만 블럭을 놓습니다.
 schematica.config.swapSlots=슬롯 바꾸기
 schematica.config.swapSlots.tooltip=프린터는 인벤토리의 아이템을 바꾸기 위해 이 슬롯들을 사용합니다.
+
+# gui - config - tooltip
+# schematica.config.tooltipEnabled=Tooltip Enabled
+# schematica.config.tooltipEnabled.tooltip=Display a tooltip when hovering over blocks in a schematic.
+# schematica.config.tooltipX=Tooltip X
+# schematica.config.tooltipX.tooltip=Relative tooltip X.
+# schematica.config.tooltipY=Tooltip Y
+# schematica.config.tooltipY.tooltip=Relative tooltip Y.
 
 # gui - config - general
 schematica.config.schematicDirectory=Schematic 디렉토리
