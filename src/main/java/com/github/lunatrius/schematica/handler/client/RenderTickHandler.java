@@ -25,6 +25,10 @@ public class RenderTickHandler {
 
     private MovingObjectPosition rayTrace(final SchematicWorld schematic, final float partialTicks) {
         final EntityLivingBase renderViewEntity = this.minecraft.renderViewEntity;
+        if (renderViewEntity == null) {
+            return null;
+        }
+
         final double blockReachDistance = this.minecraft.playerController.getBlockReachDistance();
 
         final double posX = renderViewEntity.posX;
