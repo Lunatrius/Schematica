@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.ForgeHooks;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 import static cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import static cpw.mods.fml.common.gameevent.InputEvent.MouseInputEvent;
@@ -63,7 +62,8 @@ public class KeyInputHandler {
 
     @SubscribeEvent
     public void onMouseInput(MouseInputEvent event) {
-        if (this.minecraft.gameSettings.keyBindPickBlock.isPressed()) {
+        final KeyBinding keyPickBlock = this.minecraft.gameSettings.keyBindPickBlock;
+        if (keyPickBlock.isPressed()) {
             try {
                 final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
                 boolean revert = true;
@@ -73,8 +73,7 @@ public class KeyInputHandler {
                 }
 
                 if (revert) {
-                    final int eventButton = Mouse.getEventButton();
-                    KeyBinding.onTick(eventButton - 100);
+                    KeyBinding.onTick(keyPickBlock.getKeyCode());
                 }
             } catch (Exception e) {
                 Reference.logger.error("Could not pick block!", e);
