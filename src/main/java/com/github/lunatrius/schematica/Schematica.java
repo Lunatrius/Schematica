@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica;
 
 import com.github.lunatrius.core.version.VersionChecker;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
+import com.github.lunatrius.schematica.network.PacketHandler;
 import com.github.lunatrius.schematica.proxy.CommonProxy;
 import com.github.lunatrius.schematica.reference.Reference;
 import cpw.mods.fml.common.Mod;
@@ -34,6 +35,8 @@ public class Schematica {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
+        PacketHandler.init();
+
         try {
             proxy.registerEvents();
         } catch (Exception e) {

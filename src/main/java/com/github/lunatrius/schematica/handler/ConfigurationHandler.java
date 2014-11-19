@@ -38,6 +38,9 @@ public class ConfigurationHandler {
     public static final double TOOLTIPY_DEFAULT = 0;
     public static final String SCHEMATICDIRECTORY_STR = "schematics";
     public static final File SCHEMATICDIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATICDIRECTORY_STR);
+    public static final boolean PRINTERENABLED_DEFAULT = true;
+    public static final boolean SAVEENABLED_DEFAULT = true;
+    public static final boolean LOADENABLED_DEFAULT = true;
 
     public static boolean enableAlpha = ENABLEALPHA_DEFAULT;
     public static float alpha = (float) ALPHA_DEFAULT;
@@ -58,6 +61,9 @@ public class ConfigurationHandler {
     public static float tooltipX = (float) TOOLTIPX_DEFAULT;
     public static float tooltipY = (float) TOOLTIPY_DEFAULT;
     public static File schematicDirectory = SCHEMATICDIRECTORY_DEFAULT;
+    public static boolean printerEnabled = PRINTERENABLED_DEFAULT;
+    public static boolean saveEnabled = SAVEENABLED_DEFAULT;
+    public static boolean loadEnabled = LOADENABLED_DEFAULT;
 
     public static Property propEnableAlpha = null;
     public static Property propAlpha = null;
@@ -77,6 +83,9 @@ public class ConfigurationHandler {
     public static Property propTooltipX = null;
     public static Property propTooltipY = null;
     public static Property propSchematicDirectory = null;
+    public static Property propPrinterEnabled = null;
+    public static Property propSaveEnabled = null;
+    public static Property propLoadEnabled = null;
 
     public static void init(File configFile) {
         if (configuration == null) {
@@ -171,6 +180,18 @@ public class ConfigurationHandler {
         } catch (IOException e) {
             Reference.logger.warn("Could not canonize path!", e);
         }
+
+        propPrinterEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.PRINTER_ENABLED, PRINTERENABLED_DEFAULT, Names.Config.PRINTER_ENABLED_DESC);
+        propPrinterEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PRINTER_ENABLED);
+        printerEnabled = propPrinterEnabled.getBoolean(PRINTERENABLED_DEFAULT);
+
+        propSaveEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.SAVE_ENABLED, SAVEENABLED_DEFAULT, Names.Config.SAVE_ENABLED_DESC);
+        propSaveEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SAVE_ENABLED);
+        saveEnabled = propSaveEnabled.getBoolean(SAVEENABLED_DEFAULT);
+
+        propLoadEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.LOAD_ENABLED, LOADENABLED_DEFAULT, Names.Config.LOAD_ENABLED_DESC);
+        propLoadEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.LOAD_ENABLED);
+        loadEnabled = propLoadEnabled.getBoolean(LOADENABLED_DEFAULT);
 
         Schematica.proxy.createFolders();
 
