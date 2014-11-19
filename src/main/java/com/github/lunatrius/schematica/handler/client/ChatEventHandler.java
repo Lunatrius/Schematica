@@ -8,7 +8,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 public class ChatEventHandler {
-
     public static int chatLines = 0;
 
     @SubscribeEvent
