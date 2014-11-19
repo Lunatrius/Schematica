@@ -39,6 +39,8 @@ schematica.config.category.printer.tooltip=프린터 관련 설정.
 # schematica.config.category.tooltip.tooltip=Tooltip related settings.
 schematica.config.category.general=일반
 schematica.config.category.general.tooltip=일반 설정.
+# schematica.config.category.server=Server
+# schematica.config.category.server.tooltip=Server-side settings.
 
 # gui - config - render
 schematica.config.alphaEnabled=알파 활성화됨
@@ -83,6 +85,14 @@ schematica.config.swapSlots.tooltip=프린터는 인벤토리의 아이템을 �
 # gui - config - general
 schematica.config.schematicDirectory=Schematic 디렉토리
 schematica.config.schematicDirectory.tooltip=Schematic 디렉토리.
+
+# gui - config - server
+# schematica.config.printerEnabled=Allow Printer
+# schematica.config.printerEnabled.tooltip=Allow players to use the printer.
+# schematica.config.saveEnabled=Allow Saving
+# schematica.config.saveEnabled.tooltip=Allow players to save schematics.
+# schematica.config.loadEnabled=Allow Loading
+# schematica.config.loadEnabled.tooltip=Allow players to load schematics.
 
 # keys
 schematica.key.category=Schematica
