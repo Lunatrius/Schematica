@@ -44,18 +44,6 @@ public abstract class CommonProxy {
     }
 
     public SchematicWorld getSchematicFromWorld(World world, Vector3i from, Vector3i to) {
-
-        //Forge dictates that it must be set, it will not be used here.
-        ForgeChunkManager.setForcedChunkLoadingCallback(Schematica.instance, new ForgeChunkManager.LoadingCallback() {
-            @Override
-            public void ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world)
-            {
-
-            }
-        });
-
-        ForgeChunkManager.Ticket ticket = null;
-
         try {
             int minX = Math.min(from.x, to.x);
             int maxX = Math.max(from.x, to.x);
@@ -77,23 +65,12 @@ public abstract class CommonProxy {
             byte[][][] metadata = new byte[width][height][length];
             List<TileEntity> tileEntities = new ArrayList<TileEntity>();
 
-            if (!world.isRemote) { //Only do chunk loading on the server side.
-                ticket = ForgeChunkManager.requestTicket(Schematica.instance, world, ForgeChunkManager.Type.NORMAL);
-                if (ticket == null) {
-                    Reference.logger.error("Unable to reserve a ticket to do chunk loading! Only a partial schematic may be created.");
-                }
-            }
-
             for (int chunkX = minChunkX; chunkX <= maxChunkX; chunkX++) {
                 for (int chunkZ = minChunkZ; chunkZ <= maxChunkZ; chunkZ++) {
                     int localMinX = minX < (chunkX << 4) ? 0 : (minX & 15);
                     int localMaxX = maxX > ((chunkX << 4) + 15) ? 15 : (maxX & 15);
                     int localMinZ = minZ < (chunkZ << 4) ? 0 : (minZ & 15);
                     int localMaxZ = maxZ > ((chunkZ << 4) + 15) ? 15 : (maxZ & 15);
-
-                    if (ticket != null) {
-                        ForgeChunkManager.forceChunk(ticket, new ChunkCoordIntPair(chunkX, chunkZ));
-                    }
 
                     for (int chunkLocalX = localMinX; chunkLocalX <= localMaxX; chunkLocalX++) {
                         for (int y = minY; y <= maxY; y++) {
@@ -124,20 +101,12 @@ public abstract class CommonProxy {
                             }
                         }
                     }
-
-                    if (ticket != null) {
-                        ForgeChunkManager.unforceChunk(ticket, new ChunkCoordIntPair(chunkX, chunkZ));
-                    }
                 }
             }
 
             return new SchematicWorld("", blocks, metadata, tileEntities, width, height, length);
         } catch (Exception e) {
             Reference.logger.error("Failed to extract schematic!", e);
-        } finally {
-            if (ticket != null) {
-                ForgeChunkManager.releaseTicket(ticket);
-            }
         }
 
         return null;
