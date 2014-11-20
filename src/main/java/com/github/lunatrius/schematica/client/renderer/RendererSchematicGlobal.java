@@ -26,7 +26,7 @@ public class RendererSchematicGlobal {
     private final Frustrum frustrum = new Frustrum();
     public RenderBlocks renderBlocks = null;
     public final List<RendererSchematicChunk> sortedRendererSchematicChunk = new ArrayList<RendererSchematicChunk>();
-    private final RendererSchematicChunkSorter rendererSchematicChunkSorter = new RendererSchematicChunkSorter();
+    private final RendererSchematicChunkComparator rendererSchematicChunkComparator = new RendererSchematicChunkComparator();
 
     private RendererSchematicGlobal() {}
 
@@ -156,8 +156,8 @@ public class RendererSchematicGlobal {
     }
 
     private void sortAndUpdate(SchematicWorld schematic) {
-        this.rendererSchematicChunkSorter.setSchematic(schematic);
-        Collections.sort(this.sortedRendererSchematicChunk, this.rendererSchematicChunkSorter);
+        this.rendererSchematicChunkComparator.setSchematic(schematic);
+        Collections.sort(this.sortedRendererSchematicChunk, this.rendererSchematicChunkComparator);
 
         for (RendererSchematicChunk rendererSchematicChunk : this.sortedRendererSchematicChunk) {
             if (rendererSchematicChunk.getDirty()) {
