@@ -1,8 +1,8 @@
 package com.github.lunatrius.schematica.client.renderer;
 
 import com.github.lunatrius.core.util.vector.Vector3f;
+import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 
 import java.util.Comparator;
 
@@ -23,12 +23,7 @@ public class RendererSchematicChunkComparator implements Comparator<RendererSche
         }
     }
 
-    public void setPosition(SchematicWorld schematic) {
-        if (schematic == null) {
-            return;
-        }
-
-        schematic.position.toVector3f(this.schematicPosition);
-        this.position.set(ClientProxy.playerPosition).sub(this.schematicPosition);
+    public void setPosition(Vector3i position) {
+        this.position.set(ClientProxy.playerPosition).sub(position.toVector3f(this.schematicPosition));
     }
 }
