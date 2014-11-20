@@ -156,7 +156,7 @@ public class RendererSchematicGlobal {
     }
 
     private void sortAndUpdate(SchematicWorld schematic) {
-        this.rendererSchematicChunkComparator.setSchematic(schematic);
+        this.rendererSchematicChunkComparator.setPosition(schematic);
         Collections.sort(this.sortedRendererSchematicChunk, this.rendererSchematicChunkComparator);
 
         for (RendererSchematicChunk rendererSchematicChunk : this.sortedRendererSchematicChunk) {
