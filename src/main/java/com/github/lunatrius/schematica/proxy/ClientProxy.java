@@ -35,7 +35,6 @@ public class ClientProxy extends CommonProxy {
             1, 5, 15, 50, 250
     };
 
-    public static RendererSchematicGlobal rendererSchematicGlobal = null;
     public static boolean isRenderingGuide = false;
     public static boolean isPendingReset = false;
 
@@ -165,14 +164,13 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void registerEvents() {
-        FMLCommonHandler.instance().bus().register(new KeyInputHandler());
-        FMLCommonHandler.instance().bus().register(new TickHandler());
-        FMLCommonHandler.instance().bus().register(new RenderTickHandler());
-        FMLCommonHandler.instance().bus().register(new ConfigurationHandler());
+        FMLCommonHandler.instance().bus().register(KeyInputHandler.INSTANCE);
+        FMLCommonHandler.instance().bus().register(TickHandler.INSTANCE);
+        FMLCommonHandler.instance().bus().register(RenderTickHandler.INSTANCE);
+        FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
 
-        rendererSchematicGlobal = new RendererSchematicGlobal();
-        MinecraftForge.EVENT_BUS.register(rendererSchematicGlobal);
-        MinecraftForge.EVENT_BUS.register(new ChatEventHandler());
+        MinecraftForge.EVENT_BUS.register(RendererSchematicGlobal.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(ChatEventHandler.INSTANCE);
     }
 
     @Override
@@ -190,12 +188,12 @@ public class ClientProxy extends CommonProxy {
     public void resetSettings() {
         super.resetSettings();
 
-        ChatEventHandler.chatLines = 0;
+        ChatEventHandler.INSTANCE.chatLines = 0;
 
         SchematicPrinter.INSTANCE.setEnabled(true);
         SchematicPrinter.INSTANCE.setSchematic(null);
 
-        rendererSchematicGlobal.destroyRendererSchematicChunks();
+        RendererSchematicGlobal.INSTANCE.destroyRendererSchematicChunks();
 
         setActiveSchematic(null);
 
@@ -244,7 +242,7 @@ public class ClientProxy extends CommonProxy {
         Reference.logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", filename, schematic.getWidth(), schematic.getHeight(), schematic.getLength()));
 
         Schematica.proxy.setActiveSchematic(schematic);
-        rendererSchematicGlobal.createRendererSchematicChunks(schematic);
+        RendererSchematicGlobal.INSTANCE.createRendererSchematicChunks(schematic);
         SchematicPrinter.INSTANCE.setSchematic(schematic);
         schematic.isRendering = true;
 

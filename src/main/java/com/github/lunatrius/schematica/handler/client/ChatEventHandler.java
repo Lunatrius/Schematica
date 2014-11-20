@@ -8,15 +8,18 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 public class ChatEventHandler {
+    public static final ChatEventHandler INSTANCE = new ChatEventHandler();
 
-    public static int chatLines = 0;
+    public int chatLines = 0;
+
+    private ChatEventHandler() {}
 
     @SubscribeEvent
     public void onClientChatReceivedEvent(ClientChatReceivedEvent event) {
-        if (chatLines < 20) {
-            chatLines++;
+        if (this.chatLines < 20) {
+            this.chatLines++;
             String message = event.message.getFormattedText();
-            Reference.logger.debug(String.format("Message #%d: %s", chatLines, message));
+            Reference.logger.debug(String.format("Message #%d: %s", this.chatLines, message));
             if (message.contains(Names.SBC.DISABLE_PRINTER)) {
                 Reference.logger.info("Printer is disabled on this server.");
                 SchematicPrinter.INSTANCE.setEnabled(false);

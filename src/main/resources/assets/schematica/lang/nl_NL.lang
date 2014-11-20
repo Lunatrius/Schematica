@@ -39,6 +39,8 @@ schematica.gui.materialamount=Hoeveelheid
 # schematica.config.category.tooltip.tooltip=Tooltip related settings.
 # schematica.config.category.general=General
 # schematica.config.category.general.tooltip=General settings.
+# schematica.config.category.server=Server
+# schematica.config.category.server.tooltip=Server-side settings.
 
 # gui - config - render
 # schematica.config.alphaEnabled=Alpha Enabled
@@ -83,6 +85,14 @@ schematica.gui.materialamount=Hoeveelheid
 # gui - config - general
 # schematica.config.schematicDirectory=Schematic Directory
 # schematica.config.schematicDirectory.tooltip=Schematic directory.
+
+# gui - config - server
+# schematica.config.printerEnabled=Allow Printer
+# schematica.config.printerEnabled.tooltip=Allow players to use the printer.
+# schematica.config.saveEnabled=Allow Saving
+# schematica.config.saveEnabled.tooltip=Allow players to save schematics.
+# schematica.config.loadEnabled=Allow Loading
+# schematica.config.loadEnabled.tooltip=Allow players to load schematics.
 
 # keys
 # schematica.key.category=Schematica
