@@ -48,6 +48,12 @@ public abstract class CommonProxy {
             int maxY = Math.max(from.y, to.y);
             int minZ = Math.min(from.z, to.z);
             int maxZ = Math.max(from.z, to.z);
+
+            int minChunkX = minX >> 4;
+            int maxChunkX = maxX >> 4;
+            int minChunkZ = minZ >> 4;
+            int maxChunkZ = maxZ >> 4;
+
             short width = (short) (Math.abs(maxX - minX) + 1);
             short height = (short) (Math.abs(maxY - minY) + 1);
             short length = (short) (Math.abs(maxZ - minZ) + 1);
@@ -56,27 +62,39 @@ public abstract class CommonProxy {
             byte[][][] metadata = new byte[width][height][length];
             List<TileEntity> tileEntities = new ArrayList<TileEntity>();
 
-            for (int x = minX; x <= maxX; x++) {
-                for (int y = minY; y <= maxY; y++) {
-                    for (int z = minZ; z <= maxZ; z++) {
-                        blocks[x - minX][y - minY][z - minZ] = (short) GameData.getBlockRegistry().getId(world.getBlock(x, y, z));
-                        metadata[x - minX][y - minY][z - minZ] = (byte) world.getBlockMetadata(x, y, z);
+            for (int chunkX = minChunkX; chunkX <= maxChunkX; chunkX++) {
+                for (int chunkZ = minChunkZ; chunkZ <= maxChunkZ; chunkZ++) {
+                    int localMinX = minX < (chunkX << 4) ? 0 : (minX & 15);
+                    int localMaxX = maxX > ((chunkX << 4) + 15) ? 15 : (maxX & 15);
+                    int localMinZ = minZ < (chunkZ << 4) ? 0 : (minZ & 15);
+                    int localMaxZ = maxZ > ((chunkZ << 4) + 15) ? 15 : (maxZ & 15);
 
-                        TileEntity tileEntity = world.getTileEntity(x, y, z);
-                        if (tileEntity != null) {
-                            try {
-                                NBTTagCompound tileEntityNBT = new NBTTagCompound();
-                                tileEntity.writeToNBT(tileEntityNBT);
+                    for (int chunkLocalX = localMinX; chunkLocalX <= localMaxX; chunkLocalX++) {
+                        for (int y = minY; y <= maxY; y++) {
+                            for (int chunkLocalZ = localMinZ; chunkLocalZ <= localMaxZ; chunkLocalZ++) {
+                                int x = chunkLocalX | (chunkX << 4);
+                                int z = chunkLocalZ | (chunkZ << 4);
 
-                                tileEntity = TileEntity.createAndLoadEntity(tileEntityNBT);
-                                tileEntity.xCoord -= minX;
-                                tileEntity.yCoord -= minY;
-                                tileEntity.zCoord -= minZ;
-                                tileEntities.add(tileEntity);
-                            } catch (Exception e) {
-                                Reference.logger.error(String.format("Error while trying to save tile entity %s!", tileEntity), e);
-                                blocks[x - minX][y - minY][z - minZ] = (short) GameData.getBlockRegistry().getId(Blocks.bedrock);
-                                metadata[x - minX][y - minY][z - minZ] = 0;
+                                blocks[x - minX][y - minY][z - minZ] = (short) GameData.getBlockRegistry().getId(world.getBlock(x, y, z));
+                                metadata[x - minX][y - minY][z - minZ] = (byte) world.getBlockMetadata(x, y, z);
+
+                                TileEntity tileEntity = world.getTileEntity(x, y, z);
+                                if (tileEntity != null) {
+                                    try {
+                                        NBTTagCompound tileEntityNBT = new NBTTagCompound();
+                                        tileEntity.writeToNBT(tileEntityNBT);
+
+                                        tileEntity = TileEntity.createAndLoadEntity(tileEntityNBT);
+                                        tileEntity.xCoord -= minX;
+                                        tileEntity.yCoord -= minY;
+                                        tileEntity.zCoord -= minZ;
+                                        tileEntities.add(tileEntity);
+                                    } catch (Exception e) {
+                                        Reference.logger.error(String.format("Error while trying to save tile entity %s!", tileEntity), e);
+                                        blocks[x - minX][y - minY][z - minZ] = (short) GameData.getBlockRegistry().getId(Blocks.bedrock);
+                                        metadata[x - minX][y - minY][z - minZ] = 0;
+                                    }
+                                }
                             }
                         }
                     }
