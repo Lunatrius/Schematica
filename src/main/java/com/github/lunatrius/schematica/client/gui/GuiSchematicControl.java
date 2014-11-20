@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.client.gui;
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.client.gui.GuiButton;
@@ -152,28 +153,28 @@ public class GuiSchematicControl extends GuiScreen {
         if (guiButton.enabled) {
             if (guiButton.id == this.btnDecX.id) {
                 this.schematic.position.x -= ClientProxy.INCREMENTS[this.incrementX];
-                ClientProxy.rendererSchematicGlobal.refresh();
+                RendererSchematicGlobal.INSTANCE.refresh();
             } else if (guiButton.id == this.btnIncX.id) {
                 this.schematic.position.x += ClientProxy.INCREMENTS[this.incrementX];
-                ClientProxy.rendererSchematicGlobal.refresh();
+                RendererSchematicGlobal.INSTANCE.refresh();
             } else if (guiButton.id == this.btnAmountX.id) {
                 this.incrementX = (this.incrementX + 1) % ClientProxy.INCREMENTS.length;
                 this.btnAmountX.displayString = Integer.toString(ClientProxy.INCREMENTS[this.incrementX]);
             } else if (guiButton.id == this.btnDecY.id) {
                 this.schematic.position.y -= ClientProxy.INCREMENTS[this.incrementY];
-                ClientProxy.rendererSchematicGlobal.refresh();
+                RendererSchematicGlobal.INSTANCE.refresh();
             } else if (guiButton.id == this.btnIncY.id) {
                 this.schematic.position.y += ClientProxy.INCREMENTS[this.incrementY];
-                ClientProxy.rendererSchematicGlobal.refresh();
+                RendererSchematicGlobal.INSTANCE.refresh();
             } else if (guiButton.id == this.btnAmountY.id) {
                 this.incrementY = (this.incrementY + 1) % ClientProxy.INCREMENTS.length;
                 this.btnAmountY.displayString = Integer.toString(ClientProxy.INCREMENTS[this.incrementY]);
             } else if (guiButton.id == this.btnDecZ.id) {
                 this.schematic.position.z -= ClientProxy.INCREMENTS[this.incrementZ];
-                ClientProxy.rendererSchematicGlobal.refresh();
+                RendererSchematicGlobal.INSTANCE.refresh();
             } else if (guiButton.id == this.btnIncZ.id) {
                 this.schematic.position.z += ClientProxy.INCREMENTS[this.incrementZ];
-                ClientProxy.rendererSchematicGlobal.refresh();
+                RendererSchematicGlobal.INSTANCE.refresh();
             } else if (guiButton.id == this.btnAmountZ.id) {
                 this.incrementZ = (this.incrementZ + 1) % ClientProxy.INCREMENTS.length;
                 this.btnAmountZ.displayString = Integer.toString(ClientProxy.INCREMENTS[this.incrementZ]);
@@ -181,27 +182,27 @@ public class GuiSchematicControl extends GuiScreen {
                 if (this.schematic != null) {
                     this.schematic.decrementRenderingLayer();
                 }
-                ClientProxy.rendererSchematicGlobal.refresh();
+                RendererSchematicGlobal.INSTANCE.refresh();
             } else if (guiButton.id == this.btnIncLayer.id) {
                 if (this.schematic != null) {
                     this.schematic.incrementRenderingLayer();
                 }
-                ClientProxy.rendererSchematicGlobal.refresh();
+                RendererSchematicGlobal.INSTANCE.refresh();
             } else if (guiButton.id == this.btnHide.id) {
                 this.btnHide.displayString = I18n.format(this.schematic != null && this.schematic.toggleRendering() ? "schematica.gui.hide" : "schematica.gui.show");
             } else if (guiButton.id == this.btnMove.id) {
                 ClientProxy.moveSchematicToPlayer(this.schematic);
-                ClientProxy.rendererSchematicGlobal.refresh();
+                RendererSchematicGlobal.INSTANCE.refresh();
             } else if (guiButton.id == this.btnFlip.id) {
                 if (this.schematic != null) {
                     this.schematic.flip();
-                    ClientProxy.rendererSchematicGlobal.createRendererSchematicChunks(this.schematic);
+                    RendererSchematicGlobal.INSTANCE.createRendererSchematicChunks(this.schematic);
                     SchematicPrinter.INSTANCE.refresh();
                 }
             } else if (guiButton.id == this.btnRotate.id) {
                 if (this.schematic != null) {
                     this.schematic.rotate();
-                    ClientProxy.rendererSchematicGlobal.createRendererSchematicChunks(this.schematic);
+                    RendererSchematicGlobal.INSTANCE.createRendererSchematicChunks(this.schematic);
                     SchematicPrinter.INSTANCE.refresh();
                 }
             } else if (guiButton.id == this.btnMaterials.id) {

@@ -65,6 +65,13 @@ public final class Names {
         public static final String MINECRAFT = "minecraft";
     }
 
+    public static final class Keys {
+        public static final String CATEGORY = "schematica.key.category";
+        public static final String LOAD = "schematica.key.load";
+        public static final String SAVE = "schematica.key.save";
+        public static final String CONTROL = "schematica.key.control";
+    }
+
     public static final class NBT {
         public static final String ROOT = "Schematic";
 

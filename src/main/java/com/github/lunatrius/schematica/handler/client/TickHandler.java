@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.handler.client;
 import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
+import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Reference;
@@ -15,9 +16,13 @@ import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.AxisAlignedBB;
 
 public class TickHandler {
+    public static final TickHandler INSTANCE = new TickHandler();
+
     private final Minecraft minecraft = Minecraft.getMinecraft();
 
     private int ticks = -1;
+
+    private TickHandler() {}
 
     @SubscribeEvent
     public void onClientConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
@@ -70,7 +75,7 @@ public class TickHandler {
             for (WorldRenderer worldRenderer : renderers) {
                 if (worldRenderer != null && worldRenderer.needsUpdate && count++ < 125) {
                     AxisAlignedBB worldRendererBoundingBox = worldRenderer.rendererBoundingBox.getOffsetBoundingBox(-schematic.position.x, -schematic.position.y, -schematic.position.z);
-                    for (RendererSchematicChunk renderer : ClientProxy.rendererSchematicGlobal.sortedRendererSchematicChunk) {
+                    for (RendererSchematicChunk renderer : RendererSchematicGlobal.INSTANCE.sortedRendererSchematicChunk) {
                         if (!renderer.getDirty() && renderer.getBoundingBox().intersectsWith(worldRendererBoundingBox)) {
                             renderer.setDirty();
                         }

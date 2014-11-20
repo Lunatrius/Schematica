@@ -5,6 +5,7 @@ import com.github.lunatrius.schematica.client.gui.GuiSchematicControl;
 import com.github.lunatrius.schematica.client.gui.GuiSchematicLoad;
 import com.github.lunatrius.schematica.client.gui.GuiSchematicSave;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
+import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -23,20 +24,19 @@ import static cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import static cpw.mods.fml.common.gameevent.InputEvent.MouseInputEvent;
 
 public class KeyInputHandler {
-    public static final String CATEGORY = "schematica.key.category";
-    public static final String LOAD = "schematica.key.load";
-    public static final String SAVE = "schematica.key.save";
-    public static final String CONTROL = "schematica.key.control";
+    public static final KeyInputHandler INSTANCE = new KeyInputHandler();
 
-    private static final KeyBinding KEY_BINDING_LOAD = new KeyBinding(LOAD, Keyboard.KEY_DIVIDE, CATEGORY);
-    private static final KeyBinding KEY_BINDING_SAVE = new KeyBinding(SAVE, Keyboard.KEY_MULTIPLY, CATEGORY);
-    private static final KeyBinding KEY_BINDING_CONTROL = new KeyBinding(CONTROL, Keyboard.KEY_SUBTRACT, CATEGORY);
+    private static final KeyBinding KEY_BINDING_LOAD = new KeyBinding(Names.Keys.LOAD, Keyboard.KEY_DIVIDE, Names.Keys.CATEGORY);
+    private static final KeyBinding KEY_BINDING_SAVE = new KeyBinding(Names.Keys.SAVE, Keyboard.KEY_MULTIPLY, Names.Keys.CATEGORY);
+    private static final KeyBinding KEY_BINDING_CONTROL = new KeyBinding(Names.Keys.CONTROL, Keyboard.KEY_SUBTRACT, Names.Keys.CATEGORY);
 
     public static final KeyBinding[] KEY_BINDINGS = new KeyBinding[] {
             KEY_BINDING_LOAD, KEY_BINDING_SAVE, KEY_BINDING_CONTROL
     };
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
+
+    private KeyInputHandler() {}
 
     @SubscribeEvent
     public void onKeyInput(KeyInputEvent event) {

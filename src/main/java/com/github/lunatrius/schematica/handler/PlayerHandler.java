@@ -8,6 +8,10 @@ import cpw.mods.fml.common.gameevent.PlayerEvent;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 public class PlayerHandler {
+    public static final PlayerHandler INSTANCE = new PlayerHandler();
+
+    private PlayerHandler() {}
+
     @SubscribeEvent
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.player instanceof EntityPlayerMP) {
