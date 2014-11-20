@@ -224,7 +224,7 @@ public class RendererSchematicChunk {
 
     public void renderBlocks(int renderPass, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
         IBlockAccess mcWorld = this.minecraft.theWorld;
-        RenderBlocks renderBlocks = ClientProxy.rendererSchematicGlobal.renderBlocks;
+        RenderBlocks renderBlocks = RendererSchematicGlobal.INSTANCE.renderBlocks;
 
         int x, y, z, wx, wy, wz;
         int sides;

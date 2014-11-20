@@ -18,6 +18,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class RendererSchematicGlobal {
+    public static final RendererSchematicGlobal INSTANCE = new RendererSchematicGlobal();
+
     private final Minecraft minecraft = Minecraft.getMinecraft();
     private final Profiler profiler = this.minecraft.mcProfiler;
 
@@ -25,6 +27,8 @@ public class RendererSchematicGlobal {
     public RenderBlocks renderBlocks = null;
     public final List<RendererSchematicChunk> sortedRendererSchematicChunk = new ArrayList<RendererSchematicChunk>();
     private final RendererSchematicChunkSorter rendererSchematicChunkSorter = new RendererSchematicChunkSorter();
+
+    private RendererSchematicGlobal() {}
 
     @SubscribeEvent
     public void onRender(RenderWorldLastEvent event) {

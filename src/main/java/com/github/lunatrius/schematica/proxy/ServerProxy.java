@@ -23,7 +23,7 @@ public class ServerProxy extends CommonProxy {
 
     @Override
     public void registerEvents() {
-        FMLCommonHandler.instance().bus().register(new PlayerHandler());
+        FMLCommonHandler.instance().bus().register(PlayerHandler.INSTANCE);
     }
 
     @Override

@@ -12,7 +12,11 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 
 public class RenderTickHandler {
+    public static final RenderTickHandler INSTANCE = new RenderTickHandler();
+
     private final Minecraft minecraft = Minecraft.getMinecraft();
+
+    private RenderTickHandler() {}
 
     @SubscribeEvent
     public void onRenderTick(TickEvent.RenderTickEvent event) {
