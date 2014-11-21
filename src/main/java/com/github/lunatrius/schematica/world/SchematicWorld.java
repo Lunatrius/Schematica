@@ -4,7 +4,9 @@ import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.reference.Reference;
+import com.github.lunatrius.schematica.world.chunk.ChunkProviderSchematic;
 import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
+import com.github.lunatrius.schematica.world.storage.SaveHandlerSchematic;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -13,7 +15,6 @@ import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockSlab;
-import net.minecraft.client.multiplayer.ChunkProviderClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -29,7 +30,6 @@ import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.storage.SaveHandlerMP;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class SchematicWorld extends World {
 
     public SchematicWorld() {
         // TODO: revert if any issues arise
-        super(new SaveHandlerMP(), "Schematica", null, WORLD_SETTINGS, null);
+        super(new SaveHandlerSchematic(), "Schematica", null, WORLD_SETTINGS, null);
         this.icon = SchematicWorld.DEFAULT_ICON.copy();
         this.blocks = null;
         this.metadata = null;
@@ -297,7 +297,7 @@ public class SchematicWorld extends World {
 
     @Override
     protected IChunkProvider createChunkProvider() {
-        return new ChunkProviderClient(this);
+        return new ChunkProviderSchematic(this);
     }
 
     @Override
