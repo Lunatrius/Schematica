@@ -99,3 +99,9 @@ schematica.gui.printer=投影
 schematica.key.load=载入Schematic文件
 schematica.key.save=保存Schematic文件
 schematica.key.control=调整Schematic文件
+
+# commands - save
+# schematica.command.save.playersOnly=This command can only be sent by players.
+# schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name>
+# schematica.command.save.saveSucceeded=Successfully saved %s.
+# schematica.command.save.saveFailed=There was a problem saving the schematic %s.

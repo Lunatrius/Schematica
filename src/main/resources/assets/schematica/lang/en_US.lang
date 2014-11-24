@@ -100,7 +100,7 @@ schematica.key.load=Load schematic
 schematica.key.save=Save schematic
 schematica.key.control=Manipulate schematic
 
-#commands
+# commands - save
 schematica.command.save.playersOnly=This command can only be sent by players.
 schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name>
 schematica.command.save.saveSucceeded=Successfully saved %s.

@@ -99,3 +99,9 @@ schematica.key.category=Schematica
 schematica.key.load=Загрузить схему
 schematica.key.save=Сохранить схему
 schematica.key.control=Манипулирование схемой
+
+# commands - save
+# schematica.command.save.playersOnly=This command can only be sent by players.
+# schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name>
+# schematica.command.save.saveSucceeded=Successfully saved %s.
+# schematica.command.save.saveFailed=There was a problem saving the schematic %s.
