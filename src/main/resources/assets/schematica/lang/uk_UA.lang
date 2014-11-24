@@ -99,3 +99,9 @@ schematica.gui.printer=Принтер
 schematica.key.load=завантажити технологічну схему
 schematica.key.save=Зберегти технологічну схему
 schematica.key.control=маніпулювати технологічною схемою схемою
+
+# commands - save
+# schematica.command.save.playersOnly=This command can only be sent by players.
+# schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name>
+# schematica.command.save.saveSucceeded=Successfully saved %s.
+# schematica.command.save.saveFailed=There was a problem saving the schematic %s.

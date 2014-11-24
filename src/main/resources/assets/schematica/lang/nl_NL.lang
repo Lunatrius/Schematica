@@ -99,3 +99,9 @@ schematica.gui.materialamount=Hoeveelheid
 schematica.key.load=Laad schematic
 schematica.key.save=Sla schematic op
 schematica.key.control=Bewerk schematic
+
+# commands - save
+# schematica.command.save.playersOnly=This command can only be sent by players.
+# schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name>
+# schematica.command.save.saveSucceeded=Successfully saved %s.
+# schematica.command.save.saveFailed=There was a problem saving the schematic %s.

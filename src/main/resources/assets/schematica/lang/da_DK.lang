@@ -99,3 +99,9 @@ schematica.gui.materialamount=Antal
 schematica.key.load=Åbn schematic
 schematica.key.save=Gem schematic
 schematica.key.control=Manipulér schematic
+
+# commands - save
+# schematica.command.save.playersOnly=This command can only be sent by players.
+# schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name>
+# schematica.command.save.saveSucceeded=Successfully saved %s.
+# schematica.command.save.saveFailed=There was a problem saving the schematic %s.

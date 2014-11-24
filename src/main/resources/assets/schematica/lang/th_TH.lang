@@ -99,3 +99,9 @@ schematica.gui.printer=การปริ๊น
 schematica.key.load=เปิดไฟล์ Schematic
 schematica.key.save=บันทึกไฟล์ Schematic
 schematica.key.control=จัดการ Schematic
+
+# commands - save
+# schematica.command.save.playersOnly=This command can only be sent by players.
+# schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name>
+# schematica.command.save.saveSucceeded=Successfully saved %s.
+# schematica.command.save.saveFailed=There was a problem saving the schematic %s.
