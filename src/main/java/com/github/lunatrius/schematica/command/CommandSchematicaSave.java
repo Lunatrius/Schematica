@@ -7,10 +7,9 @@ import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.StatCollector;
 
 public class CommandSchematicaSave extends CommandBase {
     @Override
@@ -20,7 +19,7 @@ public class CommandSchematicaSave extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_) {
-        return StatCollector.translateToLocal(Names.Command.Save.Message.USAGE);
+        return Names.Command.Save.Message.USAGE;
     }
 
     @Override
@@ -29,15 +28,9 @@ public class CommandSchematicaSave extends CommandBase {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(ICommandSender p_71519_1_) {
-        return true;
-    }
-
-    @Override
     public void processCommand(ICommandSender sender, String[] arguments) {
         if (arguments.length < 7) {
-            sender.addChatMessage(new ChatComponentText(getCommandUsage(sender)));
-            return;
+            throw new WrongUsageException(getCommandUsage(sender));
         }
 
         if (!(sender instanceof EntityPlayer)) {
@@ -51,23 +44,13 @@ public class CommandSchematicaSave extends CommandBase {
         String name;
 
         try {
-            from.set(
-                    Integer.parseInt(arguments[0]),
-                    Integer.parseInt(arguments[1]),
-                    Integer.parseInt(arguments[2])
-            );
-
-            to.set(
-                    Integer.parseInt(arguments[3]),
-                    Integer.parseInt(arguments[4]),
-                    Integer.parseInt(arguments[5])
-            );
+            from.set(Integer.parseInt(arguments[0]), Integer.parseInt(arguments[1]), Integer.parseInt(arguments[2]));
+            to.set(Integer.parseInt(arguments[3]), Integer.parseInt(arguments[4]), Integer.parseInt(arguments[5]));
 
             name = arguments[6];
             filename = String.format("%s.schematic", name);
         } catch (NumberFormatException exception) {
-            sender.addChatMessage(new ChatComponentText(getCommandUsage(sender)));
-            return;
+            throw new WrongUsageException(getCommandUsage(sender));
         }
 
         final EntityPlayer player = (EntityPlayer) sender;
