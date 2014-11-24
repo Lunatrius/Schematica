@@ -52,11 +52,11 @@ public final class Names {
         public static final String SCHEMATIC_DIRECTORY_DESC = "Schematic directory.";
 
         public static final String PRINTER_ENABLED = "printerEnabled";
-        public static final String PRINTER_ENABLED_DESC = "printerEnabled";
+        public static final String PRINTER_ENABLED_DESC = "Allow players to use the printer.";
         public static final String SAVE_ENABLED = "saveEnabled";
-        public static final String SAVE_ENABLED_DESC = "printerEnabled";
+        public static final String SAVE_ENABLED_DESC = "Allow players to save schematics.";
         public static final String LOAD_ENABLED = "loadEnabled";
-        public static final String LOAD_ENABLED_DESC = "printerEnabled";
+        public static final String LOAD_ENABLED_DESC = "Allow players to load schematics.";
 
         public static final String LANG_PREFIX = Reference.MODID.toLowerCase() + ".config";
     }
