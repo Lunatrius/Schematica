@@ -38,11 +38,6 @@ public class ServerProxy extends CommonProxy {
     }
 
     @Override
-    public boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, Vector3i from, Vector3i to) {
-        return false;
-    }
-
-    @Override
     public boolean loadSchematic(EntityPlayer player, File directory, String filename) {
         return false;
     }
