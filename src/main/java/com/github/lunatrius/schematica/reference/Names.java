@@ -61,6 +61,19 @@ public final class Names {
         public static final String LANG_PREFIX = Reference.MODID.toLowerCase() + ".config";
     }
 
+    public static final class Command {
+        public static final class Save {
+            public static final class Message {
+                public static final String USAGE = "schematica.command.save.usage";
+                public static final String PLAYERS_ONLY = "schematica.command.save.playersOnly";
+                public static final String SAVE_SUCCESSFUL = "schematica.command.save.saveSucceeded";
+                public static final String SAVE_FAILED = "schematica.command.save.saveFailed";
+            }
+
+            public static final String NAME = "schematicaSave";
+        }
+    }
+
     public static final class ModId {
         public static final String MINECRAFT = "minecraft";
     }

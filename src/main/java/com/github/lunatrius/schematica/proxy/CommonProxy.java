@@ -4,6 +4,8 @@ import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
+import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
+import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -109,7 +111,30 @@ public abstract class CommonProxy {
         return null;
     }
 
-    public abstract boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, Vector3i from, Vector3i to);
+    public boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, Vector3i from, Vector3i to) {
+        try {
+            String iconName = "";
+
+            try {
+                String[] parts = filename.split(";");
+                if (parts.length == 2) {
+                    iconName = parts[0];
+                    filename = parts[1];
+                }
+            } catch (Exception e) {
+                Reference.logger.error("Failed to parse icon data!", e);
+            }
+
+            SchematicWorld schematic = getSchematicFromWorld(world, from, to);
+            schematic.setIcon(SchematicUtil.getIconFromName(iconName));
+            SchematicFormat.writeToFile(directory, filename, schematic);
+
+            return true;
+        } catch (Exception e) {
+            Reference.logger.error("Failed to save schematic!", e);
+        }
+        return false;
+    }
 
     public abstract boolean loadSchematic(EntityPlayer player, File directory, String filename);
 

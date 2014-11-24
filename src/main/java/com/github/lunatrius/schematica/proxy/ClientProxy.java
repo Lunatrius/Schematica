@@ -207,32 +207,6 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, Vector3i from, Vector3i to) {
-        try {
-            String iconName = "";
-
-            try {
-                String[] parts = filename.split(";");
-                if (parts.length == 2) {
-                    iconName = parts[0];
-                    filename = parts[1];
-                }
-            } catch (Exception e) {
-                Reference.logger.error("Failed to parse icon data!", e);
-            }
-
-            SchematicWorld schematic = getSchematicFromWorld(world, from, to);
-            schematic.setIcon(SchematicUtil.getIconFromName(iconName));
-            SchematicFormat.writeToFile(directory, filename, schematic);
-
-            return true;
-        } catch (Exception e) {
-            Reference.logger.error("Failed to save schematic!", e);
-        }
-        return false;
-    }
-
-    @Override
     public boolean loadSchematic(EntityPlayer player, File directory, String filename) {
         SchematicWorld schematic = SchematicFormat.readFromFile(directory, filename);
         if (schematic == null) {
