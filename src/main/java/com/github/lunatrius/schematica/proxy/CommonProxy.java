@@ -2,20 +2,19 @@ package com.github.lunatrius.schematica.proxy;
 
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
+import com.github.lunatrius.schematica.nbt.NBTHelper;
+import com.github.lunatrius.schematica.nbt.TileEntityException;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
-import cpw.mods.fml.common.registry.GameData;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class CommonProxy {
     public boolean isSaveEnabled = true;
@@ -60,9 +59,7 @@ public abstract class CommonProxy {
             short height = (short) (Math.abs(maxY - minY) + 1);
             short length = (short) (Math.abs(maxZ - minZ) + 1);
 
-            short[][][] blocks = new short[width][height][length];
-            byte[][][] metadata = new byte[width][height][length];
-            List<TileEntity> tileEntities = new ArrayList<TileEntity>();
+            final SchematicWorld schematic = new SchematicWorld("", width, height, length);
 
             for (int chunkX = minChunkX; chunkX <= maxChunkX; chunkX++) {
                 for (int chunkZ = minChunkZ; chunkZ <= maxChunkZ; chunkZ++) {
@@ -77,24 +74,20 @@ public abstract class CommonProxy {
                                 int x = chunkLocalX | (chunkX << 4);
                                 int z = chunkLocalZ | (chunkZ << 4);
 
-                                blocks[x - minX][y - minY][z - minZ] = (short) GameData.getBlockRegistry().getId(world.getBlock(x, y, z));
-                                metadata[x - minX][y - minY][z - minZ] = (byte) world.getBlockMetadata(x, y, z);
+                                final Block block = world.getBlock(x, y, z);
+                                final int metadata = world.getBlockMetadata(x, y, z);
+                                final boolean success = schematic.setBlock(x - minX, y - minY, z - minZ, block, metadata);
 
-                                TileEntity tileEntity = world.getTileEntity(x, y, z);
-                                if (tileEntity != null) {
-                                    try {
-                                        NBTTagCompound tileEntityNBT = new NBTTagCompound();
-                                        tileEntity.writeToNBT(tileEntityNBT);
-
-                                        tileEntity = TileEntity.createAndLoadEntity(tileEntityNBT);
-                                        tileEntity.xCoord -= minX;
-                                        tileEntity.yCoord -= minY;
-                                        tileEntity.zCoord -= minZ;
-                                        tileEntities.add(tileEntity);
-                                    } catch (Exception e) {
-                                        Reference.logger.error(String.format("Error while trying to save tile entity %s!", tileEntity), e);
-                                        blocks[x - minX][y - minY][z - minZ] = (short) GameData.getBlockRegistry().getId(Blocks.bedrock);
-                                        metadata[x - minX][y - minY][z - minZ] = 0;
+                                if (success && block.hasTileEntity(metadata)) {
+                                    final TileEntity tileEntity = world.getTileEntity(x, y, z);
+                                    if (tileEntity != null) {
+                                        try {
+                                            final TileEntity reloadedTileEntity = NBTHelper.reloadTileEntity(tileEntity, minX, minY, minZ);
+                                            schematic.setTileEntity(x - minX, y - minY, z - minZ, reloadedTileEntity);
+                                        } catch (TileEntityException e) {
+                                            Reference.logger.error(String.format("Error while trying to save tile entity '%s'!", tileEntity), e);
+                                            schematic.setBlock(x - minX, y - minY, z - minZ, Blocks.bedrock);
+                                        }
                                     }
                                 }
                             }
@@ -103,7 +96,7 @@ public abstract class CommonProxy {
                 }
             }
 
-            return new SchematicWorld("", blocks, metadata, tileEntities, width, height, length);
+            return schematic;
         } catch (Exception e) {
             Reference.logger.error("Failed to extract schematic!", e);
         }

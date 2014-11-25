@@ -84,4 +84,28 @@ public class NBTHelper {
 
         return compound;
     }
+
+    public static TileEntity reloadTileEntity(TileEntity tileEntity) throws TileEntityException {
+        return reloadTileEntity(tileEntity, 0, 0, 0);
+    }
+
+    public static TileEntity reloadTileEntity(TileEntity tileEntity, int offsetX, int offsetY, int offsetZ) throws TileEntityException {
+        if (tileEntity == null) {
+            return null;
+        }
+
+        try {
+            NBTTagCompound tileEntityCompound = new NBTTagCompound();
+            tileEntity.writeToNBT(tileEntityCompound);
+
+            tileEntity = TileEntity.createAndLoadEntity(tileEntityCompound);
+            tileEntity.xCoord -= offsetX;
+            tileEntity.yCoord -= offsetY;
+            tileEntity.zCoord -= offsetZ;
+        } catch (Exception e) {
+            throw new TileEntityException(tileEntity, e);
+        }
+
+        return tileEntity;
+    }
 }
