@@ -5,7 +5,6 @@ import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.chunk.ChunkProviderSchematic;
-import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import com.github.lunatrius.schematica.world.storage.SaveHandlerSchematic;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
@@ -109,8 +108,8 @@ public class SchematicWorld extends World {
         }
     }
 
-    public SchematicWorld(String iconName, short width, short height, short length) {
-        this(SchematicUtil.getIconFromName(iconName), null, null, null, width, height, length);
+    public SchematicWorld(ItemStack icon, short width, short height, short length) {
+        this(icon, null, null, null, width, height, length);
     }
 
     private void generateBlockList() {
