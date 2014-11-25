@@ -59,40 +59,11 @@ public abstract class CommonProxy {
             short height = (short) (Math.abs(maxY - minY) + 1);
             short length = (short) (Math.abs(maxZ - minZ) + 1);
 
-            final SchematicWorld schematic = new SchematicWorld("", width, height, length);
+            final SchematicWorld schematic = new SchematicWorld(null, width, height, length);
 
             for (int chunkX = minChunkX; chunkX <= maxChunkX; chunkX++) {
                 for (int chunkZ = minChunkZ; chunkZ <= maxChunkZ; chunkZ++) {
-                    int localMinX = minX < (chunkX << 4) ? 0 : (minX & 15);
-                    int localMaxX = maxX > ((chunkX << 4) + 15) ? 15 : (maxX & 15);
-                    int localMinZ = minZ < (chunkZ << 4) ? 0 : (minZ & 15);
-                    int localMaxZ = maxZ > ((chunkZ << 4) + 15) ? 15 : (maxZ & 15);
-
-                    for (int chunkLocalX = localMinX; chunkLocalX <= localMaxX; chunkLocalX++) {
-                        for (int y = minY; y <= maxY; y++) {
-                            for (int chunkLocalZ = localMinZ; chunkLocalZ <= localMaxZ; chunkLocalZ++) {
-                                int x = chunkLocalX | (chunkX << 4);
-                                int z = chunkLocalZ | (chunkZ << 4);
-
-                                final Block block = world.getBlock(x, y, z);
-                                final int metadata = world.getBlockMetadata(x, y, z);
-                                final boolean success = schematic.setBlock(x - minX, y - minY, z - minZ, block, metadata);
-
-                                if (success && block.hasTileEntity(metadata)) {
-                                    final TileEntity tileEntity = world.getTileEntity(x, y, z);
-                                    if (tileEntity != null) {
-                                        try {
-                                            final TileEntity reloadedTileEntity = NBTHelper.reloadTileEntity(tileEntity, minX, minY, minZ);
-                                            schematic.setTileEntity(x - minX, y - minY, z - minZ, reloadedTileEntity);
-                                        } catch (TileEntityException e) {
-                                            Reference.logger.error(String.format("Error while trying to save tile entity '%s'!", tileEntity), e);
-                                            schematic.setBlock(x - minX, y - minY, z - minZ, Blocks.bedrock);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    copyChunkToSchematic(schematic, world, chunkX, chunkZ, minX, maxX, minY, maxY, minZ, maxZ);
                 }
             }
 
@@ -102,6 +73,43 @@ public abstract class CommonProxy {
         }
 
         return null;
+    }
+
+    protected void copyChunkToSchematic(final SchematicWorld schematic, final World world, final int chunkX, final int chunkZ, final int minX, final int maxX, final int minY, final int maxY, final int minZ, final int maxZ) {
+        final int localMinX = minX < (chunkX << 4) ? 0 : (minX & 15);
+        final int localMaxX = maxX > ((chunkX << 4) + 15) ? 15 : (maxX & 15);
+        final int localMinZ = minZ < (chunkZ << 4) ? 0 : (minZ & 15);
+        final int localMaxZ = maxZ > ((chunkZ << 4) + 15) ? 15 : (maxZ & 15);
+
+        for (int chunkLocalX = localMinX; chunkLocalX <= localMaxX; chunkLocalX++) {
+            for (int chunkLocalZ = localMinZ; chunkLocalZ <= localMaxZ; chunkLocalZ++) {
+                for (int y = minY; y <= maxY; y++) {
+                    final int x = chunkLocalX | (chunkX << 4);
+                    final int z = chunkLocalZ | (chunkZ << 4);
+
+                    final int localX = x - minX;
+                    final int localY = y - minY;
+                    final int localZ = z - minZ;
+
+                    final Block block = world.getBlock(x, y, z);
+                    final int metadata = world.getBlockMetadata(x, y, z);
+                    final boolean success = schematic.setBlock(localX, localY, localZ, block, metadata);
+
+                    if (success && block.hasTileEntity(metadata)) {
+                        final TileEntity tileEntity = world.getTileEntity(x, y, z);
+                        if (tileEntity != null) {
+                            try {
+                                final TileEntity reloadedTileEntity = NBTHelper.reloadTileEntity(tileEntity, minX, minY, minZ);
+                                schematic.setTileEntity(localX, localY, localZ, reloadedTileEntity);
+                            } catch (TileEntityException e) {
+                                Reference.logger.error(String.format("Error while trying to save tile entity '%s'!", tileEntity), e);
+                                schematic.setBlock(localX, localY, localZ, Blocks.bedrock);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, Vector3i from, Vector3i to) {
