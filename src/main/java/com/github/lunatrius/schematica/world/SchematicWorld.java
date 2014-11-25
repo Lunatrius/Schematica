@@ -7,6 +7,8 @@ import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.chunk.ChunkProviderSchematic;
 import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import com.github.lunatrius.schematica.world.storage.SaveHandlerSchematic;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -35,10 +37,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 public class SchematicWorld extends World {
-    // private static final AnvilSaveHandler SAVE_HANDLER = new AnvilSaveHandler(Minecraft.getMinecraft().mcDataDir, "tmp/schematica", false);
+    private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
     private static final WorldSettings WORLD_SETTINGS = new WorldSettings(0, WorldSettings.GameType.CREATIVE, false, false, WorldType.FLAT);
     private static final Comparator<ItemStack> BLOCK_COMPARATOR = new Comparator<ItemStack>() {
         @Override
@@ -55,23 +58,22 @@ public class SchematicWorld extends World {
     private final List<TileEntity> tileEntities = new ArrayList<TileEntity>();
     private final List<ItemStack> blockList = new ArrayList<ItemStack>();
     private short width;
-    private short length;
     private short height;
+    private short length;
 
     public final Vector3i position = new Vector3i();
     public boolean isRendering;
     public int renderingLayer;
 
     public SchematicWorld() {
-        // TODO: revert if any issues arise
         super(new SaveHandlerSchematic(), "Schematica", WORLD_SETTINGS, null, null);
         this.icon = SchematicWorld.DEFAULT_ICON.copy();
         this.blocks = null;
         this.metadata = null;
         this.tileEntities.clear();
         this.width = 0;
-        this.length = 0;
         this.height = 0;
+        this.length = 0;
 
         this.isRendering = false;
         this.renderingLayer = -1;
@@ -82,12 +84,12 @@ public class SchematicWorld extends World {
 
         this.icon = icon != null ? icon : SchematicWorld.DEFAULT_ICON.copy();
 
-        this.blocks = blocks.clone();
-        this.metadata = metadata.clone();
+        this.blocks = blocks != null ? blocks.clone() : new short[width][height][length];
+        this.metadata = metadata != null ? metadata.clone() : new byte[width][height][length];
 
         this.width = width;
-        this.length = length;
         this.height = height;
+        this.length = length;
 
         if (tileEntities != null) {
             this.tileEntities.addAll(tileEntities);
@@ -102,11 +104,13 @@ public class SchematicWorld extends World {
             }
         }
 
-        generateBlockList();
+        if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+            generateBlockList();
+        }
     }
 
-    public SchematicWorld(String iconName, short[][][] blocks, byte[][][] metadata, List<TileEntity> tileEntities, short width, short height, short length) {
-        this(SchematicUtil.getIconFromName(iconName), blocks, metadata, tileEntities, width, height, length);
+    public SchematicWorld(String iconName, short width, short height, short length) {
+        this(SchematicUtil.getIconFromName(iconName), null, null, null, width, height, length);
     }
 
     private void generateBlockList() {
@@ -208,12 +212,32 @@ public class SchematicWorld extends World {
     }
 
     public Block getBlockRaw(int x, int y, int z) {
-        return GameData.getBlockRegistry().getObjectById(getBlockIdRaw(x, y, z));
+        return BLOCK_REGISTRY.getObjectById(getBlockIdRaw(x, y, z));
     }
 
     @Override
     public Block getBlock(int x, int y, int z) {
-        return GameData.getBlockRegistry().getObjectById(getBlockId(x, y, z));
+        return BLOCK_REGISTRY.getObjectById(getBlockId(x, y, z));
+    }
+
+    public boolean setBlock(int x, int y, int z, Block block, int metadata) {
+        return setBlock(x, y, z, block, metadata, 0);
+    }
+
+    @Override
+    public boolean setBlock(int x, int y, int z, Block block, int metadata, int flags) {
+        if (x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length) {
+            return false;
+        }
+
+        final int id = BLOCK_REGISTRY.getId(block);
+        if (id == -1) {
+            return false;
+        }
+
+        this.blocks[x][y][z] = (short) id;
+        this.metadata[x][y][z] = (byte) metadata;
+        return true;
     }
 
     @Override
@@ -224,6 +248,28 @@ public class SchematicWorld extends World {
             }
         }
         return null;
+    }
+
+    @Override
+    public void setTileEntity(int x, int y, int z, TileEntity tileEntity) {
+        if (x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length) {
+            return;
+        }
+
+        removeTileEntity(x, y, z);
+
+        this.tileEntities.add(tileEntity);
+    }
+
+    @Override
+    public void removeTileEntity(int x, int y, int z) {
+        final Iterator<TileEntity> iterator = this.tileEntities.iterator();
+        while (iterator.hasNext()) {
+            final TileEntity tileEntity = iterator.next();
+            if (tileEntity.xCoord == x && tileEntity.yCoord == y && tileEntity.zCoord == z) {
+                iterator.remove();
+            }
+        }
     }
 
     @SideOnly(Side.CLIENT)
