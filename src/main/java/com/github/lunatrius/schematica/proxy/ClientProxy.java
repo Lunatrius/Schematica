@@ -16,12 +16,15 @@ import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.io.File;
@@ -144,24 +147,30 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void setConfigEntryClasses() {
-        ConfigurationHandler.propAlpha.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
-        ConfigurationHandler.propBlockDelta.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
-        ConfigurationHandler.propPlaceDelay.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
-        ConfigurationHandler.propTimeout.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
-        ConfigurationHandler.propTooltipX.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
-        ConfigurationHandler.propTooltipY.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
-    }
+    public void preInit(FMLPreInitializationEvent event) {
+        super.preInit(event);
 
-    @Override
-    public void registerKeybindings() {
+        final Property[] sliders = {
+                ConfigurationHandler.propAlpha,
+                ConfigurationHandler.propBlockDelta,
+                ConfigurationHandler.propPlaceDelay,
+                ConfigurationHandler.propTimeout,
+                ConfigurationHandler.propTooltipX,
+                ConfigurationHandler.propTooltipY
+        };
+        for (Property prop : sliders) {
+            prop.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
+        }
+
         for (KeyBinding keyBinding : KeyInputHandler.KEY_BINDINGS) {
             ClientRegistry.registerKeyBinding(keyBinding);
         }
     }
 
     @Override
-    public void registerEvents() {
+    public void init(FMLInitializationEvent event) {
+        super.init(event);
+
         FMLCommonHandler.instance().bus().register(KeyInputHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(TickHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(RenderTickHandler.INSTANCE);

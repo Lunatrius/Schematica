@@ -4,6 +4,7 @@ import com.github.lunatrius.schematica.handler.PlayerHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
@@ -12,15 +13,9 @@ import java.io.IOException;
 
 public class ServerProxy extends CommonProxy {
     @Override
-    public void setConfigEntryClasses() {
-    }
+    public void init(FMLInitializationEvent event) {
+        super.init(event);
 
-    @Override
-    public void registerKeybindings() {
-    }
-
-    @Override
-    public void registerEvents() {
         FMLCommonHandler.instance().bus().register(PlayerHandler.INSTANCE);
     }
 

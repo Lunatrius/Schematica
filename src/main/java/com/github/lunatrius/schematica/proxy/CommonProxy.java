@@ -1,13 +1,20 @@
 package com.github.lunatrius.schematica.proxy;
 
 import com.github.lunatrius.core.util.vector.Vector3i;
+import com.github.lunatrius.core.version.VersionChecker;
+import com.github.lunatrius.schematica.command.CommandSchematicaSave;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.nbt.NBTHelper;
 import com.github.lunatrius.schematica.nbt.TileEntityException;
+import com.github.lunatrius.schematica.network.PacketHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -20,11 +27,23 @@ public abstract class CommonProxy {
     public boolean isSaveEnabled = true;
     public boolean isLoadEnabled = true;
 
-    public abstract void setConfigEntryClasses();
+    public void preInit(FMLPreInitializationEvent event) {
+        Reference.logger = event.getModLog();
+        ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 
-    public abstract void registerKeybindings();
+        VersionChecker.registerMod(event.getModMetadata(), Reference.FORGE);
+    }
 
-    public abstract void registerEvents();
+    public void init(FMLInitializationEvent event) {
+        PacketHandler.init();
+    }
+
+    public void postInit(FMLPostInitializationEvent event) {
+    }
+
+    public void serverStarting(FMLServerStartingEvent event) {
+        event.registerServerCommand(new CommandSchematicaSave());
+    }
 
     public void createFolders() {
         if (!ConfigurationHandler.schematicDirectory.exists()) {
