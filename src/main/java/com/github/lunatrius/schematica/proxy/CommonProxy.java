@@ -4,13 +4,15 @@ import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.core.version.VersionChecker;
 import com.github.lunatrius.schematica.command.CommandSchematicaSave;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
+import com.github.lunatrius.schematica.handler.QueueTickHandler;
 import com.github.lunatrius.schematica.nbt.NBTHelper;
 import com.github.lunatrius.schematica.nbt.TileEntityException;
 import com.github.lunatrius.schematica.network.PacketHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
-import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
+import com.github.lunatrius.schematica.world.chunk.SchematicContainer;
 import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -36,6 +38,8 @@ public abstract class CommonProxy {
 
     public void init(FMLInitializationEvent event) {
         PacketHandler.init();
+
+        FMLCommonHandler.instance().bus().register(QueueTickHandler.INSTANCE);
     }
 
     public void postInit(FMLPostInitializationEvent event) {
@@ -60,41 +64,7 @@ public abstract class CommonProxy {
         this.isLoadEnabled = true;
     }
 
-    public SchematicWorld getSchematicFromWorld(World world, Vector3i from, Vector3i to) {
-        try {
-            int minX = Math.min(from.x, to.x);
-            int maxX = Math.max(from.x, to.x);
-            int minY = Math.min(from.y, to.y);
-            int maxY = Math.max(from.y, to.y);
-            int minZ = Math.min(from.z, to.z);
-            int maxZ = Math.max(from.z, to.z);
-
-            int minChunkX = minX >> 4;
-            int maxChunkX = maxX >> 4;
-            int minChunkZ = minZ >> 4;
-            int maxChunkZ = maxZ >> 4;
-
-            short width = (short) (Math.abs(maxX - minX) + 1);
-            short height = (short) (Math.abs(maxY - minY) + 1);
-            short length = (short) (Math.abs(maxZ - minZ) + 1);
-
-            final SchematicWorld schematic = new SchematicWorld(null, width, height, length);
-
-            for (int chunkX = minChunkX; chunkX <= maxChunkX; chunkX++) {
-                for (int chunkZ = minChunkZ; chunkZ <= maxChunkZ; chunkZ++) {
-                    copyChunkToSchematic(schematic, world, chunkX, chunkZ, minX, maxX, minY, maxY, minZ, maxZ);
-                }
-            }
-
-            return schematic;
-        } catch (Exception e) {
-            Reference.logger.error("Failed to extract schematic!", e);
-        }
-
-        return null;
-    }
-
-    protected void copyChunkToSchematic(final SchematicWorld schematic, final World world, final int chunkX, final int chunkZ, final int minX, final int maxX, final int minY, final int maxY, final int minZ, final int maxZ) {
+    public void copyChunkToSchematic(final SchematicWorld schematic, final World world, final int chunkX, final int chunkZ, final int minX, final int maxX, final int minY, final int maxY, final int minZ, final int maxZ) {
         final int localMinX = minX < (chunkX << 4) ? 0 : (minX & 15);
         final int localMaxX = maxX > ((chunkX << 4) + 15) ? 15 : (maxX & 15);
         final int localMinZ = minZ < (chunkZ << 4) ? 0 : (minZ & 15);
@@ -110,21 +80,25 @@ public abstract class CommonProxy {
                     final int localY = y - minY;
                     final int localZ = z - minZ;
 
-                    final Block block = world.getBlock(x, y, z);
-                    final int metadata = world.getBlockMetadata(x, y, z);
-                    final boolean success = schematic.setBlock(localX, localY, localZ, block, metadata);
+                    try {
+                        final Block block = world.getBlock(x, y, z);
+                        final int metadata = world.getBlockMetadata(x, y, z);
+                        final boolean success = schematic.setBlock(localX, localY, localZ, block, metadata);
 
-                    if (success && block.hasTileEntity(metadata)) {
-                        final TileEntity tileEntity = world.getTileEntity(x, y, z);
-                        if (tileEntity != null) {
-                            try {
-                                final TileEntity reloadedTileEntity = NBTHelper.reloadTileEntity(tileEntity, minX, minY, minZ);
-                                schematic.setTileEntity(localX, localY, localZ, reloadedTileEntity);
-                            } catch (TileEntityException e) {
-                                Reference.logger.error(String.format("Error while trying to save tile entity '%s'!", tileEntity), e);
-                                schematic.setBlock(localX, localY, localZ, Blocks.bedrock);
+                        if (success && block.hasTileEntity(metadata)) {
+                            final TileEntity tileEntity = world.getTileEntity(x, y, z);
+                            if (tileEntity != null) {
+                                try {
+                                    final TileEntity reloadedTileEntity = NBTHelper.reloadTileEntity(tileEntity, minX, minY, minZ);
+                                    schematic.setTileEntity(localX, localY, localZ, reloadedTileEntity);
+                                } catch (TileEntityException tee) {
+                                    Reference.logger.error(String.format("Error while trying to save tile entity '%s'!", tileEntity), tee);
+                                    schematic.setBlock(localX, localY, localZ, Blocks.bedrock);
+                                }
                             }
                         }
+                    } catch (Exception e) {
+                        Reference.logger.error("Something went wrong!", e);
                     }
                 }
             }
@@ -145,9 +119,20 @@ public abstract class CommonProxy {
                 Reference.logger.error("Failed to parse icon data!", e);
             }
 
-            SchematicWorld schematic = getSchematicFromWorld(world, from, to);
-            schematic.setIcon(SchematicUtil.getIconFromName(iconName));
-            SchematicFormat.writeToFile(directory, filename, schematic);
+            final int minX = Math.min(from.x, to.x);
+            final int maxX = Math.max(from.x, to.x);
+            final int minY = Math.min(from.y, to.y);
+            final int maxY = Math.max(from.y, to.y);
+            final int minZ = Math.min(from.z, to.z);
+            final int maxZ = Math.max(from.z, to.z);
+
+            final short width = (short) (Math.abs(maxX - minX) + 1);
+            final short height = (short) (Math.abs(maxY - minY) + 1);
+            final short length = (short) (Math.abs(maxZ - minZ) + 1);
+
+            final SchematicWorld schematic = new SchematicWorld(SchematicUtil.getIconFromName(iconName), width, height, length);
+            final SchematicContainer container = new SchematicContainer(schematic, player, world, new File(directory, filename), minX, maxX, minY, maxY, minZ, maxZ);
+            QueueTickHandler.INSTANCE.queueSchematic(container);
 
             return true;
         } catch (Exception e) {

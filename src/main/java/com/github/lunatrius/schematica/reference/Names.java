@@ -66,6 +66,7 @@ public final class Names {
             public static final class Message {
                 public static final String USAGE = "schematica.command.save.usage";
                 public static final String PLAYERS_ONLY = "schematica.command.save.playersOnly";
+                public static final String SAVE_STARTED = "schematica.command.save.started";
                 public static final String SAVE_SUCCESSFUL = "schematica.command.save.saveSucceeded";
                 public static final String SAVE_FAILED = "schematica.command.save.saveFailed";
             }
