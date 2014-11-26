@@ -1,9 +1,5 @@
 package com.github.lunatrius.schematica;
 
-import com.github.lunatrius.core.version.VersionChecker;
-import com.github.lunatrius.schematica.command.CommandSchematicaSave;
-import com.github.lunatrius.schematica.handler.ConfigurationHandler;
-import com.github.lunatrius.schematica.network.PacketHandler;
 import com.github.lunatrius.schematica.proxy.CommonProxy;
 import com.github.lunatrius.schematica.reference.Reference;
 import cpw.mods.fml.common.Mod;
@@ -34,34 +30,21 @@ public class Schematica {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        Reference.logger = event.getModLog();
-        ConfigurationHandler.init(event.getSuggestedConfigurationFile());
-        proxy.setConfigEntryClasses();
-
-        proxy.registerKeybindings();
-        proxy.createFolders();
-
-        VersionChecker.registerMod(event.getModMetadata(), Reference.FORGE);
+        proxy.preInit(event);
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        PacketHandler.init();
-
-        try {
-            proxy.registerEvents();
-        } catch (Exception e) {
-            Reference.logger.fatal("Could not initialize the mod!", e);
-            throw new RuntimeException(e);
-        }
+        proxy.init(event);
     }
 
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        proxy.postInit(event);
     }
 
     @EventHandler
     public void serverStarting(FMLServerStartingEvent event) {
-        event.registerServerCommand(new CommandSchematicaSave());
+        proxy.serverStarting(event);
     }
 }
