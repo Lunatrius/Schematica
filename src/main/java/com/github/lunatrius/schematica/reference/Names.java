@@ -58,6 +58,9 @@ public final class Names {
         public static final String LOAD_ENABLED = "loadEnabled";
         public static final String LOAD_ENABLED_DESC = "Allow players to load schematics.";
 
+        public static final String PLAYER_QUOTA_KILOBYTES = "playerQuotaKilobytes";
+        public static final String PLAYER_QUOTA_KILOBYTES_DESC = "Amount of storage provided per-player for schematics on the server.";
+
         public static final String LANG_PREFIX = Reference.MODID.toLowerCase() + ".config";
     }
 
@@ -69,10 +72,39 @@ public final class Names {
                 public static final String SAVE_STARTED = "schematica.command.save.started";
                 public static final String SAVE_SUCCESSFUL = "schematica.command.save.saveSucceeded";
                 public static final String SAVE_FAILED = "schematica.command.save.saveFailed";
+                public static final String QUOTA_EXCEEDED = "schematica.command.save.quotaExceeded";
+                public static final String PLAYER_SCHEMATIC_DIR_UNAVAILABLE = "schematica.command.save.playerSchematicDirUnavailable";
             }
 
             public static final String NAME = "schematicaSave";
         }
+
+        public static final class List {
+            public static final class Message {
+                public static final String USAGE = "schematica.command.list.usage";
+                public static final String LIST_NOT_AVAILABLE = "schematica.command.list.notAvailable";
+                public static final String REMOVE = "schematica.command.list.remove";
+                public static final String PAGE_HEADER = "schematica.command.list.header";
+                public static final String NO_SUCH_PAGE = "schematica.command.list.noSuchPage";
+                public static final String NO_SCHEMATICS = "schematica.command.list.noSchematics";
+            }
+
+            public static final String NAME = "schematicaList";
+        }
+
+        public static final class Remove {
+            public static final class Message {
+                public static final String USAGE = "schematica.command.remove.usage";
+                public static final String PLAYERS_ONLY = "schematica.command.save.playersOnly";
+                public static final String SCHEMATIC_REMOVED = "schematica.command.remove.schematicRemoved";
+                public static final String SCHEMATIC_NOT_FOUND = "schematica.command.remove.schematicNotFound";
+                public static final String ARE_YOU_SURE_START = "schematica.command.remove.areYouSure";
+                public static final String YES = "gui.yes";
+            }
+
+            public static final String NAME = "schematicaRemove";
+        }
+
     }
 
     public static final class ModId {
