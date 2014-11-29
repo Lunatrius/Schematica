@@ -2,6 +2,8 @@ package com.github.lunatrius.schematica.proxy;
 
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.core.version.VersionChecker;
+import com.github.lunatrius.schematica.command.CommandSchematicaList;
+import com.github.lunatrius.schematica.command.CommandSchematicaRemove;
 import com.github.lunatrius.schematica.command.CommandSchematicaSave;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.QueueTickHandler;
@@ -47,6 +49,8 @@ public abstract class CommonProxy {
 
     public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new CommandSchematicaSave());
+        event.registerServerCommand(new CommandSchematicaList());
+        event.registerServerCommand(new CommandSchematicaRemove());
     }
 
     public void createFolders() {
@@ -150,4 +154,8 @@ public abstract class CommonProxy {
     public abstract SchematicWorld getActiveSchematic();
 
     public abstract SchematicWorld getActiveSchematic(EntityPlayer player);
+
+    public abstract boolean isPlayerQuotaExceeded(EntityPlayer player);
+
+    public abstract File getPlayerSchematicDirectory(EntityPlayer player, boolean privateDirectory);
 }

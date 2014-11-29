@@ -43,6 +43,7 @@ public class ConfigurationHandler {
     public static final boolean PRINTERENABLED_DEFAULT = true;
     public static final boolean SAVEENABLED_DEFAULT = true;
     public static final boolean LOADENABLED_DEFAULT = true;
+    public static final int PLAYERQUOTAKILOBYTES_DEFAULT = 8192;
 
     public static boolean enableAlpha = ENABLEALPHA_DEFAULT;
     public static float alpha = (float) ALPHA_DEFAULT;
@@ -66,6 +67,7 @@ public class ConfigurationHandler {
     public static boolean printerEnabled = PRINTERENABLED_DEFAULT;
     public static boolean saveEnabled = SAVEENABLED_DEFAULT;
     public static boolean loadEnabled = LOADENABLED_DEFAULT;
+    public static int playerQuotaKilobytes = PLAYERQUOTAKILOBYTES_DEFAULT;
 
     public static Property propEnableAlpha = null;
     public static Property propAlpha = null;
@@ -88,6 +90,7 @@ public class ConfigurationHandler {
     public static Property propPrinterEnabled = null;
     public static Property propSaveEnabled = null;
     public static Property propLoadEnabled = null;
+    public static Property propPlayerQuotaKilobytes = null;
 
     public static void init(File configFile) {
         if (configuration == null) {
@@ -194,6 +197,10 @@ public class ConfigurationHandler {
         propLoadEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.LOAD_ENABLED, LOADENABLED_DEFAULT, Names.Config.LOAD_ENABLED_DESC);
         propLoadEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.LOAD_ENABLED);
         loadEnabled = propLoadEnabled.getBoolean(LOADENABLED_DEFAULT);
+
+        propPlayerQuotaKilobytes = configuration.get(Names.Config.Category.SERVER, Names.Config.PLAYER_QUOTA_KILOBYTES, PLAYERQUOTAKILOBYTES_DEFAULT, Names.Config.PLAYER_QUOTA_KILOBYTES_DESC);
+        propPlayerQuotaKilobytes.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLAYER_QUOTA_KILOBYTES);
+        playerQuotaKilobytes = propPlayerQuotaKilobytes.getInt(PLAYERQUOTAKILOBYTES_DEFAULT);
 
         Schematica.proxy.createFolders();
 
