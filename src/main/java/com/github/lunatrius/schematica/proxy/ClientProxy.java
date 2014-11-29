@@ -249,4 +249,14 @@ public class ClientProxy extends CommonProxy {
     public SchematicWorld getActiveSchematic(EntityPlayer player) {
         return getActiveSchematic();
     }
+
+    @Override
+    public boolean isPlayerQuotaExceeded(EntityPlayer player) {
+        return false;
+    }
+
+    @Override
+    public File getPlayerSchematicDirectory(EntityPlayer player, boolean privateDirectory) {
+        return ConfigurationHandler.schematicDirectory;
+    }
 }
