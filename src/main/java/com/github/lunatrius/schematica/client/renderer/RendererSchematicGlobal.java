@@ -1,6 +1,6 @@
 package com.github.lunatrius.schematica.client.renderer;
 
-import com.github.lunatrius.core.util.vector.Vector3f;
+import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.world.SchematicWorld;
@@ -51,14 +51,14 @@ public class RendererSchematicGlobal {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glEnable(GL11.GL_BLEND);
 
-        Vector3f playerPosition = ClientProxy.playerPosition.clone();
-        Vector3f extra = new Vector3f();
+        Vector3d playerPosition = ClientProxy.playerPosition.clone();
+        Vector3d extra = new Vector3d();
         if (schematic != null) {
-            extra.add(schematic.position.toVector3f());
+            extra.add(schematic.position.toVector3d());
             playerPosition.sub(extra);
         }
 
-        GL11.glTranslatef(-playerPosition.x, -playerPosition.y, -playerPosition.z);
+        GL11.glTranslated(-playerPosition.x, -playerPosition.y, -playerPosition.z);
 
         this.profiler.startSection("schematic");
         if (schematic != null && schematic.isRendering) {
@@ -90,22 +90,22 @@ public class RendererSchematicGlobal {
         }
 
         if (ClientProxy.isRenderingGuide) {
-            Vector3f start;
-            Vector3f end;
+            Vector3d start = new Vector3d();
+            Vector3d end = new Vector3d();
 
-            start = ClientProxy.pointMin.toVector3f().sub(extra);
-            end = ClientProxy.pointMax.toVector3f().sub(extra).add(1, 1, 1);
-            RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.0f, 0.75f, 0.0f, 0.25f);
+            ClientProxy.pointMin.toVector3d(start).sub(extra);
+            ClientProxy.pointMax.toVector3d(end).sub(extra).add(1, 1, 1);
+            RenderHelper.drawCuboidOutline(start.toVector3f(), end.toVector3f(), RenderHelper.LINE_ALL, 0.0f, 0.75f, 0.0f, 0.25f);
 
-            start = ClientProxy.pointA.toVector3f().sub(extra);
-            end = start.clone().add(1, 1, 1);
-            RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
-            RenderHelper.drawCuboidSurface(start, end, RenderHelper.QUAD_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
+            ClientProxy.pointA.toVector3d(start).sub(extra);
+            end.set(start).add(1, 1, 1);
+            RenderHelper.drawCuboidOutline(start.toVector3f(), end.toVector3f(), RenderHelper.LINE_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
+            RenderHelper.drawCuboidSurface(start.toVector3f(), end.toVector3f(), RenderHelper.QUAD_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
 
-            start = ClientProxy.pointB.toVector3f().sub(extra);
-            end = start.clone().add(1, 1, 1);
-            RenderHelper.drawCuboidOutline(start, end, RenderHelper.LINE_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
-            RenderHelper.drawCuboidSurface(start, end, RenderHelper.QUAD_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
+            ClientProxy.pointB.toVector3d(start).sub(extra);
+            end.set(start).add(1, 1, 1);
+            RenderHelper.drawCuboidOutline(start.toVector3f(), end.toVector3f(), RenderHelper.LINE_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
+            RenderHelper.drawCuboidSurface(start.toVector3f(), end.toVector3f(), RenderHelper.QUAD_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
         }
 
         int quadCount = RenderHelper.getQuadCount();

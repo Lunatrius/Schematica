@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.renderer;
 
+import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.schematica.client.renderer.shader.ShaderProgram;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
@@ -36,13 +37,13 @@ public class RendererSchematicChunk {
 
     public boolean isInFrustrum = false;
 
-    public final Vector3f centerPosition = new Vector3f();
+    public final Vector3d centerPosition = new Vector3d();
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
     private final Profiler profiler = this.minecraft.mcProfiler;
     private final SchematicWorld schematic;
     private final List<TileEntity> tileEntities = new ArrayList<TileEntity>();
-    private final Vector3f distance = new Vector3f();
+    private final Vector3d distance = new Vector3d();
 
     private final AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
 

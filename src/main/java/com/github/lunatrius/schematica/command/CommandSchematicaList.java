@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.command;
 
+import com.github.lunatrius.schematica.FileFilterSchematic;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.reference.Names;
 import net.minecraft.command.CommandBase;
@@ -7,14 +8,19 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.ClickEvent;
-import net.minecraft.util.*;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IChatComponent;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.LinkedList;
 
 public class CommandSchematicaList extends CommandBase {
+    private static final FileFilterSchematic FILE_FILTER_SCHEMATIC = new FileFilterSchematic(false);
+
     @Override
     public String getCommandName() {
         return Names.Command.List.NAME;
@@ -60,12 +66,7 @@ public class CommandSchematicaList extends CommandBase {
         LinkedList<IChatComponent> componentsToSend = new LinkedList<IChatComponent>();
 
         File file = Schematica.proxy.getPlayerSchematicDirectory(player, true);
-        final File[] files = file.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File file, String s) {
-                return s.endsWith(".schematic");
-            }
-        });
+        final File[] files = file.listFiles(FILE_FILTER_SCHEMATIC);
         for (File path : files) {
             if (currentFile >= pageStart && currentFile < pageEnd) {
                 String fileName = FilenameUtils.removeExtension(path.getName());

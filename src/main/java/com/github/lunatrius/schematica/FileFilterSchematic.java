@@ -1,12 +1,12 @@
 package com.github.lunatrius.schematica;
 
 import java.io.File;
+import java.io.FileFilter;
 
-public class FileFilterSchematic implements java.io.FileFilter {
+public class FileFilterSchematic implements FileFilter {
     private final boolean directory;
 
     public FileFilterSchematic(boolean dir) {
-        super();
         this.directory = dir;
     }
 
