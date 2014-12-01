@@ -1,6 +1,6 @@
 package com.github.lunatrius.schematica.proxy;
 
-import com.github.lunatrius.core.util.vector.Vector3f;
+import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
@@ -39,7 +39,7 @@ public class ClientProxy extends CommonProxy {
     public static boolean isRenderingGuide = false;
     public static boolean isPendingReset = false;
 
-    public static final Vector3f playerPosition = new Vector3f();
+    public static final Vector3d playerPosition = new Vector3d();
     public static ForgeDirection orientation = ForgeDirection.UNKNOWN;
     public static int rotationRender = 0;
 
@@ -53,9 +53,9 @@ public class ClientProxy extends CommonProxy {
     private SchematicWorld schematicWorld = null;
 
     public static void setPlayerData(EntityPlayer player, float partialTicks) {
-        playerPosition.x = (float) (player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks);
-        playerPosition.y = (float) (player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks);
-        playerPosition.z = (float) (player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks);
+        playerPosition.x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
+        playerPosition.y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
+        playerPosition.z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
 
         orientation = getOrientation(player);
 
