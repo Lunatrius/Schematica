@@ -66,7 +66,7 @@ public class SchematicContainer {
 
         this.processedChunks++;
         this.curChunkX++;
-        if (this.curChunkX >= this.maxChunkX) {
+        if (this.curChunkX > this.maxChunkX) {
             this.curChunkX = this.minChunkX;
             this.curChunkZ++;
         }
