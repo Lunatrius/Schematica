@@ -1,12 +1,15 @@
 package com.github.lunatrius.schematica.network.message;
 
 import com.github.lunatrius.schematica.world.SchematicWorld;
+import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.item.ItemStack;
 
 public class MessageSchematicBegin implements IMessage, IMessageHandler<MessageSchematicBegin, IMessage> {
+    public ItemStack icon;
     public int width;
     public int height;
     public int length;
@@ -15,6 +18,7 @@ public class MessageSchematicBegin implements IMessage, IMessageHandler<MessageS
     }
 
     public MessageSchematicBegin(SchematicWorld schematic) {
+        this.icon = schematic.getIcon();
         this.width = schematic.getWidth();
         this.height = schematic.getHeight();
         this.length = schematic.getLength();
@@ -22,6 +26,7 @@ public class MessageSchematicBegin implements IMessage, IMessageHandler<MessageS
 
     @Override
     public void fromBytes(ByteBuf buf) {
+        this.icon = ByteBufUtils.readItemStack(buf);
         this.width = buf.readShort();
         this.height = buf.readShort();
         this.length = buf.readShort();
@@ -29,6 +34,7 @@ public class MessageSchematicBegin implements IMessage, IMessageHandler<MessageS
 
     @Override
     public void toBytes(ByteBuf buf) {
+        ByteBufUtils.writeItemStack(buf, this.icon);
         buf.writeShort(this.width);
         buf.writeShort(this.height);
         buf.writeShort(this.length);
