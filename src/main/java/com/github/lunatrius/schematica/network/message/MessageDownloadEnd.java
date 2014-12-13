@@ -5,7 +5,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 
-public class MessageSchematicEnd implements IMessage, IMessageHandler<MessageSchematicEnd, IMessage> {
+public class MessageDownloadEnd implements IMessage, IMessageHandler<MessageDownloadEnd, IMessage> {
     @Override
     public void fromBytes(ByteBuf buf) {
         // TODO: implement
@@ -17,7 +17,7 @@ public class MessageSchematicEnd implements IMessage, IMessageHandler<MessageSch
     }
 
     @Override
-    public IMessage onMessage(MessageSchematicEnd message, MessageContext ctx) {
+    public IMessage onMessage(MessageDownloadEnd message, MessageContext ctx) {
         // TODO: implement
         return null;
     }

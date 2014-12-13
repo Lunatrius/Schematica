@@ -15,7 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageSchematicChunk implements IMessage, IMessageHandler<MessageSchematicChunk, IMessage> {
+public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDownloadChunk, IMessage> {
     public int baseX;
     public int baseY;
     public int baseZ;
@@ -25,10 +25,10 @@ public class MessageSchematicChunk implements IMessage, IMessageHandler<MessageS
     public List<TileEntity> tileEntities;
     public List<Entity> entities;
 
-    public MessageSchematicChunk() {
+    public MessageDownloadChunk() {
     }
 
-    public MessageSchematicChunk(SchematicWorld schematic, int baseX, int baseY, int baseZ) {
+    public MessageDownloadChunk(SchematicWorld schematic, int baseX, int baseY, int baseZ) {
         this.baseX = baseX;
         this.baseY = baseY;
         this.baseZ = baseZ;
@@ -102,7 +102,7 @@ public class MessageSchematicChunk implements IMessage, IMessageHandler<MessageS
     }
 
     @Override
-    public IMessage onMessage(MessageSchematicChunk message, MessageContext ctx) {
+    public IMessage onMessage(MessageDownloadChunk message, MessageContext ctx) {
         // TODO: implement
         return null;
     }
