@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.network.message;
 
 import com.github.lunatrius.schematica.nbt.NBTHelper;
+import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -15,10 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageSchematicChunk implements IMessage, IMessageHandler<MessageSchematicChunk, IMessage> {
-    public static final int CHUNK_WIDTH = 16;
-    public static final int CHUNK_HEIGHT = 16;
-    public static final int CHUNK_LENGTH = 16;
-
     public int baseX;
     public int baseY;
     public int baseZ;
@@ -36,14 +33,14 @@ public class MessageSchematicChunk implements IMessage, IMessageHandler<MessageS
         this.baseY = baseY;
         this.baseZ = baseZ;
 
-        this.blocks = new short[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_LENGTH];
-        this.metadata = new byte[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_LENGTH];
+        this.blocks = new short[Constants.SchematicChunk.WIDTH][Constants.SchematicChunk.HEIGHT][Constants.SchematicChunk.LENGTH];
+        this.metadata = new byte[Constants.SchematicChunk.WIDTH][Constants.SchematicChunk.HEIGHT][Constants.SchematicChunk.LENGTH];
         this.tileEntities = new ArrayList<TileEntity>();
         this.entities = new ArrayList<Entity>();
 
-        for (int x = 0; x < CHUNK_WIDTH; x++) {
-            for (int y = 0; y < CHUNK_HEIGHT; y++) {
-                for (int z = 0; z < CHUNK_LENGTH; z++) {
+        for (int x = 0; x < Constants.SchematicChunk.WIDTH; x++) {
+            for (int y = 0; y < Constants.SchematicChunk.HEIGHT; y++) {
+                for (int z = 0; z < Constants.SchematicChunk.LENGTH; z++) {
                     this.blocks[x][y][z] = (short) schematic.getBlockIdRaw(baseX + x, baseY + y, baseZ + z);
                     this.metadata[x][y][z] = (byte) schematic.getBlockMetadata(baseX + x, baseY + y, baseZ + z);
                     final TileEntity tileEntity = schematic.getTileEntity(baseX + x, baseY + y, baseZ + z);
@@ -61,14 +58,14 @@ public class MessageSchematicChunk implements IMessage, IMessageHandler<MessageS
         this.baseY = buf.readShort();
         this.baseZ = buf.readShort();
 
-        this.blocks = new short[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_LENGTH];
-        this.metadata = new byte[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_LENGTH];
+        this.blocks = new short[Constants.SchematicChunk.WIDTH][Constants.SchematicChunk.HEIGHT][Constants.SchematicChunk.LENGTH];
+        this.metadata = new byte[Constants.SchematicChunk.WIDTH][Constants.SchematicChunk.HEIGHT][Constants.SchematicChunk.LENGTH];
         this.tileEntities = new ArrayList<TileEntity>();
         this.entities = new ArrayList<Entity>();
 
-        for (int x = 0; x < CHUNK_WIDTH; x++) {
-            for (int y = 0; y < CHUNK_HEIGHT; y++) {
-                for (int z = 0; z < CHUNK_LENGTH; z++) {
+        for (int x = 0; x < Constants.SchematicChunk.WIDTH; x++) {
+            for (int y = 0; y < Constants.SchematicChunk.HEIGHT; y++) {
+                for (int z = 0; z < Constants.SchematicChunk.LENGTH; z++) {
                     this.blocks[x][y][z] = buf.readShort();
                     this.metadata[x][y][z] = buf.readByte();
                 }
@@ -88,9 +85,9 @@ public class MessageSchematicChunk implements IMessage, IMessageHandler<MessageS
         buf.writeShort(this.baseY);
         buf.writeShort(this.baseZ);
 
-        for (int x = 0; x < CHUNK_WIDTH; x++) {
-            for (int y = 0; y < CHUNK_HEIGHT; y++) {
-                for (int z = 0; z < CHUNK_LENGTH; z++) {
+        for (int x = 0; x < Constants.SchematicChunk.WIDTH; x++) {
+            for (int y = 0; y < Constants.SchematicChunk.HEIGHT; y++) {
+                for (int z = 0; z < Constants.SchematicChunk.LENGTH; z++) {
                     buf.writeShort(this.blocks[x][y][z]);
                     buf.writeByte(this.metadata[x][y][z]);
                 }

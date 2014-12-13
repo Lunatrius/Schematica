@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.client.renderer;
 import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
+import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
@@ -168,9 +169,9 @@ public class RendererSchematicGlobal {
     }
 
     public void createRendererSchematicChunks(SchematicWorld schematic) {
-        int width = (schematic.getWidth() - 1) / RendererSchematicChunk.CHUNK_WIDTH + 1;
-        int height = (schematic.getHeight() - 1) / RendererSchematicChunk.CHUNK_HEIGHT + 1;
-        int length = (schematic.getLength() - 1) / RendererSchematicChunk.CHUNK_LENGTH + 1;
+        int width = (schematic.getWidth() - 1) / Constants.SchematicChunk.WIDTH + 1;
+        int height = (schematic.getHeight() - 1) / Constants.SchematicChunk.HEIGHT + 1;
+        int length = (schematic.getLength() - 1) / Constants.SchematicChunk.LENGTH + 1;
 
         destroyRendererSchematicChunks();
 
