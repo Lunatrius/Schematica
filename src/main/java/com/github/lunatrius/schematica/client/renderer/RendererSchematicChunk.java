@@ -5,6 +5,7 @@ import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.schematica.client.renderer.shader.ShaderProgram;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
+import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.block.Block;
@@ -27,10 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RendererSchematicChunk {
-    public static final int CHUNK_WIDTH = 16;
-    public static final int CHUNK_HEIGHT = 16;
-    public static final int CHUNK_LENGTH = 16;
-
     private static final ShaderProgram SHADER_ALPHA = new ShaderProgram("schematica", null, "shaders/alpha.frag");
 
     private static boolean canUpdate = false;
@@ -54,11 +51,11 @@ public class RendererSchematicChunk {
 
     public RendererSchematicChunk(SchematicWorld schematicWorld, int baseX, int baseY, int baseZ) {
         this.schematic = schematicWorld;
-        this.boundingBox.setBounds(baseX * CHUNK_WIDTH, baseY * CHUNK_HEIGHT, baseZ * CHUNK_LENGTH, (baseX + 1) * CHUNK_WIDTH, (baseY + 1) * CHUNK_HEIGHT, (baseZ + 1) * CHUNK_LENGTH);
+        this.boundingBox.setBounds(baseX * Constants.SchematicChunk.WIDTH, baseY * Constants.SchematicChunk.HEIGHT, baseZ * Constants.SchematicChunk.LENGTH, (baseX + 1) * Constants.SchematicChunk.WIDTH, (baseY + 1) * Constants.SchematicChunk.HEIGHT, (baseZ + 1) * Constants.SchematicChunk.LENGTH);
 
-        this.centerPosition.x = (int) ((baseX + 0.5) * CHUNK_WIDTH);
-        this.centerPosition.y = (int) ((baseY + 0.5) * CHUNK_HEIGHT);
-        this.centerPosition.z = (int) ((baseZ + 0.5) * CHUNK_LENGTH);
+        this.centerPosition.x = (int) ((baseX + 0.5) * Constants.SchematicChunk.WIDTH);
+        this.centerPosition.y = (int) ((baseY + 0.5) * Constants.SchematicChunk.HEIGHT);
+        this.centerPosition.z = (int) ((baseZ + 0.5) * Constants.SchematicChunk.LENGTH);
 
         int x, y, z;
         for (TileEntity tileEntity : this.schematic.getTileEntities()) {
