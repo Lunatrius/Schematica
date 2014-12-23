@@ -19,8 +19,8 @@ schematica.gui.operations=동작
 schematica.gui.point.red=빨간 점
 schematica.gui.point.blue=푸른 점
 schematica.gui.saveselection=선택 영역을 schematic으로 저장
-# schematica.gui.on=켜기
-# schematica.gui.off=끄기
+schematica.gui.on=켜기
+schematica.gui.off=끄기
 schematica.gui.x=X:
 schematica.gui.y=Y:
 schematica.gui.z=Z:
@@ -28,19 +28,19 @@ schematica.gui.materials=재료
 schematica.gui.materialname=재료
 schematica.gui.materialamount=양
 schematica.gui.printer=프린터
-# schematica.gui.unknownblock=알 수 없는 블럭
+schematica.gui.unknownblock=알 수 없는 블럭
 
 # gui - config - categories
 schematica.config.category.render=렌더링
 schematica.config.category.render.tooltip=렌더링 관련 설정.
 schematica.config.category.printer=프린터
 schematica.config.category.printer.tooltip=프린터 관련 설정.
-# schematica.config.category.tooltip=툴팁
-# schematica.config.category.tooltip.tooltip=툴팁 관련 설정.
+schematica.config.category.tooltip=툴팁
+schematica.config.category.tooltip.tooltip=툴팁 관련 설정.
 schematica.config.category.general=일반
 schematica.config.category.general.tooltip=일반 설정.
-# schematica.config.category.server=서버
-# schematica.config.category.server.tooltip=서버 측 설정.
+schematica.config.category.server=서버
+schematica.config.category.server.tooltip=서버 측 설정.
 
 # gui - config - render
 schematica.config.alphaEnabled=알파 활성화됨
@@ -75,24 +75,24 @@ schematica.config.swapSlots=슬롯 바꾸기
 schematica.config.swapSlots.tooltip=프린터는 인벤토리의 아이템을 바꾸기 위해 이 슬롯들을 사용합니다.
 
 # gui - config - tooltip
-# schematica.config.tooltipEnabled=툴팁 활성화됨
-# schematica.config.tooltipEnabled.tooltip=Schematic의 블럭 위에 마우스를 올릴 때 툴팁을 표시합니다.
-# schematica.config.tooltipX=툴팁 X
-# schematica.config.tooltipX.tooltip=툴팁 X에 관련.
-# schematica.config.tooltipY=툴팁 Y
-# schematica.config.tooltipY.tooltip=툴팁 Y에 관련.
+schematica.config.tooltipEnabled=툴팁 활성화됨
+schematica.config.tooltipEnabled.tooltip=Schematic의 블럭 위에 마우스를 올릴 때 툴팁을 표시합니다.
+schematica.config.tooltipX=툴팁 X
+schematica.config.tooltipX.tooltip=툴팁 X에 관련.
+schematica.config.tooltipY=툴팁 Y
+schematica.config.tooltipY.tooltip=툴팁 Y에 관련.
 
 # gui - config - general
 schematica.config.schematicDirectory=Schematic 디렉토리
 schematica.config.schematicDirectory.tooltip=Schematic 디렉토리.
 
 # gui - config - server
-# schematica.config.printerEnabled=프린터 허용
-# schematica.config.printerEnabled.tooltip=플레이어가 프린터를 쓰는 것을 허용.
-# schematica.config.saveEnabled=저장 허용
-# schematica.config.saveEnabled.tooltip=플레이어가 schematic을 저장하는 것을 허용.
-# schematica.config.loadEnabled=불러오기 허용
-# schematica.config.loadEnabled.tooltip=플레이어가 schematic을 불러오는 것을 허용.
+schematica.config.printerEnabled=프린터 허용
+schematica.config.printerEnabled.tooltip=플레이어가 프린터를 쓰는 것을 허용.
+schematica.config.saveEnabled=저장 허용
+schematica.config.saveEnabled.tooltip=플레이어가 schematic을 저장하는 것을 허용.
+schematica.config.loadEnabled=불러오기 허용
+schematica.config.loadEnabled.tooltip=플레이어가 schematic을 불러오는 것을 허용.
 
 # keys
 schematica.key.category=Schematica
@@ -101,7 +101,7 @@ schematica.key.save=Schematic 저장
 schematica.key.control=Schematic 조작
 
 # commands - save
-# schematica.command.save.playersOnly=이 커맨드는 오직 플레이어만 사용할 수 있습니다.
-# schematica.command.save.usage=/schematicaSave <X시작> <Y시작> <Z시작> <X끝> <Y끝> <Z끝> <이름>
-# schematica.command.save.saveSucceeded=%s을(를) 성공적으로 저장하였습니다.
-# schematica.command.save.saveFailed=Schematic %s을(를) 저장하는데 문제가 발생하였습니다.
+schematica.command.save.playersOnly=이 커맨드는 오직 플레이어만 사용할 수 있습니다.
+schematica.command.save.usage=/schematicaSave <X시작> <Y시작> <Z시작> <X끝> <Y끝> <Z끝> <이름>
+schematica.command.save.saveSucceeded=%s을(를) 성공적으로 저장하였습니다.
+schematica.command.save.saveFailed=Schematic %s을(를) 저장하는데 문제가 발생하였습니다.
