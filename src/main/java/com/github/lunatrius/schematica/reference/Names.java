@@ -105,6 +105,17 @@ public final class Names {
             public static final String NAME = "schematicaRemove";
         }
 
+        public static final class Download {
+            public static final class Message {
+                public static final String USAGE = "schematica.command.download.usage";
+                public static final String PLAYERS_ONLY = "schematica.command.save.playersOnly";
+                public static final String DOWNLOAD_STARTED = "schematica.command.download.started";
+                public static final String DOWNLOAD_SUCCEEDED = "schematica.command.download.downloadSucceeded";
+                public static final String DOWNLOAD_FAILED = "schematica.command.download.downloadFail";
+            }
+
+            public static final String NAME = "schematicaDownload";
+        }
     }
 
     public static final class ModId {

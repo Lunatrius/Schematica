@@ -122,3 +122,9 @@ schematica.command.remove.usage=/schematicaRemove <name>
 schematica.command.remove.schematicRemoved=Schematic "%s" removed.
 schematica.command.remove.schematicNotFound=Schematic "%s" could not be found.
 schematica.command.remove.areYouSure=Are you sure?
+
+# commands - download
+schematica.command.download.usage=/schematicaDownload <name>
+schematica.command.download.started=Started downloading %s...
+schematica.command.download.downloadSucceeded=Successfully downloaded %s.
+schematica.command.download.downloadFail=Download failed.

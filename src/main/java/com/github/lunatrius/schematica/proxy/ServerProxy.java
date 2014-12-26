@@ -1,11 +1,13 @@
 package com.github.lunatrius.schematica.proxy;
 
+import com.github.lunatrius.schematica.command.CommandSchematicaDownload;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.PlayerHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
@@ -19,6 +21,12 @@ public class ServerProxy extends CommonProxy {
         super.init(event);
 
         FMLCommonHandler.instance().bus().register(PlayerHandler.INSTANCE);
+    }
+
+    @Override
+    public void serverStarting(FMLServerStartingEvent event) {
+        super.serverStarting(event);
+        event.registerServerCommand(new CommandSchematicaDownload());
     }
 
     @Override

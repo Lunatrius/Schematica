@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.network.message;
 
+import com.github.lunatrius.schematica.handler.DownloadHandler;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -42,7 +43,8 @@ public class MessageDownloadBegin implements IMessage, IMessageHandler<MessageDo
 
     @Override
     public IMessage onMessage(MessageDownloadBegin message, MessageContext ctx) {
-        // TODO: implement
-        return null;
+        DownloadHandler.INSTANCE.schematic = new SchematicWorld(message.icon, (short) message.width, (short) message.height, (short) message.length);
+
+        return new MessageDownloadBeginAck();
     }
 }
