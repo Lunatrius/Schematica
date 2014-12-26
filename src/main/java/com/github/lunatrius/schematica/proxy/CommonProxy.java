@@ -6,6 +6,7 @@ import com.github.lunatrius.schematica.command.CommandSchematicaList;
 import com.github.lunatrius.schematica.command.CommandSchematicaRemove;
 import com.github.lunatrius.schematica.command.CommandSchematicaSave;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
+import com.github.lunatrius.schematica.handler.DownloadHandler;
 import com.github.lunatrius.schematica.handler.QueueTickHandler;
 import com.github.lunatrius.schematica.nbt.NBTHelper;
 import com.github.lunatrius.schematica.nbt.TileEntityException;
@@ -42,6 +43,7 @@ public abstract class CommonProxy {
         PacketHandler.init();
 
         FMLCommonHandler.instance().bus().register(QueueTickHandler.INSTANCE);
+        FMLCommonHandler.instance().bus().register(DownloadHandler.INSTANCE);
     }
 
     public void postInit(FMLPostInitializationEvent event) {

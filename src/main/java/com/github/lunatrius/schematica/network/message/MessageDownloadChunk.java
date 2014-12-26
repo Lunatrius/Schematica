@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.network.message;
 
+import com.github.lunatrius.schematica.handler.DownloadHandler;
 import com.github.lunatrius.schematica.nbt.NBTHelper;
 import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.world.SchematicWorld;
@@ -7,7 +8,10 @@ import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
+import cpw.mods.fml.common.registry.GameData;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -16,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDownloadChunk, IMessage> {
+    public static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
+
     public int baseX;
     public int baseY;
     public int baseZ;
@@ -49,6 +55,24 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
                     }
                 }
             }
+        }
+    }
+
+    private void copyToSchematic(final SchematicWorld schematic) {
+        for (int x = 0; x < Constants.SchematicChunk.WIDTH; x++) {
+            for (int y = 0; y < Constants.SchematicChunk.HEIGHT; y++) {
+                for (int z = 0; z < Constants.SchematicChunk.LENGTH; z++) {
+                    short id = this.blocks[x][y][z];
+                    byte meta = this.metadata[x][y][z];
+                    Block block = BLOCK_REGISTRY.getObjectById(id);
+
+                    schematic.setBlock(this.baseX + x, this.baseY + y, this.baseZ + z, block, meta);
+                }
+            }
+        }
+
+        for (TileEntity tileEntity : this.tileEntities) {
+            schematic.setTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity);
         }
     }
 
@@ -103,7 +127,8 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
 
     @Override
     public IMessage onMessage(MessageDownloadChunk message, MessageContext ctx) {
-        // TODO: implement
-        return null;
+        message.copyToSchematic(DownloadHandler.INSTANCE.schematic);
+
+        return new MessageDownloadChunkAck(message.baseX, message.baseY, message.baseZ);
     }
 }

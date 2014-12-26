@@ -22,4 +22,11 @@ public class PlayerHandler {
             }
         }
     }
+
+    @SubscribeEvent
+    public void onPlayerLoggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        if (event.player instanceof EntityPlayerMP) {
+            DownloadHandler.INSTANCE.transferMap.remove(event.player);
+        }
+    }
 }
