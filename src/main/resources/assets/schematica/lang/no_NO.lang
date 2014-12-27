@@ -113,7 +113,8 @@ schematica.key.control=Manipuler tegning
 # schematica.command.list.usage=/schematicaList [page]
 # schematica.command.list.notAvailable=There was a problem retrieving your list of schematics.
 # schematica.command.list.remove=Remove
-# schematica.command.list.header=Schematic List - Page %d of %d
+# schematica.command.list.download=Download
+# schematica.command.list.header=--- Showing schematics page %d of %d ---
 # schematica.command.list.noSuchPage=No such page
 # schematica.command.list.noSchematics=You have no schematics available.
 

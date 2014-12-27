@@ -84,6 +84,7 @@ public final class Names {
                 public static final String USAGE = "schematica.command.list.usage";
                 public static final String LIST_NOT_AVAILABLE = "schematica.command.list.notAvailable";
                 public static final String REMOVE = "schematica.command.list.remove";
+                public static final String DOWNLOAD = "schematica.command.list.download";
                 public static final String PAGE_HEADER = "schematica.command.list.header";
                 public static final String NO_SUCH_PAGE = "schematica.command.list.noSuchPage";
                 public static final String NO_SCHEMATICS = "schematica.command.list.noSchematics";
