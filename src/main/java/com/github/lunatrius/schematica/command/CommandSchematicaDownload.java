@@ -20,7 +20,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommandSchematicaDownload extends CommandBase {
+public class CommandSchematicaDownload extends CommandSchematicaBase {
     private static final FileFilterSchematic FILE_FILTER_SCHEMATIC = new FileFilterSchematic(false);
 
     @Override
@@ -31,11 +31,6 @@ public class CommandSchematicaDownload extends CommandBase {
     @Override
     public String getCommandUsage(ICommandSender sender) {
         return Names.Command.Download.Message.USAGE;
-    }
-
-    @Override
-    public int getRequiredPermissionLevel() {
-        return 3;
     }
 
     @Override

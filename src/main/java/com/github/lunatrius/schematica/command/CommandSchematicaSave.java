@@ -12,7 +12,7 @@ import net.minecraft.util.ChatComponentTranslation;
 
 import java.io.File;
 
-public class CommandSchematicaSave extends CommandBase {
+public class CommandSchematicaSave extends CommandSchematicaBase {
     @Override
     public String getCommandName() {
         return Names.Command.Save.NAME;
@@ -21,11 +21,6 @@ public class CommandSchematicaSave extends CommandBase {
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_) {
         return Names.Command.Save.Message.USAGE;
-    }
-
-    @Override
-    public int getRequiredPermissionLevel() {
-        return 3;
     }
 
     @Override
