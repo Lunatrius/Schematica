@@ -2,10 +2,12 @@ package com.github.lunatrius.schematica.command;
 
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.reference.Names;
+import com.github.lunatrius.schematica.reference.Reference;
+import com.github.lunatrius.schematica.util.FileUtils;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 import joptsimple.internal.Strings;
-import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,8 +39,7 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
         }
 
         if (!(sender instanceof EntityPlayer)) {
-            sender.addChatMessage(new ChatComponentTranslation(Names.Command.Remove.Message.PLAYERS_ONLY));
-            return;
+            throw new CommandException(Names.Command.Remove.Message.PLAYERS_ONLY);
         }
 
         final EntityPlayer player = (EntityPlayer) sender;
@@ -63,22 +64,24 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
             }
         }
 
+        String filename = String.format("%s.schematic", name);
         File schematicDirectory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
+        File file = new File(schematicDirectory, filename);
+        if (!FileUtils.contains(schematicDirectory, file)) {
+            Reference.logger.error(player.getDisplayName() + " has tried to download the file " + filename);
+            throw new CommandException(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND);
+        }
 
-        File file = new File(schematicDirectory, String.format("%s.schematic", name));
         if (file.exists()) {
             if (delete) {
                 if (file.delete()) {
                     sender.addChatMessage(new ChatComponentTranslation(Names.Command.Remove.Message.SCHEMATIC_REMOVED, name));
                 } else {
-                    sender.addChatMessage(new ChatComponentTranslation(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND, name));
+                    throw new CommandException(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND);
                 }
             } else {
-
                 String hash = Hashing.md5().hashString(name, Charsets.UTF_8).toString();
-
-                String commandCommandFormat = "/%s %s %s";
-                String confirmCommand = String.format(commandCommandFormat, Names.Command.Remove.NAME, name, hash);
+                String confirmCommand = String.format("/%s %s %s", Names.Command.Remove.NAME, name, hash);
                 final IChatComponent chatComponent = new ChatComponentTranslation(Names.Command.Remove.Message.ARE_YOU_SURE_START, name)
                         .appendSibling(new ChatComponentText(" ["))
                         .appendSibling(
@@ -97,7 +100,7 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
                 sender.addChatMessage(chatComponent);
             }
         } else {
-            sender.addChatMessage(new ChatComponentTranslation(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND, name));
+            throw new CommandException(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND);
         }
     }
 }
