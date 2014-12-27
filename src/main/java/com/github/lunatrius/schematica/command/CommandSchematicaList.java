@@ -61,8 +61,6 @@ public class CommandSchematicaList extends CommandBase {
         int pageEnd = pageStart + pageSize;
         int currentFile = 0;
 
-        String removeCommandFormat = "/%s %s";
-
         LinkedList<IChatComponent> componentsToSend = new LinkedList<IChatComponent>();
 
         File file = Schematica.proxy.getPlayerSchematicDirectory(player, true);
@@ -72,7 +70,7 @@ public class CommandSchematicaList extends CommandBase {
                 String fileName = FilenameUtils.removeExtension(path.getName());
 
                 IChatComponent chatComponent = new ChatComponentText(String.format("%2d (%s): %s [", (currentFile + 1), humanReadableByteCount(path.length()), fileName));
-                String removeCommand = String.format(removeCommandFormat, Names.Command.Remove.NAME, fileName);
+                String removeCommand = String.format("/%s %s", Names.Command.Remove.NAME, fileName);
 
                 IChatComponent removeLink = new ChatComponentTranslation(Names.Command.List.Message.REMOVE)
                         .setChatStyle(
@@ -81,6 +79,16 @@ public class CommandSchematicaList extends CommandBase {
                                         .setColor(EnumChatFormatting.RED)
                         );
                 chatComponent.appendSibling(removeLink);
+                chatComponent.appendText("][");
+
+                String downloadCommand = String.format("/%s %s", Names.Command.Download.NAME, fileName);
+                IChatComponent downloadLink = new ChatComponentTranslation(Names.Command.List.Message.DOWNLOAD)
+                        .setChatStyle(
+                                new ChatStyle()
+                                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, downloadCommand))
+                                        .setColor(EnumChatFormatting.GREEN)
+                        );
+                chatComponent.appendSibling(downloadLink);
                 chatComponent.appendText("]");
 
                 componentsToSend.add(chatComponent);
@@ -98,8 +106,9 @@ public class CommandSchematicaList extends CommandBase {
             sender.addChatMessage(new ChatComponentTranslation(Names.Command.List.Message.NO_SUCH_PAGE));
             return;
         }
-        sender.addChatMessage(new ChatComponentText(""));
-        sender.addChatMessage(new ChatComponentTranslation(Names.Command.List.Message.PAGE_HEADER, page + 1, totalPages + 1));
+
+        sender.addChatMessage(new ChatComponentTranslation(Names.Command.List.Message.PAGE_HEADER, page + 1, totalPages + 1)
+                .setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_GREEN)));
         for (IChatComponent chatComponent : componentsToSend) {
             sender.addChatMessage(chatComponent);
         }

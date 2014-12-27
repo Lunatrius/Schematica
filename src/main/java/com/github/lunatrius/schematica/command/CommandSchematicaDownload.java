@@ -14,6 +14,7 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentTranslation;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class CommandSchematicaDownload extends CommandBase {
             final List<String> filenames = new ArrayList<String>();
 
             for (File file : files) {
-                filenames.add(file.getName());
+                filenames.add(FilenameUtils.removeExtension(file.getName()));
             }
 
             return getListOfStringsFromIterableMatchingLastWord(args, filenames);
@@ -69,7 +70,7 @@ public class CommandSchematicaDownload extends CommandBase {
             throw new CommandException(Names.Command.Download.Message.PLAYERS_ONLY);
         }
 
-        final String filename = args[0];
+        final String filename = args[0] + ".schematic";
         final EntityPlayerMP player = (EntityPlayerMP) sender;
         final File directory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
         final SchematicWorld schematic = SchematicFormat.readFromFile(directory, filename);
