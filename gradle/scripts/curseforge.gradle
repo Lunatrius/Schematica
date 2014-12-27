@@ -1,44 +1,13 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            name = 'forge'
-            url = 'http://files.minecraftforge.net/maven'
-        }
-        maven {
-            name = 'sonatype'
-            url = 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-    }
-}
-
 apply plugin: 'curseforge'
-
-import net.minecraftforge.gradle.curseforge.CurseUploadTask;
 
 if (project.hasProperty('api_key_curseforge') && project.hasProperty('extra_curseforge_id')) {
     curse {
         dependsOn signJars
         releaseType = project.hasProperty('extra_curseforge_releasetype') ? project.extra_curseforge_releasetype : 'release'
-    }
-
-    task curseDev(dependsOn: 'signJars', type: CurseUploadTask) {
-        releaseType = 'alpha'
-        artifact = devJar.archivePath
-    }
-
-    task curseSource(dependsOn: 'signJars', type: CurseUploadTask) {
-        releaseType = 'alpha'
-        artifact = sourceJar.archivePath
-    }
-
-    configure([curse, curseDev, curseSource]) {
         apiKey = project.api_key_curseforge
         projectId = project.extra_curseforge_id
         changelog = ''
-        addGameVersion minecraft.version
+
+        additionalArtifact devJar, sourceJar
     }
 }
