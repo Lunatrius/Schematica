@@ -19,7 +19,7 @@ import net.minecraft.util.IChatComponent;
 import java.io.File;
 import java.util.Arrays;
 
-public class CommandSchematicaRemove extends CommandBase {
+public class CommandSchematicaRemove extends CommandSchematicaBase {
     @Override
     public String getCommandName() {
         return Names.Command.Remove.NAME;
@@ -28,11 +28,6 @@ public class CommandSchematicaRemove extends CommandBase {
     @Override
     public String getCommandUsage(ICommandSender sender) {
         return Names.Command.Remove.Message.USAGE;
-    }
-
-    @Override
-    public int getRequiredPermissionLevel() {
-        return 3;
     }
 
     @Override

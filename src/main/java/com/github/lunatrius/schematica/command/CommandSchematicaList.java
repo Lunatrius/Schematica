@@ -18,7 +18,7 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.File;
 import java.util.LinkedList;
 
-public class CommandSchematicaList extends CommandBase {
+public class CommandSchematicaList extends CommandSchematicaBase {
     private static final FileFilterSchematic FILE_FILTER_SCHEMATIC = new FileFilterSchematic(false);
 
     @Override
@@ -29,11 +29,6 @@ public class CommandSchematicaList extends CommandBase {
     @Override
     public String getCommandUsage(ICommandSender sender) {
         return Names.Command.List.Message.USAGE;
-    }
-
-    @Override
-    public int getRequiredPermissionLevel() {
-        return 3;
     }
 
     @Override
