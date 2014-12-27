@@ -4,7 +4,7 @@ import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
-import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,15 +30,13 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
         }
 
         if (!(sender instanceof EntityPlayer)) {
-            sender.addChatMessage(new ChatComponentTranslation(Names.Command.Save.Message.PLAYERS_ONLY));
-            return;
+            throw new CommandException(Names.Command.Save.Message.PLAYERS_ONLY);
         }
 
         final EntityPlayer player = (EntityPlayer) sender;
 
         if (Schematica.proxy.isPlayerQuotaExceeded(player)) {
-            sender.addChatMessage(new ChatComponentTranslation(Names.Command.Save.Message.QUOTA_EXCEEDED));
-            return;
+            throw new CommandException(Names.Command.Save.Message.QUOTA_EXCEEDED);
         }
 
         Vector3i from = new Vector3i();
@@ -61,15 +59,13 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
         if (schematicDirectory == null) {
             //Chances are that if this is null, we could not retrieve their UUID.
             Reference.logger.info(String.format("Unable to determine the schematic directory for player %s", player));
-            sender.addChatMessage(new ChatComponentTranslation(Names.Command.Save.Message.PLAYER_SCHEMATIC_DIR_UNAVAILABLE));
-            return;
+            throw new CommandException(Names.Command.Save.Message.PLAYER_SCHEMATIC_DIR_UNAVAILABLE);
         }
 
         if (!schematicDirectory.exists()) {
             if (!schematicDirectory.mkdirs()) {
                 Reference.logger.info(String.format("Could not create player schematic directory %s", schematicDirectory.getAbsolutePath()));
-                sender.addChatMessage(new ChatComponentTranslation(Names.Command.Save.Message.PLAYER_SCHEMATIC_DIR_UNAVAILABLE));
-                return;
+                throw new CommandException(Names.Command.Save.Message.PLAYER_SCHEMATIC_DIR_UNAVAILABLE);
             }
         }
 
@@ -77,7 +73,7 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
             Schematica.proxy.saveSchematic(player, schematicDirectory, filename, player.getEntityWorld(), from, to);
             sender.addChatMessage(new ChatComponentTranslation(Names.Command.Save.Message.SAVE_SUCCESSFUL, name));
         } catch (Exception e) {
-            sender.addChatMessage(new ChatComponentTranslation(Names.Command.Save.Message.SAVE_FAILED, name));
+            throw new CommandException(Names.Command.Save.Message.SAVE_FAILED, name);
         }
     }
 }

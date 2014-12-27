@@ -3,7 +3,8 @@ package com.github.lunatrius.schematica.command;
 import com.github.lunatrius.schematica.FileFilterSchematic;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.reference.Names;
-import net.minecraft.command.CommandBase;
+import com.github.lunatrius.schematica.util.FileUtils;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,8 +35,7 @@ public class CommandSchematicaList extends CommandSchematicaBase {
     @Override
     public void processCommand(ICommandSender sender, String[] arguments) {
         if (!(sender instanceof EntityPlayer)) {
-            sender.addChatMessage(new ChatComponentTranslation(Names.Command.Save.Message.PLAYERS_ONLY));
-            return;
+            throw new CommandException(Names.Command.Save.Message.PLAYERS_ONLY);
         }
 
         int page = 0;
@@ -64,7 +64,7 @@ public class CommandSchematicaList extends CommandSchematicaBase {
             if (currentFile >= pageStart && currentFile < pageEnd) {
                 String fileName = FilenameUtils.removeExtension(path.getName());
 
-                IChatComponent chatComponent = new ChatComponentText(String.format("%2d (%s): %s [", (currentFile + 1), humanReadableByteCount(path.length()), fileName));
+                IChatComponent chatComponent = new ChatComponentText(String.format("%2d (%s): %s [", currentFile + 1, FileUtils.humanReadableByteCount(path.length()), fileName));
                 String removeCommand = String.format("/%s %s", Names.Command.Remove.NAME, fileName);
 
                 IChatComponent removeLink = new ChatComponentTranslation(Names.Command.List.Message.REMOVE)
@@ -98,8 +98,7 @@ public class CommandSchematicaList extends CommandSchematicaBase {
 
         final int totalPages = (currentFile - 1) / pageSize;
         if (page > totalPages) {
-            sender.addChatMessage(new ChatComponentTranslation(Names.Command.List.Message.NO_SUCH_PAGE));
-            return;
+            throw new CommandException(Names.Command.List.Message.NO_SUCH_PAGE);
         }
 
         sender.addChatMessage(new ChatComponentTranslation(Names.Command.List.Message.PAGE_HEADER, page + 1, totalPages + 1)
@@ -107,14 +106,5 @@ public class CommandSchematicaList extends CommandSchematicaBase {
         for (IChatComponent chatComponent : componentsToSend) {
             sender.addChatMessage(chatComponent);
         }
-    }
-
-    //http://stackoverflow.com/questions/3758606/how-to-convert-byte-size-into-human-readable-format-in-java
-    public static String humanReadableByteCount(long bytes) {
-        final int unit = 1024;
-        if (bytes < unit) return bytes + " B";
-        int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = ("KMGTPE").charAt(exp - 1) + ("i");
-        return String.format("%3.0f %sB", bytes / Math.pow(unit, exp), pre);
     }
 }
