@@ -6,7 +6,6 @@ import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.chunk.ChunkProviderSchematic;
 import com.github.lunatrius.schematica.world.storage.SaveHandlerSchematic;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import cpw.mods.fml.common.registry.GameData;
 import cpw.mods.fml.relauncher.Side;
@@ -24,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntitySkull;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
@@ -55,7 +53,6 @@ public class SchematicWorld extends World {
     private short[][][] blocks;
     private byte[][][] metadata;
     private final List<TileEntity> tileEntities = new ArrayList<TileEntity>();
-    private final List<ItemStack> blockList = new ArrayList<ItemStack>();
     private short width;
     private short height;
     private short length;
@@ -104,98 +101,10 @@ public class SchematicWorld extends World {
                 }
             }
         }
-
-        if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
-            generateBlockList();
-        }
     }
 
     public SchematicWorld(ItemStack icon, short width, short height, short length) {
         this(icon, null, null, null, width, height, length);
-    }
-
-    private void generateBlockList() {
-        this.blockList.clear();
-
-        int x, y, z, itemDamage;
-        Block block;
-        Item item;
-        ItemStack itemStack;
-
-        for (y = 0; y < this.height; y++) {
-            for (z = 0; z < this.length; z++) {
-                for (x = 0; x < this.width; x++) {
-                    block = this.getBlock(x, y, z);
-                    item = Item.getItemFromBlock(block);
-                    itemDamage = this.metadata[x][y][z];
-
-                    if (block == null || block == Blocks.air) {
-                        continue;
-                    }
-
-                    if (BlockInfo.BLOCK_LIST_IGNORE_BLOCK.contains(block)) {
-                        continue;
-                    }
-
-                    if (BlockInfo.BLOCK_LIST_IGNORE_METADATA.contains(block)) {
-                        itemDamage = 0;
-                    }
-
-                    Item tmp = BlockInfo.BLOCK_ITEM_MAP.get(block);
-                    if (tmp != null) {
-                        item = tmp;
-                        Block blockFromItem = Block.getBlockFromItem(item);
-                        if (blockFromItem != Blocks.air) {
-                            block = blockFromItem;
-                        } else {
-                            itemDamage = 0;
-                        }
-                    }
-
-                    if (block instanceof BlockLog || block instanceof BlockLeavesBase) {
-                        itemDamage &= 0x03;
-                    }
-
-                    if (block instanceof BlockSlab) {
-                        itemDamage &= 0x07;
-                    }
-
-                    if (block instanceof BlockDoublePlant) {
-                        if ((itemDamage & 0x08) == 0x08) {
-                            continue;
-                        }
-                    }
-
-                    if (block == Blocks.cocoa) {
-                        itemDamage = 0x03;
-                    }
-
-                    if (item == Items.skull) {
-                        TileEntity tileEntity = getTileEntity(x, y, z);
-                        if (tileEntity instanceof TileEntitySkull) {
-                            itemDamage = ((TileEntitySkull) tileEntity).func_145904_a();
-                        }
-                    }
-
-                    itemStack = null;
-                    for (ItemStack stack : this.blockList) {
-                        if (stack.getItem() == item && stack.getItemDamage() == itemDamage) {
-                            itemStack = stack;
-                            itemStack.stackSize++;
-                            break;
-                        }
-                    }
-
-                    if (itemStack == null) {
-                        itemStack = new ItemStack(item, 1, itemDamage);
-                        if (itemStack.getItem() != null) {
-                            this.blockList.add(itemStack);
-                        }
-                    }
-                }
-            }
-        }
-        Collections.sort(this.blockList, BLOCK_COMPARATOR);
     }
 
     public int getBlockIdRaw(int x, int y, int z) {
@@ -403,7 +312,94 @@ public class SchematicWorld extends World {
     }
 
     public List<ItemStack> getBlockList() {
-        return this.blockList;
+        final List<ItemStack> blockList = new ArrayList<ItemStack>();
+
+        int x, y, z, itemDamage;
+        Block block;
+        Item item;
+        ItemStack itemStack;
+
+        for (y = 0; y < this.height; y++) {
+            if (this.isRenderingLayer && y != this.renderingLayer) {
+                continue;
+            }
+
+            for (z = 0; z < this.length; z++) {
+                for (x = 0; x < this.width; x++) {
+                    block = this.getBlock(x, y, z);
+                    item = Item.getItemFromBlock(block);
+                    itemDamage = this.metadata[x][y][z];
+
+                    if (block == null || block == Blocks.air) {
+                        continue;
+                    }
+
+                    if (BlockInfo.BLOCK_LIST_IGNORE_BLOCK.contains(block)) {
+                        continue;
+                    }
+
+                    if (BlockInfo.BLOCK_LIST_IGNORE_METADATA.contains(block)) {
+                        itemDamage = 0;
+                    }
+
+                    Item tmp = BlockInfo.BLOCK_ITEM_MAP.get(block);
+                    if (tmp != null) {
+                        item = tmp;
+                        Block blockFromItem = Block.getBlockFromItem(item);
+                        if (blockFromItem != Blocks.air) {
+                            block = blockFromItem;
+                        } else {
+                            itemDamage = 0;
+                        }
+                    }
+
+                    if (block instanceof BlockLog || block instanceof BlockLeavesBase) {
+                        itemDamage &= 0x03;
+                    }
+
+                    if (block instanceof BlockSlab) {
+                        itemDamage &= 0x07;
+                    }
+
+                    if (block instanceof BlockDoublePlant) {
+                        if ((itemDamage & 0x08) == 0x08) {
+                            continue;
+                        }
+                    }
+
+                    if (block == Blocks.cocoa) {
+                        itemDamage = 0x03;
+                    }
+
+                    if (item == Items.skull) {
+                        TileEntity tileEntity = getTileEntity(x, y, z);
+                        if (tileEntity instanceof TileEntitySkull) {
+                            itemDamage = ((TileEntitySkull) tileEntity).func_145904_a();
+                        }
+                    }
+
+                    itemStack = null;
+                    for (ItemStack stack : blockList) {
+                        if (stack.getItem() == item && stack.getItemDamage() == itemDamage) {
+                            itemStack = stack;
+                            itemStack.stackSize++;
+                            break;
+                        }
+                    }
+
+                    if (itemStack == null) {
+                        itemStack = new ItemStack(item, 1, itemDamage);
+                        if (itemStack.getItem() != null) {
+                            blockList.add(itemStack);
+                        }
+                    }
+                }
+            }
+        }
+
+        Collections.sort(blockList, BLOCK_COMPARATOR);
+
+        return blockList;
     }
 
     public boolean toggleRendering() {
