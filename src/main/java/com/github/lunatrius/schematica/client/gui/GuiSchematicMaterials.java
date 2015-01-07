@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.gui;
 
+import com.github.lunatrius.core.client.gui.GuiScreenBase;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.client.gui.GuiButton;
@@ -10,8 +11,7 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiSchematicMaterials extends GuiScreen {
-    private final GuiScreen prevGuiScreen;
+public class GuiSchematicMaterials extends GuiScreenBase {
     private GuiSchematicMaterialsSlot guiSchematicMaterialsSlot;
 
     private GuiButton btnDone = null;
@@ -22,7 +22,7 @@ public class GuiSchematicMaterials extends GuiScreen {
     protected final List<ItemStack> blockList;
 
     public GuiSchematicMaterials(GuiScreen guiScreen) {
-        this.prevGuiScreen = guiScreen;
+        super(guiScreen);
         SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
         if (schematic != null) {
             this.blockList = schematic.getBlockList();
@@ -45,7 +45,7 @@ public class GuiSchematicMaterials extends GuiScreen {
     protected void actionPerformed(GuiButton guiButton) {
         if (guiButton.enabled) {
             if (guiButton.id == this.btnDone.id) {
-                this.mc.displayGuiScreen(this.prevGuiScreen);
+                this.mc.displayGuiScreen(this.parentScreen);
             } else {
                 this.guiSchematicMaterialsSlot.actionPerformed(guiButton);
             }

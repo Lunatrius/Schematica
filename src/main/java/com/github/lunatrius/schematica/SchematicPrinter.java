@@ -112,12 +112,11 @@ public class SchematicPrinter {
         final int slot = player.inventory.currentItem;
         final boolean isSneaking = player.isSneaking();
 
+        final boolean isRenderingLayer = this.schematic.isRenderingLayer;
         final int renderingLayer = this.schematic.renderingLayer;
         for (int y = minY; y < maxY; y++) {
-            if (renderingLayer >= 0) {
-                if (y != renderingLayer) {
-                    continue;
-                }
+            if (isRenderingLayer && y != renderingLayer) {
+                continue;
             }
 
             for (int x = minX; x < maxX; x++) {

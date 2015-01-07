@@ -127,7 +127,7 @@ public class RendererSchematicChunk {
                 maxZ = Math.min((int) this.boundingBox.maxZ, this.schematic.getLength());
 
                 int renderingLayer = this.schematic.renderingLayer;
-                if (renderingLayer >= 0) {
+                if (this.schematic.isRenderingLayer) {
                     if (renderingLayer >= minY && renderingLayer < maxY) {
                         minY = renderingLayer;
                         maxY = renderingLayer + 1;
@@ -353,11 +353,8 @@ public class RendererSchematicChunk {
                 y = tileEntity.yCoord;
                 z = tileEntity.zCoord;
 
-                int renderingLayer = this.schematic.renderingLayer;
-                if (renderingLayer >= 0) {
-                    if (renderingLayer != y) {
-                        continue;
-                    }
+                if (this.schematic.isRenderingLayer && this.schematic.renderingLayer != y) {
+                    continue;
                 }
 
                 mcBlock = mcWorld.getBlock(x + this.schematic.position.x, y + this.schematic.position.y, z + this.schematic.position.z);

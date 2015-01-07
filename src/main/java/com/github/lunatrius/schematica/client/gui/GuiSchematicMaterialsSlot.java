@@ -51,7 +51,7 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
         String itemName;
         String amount = Integer.toString(itemStack.stackSize);
 
-        if (itemStack != null && itemStack.getItem() != null) {
+        if (itemStack.getItem() != null) {
             itemName = itemStack.getItem().getItemStackDisplayName(itemStack);
         } else {
             itemName = this.strUnknownBlock;
@@ -59,7 +59,7 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 
         GuiHelper.drawItemStack(this.minecraft.renderEngine, this.minecraft.fontRenderer, x, y, itemStack);
 
-        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, itemName, x + 24, y + 6, 16777215);
-        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amount, x + 215 - this.minecraft.fontRenderer.getStringWidth(amount), y + 6, 16777215);
+        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, itemName, x + 24, y + 6, 0xFFFFFF);
+        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amount, x + 215 - this.minecraft.fontRenderer.getStringWidth(amount), y + 6, 0xFFFFFF);
     }
 }
