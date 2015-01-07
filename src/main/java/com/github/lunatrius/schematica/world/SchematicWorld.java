@@ -62,6 +62,7 @@ public class SchematicWorld extends World {
 
     public final Vector3i position = new Vector3i();
     public boolean isRendering;
+    public boolean isRenderingLayer;
     public int renderingLayer;
 
     public SchematicWorld() {
@@ -75,7 +76,8 @@ public class SchematicWorld extends World {
         this.length = 0;
 
         this.isRendering = false;
-        this.renderingLayer = -1;
+        this.isRenderingLayer = false;
+        this.renderingLayer = 0;
     }
 
     public SchematicWorld(ItemStack icon, short[][][] blocks, byte[][][] metadata, List<TileEntity> tileEntities, short width, short height, short length) {
@@ -204,7 +206,7 @@ public class SchematicWorld extends World {
     }
 
     private int getBlockId(int x, int y, int z) {
-        if (this.renderingLayer != -1 && this.renderingLayer != y) {
+        if (this.isRenderingLayer && this.renderingLayer != y) {
             return 0;
         }
         return getBlockIdRaw(x, y, z);
@@ -407,14 +409,6 @@ public class SchematicWorld extends World {
     public boolean toggleRendering() {
         this.isRendering = !this.isRendering;
         return this.isRendering;
-    }
-
-    public void decrementRenderingLayer() {
-        this.renderingLayer = MathHelper.clamp_int(this.renderingLayer - 1, -1, getHeight() - 1);
-    }
-
-    public void incrementRenderingLayer() {
-        this.renderingLayer = MathHelper.clamp_int(this.renderingLayer + 1, -1, getHeight() - 1);
     }
 
     public void refreshChests() {

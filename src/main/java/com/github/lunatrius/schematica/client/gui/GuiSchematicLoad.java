@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.gui;
 
+import com.github.lunatrius.core.client.gui.GuiScreenBase;
 import com.github.lunatrius.schematica.FileFilterSchematic;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
@@ -21,11 +22,10 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuiSchematicLoad extends GuiScreen {
+public class GuiSchematicLoad extends GuiScreenBase {
     private static final FileFilterSchematic FILE_FILTER_FOLDER = new FileFilterSchematic(true);
     private static final FileFilterSchematic FILE_FILTER_SCHEMATIC = new FileFilterSchematic(false);
 
-    private final GuiScreen prevGuiScreen;
     private GuiSchematicLoadSlot guiSchematicLoadSlot;
 
     private GuiButton btnOpenDir = null;
@@ -38,7 +38,7 @@ public class GuiSchematicLoad extends GuiScreen {
     protected final List<GuiSchematicEntry> schematicFiles = new ArrayList<GuiSchematicEntry>();
 
     public GuiSchematicLoad(GuiScreen guiScreen) {
-        this.prevGuiScreen = guiScreen;
+        super(guiScreen);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class GuiSchematicLoad extends GuiScreen {
                 if (Schematica.proxy.isLoadEnabled) {
                     loadSchematic();
                 }
-                this.mc.displayGuiScreen(this.prevGuiScreen);
+                this.mc.displayGuiScreen(this.parentScreen);
             } else {
                 this.guiSchematicLoadSlot.actionPerformed(guiButton);
             }

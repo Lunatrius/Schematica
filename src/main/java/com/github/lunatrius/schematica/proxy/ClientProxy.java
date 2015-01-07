@@ -31,11 +31,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class ClientProxy extends CommonProxy {
-    // TODO: remove this and replace the 3 sepparate buttons with a single control
-    public static final int[] INCREMENTS = {
-            1, 5, 15, 50, 250
-    };
-
     public static boolean isRenderingGuide = false;
     public static boolean isPendingReset = false;
 
