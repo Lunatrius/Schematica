@@ -26,55 +26,55 @@ public class ConfigurationHandler {
 
     public static Configuration configuration;
 
-    public static final boolean ENABLEALPHA_DEFAULT = false;
+    public static final boolean ENABLE_ALPHA_DEFAULT = false;
     public static final double ALPHA_DEFAULT = 1.0;
     public static final boolean HIGHLIGHT_DEFAULT = true;
-    public static final boolean HIGHLIGHTAIR_DEFAULT = true;
-    public static final double BLOCKDELTA_DEFAULT = 0.005;
-    public static final boolean DRAWQUADS_DEFAULT = true;
-    public static final boolean DRAWLINES_DEFAULT = true;
-    public static final int PLACEDELAY_DEFAULT = 1;
+    public static final boolean HIGHLIGHT_AIR_DEFAULT = true;
+    public static final double BLOCK_DELTA_DEFAULT = 0.005;
+    public static final boolean DRAW_QUADS_DEFAULT = true;
+    public static final boolean DRAW_LINES_DEFAULT = true;
+    public static final int PLACE_DELAY_DEFAULT = 1;
     public static final int TIMEOUT_DEFAULT = 10;
-    public static final boolean PLACEINSTANTLY_DEFAULT = false;
-    public static final boolean DESTROYBLOCKS_DEFAULT = false;
-    public static final boolean DESTROYINSTANTLY_DEFAULT = false;
-    public static final boolean PLACEADJACENT_DEFAULT = true;
-    public static final int[] SWAPSLOTS_DEFAULT = new int[] { };
-    public static final boolean TOOLTIPENABLED_DEFAULT = true;
-    public static final double TOOLTIPX_DEFAULT = 100;
-    public static final double TOOLTIPY_DEFAULT = 0;
-    public static final String SCHEMATICDIRECTORY_STR = "schematics";
-    public static final File SCHEMATICDIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATICDIRECTORY_STR);
-    public static final String[] EXTRAAIRBLOCKS_DEFAULT = { };
-    public static final boolean PRINTERENABLED_DEFAULT = true;
-    public static final boolean SAVEENABLED_DEFAULT = true;
-    public static final boolean LOADENABLED_DEFAULT = true;
-    public static final int PLAYERQUOTAKILOBYTES_DEFAULT = 8192;
+    public static final boolean PLACE_INSTANTLY_DEFAULT = false;
+    public static final boolean DESTROY_BLOCKS_DEFAULT = false;
+    public static final boolean DESTROY_INSTANTLY_DEFAULT = false;
+    public static final boolean PLACE_ADJACENT_DEFAULT = true;
+    public static final int[] SWAP_SLOTS_DEFAULT = new int[] { };
+    public static final boolean TOOLTIP_ENABLED_DEFAULT = true;
+    public static final double TOOLTIP_X_DEFAULT = 100;
+    public static final double TOOLTIP_Y_DEFAULT = 0;
+    public static final String SCHEMATIC_DIRECTORY_STR = "schematics";
+    public static final File SCHEMATIC_DIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATIC_DIRECTORY_STR);
+    public static final String[] EXTRA_AIR_BLOCKS_DEFAULT = { };
+    public static final boolean PRINTER_ENABLED_DEFAULT = true;
+    public static final boolean SAVE_ENABLED_DEFAULT = true;
+    public static final boolean LOAD_ENABLED_DEFAULT = true;
+    public static final int PLAYER_QUOTA_KILOBYTES_DEFAULT = 8192;
 
-    public static boolean enableAlpha = ENABLEALPHA_DEFAULT;
+    public static boolean enableAlpha = ENABLE_ALPHA_DEFAULT;
     public static float alpha = (float) ALPHA_DEFAULT;
     public static boolean highlight = HIGHLIGHT_DEFAULT;
-    public static boolean highlightAir = HIGHLIGHTAIR_DEFAULT;
-    public static float blockDelta = (float) BLOCKDELTA_DEFAULT;
-    public static boolean drawQuads = DRAWQUADS_DEFAULT;
-    public static boolean drawLines = DRAWLINES_DEFAULT;
-    public static int placeDelay = PLACEDELAY_DEFAULT;
+    public static boolean highlightAir = HIGHLIGHT_AIR_DEFAULT;
+    public static float blockDelta = (float) BLOCK_DELTA_DEFAULT;
+    public static boolean drawQuads = DRAW_QUADS_DEFAULT;
+    public static boolean drawLines = DRAW_LINES_DEFAULT;
+    public static int placeDelay = PLACE_DELAY_DEFAULT;
     public static int timeout = TIMEOUT_DEFAULT;
-    public static boolean placeInstantly = PLACEINSTANTLY_DEFAULT;
-    public static boolean destroyBlocks = DESTROYBLOCKS_DEFAULT;
-    public static boolean destroyInstantly = DESTROYINSTANTLY_DEFAULT;
-    public static boolean placeAdjacent = PLACEADJACENT_DEFAULT;
-    public static int[] swapSlots = SWAPSLOTS_DEFAULT;
+    public static boolean placeInstantly = PLACE_INSTANTLY_DEFAULT;
+    public static boolean destroyBlocks = DESTROY_BLOCKS_DEFAULT;
+    public static boolean destroyInstantly = DESTROY_INSTANTLY_DEFAULT;
+    public static boolean placeAdjacent = PLACE_ADJACENT_DEFAULT;
+    public static int[] swapSlots = SWAP_SLOTS_DEFAULT;
     public static Queue<Integer> swapSlotsQueue = new ArrayDeque<Integer>();
-    public static boolean tooltipEnabled = TOOLTIPENABLED_DEFAULT;
-    public static float tooltipX = (float) TOOLTIPX_DEFAULT;
-    public static float tooltipY = (float) TOOLTIPY_DEFAULT;
-    public static File schematicDirectory = SCHEMATICDIRECTORY_DEFAULT;
-    public static String[] extraAirBlocks = EXTRAAIRBLOCKS_DEFAULT;
-    public static boolean printerEnabled = PRINTERENABLED_DEFAULT;
-    public static boolean saveEnabled = SAVEENABLED_DEFAULT;
-    public static boolean loadEnabled = LOADENABLED_DEFAULT;
-    public static int playerQuotaKilobytes = PLAYERQUOTAKILOBYTES_DEFAULT;
+    public static boolean tooltipEnabled = TOOLTIP_ENABLED_DEFAULT;
+    public static float tooltipX = (float) TOOLTIP_X_DEFAULT;
+    public static float tooltipY = (float) TOOLTIP_Y_DEFAULT;
+    public static File schematicDirectory = SCHEMATIC_DIRECTORY_DEFAULT;
+    public static String[] extraAirBlocks = EXTRA_AIR_BLOCKS_DEFAULT;
+    public static boolean printerEnabled = PRINTER_ENABLED_DEFAULT;
+    public static boolean saveEnabled = SAVE_ENABLED_DEFAULT;
+    public static boolean loadEnabled = LOAD_ENABLED_DEFAULT;
+    public static int playerQuotaKilobytes = PLAYER_QUOTA_KILOBYTES_DEFAULT;
 
     public static Property propEnableAlpha = null;
     public static Property propAlpha = null;
@@ -110,9 +110,9 @@ public class ConfigurationHandler {
     }
 
     private static void loadConfiguration() {
-        propEnableAlpha = configuration.get(Names.Config.Category.RENDER, Names.Config.ALPHA_ENABLED, ENABLEALPHA_DEFAULT, Names.Config.ALPHA_ENABLED_DESC);
+        propEnableAlpha = configuration.get(Names.Config.Category.RENDER, Names.Config.ALPHA_ENABLED, ENABLE_ALPHA_DEFAULT, Names.Config.ALPHA_ENABLED_DESC);
         propEnableAlpha.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.ALPHA_ENABLED);
-        enableAlpha = propEnableAlpha.getBoolean(ENABLEALPHA_DEFAULT);
+        enableAlpha = propEnableAlpha.getBoolean(ENABLE_ALPHA_DEFAULT);
 
         propAlpha = configuration.get(Names.Config.Category.RENDER, Names.Config.ALPHA, ALPHA_DEFAULT, Names.Config.ALPHA_DESC, 0.0, 1.0);
         propAlpha.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.ALPHA);
@@ -122,64 +122,64 @@ public class ConfigurationHandler {
         propHighlight.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.HIGHLIGHT);
         highlight = propHighlight.getBoolean(HIGHLIGHT_DEFAULT);
 
-        propHighlightAir = configuration.get(Names.Config.Category.RENDER, Names.Config.HIGHLIGHT_AIR, HIGHLIGHTAIR_DEFAULT, Names.Config.HIGHLIGHT_AIR_DESC);
+        propHighlightAir = configuration.get(Names.Config.Category.RENDER, Names.Config.HIGHLIGHT_AIR, HIGHLIGHT_AIR_DEFAULT, Names.Config.HIGHLIGHT_AIR_DESC);
         propHighlightAir.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.HIGHLIGHT_AIR);
-        highlightAir = propHighlightAir.getBoolean(HIGHLIGHTAIR_DEFAULT);
+        highlightAir = propHighlightAir.getBoolean(HIGHLIGHT_AIR_DEFAULT);
 
-        propBlockDelta = configuration.get(Names.Config.Category.RENDER, Names.Config.BLOCK_DELTA, BLOCKDELTA_DEFAULT, Names.Config.BLOCK_DELTA_DESC, 0.0, 0.2);
+        propBlockDelta = configuration.get(Names.Config.Category.RENDER, Names.Config.BLOCK_DELTA, BLOCK_DELTA_DEFAULT, Names.Config.BLOCK_DELTA_DESC, 0.0, 0.2);
         propBlockDelta.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.BLOCK_DELTA);
-        blockDelta = (float) propBlockDelta.getDouble(BLOCKDELTA_DEFAULT);
+        blockDelta = (float) propBlockDelta.getDouble(BLOCK_DELTA_DEFAULT);
 
-        propDrawQuads = configuration.get(Names.Config.Category.RENDER, Names.Config.DRAW_QUADS, DRAWQUADS_DEFAULT, Names.Config.DRAW_QUADS_DESC);
+        propDrawQuads = configuration.get(Names.Config.Category.RENDER, Names.Config.DRAW_QUADS, DRAW_QUADS_DEFAULT, Names.Config.DRAW_QUADS_DESC);
         propDrawQuads.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DRAW_QUADS);
-        drawQuads = propDrawQuads.getBoolean(DRAWQUADS_DEFAULT);
+        drawQuads = propDrawQuads.getBoolean(DRAW_QUADS_DEFAULT);
 
-        propDrawLines = configuration.get(Names.Config.Category.RENDER, Names.Config.DRAW_LINES, DRAWLINES_DEFAULT, Names.Config.DRAW_LINES_DESC);
+        propDrawLines = configuration.get(Names.Config.Category.RENDER, Names.Config.DRAW_LINES, DRAW_LINES_DEFAULT, Names.Config.DRAW_LINES_DESC);
         propDrawLines.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DRAW_LINES);
-        drawLines = propDrawLines.getBoolean(DRAWLINES_DEFAULT);
+        drawLines = propDrawLines.getBoolean(DRAW_LINES_DEFAULT);
 
-        propPlaceDelay = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_DELAY, PLACEDELAY_DEFAULT, Names.Config.PLACE_DELAY_DESC, 0, 20);
+        propPlaceDelay = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_DELAY, PLACE_DELAY_DEFAULT, Names.Config.PLACE_DELAY_DESC, 0, 20);
         propPlaceDelay.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_DELAY);
-        placeDelay = propPlaceDelay.getInt(PLACEDELAY_DEFAULT);
+        placeDelay = propPlaceDelay.getInt(PLACE_DELAY_DEFAULT);
 
         propTimeout = configuration.get(Names.Config.Category.PRINTER, Names.Config.TIMEOUT, TIMEOUT_DEFAULT, Names.Config.TIMEOUT_DESC, 0, 100);
         propTimeout.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TIMEOUT);
         timeout = propTimeout.getInt(TIMEOUT_DEFAULT);
 
-        propPlaceInstantly = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_INSTANTLY, PLACEINSTANTLY_DEFAULT, Names.Config.PLACE_INSTANTLY_DESC);
+        propPlaceInstantly = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_INSTANTLY, PLACE_INSTANTLY_DEFAULT, Names.Config.PLACE_INSTANTLY_DESC);
         propPlaceInstantly.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_INSTANTLY);
-        placeInstantly = propPlaceInstantly.getBoolean(PLACEINSTANTLY_DEFAULT);
+        placeInstantly = propPlaceInstantly.getBoolean(PLACE_INSTANTLY_DEFAULT);
 
-        propDestroyBlocks = configuration.get(Names.Config.Category.PRINTER, Names.Config.DESTROY_BLOCKS, DESTROYBLOCKS_DEFAULT, Names.Config.DESTROY_BLOCKS_DESC);
+        propDestroyBlocks = configuration.get(Names.Config.Category.PRINTER, Names.Config.DESTROY_BLOCKS, DESTROY_BLOCKS_DEFAULT, Names.Config.DESTROY_BLOCKS_DESC);
         propDestroyBlocks.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DESTROY_BLOCKS);
-        destroyBlocks = propDestroyBlocks.getBoolean(DESTROYBLOCKS_DEFAULT);
+        destroyBlocks = propDestroyBlocks.getBoolean(DESTROY_BLOCKS_DEFAULT);
 
-        propDestroyInstantly = configuration.get(Names.Config.Category.PRINTER, Names.Config.DESTROY_INSTANTLY, DESTROYINSTANTLY_DEFAULT, Names.Config.DESTROY_INSTANTLY_DESC);
+        propDestroyInstantly = configuration.get(Names.Config.Category.PRINTER, Names.Config.DESTROY_INSTANTLY, DESTROY_INSTANTLY_DEFAULT, Names.Config.DESTROY_INSTANTLY_DESC);
         propDestroyInstantly.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DESTROY_INSTANTLY);
-        destroyInstantly = propDestroyInstantly.getBoolean(DESTROYINSTANTLY_DEFAULT);
+        destroyInstantly = propDestroyInstantly.getBoolean(DESTROY_INSTANTLY_DEFAULT);
 
-        propPlaceAdjacent = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_ADJACENT, PLACEADJACENT_DEFAULT, Names.Config.PLACE_ADJACENT_DESC);
+        propPlaceAdjacent = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_ADJACENT, PLACE_ADJACENT_DEFAULT, Names.Config.PLACE_ADJACENT_DESC);
         propPlaceAdjacent.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_ADJACENT);
-        placeAdjacent = propPlaceAdjacent.getBoolean(PLACEADJACENT_DEFAULT);
+        placeAdjacent = propPlaceAdjacent.getBoolean(PLACE_ADJACENT_DEFAULT);
 
-        propSwapSlots = configuration.get(Names.Config.Category.PRINTER, Names.Config.SWAP_SLOTS, SWAPSLOTS_DEFAULT, Names.Config.SWAP_SLOTS_DESC, 0, 8);
+        propSwapSlots = configuration.get(Names.Config.Category.PRINTER, Names.Config.SWAP_SLOTS, SWAP_SLOTS_DEFAULT, Names.Config.SWAP_SLOTS_DESC, 0, 8);
         propSwapSlots.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SWAP_SLOTS);
         swapSlots = propSwapSlots.getIntList();
         swapSlotsQueue = new ArrayDeque<Integer>(Ints.asList(swapSlots));
 
-        propTooltipEnabled = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_ENABLED, TOOLTIPENABLED_DEFAULT, Names.Config.TOOLTIP_ENABLED_DESC);
+        propTooltipEnabled = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_ENABLED, TOOLTIP_ENABLED_DEFAULT, Names.Config.TOOLTIP_ENABLED_DESC);
         propTooltipEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TOOLTIP_ENABLED);
-        tooltipEnabled = propTooltipEnabled.getBoolean(TOOLTIPENABLED_DEFAULT);
+        tooltipEnabled = propTooltipEnabled.getBoolean(TOOLTIP_ENABLED_DEFAULT);
 
-        propTooltipX = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_X, TOOLTIPX_DEFAULT, Names.Config.TOOLTIP_X_DESC, 0, 100);
+        propTooltipX = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_X, TOOLTIP_X_DEFAULT, Names.Config.TOOLTIP_X_DESC, 0, 100);
         propTooltipX.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TOOLTIP_X);
-        tooltipX = (float) propTooltipX.getDouble(TOOLTIPX_DEFAULT);
+        tooltipX = (float) propTooltipX.getDouble(TOOLTIP_X_DEFAULT);
 
-        propTooltipY = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_Y, TOOLTIPY_DEFAULT, Names.Config.TOOLTIP_Y_DESC, 0, 100);
+        propTooltipY = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_Y, TOOLTIP_Y_DEFAULT, Names.Config.TOOLTIP_Y_DESC, 0, 100);
         propTooltipY.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TOOLTIP_Y);
-        tooltipY = (float) propTooltipY.getDouble(TOOLTIPY_DEFAULT);
+        tooltipY = (float) propTooltipY.getDouble(TOOLTIP_Y_DEFAULT);
 
-        propSchematicDirectory = configuration.get(Names.Config.Category.GENERAL, Names.Config.SCHEMATIC_DIRECTORY, SCHEMATICDIRECTORY_STR, Names.Config.SCHEMATIC_DIRECTORY_DESC);
+        propSchematicDirectory = configuration.get(Names.Config.Category.GENERAL, Names.Config.SCHEMATIC_DIRECTORY, SCHEMATIC_DIRECTORY_STR, Names.Config.SCHEMATIC_DIRECTORY_DESC);
         propSchematicDirectory.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SCHEMATIC_DIRECTORY);
         schematicDirectory = new File(propSchematicDirectory.getString());
 
@@ -196,7 +196,7 @@ public class ConfigurationHandler {
             Reference.logger.warn("Could not canonize path!", e);
         }
 
-        propExtraAirBlocks = configuration.get(Names.Config.Category.GENERAL, Names.Config.EXTRA_AIR_BLOCKS, EXTRAAIRBLOCKS_DEFAULT, Names.Config.EXTRA_AIR_BLOCKS_DESC);
+        propExtraAirBlocks = configuration.get(Names.Config.Category.GENERAL, Names.Config.EXTRA_AIR_BLOCKS, EXTRA_AIR_BLOCKS_DEFAULT, Names.Config.EXTRA_AIR_BLOCKS_DESC);
         propExtraAirBlocks.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.EXTRA_AIR_BLOCKS);
         extraAirBlocks = propExtraAirBlocks.getStringList();
 
@@ -208,21 +208,21 @@ public class ConfigurationHandler {
             }
         }
 
-        propPrinterEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.PRINTER_ENABLED, PRINTERENABLED_DEFAULT, Names.Config.PRINTER_ENABLED_DESC);
+        propPrinterEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.PRINTER_ENABLED, PRINTER_ENABLED_DEFAULT, Names.Config.PRINTER_ENABLED_DESC);
         propPrinterEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PRINTER_ENABLED);
-        printerEnabled = propPrinterEnabled.getBoolean(PRINTERENABLED_DEFAULT);
+        printerEnabled = propPrinterEnabled.getBoolean(PRINTER_ENABLED_DEFAULT);
 
-        propSaveEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.SAVE_ENABLED, SAVEENABLED_DEFAULT, Names.Config.SAVE_ENABLED_DESC);
+        propSaveEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.SAVE_ENABLED, SAVE_ENABLED_DEFAULT, Names.Config.SAVE_ENABLED_DESC);
         propSaveEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SAVE_ENABLED);
-        saveEnabled = propSaveEnabled.getBoolean(SAVEENABLED_DEFAULT);
+        saveEnabled = propSaveEnabled.getBoolean(SAVE_ENABLED_DEFAULT);
 
-        propLoadEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.LOAD_ENABLED, LOADENABLED_DEFAULT, Names.Config.LOAD_ENABLED_DESC);
+        propLoadEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.LOAD_ENABLED, LOAD_ENABLED_DEFAULT, Names.Config.LOAD_ENABLED_DESC);
         propLoadEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.LOAD_ENABLED);
-        loadEnabled = propLoadEnabled.getBoolean(LOADENABLED_DEFAULT);
+        loadEnabled = propLoadEnabled.getBoolean(LOAD_ENABLED_DEFAULT);
 
-        propPlayerQuotaKilobytes = configuration.get(Names.Config.Category.SERVER, Names.Config.PLAYER_QUOTA_KILOBYTES, PLAYERQUOTAKILOBYTES_DEFAULT, Names.Config.PLAYER_QUOTA_KILOBYTES_DESC);
+        propPlayerQuotaKilobytes = configuration.get(Names.Config.Category.SERVER, Names.Config.PLAYER_QUOTA_KILOBYTES, PLAYER_QUOTA_KILOBYTES_DEFAULT, Names.Config.PLAYER_QUOTA_KILOBYTES_DESC);
         propPlayerQuotaKilobytes.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLAYER_QUOTA_KILOBYTES);
-        playerQuotaKilobytes = propPlayerQuotaKilobytes.getInt(PLAYERQUOTAKILOBYTES_DEFAULT);
+        playerQuotaKilobytes = propPlayerQuotaKilobytes.getInt(PLAYER_QUOTA_KILOBYTES_DEFAULT);
 
         Schematica.proxy.createFolders();
 
