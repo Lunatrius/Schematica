@@ -274,7 +274,7 @@ public class RendererSchematicChunk {
                             }
                         }
 
-                        boolean isAirBlock = mcWorld.isAirBlock(wx, wy, wz);
+                        boolean isAirBlock = mcWorld.isAirBlock(wx, wy, wz) || ConfigurationHandler.isExtraAirBlock(mcBlock);
 
                         if (!isAirBlock) {
                             if (ConfigurationHandler.highlight && renderPass == 2) {

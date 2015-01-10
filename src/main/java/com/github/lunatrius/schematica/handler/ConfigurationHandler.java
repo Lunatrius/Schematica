@@ -6,13 +6,18 @@ import com.github.lunatrius.schematica.reference.Reference;
 import com.google.common.primitives.Ints;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.registry.GameData;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayDeque;
+import java.util.HashSet;
 import java.util.Queue;
+import java.util.Set;
 
 public class ConfigurationHandler {
     public static final ConfigurationHandler INSTANCE = new ConfigurationHandler();
@@ -40,6 +45,7 @@ public class ConfigurationHandler {
     public static final double TOOLTIPY_DEFAULT = 0;
     public static final String SCHEMATICDIRECTORY_STR = "schematics";
     public static final File SCHEMATICDIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATICDIRECTORY_STR);
+    public static final String[] EXTRAAIRBLOCKS_DEFAULT = { };
     public static final boolean PRINTERENABLED_DEFAULT = true;
     public static final boolean SAVEENABLED_DEFAULT = true;
     public static final boolean LOADENABLED_DEFAULT = true;
@@ -64,6 +70,7 @@ public class ConfigurationHandler {
     public static float tooltipX = (float) TOOLTIPX_DEFAULT;
     public static float tooltipY = (float) TOOLTIPY_DEFAULT;
     public static File schematicDirectory = SCHEMATICDIRECTORY_DEFAULT;
+    public static String[] extraAirBlocks = EXTRAAIRBLOCKS_DEFAULT;
     public static boolean printerEnabled = PRINTERENABLED_DEFAULT;
     public static boolean saveEnabled = SAVEENABLED_DEFAULT;
     public static boolean loadEnabled = LOADENABLED_DEFAULT;
@@ -87,10 +94,13 @@ public class ConfigurationHandler {
     public static Property propTooltipX = null;
     public static Property propTooltipY = null;
     public static Property propSchematicDirectory = null;
+    public static Property propExtraAirBlocks = null;
     public static Property propPrinterEnabled = null;
     public static Property propSaveEnabled = null;
     public static Property propLoadEnabled = null;
     public static Property propPlayerQuotaKilobytes = null;
+
+    private static final Set<Block> extraAirBlockList = new HashSet<Block>();
 
     public static void init(File configFile) {
         if (configuration == null) {
@@ -186,6 +196,18 @@ public class ConfigurationHandler {
             Reference.logger.warn("Could not canonize path!", e);
         }
 
+        propExtraAirBlocks = configuration.get(Names.Config.Category.GENERAL, Names.Config.EXTRA_AIR_BLOCKS, EXTRAAIRBLOCKS_DEFAULT, Names.Config.EXTRA_AIR_BLOCKS_DESC);
+        propExtraAirBlocks.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.EXTRA_AIR_BLOCKS);
+        extraAirBlocks = propExtraAirBlocks.getStringList();
+
+        extraAirBlockList.clear();
+        for (String name : extraAirBlocks) {
+            final Block block = GameData.getBlockRegistry().getObject(name);
+            if (block != Blocks.air) {
+                extraAirBlockList.add(block);
+            }
+        }
+
         propPrinterEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.PRINTER_ENABLED, PRINTERENABLED_DEFAULT, Names.Config.PRINTER_ENABLED_DESC);
         propPrinterEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PRINTER_ENABLED);
         printerEnabled = propPrinterEnabled.getBoolean(PRINTERENABLED_DEFAULT);
@@ -216,5 +238,9 @@ public class ConfigurationHandler {
         if (event.modID.equalsIgnoreCase(Reference.MODID)) {
             loadConfiguration();
         }
+    }
+
+    public static boolean isExtraAirBlock(final Block block) {
+        return extraAirBlockList.contains(block);
     }
 }

@@ -85,6 +85,8 @@ schematica.config.tooltipY.tooltip=Relative tooltip Y.
 # gui - config - general
 schematica.config.schematicDirectory=Schematic Directory
 schematica.config.schematicDirectory.tooltip=Schematic directory.
+schematica.config.extraAirBlocks=Extra Air Blocks
+schematica.config.extraAirBlocks.tooltip=Extra blocks to consider as air for the schematic renderer.
 
 # gui - config - server
 schematica.config.printerEnabled=Allow Printer
