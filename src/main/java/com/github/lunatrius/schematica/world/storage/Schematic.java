@@ -24,8 +24,8 @@ public class Schematic implements ISchematic {
     private final int height;
     private final int length;
 
-    public Schematic(final int width, final int height, final int length) {
-        this.icon = DEFAULT_ICON.copy();
+    public Schematic(final ItemStack icon, final int width, final int height, final int length) {
+        this.icon = icon;
         this.blocks = new short[width][height][length];
         this.metadata = new byte[width][height][length];
 
@@ -67,7 +67,7 @@ public class Schematic implements ISchematic {
     @Override
     public TileEntity getTileEntity(final int x, final int y, final int z) {
         for (final TileEntity tileEntity : this.tileEntities) {
-            if (tileEntity.xCoord == x || tileEntity.yCoord == y || tileEntity.zCoord == z) {
+            if (tileEntity.xCoord == x && tileEntity.yCoord == y && tileEntity.zCoord == z) {
                 return tileEntity;
             }
         }
@@ -97,7 +97,7 @@ public class Schematic implements ISchematic {
 
         while (iterator.hasNext()) {
             final TileEntity tileEntity = iterator.next();
-            if (tileEntity.xCoord == x || tileEntity.yCoord == y || tileEntity.zCoord == z) {
+            if (tileEntity.xCoord == x && tileEntity.yCoord == y && tileEntity.zCoord == z) {
                 iterator.remove();
             }
         }
