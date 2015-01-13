@@ -25,7 +25,7 @@ public interface ISchematic {
      * @param y the Y coord in world space.
      * @param z the Z coord in world space.
      * @param block the Block to set
-     * @return true if the block was succesfully set.
+     * @return true if the block was successfully set.
      */
     boolean setBlock(int x, int y, int z, Block block);
 
@@ -37,7 +37,7 @@ public interface ISchematic {
      * @param z the Z coord in world space.
      * @param block the Block to set
      * @param metadata the metadata value to set.
-     * @return true if the block was succesfully set.
+     * @return true if the block was successfully set.
      */
     boolean setBlock(int x, int y, int z, Block block, int metadata);
 
@@ -83,13 +83,15 @@ public interface ISchematic {
     int getBlockMetadata(int x, int y, int z);
 
     /**
-     * Modify the metadata of the block at the requested location.
+     * Modify the metadata of the block at the requested location. Attempting to set metadata outside of the schematic
+     * boundaries will result in no change being made and this method will return false.
      * @param x the X coord in world space.
      * @param y the Y coord in world space.
      * @param z the Z coord in world space.
      * @param metadata the Metadata Value
+     * @return true if the block was successfully set.
      */
-    void setBlockMetadata(int x, int y, int z, int metadata);
+    boolean setBlockMetadata(int x, int y, int z, int metadata);
 
     /**
      * Retrieves the icon that will be used to save the schematic.
