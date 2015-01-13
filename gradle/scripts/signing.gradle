@@ -7,12 +7,12 @@ if (!project.hasProperty('keystore_alias'))
 if (!project.hasProperty('keystore_password'))
     ext.keystore_password = ''
 
-task signJars(dependsOn: ['reobf', 'devJar', 'sourceJar']) {
+task signJars(dependsOn: ['reobf', 'devJar', 'sourceJar', 'apiJar']) {
     inputs.dir jar.destinationDir
     inputs.file keystore_location
     inputs.property 'keystore_alias', keystore_alias
     inputs.property 'keystore_password', keystore_password
-    outputs.dir devJar.destinationDir
+    outputs.dir jar.destinationDir
 
     onlyIf {
         return keystore_location != '.'
