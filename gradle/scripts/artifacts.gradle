@@ -11,17 +11,26 @@ jar {
 
 task devJar(dependsOn: 'classes', type: Jar) {
     from sourceSets.main.output
+    from sourceSets.api.output
     classifier = 'dev'
     manifest commonManifest
 }
 
 task sourceJar(dependsOn: 'classes', type: Jar) {
     from sourceSets.main.allSource
+    from sourceSets.api.allSource
     classifier = 'sources'
+    manifest commonManifest
+}
+
+task apiJar(dependsOn: 'classes', type: Jar) {
+    from sourceSets.api.output
+    classifier = 'api'
     manifest commonManifest
 }
 
 artifacts {
     archives devJar
     archives sourceJar
+    archives apiJar
 }
