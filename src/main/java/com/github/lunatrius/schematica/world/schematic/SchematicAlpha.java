@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
@@ -122,17 +123,9 @@ public class SchematicAlpha extends SchematicFormat {
 
                     String name = GameData.getBlockRegistry().getNameForObject(world.getBlockRaw(x, y, z));
                     if (!mappings.containsKey(name)) {
-                        mappings.put(name, (short)blockId);
+                        mappings.put(name, (short) blockId);
                     }
                 }
-            }
-        }
-
-        for (int i = 0; i < extraBlocksNibble.length; i++) {
-            if (i * 2 + 1 < extraBlocks.length) {
-                extraBlocksNibble[i] = (byte) ((extraBlocks[i * 2 + 0] << 4) | extraBlocks[i * 2 + 1]);
-            } else {
-                extraBlocksNibble[i] = (byte) (extraBlocks[i * 2 + 0] << 4);
             }
         }
 
@@ -155,10 +148,16 @@ public class SchematicAlpha extends SchematicFormat {
             }
         }
 
+        for (int i = 0; i < extraBlocksNibble.length; i++) {
+            if (i * 2 + 1 < extraBlocks.length) {
+                extraBlocksNibble[i] = (byte) ((extraBlocks[i * 2 + 0] << 4) | extraBlocks[i * 2 + 1]);
+            } else {
+                extraBlocksNibble[i] = (byte) (extraBlocks[i * 2 + 0] << 4);
+            }
+        }
 
         PreSchematicSaveEvent event = new PreSchematicSaveEvent(mappings);
-        //TODO: Post event on the bus.
-        //MinecraftForge.EVENT_BUS.post(event);
+        MinecraftForge.EVENT_BUS.post(event);
 
         NBTTagCompound nbtMapping = new NBTTagCompound();
         for (Map.Entry<String, Short> entry : mappings.entrySet()) {
