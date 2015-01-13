@@ -1,15 +1,15 @@
 package com.github.lunatrius.schematica.world.chunk;
 
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 import java.io.File;
 
 public class SchematicContainer {
-    public final SchematicWorld schematic;
+    public final ISchematic schematic;
     public final EntityPlayer player;
     public final World world;
     public final File file;
@@ -32,7 +32,7 @@ public class SchematicContainer {
     public final int chunkCount;
     public int processedChunks;
 
-    public SchematicContainer(SchematicWorld schematic, EntityPlayer player, World world, File file, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+    public SchematicContainer(ISchematic schematic, EntityPlayer player, World world, File file, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
         this.schematic = schematic;
         this.player = player;
         this.world = world;

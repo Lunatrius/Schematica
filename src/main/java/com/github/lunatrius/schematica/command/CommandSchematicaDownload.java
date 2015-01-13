@@ -2,12 +2,12 @@ package com.github.lunatrius.schematica.command;
 
 import com.github.lunatrius.schematica.FileFilterSchematic;
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.handler.DownloadHandler;
 import com.github.lunatrius.schematica.network.transfer.SchematicTransfer;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.util.FileUtils;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -74,7 +74,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
             throw new CommandException(Names.Command.Download.Message.DOWNLOAD_FAILED);
         }
 
-        final SchematicWorld schematic = SchematicFormat.readFromFile(directory, filename);
+        final ISchematic schematic = SchematicFormat.readFromFile(directory, filename);
 
         if (schematic != null) {
             DownloadHandler.INSTANCE.transferMap.put(player, new SchematicTransfer(schematic, filename));

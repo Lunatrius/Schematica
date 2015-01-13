@@ -4,6 +4,7 @@ import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
@@ -210,17 +211,19 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public boolean loadSchematic(EntityPlayer player, File directory, String filename) {
-        SchematicWorld schematic = SchematicFormat.readFromFile(directory, filename);
+        ISchematic schematic = SchematicFormat.readFromFile(directory, filename);
         if (schematic == null) {
             return false;
         }
 
-        Reference.logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", filename, schematic.getWidth(), schematic.getHeight(), schematic.getLength()));
+        SchematicWorld world = new SchematicWorld(schematic);
 
-        Schematica.proxy.setActiveSchematic(schematic);
-        RendererSchematicGlobal.INSTANCE.createRendererSchematicChunks(schematic);
-        SchematicPrinter.INSTANCE.setSchematic(schematic);
-        schematic.isRendering = true;
+        Reference.logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", filename, world.getWidth(), world.getHeight(), world.getLength()));
+
+        Schematica.proxy.setActiveSchematic(world);
+        RendererSchematicGlobal.INSTANCE.createRendererSchematicChunks(world);
+        SchematicPrinter.INSTANCE.setSchematic(world);
+        world.isRendering = true;
 
         return true;
     }

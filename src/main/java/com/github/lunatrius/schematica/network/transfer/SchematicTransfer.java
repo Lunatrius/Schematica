@@ -1,7 +1,7 @@
 package com.github.lunatrius.schematica.network.transfer;
 
+import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.reference.Constants;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 
 public class SchematicTransfer {
     public enum State {
@@ -19,7 +19,7 @@ public class SchematicTransfer {
         }
     }
 
-    public final SchematicWorld schematic;
+    public final ISchematic schematic;
     public final String name;
 
     public final int width;
@@ -34,7 +34,7 @@ public class SchematicTransfer {
     public int baseY = 0;
     public int baseZ = 0;
 
-    public SchematicTransfer(final SchematicWorld schematic, String name) {
+    public SchematicTransfer(final ISchematic schematic, String name) {
         this.schematic = schematic;
         this.name = name;
 

@@ -1,9 +1,11 @@
 package com.github.lunatrius.schematica.world.schematic;
 
+import com.github.lunatrius.schematica.api.ISchematic;
+import com.github.lunatrius.schematica.api.event.PostSchematicCaptureEvent;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -16,11 +18,11 @@ public abstract class SchematicFormat {
     public static final Map<String, SchematicFormat> FORMATS = new HashMap<String, SchematicFormat>();
     public static String FORMAT_DEFAULT;
 
-    public abstract SchematicWorld readFromNBT(NBTTagCompound tagCompound);
+    public abstract ISchematic readFromNBT(NBTTagCompound tagCompound);
 
-    public abstract boolean writeToNBT(NBTTagCompound tagCompound, SchematicWorld world);
+    public abstract boolean writeToNBT(NBTTagCompound tagCompound, ISchematic schematic);
 
-    public static SchematicWorld readFromFile(File file) {
+    public static ISchematic readFromFile(File file) {
         try {
             final NBTTagCompound tagCompound = SchematicUtil.readTagCompoundFromFile(file);
             final String format = tagCompound.getString(Names.NBT.MATERIALS);
@@ -38,15 +40,18 @@ public abstract class SchematicFormat {
         return null;
     }
 
-    public static SchematicWorld readFromFile(File directory, String filename) {
+    public static ISchematic readFromFile(File directory, String filename) {
         return readFromFile(new File(directory, filename));
     }
 
-    public static boolean writeToFile(File file, SchematicWorld world) {
+    public static boolean writeToFile(File file, ISchematic schematic) {
         try {
+            final PostSchematicCaptureEvent event = new PostSchematicCaptureEvent(schematic);
+            MinecraftForge.EVENT_BUS.post(event);
+
             NBTTagCompound tagCompound = new NBTTagCompound();
 
-            FORMATS.get(FORMAT_DEFAULT).writeToNBT(tagCompound, world);
+            FORMATS.get(FORMAT_DEFAULT).writeToNBT(tagCompound, schematic);
 
             DataOutputStream dataOutputStream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 
@@ -64,8 +69,8 @@ public abstract class SchematicFormat {
         return false;
     }
 
-    public static boolean writeToFile(File directory, String filename, SchematicWorld world) {
-        return writeToFile(new File(directory, filename), world);
+    public static boolean writeToFile(File directory, String filename, ISchematic schematic) {
+        return writeToFile(new File(directory, filename), schematic);
     }
 
     static {
