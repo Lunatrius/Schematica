@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica.proxy;
 
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.core.version.VersionChecker;
+import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.command.CommandSchematicaList;
 import com.github.lunatrius.schematica.command.CommandSchematicaRemove;
 import com.github.lunatrius.schematica.command.CommandSchematicaSave;
@@ -15,6 +16,7 @@ import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.chunk.SchematicContainer;
 import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
+import com.github.lunatrius.schematica.world.storage.Schematic;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -70,7 +72,7 @@ public abstract class CommonProxy {
         this.isLoadEnabled = true;
     }
 
-    public void copyChunkToSchematic(final SchematicWorld schematic, final World world, final int chunkX, final int chunkZ, final int minX, final int maxX, final int minY, final int maxY, final int minZ, final int maxZ) {
+    public void copyChunkToSchematic(final ISchematic schematic, final World world, final int chunkX, final int chunkZ, final int minX, final int maxX, final int minY, final int maxY, final int minZ, final int maxZ) {
         final int localMinX = minX < (chunkX << 4) ? 0 : (minX & 15);
         final int localMaxX = maxX > ((chunkX << 4) + 15) ? 15 : (maxX & 15);
         final int localMinZ = minZ < (chunkZ << 4) ? 0 : (minZ & 15);
@@ -136,7 +138,7 @@ public abstract class CommonProxy {
             final short height = (short) (Math.abs(maxY - minY) + 1);
             final short length = (short) (Math.abs(maxZ - minZ) + 1);
 
-            final SchematicWorld schematic = new SchematicWorld(SchematicUtil.getIconFromName(iconName), width, height, length);
+            final ISchematic schematic = new Schematic(SchematicUtil.getIconFromName(iconName), width, height, length);
             final SchematicContainer container = new SchematicContainer(schematic, player, world, new File(directory, filename), minX, maxX, minY, maxY, minZ, maxZ);
             QueueTickHandler.INSTANCE.queueSchematic(container);
 

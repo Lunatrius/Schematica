@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.handler;
 
+import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.network.PacketHandler;
 import com.github.lunatrius.schematica.network.message.MessageDownloadBegin;
 import com.github.lunatrius.schematica.network.message.MessageDownloadChunk;
@@ -7,7 +8,6 @@ import com.github.lunatrius.schematica.network.message.MessageDownloadEnd;
 import com.github.lunatrius.schematica.network.transfer.SchematicTransfer;
 import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class DownloadHandler {
     public static final DownloadHandler INSTANCE = new DownloadHandler();
 
-    public SchematicWorld schematic = null;
+    public ISchematic schematic = null;
 
     public final Map<EntityPlayerMP, SchematicTransfer> transferMap = new LinkedHashMap<EntityPlayerMP, SchematicTransfer>();
 

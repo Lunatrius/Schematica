@@ -1,9 +1,9 @@
 package com.github.lunatrius.schematica.network.message;
 
+import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.handler.DownloadHandler;
 import com.github.lunatrius.schematica.nbt.NBTHelper;
 import com.github.lunatrius.schematica.reference.Constants;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -34,7 +34,7 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
     public MessageDownloadChunk() {
     }
 
-    public MessageDownloadChunk(SchematicWorld schematic, int baseX, int baseY, int baseZ) {
+    public MessageDownloadChunk(ISchematic schematic, int baseX, int baseY, int baseZ) {
         this.baseX = baseX;
         this.baseY = baseY;
         this.baseZ = baseZ;
@@ -47,7 +47,9 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
         for (int x = 0; x < Constants.SchematicChunk.WIDTH; x++) {
             for (int y = 0; y < Constants.SchematicChunk.HEIGHT; y++) {
                 for (int z = 0; z < Constants.SchematicChunk.LENGTH; z++) {
-                    this.blocks[x][y][z] = (short) schematic.getBlockIdRaw(baseX + x, baseY + y, baseZ + z);
+                    final Block block = schematic.getBlock(baseX + x, baseY + y, baseZ + z);
+                    final int id = BLOCK_REGISTRY.getId(block);
+                    this.blocks[x][y][z] = (short) id;
                     this.metadata[x][y][z] = (byte) schematic.getBlockMetadata(baseX + x, baseY + y, baseZ + z);
                     final TileEntity tileEntity = schematic.getTileEntity(baseX + x, baseY + y, baseZ + z);
                     if (tileEntity != null) {
@@ -58,7 +60,7 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
         }
     }
 
-    private void copyToSchematic(final SchematicWorld schematic) {
+    private void copyToSchematic(final ISchematic schematic) {
         for (int x = 0; x < Constants.SchematicChunk.WIDTH; x++) {
             for (int y = 0; y < Constants.SchematicChunk.HEIGHT; y++) {
                 for (int z = 0; z < Constants.SchematicChunk.LENGTH; z++) {

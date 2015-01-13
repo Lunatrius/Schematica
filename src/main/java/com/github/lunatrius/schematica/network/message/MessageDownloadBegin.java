@@ -1,7 +1,8 @@
 package com.github.lunatrius.schematica.network.message;
 
+import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.handler.DownloadHandler;
-import com.github.lunatrius.schematica.world.SchematicWorld;
+import com.github.lunatrius.schematica.world.storage.Schematic;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
@@ -18,7 +19,7 @@ public class MessageDownloadBegin implements IMessage, IMessageHandler<MessageDo
     public MessageDownloadBegin() {
     }
 
-    public MessageDownloadBegin(SchematicWorld schematic) {
+    public MessageDownloadBegin(ISchematic schematic) {
         this.icon = schematic.getIcon();
         this.width = schematic.getWidth();
         this.height = schematic.getHeight();
@@ -43,7 +44,7 @@ public class MessageDownloadBegin implements IMessage, IMessageHandler<MessageDo
 
     @Override
     public IMessage onMessage(MessageDownloadBegin message, MessageContext ctx) {
-        DownloadHandler.INSTANCE.schematic = new SchematicWorld(message.icon, (short) message.width, (short) message.height, (short) message.length);
+        DownloadHandler.INSTANCE.schematic = new Schematic(message.icon, message.width, message.height, message.length);
 
         return new MessageDownloadBeginAck();
     }

@@ -2,12 +2,12 @@ package com.github.lunatrius.schematica.world;
 
 import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.core.util.vector.Vector3i;
+import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.chunk.ChunkProviderSchematic;
 import com.github.lunatrius.schematica.world.storage.SaveHandlerSchematic;
-import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
-import cpw.mods.fml.common.registry.GameData;
+import com.github.lunatrius.schematica.world.storage.Schematic;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -34,11 +34,9 @@ import net.minecraftforge.common.util.ForgeDirection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 public class SchematicWorld extends World {
-    private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
     private static final WorldSettings WORLD_SETTINGS = new WorldSettings(0, WorldSettings.GameType.CREATIVE, false, false, WorldType.FLAT);
     private static final Comparator<ItemStack> BLOCK_COMPARATOR = new Comparator<ItemStack>() {
         @Override
@@ -49,137 +47,55 @@ public class SchematicWorld extends World {
 
     public static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.grass);
 
-    private ItemStack icon;
-    private short[][][] blocks;
-    private byte[][][] metadata;
-    private final List<TileEntity> tileEntities = new ArrayList<TileEntity>();
-    private short width;
-    private short height;
-    private short length;
+    private ISchematic schematic;
 
     public final Vector3i position = new Vector3i();
     public boolean isRendering;
     public boolean isRenderingLayer;
     public int renderingLayer;
 
-    public SchematicWorld() {
+    public SchematicWorld(ISchematic schematic) {
         super(new SaveHandlerSchematic(), "Schematica", WORLD_SETTINGS, null, null);
-        this.icon = SchematicWorld.DEFAULT_ICON.copy();
-        this.blocks = null;
-        this.metadata = null;
-        this.tileEntities.clear();
-        this.width = 0;
-        this.height = 0;
-        this.length = 0;
+        this.schematic = schematic;
+
+        for (TileEntity tileEntity : schematic.getTileEntities()) {
+            initializeTileEntity(tileEntity);
+        }
 
         this.isRendering = false;
         this.isRenderingLayer = false;
         this.renderingLayer = 0;
     }
 
-    public SchematicWorld(ItemStack icon, short[][][] blocks, byte[][][] metadata, List<TileEntity> tileEntities, short width, short height, short length) {
-        this();
-
-        this.icon = icon != null ? icon : SchematicWorld.DEFAULT_ICON.copy();
-
-        this.blocks = blocks != null ? blocks.clone() : new short[width][height][length];
-        this.metadata = metadata != null ? metadata.clone() : new byte[width][height][length];
-
-        this.width = width;
-        this.height = height;
-        this.length = length;
-
-        if (tileEntities != null) {
-            this.tileEntities.addAll(tileEntities);
-            for (TileEntity tileEntity : this.tileEntities) {
-                tileEntity.setWorldObj(this);
-                tileEntity.getBlockType();
-                try {
-                    tileEntity.validate();
-                } catch (Exception e) {
-                    Reference.logger.error(String.format("TileEntity validation for %s failed!", tileEntity.getClass()), e);
-                }
-            }
-        }
-    }
-
-    public SchematicWorld(ItemStack icon, short width, short height, short length) {
-        this(icon, null, null, null, width, height, length);
-    }
-
-    public int getBlockIdRaw(int x, int y, int z) {
-        if (x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length) {
-            return 0;
-        }
-        return this.blocks[x][y][z];
-    }
-
-    private int getBlockId(int x, int y, int z) {
-        if (this.isRenderingLayer && this.renderingLayer != y) {
-            return 0;
-        }
-        return getBlockIdRaw(x, y, z);
-    }
-
-    public Block getBlockRaw(int x, int y, int z) {
-        return BLOCK_REGISTRY.getObjectById(getBlockIdRaw(x, y, z));
-    }
-
     @Override
     public Block getBlock(int x, int y, int z) {
-        return BLOCK_REGISTRY.getObjectById(getBlockId(x, y, z));
-    }
+        if (this.isRenderingLayer && this.renderingLayer != y) {
+            return Blocks.air;
+        }
 
-    public boolean setBlock(int x, int y, int z, Block block, int metadata) {
-        return setBlock(x, y, z, block, metadata, 0);
+        return this.schematic.getBlock(x, y, z);
     }
 
     @Override
     public boolean setBlock(int x, int y, int z, Block block, int metadata, int flags) {
-        if (x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length) {
-            return false;
-        }
-
-        final int id = BLOCK_REGISTRY.getId(block);
-        if (id == -1) {
-            return false;
-        }
-
-        this.blocks[x][y][z] = (short) id;
-        this.metadata[x][y][z] = (byte) metadata;
-        return true;
+        return this.schematic.setBlock(x, y, z, block, metadata);
     }
 
     @Override
     public TileEntity getTileEntity(int x, int y, int z) {
-        for (TileEntity tileEntity : this.tileEntities) {
-            if (tileEntity.xCoord == x && tileEntity.yCoord == y && tileEntity.zCoord == z) {
-                return tileEntity;
-            }
-        }
-        return null;
+        return this.schematic.getTileEntity(x, y, z);
     }
 
     @Override
     public void setTileEntity(int x, int y, int z, TileEntity tileEntity) {
-        if (x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length) {
-            return;
-        }
-
-        removeTileEntity(x, y, z);
-
-        this.tileEntities.add(tileEntity);
+        this.schematic.setTileEntity(x, y, z, tileEntity);
+        initializeTileEntity(tileEntity);
+        System.out.println("BUGGER!");
     }
 
     @Override
     public void removeTileEntity(int x, int y, int z) {
-        final Iterator<TileEntity> iterator = this.tileEntities.iterator();
-        while (iterator.hasNext()) {
-            final TileEntity tileEntity = iterator.next();
-            if (tileEntity.xCoord == x && tileEntity.yCoord == y && tileEntity.zCoord == z) {
-                iterator.remove();
-            }
-        }
+        this.schematic.removeTileEntity(x, y, z);
     }
 
     @SideOnly(Side.CLIENT)
@@ -195,10 +111,7 @@ public class SchematicWorld extends World {
 
     @Override
     public int getBlockMetadata(int x, int y, int z) {
-        if (x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length) {
-            return 0;
-        }
-        return this.metadata[x][y][z];
+        return this.schematic.getBlockMetadata(x, y, z);
     }
 
     @Override
@@ -233,16 +146,16 @@ public class SchematicWorld extends World {
     }
 
     public int getWidth() {
-        return this.width;
+        return this.schematic.getWidth();
     }
 
     public int getLength() {
-        return this.length;
+        return this.schematic.getLength();
     }
 
     @Override
     public int getHeight() {
-        return this.height;
+        return this.schematic.getHeight();
     }
 
     @SideOnly(Side.CLIENT)
@@ -268,8 +181,7 @@ public class SchematicWorld extends World {
 
     @Override
     public boolean setBlockMetadataWithNotify(int x, int y, int z, int metadata, int flag) {
-        this.metadata[x][y][z] = (byte) (metadata & 0xFF);
-        return true;
+        return this.schematic.setBlockMetadata(x, y, z, metadata);
     }
 
     @Override
@@ -286,29 +198,26 @@ public class SchematicWorld extends World {
         return block.isSideSolid(this, x, y, z, side);
     }
 
-    public void setIcon(ItemStack icon) {
-        this.icon = icon;
-    }
-
-    public ItemStack getIcon() {
-        return this.icon;
-    }
-
-    public void setTileEntities(List<TileEntity> tileEntities) {
-        this.tileEntities.clear();
-        this.tileEntities.addAll(tileEntities);
-        for (TileEntity tileEntity : this.tileEntities) {
-            tileEntity.setWorldObj(this);
-            try {
-                tileEntity.validate();
-            } catch (Exception e) {
-                Reference.logger.error(String.format("TileEntity validation for %s failed!", tileEntity.getClass()), e);
-            }
+    public void initializeTileEntity(TileEntity tileEntity) {
+        tileEntity.setWorldObj(this);
+        tileEntity.getBlockType();
+        try {
+            tileEntity.validate();
+        } catch (Exception e) {
+            Reference.logger.error(String.format("TileEntity validation for %s failed!", tileEntity.getClass()), e);
         }
     }
 
+    public void setIcon(ItemStack icon) {
+        this.schematic.setIcon(icon);
+    }
+
+    public ItemStack getIcon() {
+        return this.schematic.getIcon();
+    }
+
     public List<TileEntity> getTileEntities() {
-        return this.tileEntities;
+        return this.schematic.getTileEntities();
     }
 
     public List<ItemStack> getBlockList() {
@@ -319,16 +228,20 @@ public class SchematicWorld extends World {
         Item item;
         ItemStack itemStack;
 
-        for (y = 0; y < this.height; y++) {
+        final int width = this.schematic.getWidth();
+        final int height = this.schematic.getHeight();
+        final int length = this.schematic.getLength();
+
+        for (y = 0; y < height; y++) {
             if (this.isRenderingLayer && y != this.renderingLayer) {
                 continue;
             }
 
-            for (z = 0; z < this.length; z++) {
-                for (x = 0; x < this.width; x++) {
-                    block = this.getBlock(x, y, z);
+            for (z = 0; z < length; z++) {
+                for (x = 0; x < width; x++) {
+                    block = getBlock(x, y, z);
                     item = Item.getItemFromBlock(block);
-                    itemDamage = this.metadata[x][y][z];
+                    itemDamage = getBlockMetadata(x, y, z);
 
                     if (block == null || block == Blocks.air) {
                         continue;
@@ -408,7 +321,7 @@ public class SchematicWorld extends World {
     }
 
     public void refreshChests() {
-        for (TileEntity tileEntity : this.tileEntities) {
+        for (TileEntity tileEntity : this.schematic.getTileEntities()) {
             if (tileEntity instanceof TileEntityChest) {
                 TileEntityChest tileEntityChest = (TileEntityChest) tileEntity;
                 tileEntityChest.adjacentChestChecked = false;
@@ -463,47 +376,49 @@ public class SchematicWorld extends World {
     }
 
     public void rotate() {
-        short[][][] localBlocks = new short[this.length][this.height][this.width];
-        byte[][][] localMetadata = new byte[this.length][this.height][this.width];
+        final ItemStack icon = this.schematic.getIcon();
+        final int width = this.schematic.getWidth();
+        final int height = this.schematic.getHeight();
+        final int length = this.schematic.getLength();
 
-        for (int y = 0; y < this.height; y++) {
-            for (int z = 0; z < this.length; z++) {
-                for (int x = 0; x < this.width; x++) {
+        final ISchematic schematicRotated = new Schematic(icon, length, height, width);
+
+        for (int y = 0; y < height; y++) {
+            for (int z = 0; z < length; z++) {
+                for (int x = 0; x < width; x++) {
                     try {
-                        getBlock(x, y, this.length - 1 - z).rotateBlock(this, x, y, this.length - 1 - z, ForgeDirection.UP);
+                        getBlock(x, y, length - 1 - z).rotateBlock(this, x, y, length - 1 - z, ForgeDirection.UP);
                     } catch (Exception e) {
                         Reference.logger.debug("Failed to rotate block!", e);
                     }
-                    localBlocks[z][y][x] = this.blocks[x][y][this.length - 1 - z];
-                    localMetadata[z][y][x] = this.metadata[x][y][this.length - 1 - z];
+
+                    final Block block = getBlock(x, y, length - 1 - z);
+                    final int metadata = getBlockMetadata(x, y, length - 1 - z);
+                    schematicRotated.setBlock(z, y, x, block, metadata);
                 }
             }
         }
 
-        this.blocks = localBlocks;
-        this.metadata = localMetadata;
-
-        int coord;
-        for (TileEntity tileEntity : this.tileEntities) {
-            coord = tileEntity.zCoord;
+        for (TileEntity tileEntity : this.schematic.getTileEntities()) {
+            final int coord = tileEntity.zCoord;
             tileEntity.zCoord = tileEntity.xCoord;
-            tileEntity.xCoord = this.length - 1 - coord;
-            tileEntity.blockMetadata = this.metadata[tileEntity.xCoord][tileEntity.yCoord][tileEntity.zCoord];
+            tileEntity.xCoord = length - 1 - coord;
+            tileEntity.blockMetadata = schematicRotated.getBlockMetadata(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
 
             if (tileEntity instanceof TileEntitySkull && tileEntity.blockMetadata == 0x1) {
                 TileEntitySkull skullTileEntity = (TileEntitySkull) tileEntity;
                 skullTileEntity.func_145903_a((skullTileEntity.func_145906_b() + 12) & 15);
             }
+
+            schematicRotated.setTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity);
         }
 
-        short tmp = this.width;
-        this.width = this.length;
-        this.length = tmp;
+        this.schematic = schematicRotated;
 
         refreshChests();
     }
 
     public Vector3f dimensions() {
-        return new Vector3f(this.width, this.height, this.length);
+        return new Vector3f(this.schematic.getWidth(), this.schematic.getHeight(), this.schematic.getLength());
     }
 }
