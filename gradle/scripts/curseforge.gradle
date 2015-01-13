@@ -8,6 +8,6 @@ if (project.hasProperty('api_key_curseforge') && project.hasProperty('extra_curs
         projectId = project.extra_curseforge_id
         changelog = ''
 
-        additionalArtifact devJar, sourceJar
+        additionalArtifact devJar, sourceJar, apiJar
     }
 }
