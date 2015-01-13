@@ -113,12 +113,13 @@ public class Schematic implements ISchematic {
     }
 
     @Override
-    public void setBlockMetadata(final int x, final int y, final int z, final int metadata) {
+    public boolean setBlockMetadata(final int x, final int y, final int z, final int metadata) {
         if (!isValid(x, y, z)) {
-            return;
+            return false;
         }
 
         this.metadata[x][y][z] = (byte) (metadata & 0x0F);
+        return true;
     }
 
     @Override
