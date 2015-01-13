@@ -9,17 +9,12 @@ import cpw.mods.fml.common.eventhandler.Event;
  * Register to this event using MinecraftForge.EVENT_BUS
  */
 public class PostSchematicCaptureEvent extends Event {
-    private final ISchematic schematic;
+    /**
+     * The schematic that was just generated.
+     */
+    public final ISchematic schematic;
 
     public PostSchematicCaptureEvent(ISchematic schematic) {
         this.schematic = schematic;
-    }
-
-    /**
-     * The collected schematic
-     * @return the schematic that was just generated.
-     */
-    public ISchematic getSchematic() {
-        return schematic;
     }
 }
