@@ -5,6 +5,7 @@ def commonManifest = {
 }
 
 jar {
+    from sourceSets.api.output
     classifier = project.hasProperty('extra_classifier') ? project.extra_classifier : 'universal'
     manifest commonManifest
 }
