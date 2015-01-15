@@ -8,7 +8,7 @@ import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
-import com.github.lunatrius.schematica.handler.client.KeyInputHandler;
+import com.github.lunatrius.schematica.handler.client.InputHandler;
 import com.github.lunatrius.schematica.handler.client.RenderTickHandler;
 import com.github.lunatrius.schematica.handler.client.TickHandler;
 import com.github.lunatrius.schematica.reference.Reference;
@@ -158,7 +158,7 @@ public class ClientProxy extends CommonProxy {
             prop.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
         }
 
-        for (KeyBinding keyBinding : KeyInputHandler.KEY_BINDINGS) {
+        for (KeyBinding keyBinding : InputHandler.KEY_BINDINGS) {
             ClientRegistry.registerKeyBinding(keyBinding);
         }
     }
@@ -167,7 +167,7 @@ public class ClientProxy extends CommonProxy {
     public void init(FMLInitializationEvent event) {
         super.init(event);
 
-        FMLCommonHandler.instance().bus().register(KeyInputHandler.INSTANCE);
+        FMLCommonHandler.instance().bus().register(InputHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(TickHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(RenderTickHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
