@@ -13,7 +13,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -25,8 +24,8 @@ import org.lwjgl.input.Keyboard;
 import static cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
 import static cpw.mods.fml.common.gameevent.InputEvent.MouseInputEvent;
 
-public class KeyInputHandler {
-    public static final KeyInputHandler INSTANCE = new KeyInputHandler();
+public class InputHandler {
+    public static final InputHandler INSTANCE = new InputHandler();
 
     private static final KeyBinding KEY_BINDING_LOAD = new KeyBinding(Names.Keys.LOAD, Keyboard.KEY_DIVIDE, Names.Keys.CATEGORY);
     private static final KeyBinding KEY_BINDING_SAVE = new KeyBinding(Names.Keys.SAVE, Keyboard.KEY_MULTIPLY, Names.Keys.CATEGORY);
@@ -40,37 +39,36 @@ public class KeyInputHandler {
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
 
-    private KeyInputHandler() {}
+    private InputHandler() {}
 
     @SubscribeEvent
     public void onKeyInput(KeyInputEvent event) {
-        for (KeyBinding keyBinding : KEY_BINDINGS) {
-            if (keyBinding.isPressed()) {
-                if (this.minecraft.currentScreen == null) {
-                    GuiScreen guiScreen = null;
-                    if (keyBinding == KEY_BINDING_LOAD) {
-                        guiScreen = new GuiSchematicLoad(this.minecraft.currentScreen);
-                    } else if (keyBinding == KEY_BINDING_SAVE) {
-                        guiScreen = new GuiSchematicSave(this.minecraft.currentScreen);
-                    } else if (keyBinding == KEY_BINDING_CONTROL) {
-                        guiScreen = new GuiSchematicControl(this.minecraft.currentScreen);
-                    } else if (keyBinding == KEY_BINDING_LAYER_INC) {
-                        final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
-                        if (schematic != null && schematic.isRenderingLayer) {
-                            schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer + 1, 0, schematic.getHeight() - 1);
-                            RendererSchematicGlobal.INSTANCE.refresh();
-                        }
-                    } else if (keyBinding == KEY_BINDING_LAYER_DEC) {
-                        final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
-                        if (schematic != null && schematic.isRenderingLayer) {
-                            schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer - 1, 0, schematic.getHeight() - 1);
-                            RendererSchematicGlobal.INSTANCE.refresh();
-                        }
-                    }
+        if (this.minecraft.currentScreen == null) {
+            if (KEY_BINDING_LOAD.isPressed()) {
+                this.minecraft.displayGuiScreen(new GuiSchematicLoad(this.minecraft.currentScreen));
+            }
 
-                    if (guiScreen != null) {
-                        this.minecraft.displayGuiScreen(guiScreen);
-                    }
+            if (KEY_BINDING_SAVE.isPressed()) {
+                this.minecraft.displayGuiScreen(new GuiSchematicSave(this.minecraft.currentScreen));
+            }
+
+            if (KEY_BINDING_CONTROL.isPressed()) {
+                this.minecraft.displayGuiScreen(new GuiSchematicControl(this.minecraft.currentScreen));
+            }
+
+            if (KEY_BINDING_LAYER_INC.isPressed()) {
+                final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+                if (schematic != null && schematic.isRenderingLayer) {
+                    schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer + 1, 0, schematic.getHeight() - 1);
+                    RendererSchematicGlobal.INSTANCE.refresh();
+                }
+            }
+
+            if (KEY_BINDING_LAYER_DEC.isPressed()) {
+                final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+                if (schematic != null && schematic.isRenderingLayer) {
+                    schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer - 1, 0, schematic.getHeight() - 1);
+                    RendererSchematicGlobal.INSTANCE.refresh();
                 }
             }
         }
