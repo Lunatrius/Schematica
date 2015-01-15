@@ -19,8 +19,6 @@ schematica.gui.operations=Aktionen
 schematica.gui.point.red=Roter Punkt
 schematica.gui.point.blue=Blauer Punkt
 schematica.gui.saveselection=Auswahl als Schematic speichern
-# schematica.gui.on=ON
-# schematica.gui.off=OFF
 schematica.gui.x=X:
 schematica.gui.y=Y:
 schematica.gui.z=Z:
@@ -31,38 +29,21 @@ schematica.gui.printer=Drucker
 schematica.gui.unknownblock=Unbekannter Block
 
 # gui - config - categories
-# schematica.config.category.render=Rendering
 schematica.config.category.render.tooltip=Render Einstellungen
 schematica.config.category.printer=Drucker
 schematica.config.category.printer.tooltip=Drucker Einstellungen
-# schematica.config.category.tooltip=Tooltip
 schematica.config.category.tooltip.tooltip=Tooltip Einstellungen
 schematica.config.category.general=Generell
 schematica.config.category.general.tooltip=Generelle Einstellungen
-# schematica.config.category.server=Server
 schematica.config.category.server.tooltip=Einstellungen am Server
 
 # gui - config - render
 schematica.config.alphaEnabled=Alpha eingeschalten
 schematica.config.alphaEnabled.tooltip=Aktiviert transparente Blöcke.
-# schematica.config.alpha=Alpha
-# schematica.config.alpha.tooltip=Alpha value used when rendering the schematic (1.0 = opaque, 0.5 = half transparent, 0.0 = transparent).
-# schematica.config.highlight=Highlight Blocks
-# schematica.config.highlight.tooltip=Highlight invalid placed blocks and to be placed blocks.
-# schematica.config.highlightAir=Highlight Air
-# schematica.config.highlightAir.tooltip=Highlight blocks that should be air.
-# schematica.config.blockDelta=Block Delta
-# schematica.config.blockDelta.tooltip=Delta value used for highlighting (if you experience z-fighting increase this).
-# schematica.config.drawQuads=Draw Quads
-# schematica.config.drawQuads.tooltip=Draw surface areas.
-# schematica.config.drawLines=Draw Lines
-# schematica.config.drawLines.tooltip=Draw outlines.
 
 # gui - config - printer
 schematica.config.placeDelay=Abstand zwischen Blockplatzierung
 schematica.config.placeDelay.tooltip=Abstan (in ticks) in der ein Spieler Blöcke setzen kann.
-# schematica.config.timeout=Timeout
-# schematica.config.timeout.tooltip=Timeout before re-trying failed blocks.
 schematica.config.placeInstantly=Blöcke sofort setzen
 schematica.config.placeInstantly.tooltip=Platziere alle Blöcke innerhalb eines Ticks.
 schematica.config.destroyBlocks=Zerstöre Blöcke
@@ -77,10 +58,6 @@ schematica.config.swapSlots.tooltip=Der Drucker wird Items aus deinem Inventar v
 # gui - config - tooltip
 schematica.config.tooltipEnabled=Tooltip anschalten
 schematica.config.tooltipEnabled.tooltip=Zeigt einen Tooltip an, wenn man mit der Maus über einen Block fährt.
-# schematica.config.tooltipX=Tooltip X
-# schematica.config.tooltipX.tooltip=Relative tooltip X.
-# schematica.config.tooltipY=Tooltip Y
-# schematica.config.tooltipY.tooltip=Relative tooltip Y.
 
 # gui - config - general
 schematica.config.schematicDirectory=Schematic Verzeichnis
@@ -95,13 +72,11 @@ schematica.config.loadEnabled=Laden erlauben
 schematica.config.loadEnabled.tooltip=Erlaubt es Spielern, Schematics zu laden.
 
 # keys
-# schematica.key.category=Schematica
 schematica.key.load=Schematic laden
 schematica.key.save=Schematic speichern
 schematica.key.control=Schematic verändern
 
 # commands - save
-# schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name>
 schematica.command.save.playersOnly=Nur Spieler können dieses Kommando ausführen.
 schematica.command.save.started=%d Chunks werden in %s gespeichert.
 schematica.command.save.saveSucceeded=%s wurde erfolgreich gespeichert.
@@ -110,7 +85,6 @@ schematica.command.save.quotaExceeded=Du kannst keine Schematics mehr speichern,
 schematica.command.save.playerSchematicDirUnavailable=Es gab ein Problem, deine Schematic zu speichern. Bitte kontaktiere umgehend einen Server Administrator.
 
 # commands - list
-# schematica.command.list.usage=/schematicaList [page]
 schematica.command.list.notAvailable=Dir kann keine Liste deiner Schematics angezeigt werden.
 schematica.command.list.remove=Entfernen
 schematica.command.list.download=Herunterladen
@@ -119,13 +93,5 @@ schematica.command.list.noSuchPage=Keine Seite
 schematica.command.list.noSchematics=Es sind keine Schematics verfügbar.
 
 # commands - remove
-# schematica.command.remove.usage=/schematicaRemove <name>
-# schematica.command.remove.schematicRemoved=Schematic "%s" removed.
-# schematica.command.remove.schematicNotFound=Schematic "%s" could not be found.
-# schematica.command.remove.areYouSure=Are you sure?
 
 # commands - download
-# schematica.command.download.usage=/schematicaDownload <name>
-# schematica.command.download.started=Started downloading %s...
-# schematica.command.download.downloadSucceeded=Successfully downloaded %s.
-# schematica.command.download.downloadFail=Download failed.

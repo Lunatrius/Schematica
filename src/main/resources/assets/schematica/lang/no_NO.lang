@@ -19,8 +19,6 @@ schematica.gui.operations=Operasjoner
 schematica.gui.point.red=Rødt punkt
 schematica.gui.point.blue=Blått punkt
 schematica.gui.saveselection=Lagre utvalget som en tegning
-# schematica.gui.on=ON
-# schematica.gui.off=OFF
 schematica.gui.x=X:
 schematica.gui.y=Y:
 schematica.gui.z=Z:
@@ -28,19 +26,14 @@ schematica.gui.materials=Materialer
 schematica.gui.materialname=Materiale
 schematica.gui.materialamount=Mengde
 schematica.gui.printer=Printer
-# schematica.gui.unknownblock=Unknown Block
 
 # gui - config - categories
 schematica.config.category.render=Gjengivelse
 schematica.config.category.render.tooltip=Gjengivelsesrelaterte innstillinger.
 schematica.config.category.printer=Printer
 schematica.config.category.printer.tooltip=Printer-relaterte innstillinger.
-# schematica.config.category.tooltip=Tooltip
-# schematica.config.category.tooltip.tooltip=Tooltip related settings.
 schematica.config.category.general=Generelt
 schematica.config.category.general.tooltip=Generelle innstillinger.
-# schematica.config.category.server=Server
-# schematica.config.category.server.tooltip=Server-side settings.
 
 # gui - config - render
 schematica.config.alphaEnabled=Alpha aktivert
@@ -65,34 +58,16 @@ schematica.config.timeout=Tidsavbrudd
 schematica.config.timeout.tooltip=Tidsavbrudd før nytt forsøk på å plassere blokker.
 schematica.config.placeInstantly=Plasser umiddelbart
 schematica.config.placeInstantly.tooltip=Plasser alle blokker som kan bli plassert i ett tikk.
-# schematica.config.destroyBlocks=Destroy Blocks
-# schematica.config.destroyBlocks.tooltip=The printer will destroy blocks (creative mode only).
-# schematica.config.destroyInstantly=Destroy Instantly
-# schematica.config.destroyInstantly.tooltip=Destroy all blocks that can be destroyed in one tick.
 schematica.config.placeAdjacent=Plasser kun tilstøtende
 schematica.config.placeAdjacent.tooltip=Plasser kun blokker hvis det er en tilstøtende blokk ved siden av dem.
-# schematica.config.swapSlots=Swap Slots
-# schematica.config.swapSlots.tooltip=The printer will use these slots to swap out items in the inventory.
 
 # gui - config - tooltip
-# schematica.config.tooltipEnabled=Tooltip Enabled
-# schematica.config.tooltipEnabled.tooltip=Display a tooltip when hovering over blocks in a schematic.
-# schematica.config.tooltipX=Tooltip X
-# schematica.config.tooltipX.tooltip=Relative tooltip X.
-# schematica.config.tooltipY=Tooltip Y
-# schematica.config.tooltipY.tooltip=Relative tooltip Y.
 
 # gui - config - general
 schematica.config.schematicDirectory=Tegningskatalog
 schematica.config.schematicDirectory.tooltip=Tegningskatalog.
 
 # gui - config - server
-# schematica.config.printerEnabled=Allow Printer
-# schematica.config.printerEnabled.tooltip=Allow players to use the printer.
-# schematica.config.saveEnabled=Allow Saving
-# schematica.config.saveEnabled.tooltip=Allow players to save schematics.
-# schematica.config.loadEnabled=Allow Loading
-# schematica.config.loadEnabled.tooltip=Allow players to load schematics.
 
 # keys
 schematica.key.category=Schematica
@@ -101,31 +76,9 @@ schematica.key.save=Lagre tegning
 schematica.key.control=Manipuler tegning
 
 # commands - save
-# schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name>
-# schematica.command.save.playersOnly=This command can only be used by players.
-# schematica.command.save.started=Started saving %d chunks into %s.
-# schematica.command.save.saveSucceeded=Successfully saved %s.
-# schematica.command.save.saveFailed=There was a problem saving the schematic %s.
-# schematica.command.save.quotaExceeded=You have exceeded your quota on the server. Please use /schematicaList and /schematicaRemove to remove some old schematics.
-# schematica.command.save.playerSchematicDirUnavailable=There was a problem on the server and your schematic was not saved. Please contact the server administrator.
 
 # commands - list
-# schematica.command.list.usage=/schematicaList [page]
-# schematica.command.list.notAvailable=There was a problem retrieving your list of schematics.
-# schematica.command.list.remove=Remove
-# schematica.command.list.download=Download
-# schematica.command.list.header=--- Showing schematics page %d of %d ---
-# schematica.command.list.noSuchPage=No such page
-# schematica.command.list.noSchematics=You have no schematics available.
 
 # commands - remove
-# schematica.command.remove.usage=/schematicaRemove <name>
-# schematica.command.remove.schematicRemoved=Schematic "%s" removed.
-# schematica.command.remove.schematicNotFound=Schematic "%s" could not be found.
-# schematica.command.remove.areYouSure=Are you sure?
 
 # commands - download
-# schematica.command.download.usage=/schematicaDownload <name>
-# schematica.command.download.started=Started downloading %s...
-# schematica.command.download.downloadSucceeded=Successfully downloaded %s.
-# schematica.command.download.downloadFail=Download failed.
