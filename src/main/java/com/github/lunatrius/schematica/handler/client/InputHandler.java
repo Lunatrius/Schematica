@@ -10,6 +10,7 @@ import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -20,9 +21,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.ForgeHooks;
 import org.lwjgl.input.Keyboard;
-
-import static cpw.mods.fml.common.gameevent.InputEvent.KeyInputEvent;
-import static cpw.mods.fml.common.gameevent.InputEvent.MouseInputEvent;
 
 public class InputHandler {
     public static final InputHandler INSTANCE = new InputHandler();
@@ -42,7 +40,7 @@ public class InputHandler {
     private InputHandler() {}
 
     @SubscribeEvent
-    public void onKeyInput(KeyInputEvent event) {
+    public void onKeyInput(InputEvent event) {
         if (this.minecraft.currentScreen == null) {
             if (KEY_BINDING_LOAD.isPressed()) {
                 this.minecraft.displayGuiScreen(new GuiSchematicLoad(this.minecraft.currentScreen));
@@ -71,11 +69,12 @@ public class InputHandler {
                     RendererSchematicGlobal.INSTANCE.refresh();
                 }
             }
+
+            handlePickBlock();
         }
     }
 
-    @SubscribeEvent
-    public void onMouseInput(MouseInputEvent event) {
+    private void handlePickBlock() {
         final KeyBinding keyPickBlock = this.minecraft.gameSettings.keyBindPickBlock;
         if (keyPickBlock.isPressed()) {
             try {
