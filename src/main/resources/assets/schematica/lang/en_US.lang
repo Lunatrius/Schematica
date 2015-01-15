@@ -101,6 +101,8 @@ schematica.key.category=Schematica
 schematica.key.load=Load schematic
 schematica.key.save=Save schematic
 schematica.key.control=Manipulate schematic
+schematica.key.layerInc=Next Layer
+schematica.key.layerDec=Previous layer
 
 # commands - save
 schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name>

@@ -4,6 +4,7 @@ import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.gui.GuiSchematicControl;
 import com.github.lunatrius.schematica.client.gui.GuiSchematicLoad;
 import com.github.lunatrius.schematica.client.gui.GuiSchematicSave;
+import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
@@ -16,6 +17,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.ForgeHooks;
 import org.lwjgl.input.Keyboard;
@@ -29,9 +31,11 @@ public class KeyInputHandler {
     private static final KeyBinding KEY_BINDING_LOAD = new KeyBinding(Names.Keys.LOAD, Keyboard.KEY_DIVIDE, Names.Keys.CATEGORY);
     private static final KeyBinding KEY_BINDING_SAVE = new KeyBinding(Names.Keys.SAVE, Keyboard.KEY_MULTIPLY, Names.Keys.CATEGORY);
     private static final KeyBinding KEY_BINDING_CONTROL = new KeyBinding(Names.Keys.CONTROL, Keyboard.KEY_SUBTRACT, Names.Keys.CATEGORY);
+    private static final KeyBinding KEY_BINDING_LAYER_INC = new KeyBinding(Names.Keys.LAYER_INC, Keyboard.KEY_NONE, Names.Keys.CATEGORY);
+    private static final KeyBinding KEY_BINDING_LAYER_DEC = new KeyBinding(Names.Keys.LAYER_DEC, Keyboard.KEY_NONE, Names.Keys.CATEGORY);
 
     public static final KeyBinding[] KEY_BINDINGS = new KeyBinding[] {
-            KEY_BINDING_LOAD, KEY_BINDING_SAVE, KEY_BINDING_CONTROL
+            KEY_BINDING_LOAD, KEY_BINDING_SAVE, KEY_BINDING_CONTROL, KEY_BINDING_LAYER_INC, KEY_BINDING_LAYER_DEC
     };
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
@@ -50,6 +54,18 @@ public class KeyInputHandler {
                         guiScreen = new GuiSchematicSave(this.minecraft.currentScreen);
                     } else if (keyBinding == KEY_BINDING_CONTROL) {
                         guiScreen = new GuiSchematicControl(this.minecraft.currentScreen);
+                    } else if (keyBinding == KEY_BINDING_LAYER_INC) {
+                        final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+                        if (schematic != null && schematic.isRenderingLayer) {
+                            schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer + 1, 0, schematic.getHeight() - 1);
+                            RendererSchematicGlobal.INSTANCE.refresh();
+                        }
+                    } else if (keyBinding == KEY_BINDING_LAYER_DEC) {
+                        final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+                        if (schematic != null && schematic.isRenderingLayer) {
+                            schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer - 1, 0, schematic.getHeight() - 1);
+                            RendererSchematicGlobal.INSTANCE.refresh();
+                        }
                     }
 
                     if (guiScreen != null) {

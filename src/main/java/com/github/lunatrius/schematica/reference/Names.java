@@ -130,6 +130,8 @@ public final class Names {
         public static final String LOAD = "schematica.key.load";
         public static final String SAVE = "schematica.key.save";
         public static final String CONTROL = "schematica.key.control";
+        public static final String LAYER_INC = "schematica.key.layerInc";
+        public static final String LAYER_DEC = "schematica.key.layerDec";
     }
 
     public static final class NBT {
