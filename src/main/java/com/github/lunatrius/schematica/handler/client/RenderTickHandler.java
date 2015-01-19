@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.handler.client;
 
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.tooltip.TooltipHandler;
 import com.github.lunatrius.schematica.world.SchematicWorld;
@@ -24,7 +25,9 @@ public class RenderTickHandler {
 
         ClientProxy.movingObjectPosition = schematic != null ? rayTrace(schematic, 1.0f) : null;
 
-        TooltipHandler.INSTANCE.renderTooltip(schematic, ClientProxy.movingObjectPosition);
+        if (ConfigurationHandler.tooltipEnabled) {
+            TooltipHandler.INSTANCE.renderTooltip(schematic, ClientProxy.movingObjectPosition);
+        }
     }
 
     private MovingObjectPosition rayTrace(final SchematicWorld schematic, final float partialTicks) {
