@@ -90,7 +90,6 @@ public class SchematicWorld extends World {
     public void setTileEntity(int x, int y, int z, TileEntity tileEntity) {
         this.schematic.setTileEntity(x, y, z, tileEntity);
         initializeTileEntity(tileEntity);
-        System.out.println("BUGGER!");
     }
 
     @Override
