@@ -115,14 +115,7 @@ public class SchematicWorld extends World {
 
     @Override
     public boolean isBlockNormalCubeDefault(int x, int y, int z, boolean _default) {
-        Block block = getBlock(x, y, z);
-        if (block == null) {
-            return false;
-        }
-        if (block.isNormalCube()) {
-            return true;
-        }
-        return _default;
+        return getBlock(x, y, z).isNormalCube();
     }
 
     @Override
@@ -132,11 +125,7 @@ public class SchematicWorld extends World {
 
     @Override
     public boolean isAirBlock(int x, int y, int z) {
-        Block block = getBlock(x, y, z);
-        if (block == null) {
-            return true;
-        }
-        return block.isAir(this, x, y, z);
+        return getBlock(x, y, z).isAir(this, x, y, z);
     }
 
     @Override
@@ -190,11 +179,7 @@ public class SchematicWorld extends World {
 
     @Override
     public boolean isSideSolid(int x, int y, int z, ForgeDirection side, boolean _default) {
-        Block block = getBlock(x, y, z);
-        if (block == null) {
-            return false;
-        }
-        return block.isSideSolid(this, x, y, z, side);
+        return getBlock(x, y, z).isSideSolid(this, x, y, z, side);
     }
 
     public void initializeTileEntity(TileEntity tileEntity) {
@@ -242,7 +227,7 @@ public class SchematicWorld extends World {
                     item = Item.getItemFromBlock(block);
                     itemDamage = getBlockMetadata(x, y, z);
 
-                    if (block == null || block == Blocks.air) {
+                    if (block == Blocks.air || block.isAir(this, x, y, z)) {
                         continue;
                     }
 
