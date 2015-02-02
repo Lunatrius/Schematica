@@ -1,12 +1,14 @@
 package com.github.lunatrius.schematica.world.storage;
 
 import com.github.lunatrius.schematica.api.ISchematic;
-import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
+import net.minecraftforge.fml.common.registry.GameData;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,39 +37,45 @@ public class Schematic implements ISchematic {
     }
 
     @Override
-    public Block getBlock(final int x, final int y, final int z) {
-        if (!isValid(x, y, z)) {
-            return Blocks.air;
+    public IBlockState getBlockState(final BlockPos pos) {
+        if (!isValid(pos)) {
+            return Blocks.air.getDefaultState();
         }
 
-        return BLOCK_REGISTRY.getObjectById(this.blocks[x][y][z]);
+        final int x = pos.getX();
+        final int y = pos.getY();
+        final int z = pos.getZ();
+        final Block block = BLOCK_REGISTRY.getObjectById(this.blocks[x][y][z]);
+
+        return block.getStateFromMeta(this.metadata[x][y][z]);
     }
 
     @Override
-    public boolean setBlock(final int x, final int y, final int z, final Block block) {
-        return setBlock(x, y, z, block, 0);
-    }
-
-    @Override
-    public boolean setBlock(final int x, final int y, final int z, final Block block, final int metadata) {
-        if (!isValid(x, y, z)) {
+    public boolean setBlockState(final BlockPos pos, final IBlockState blockState) {
+        if (!isValid(pos)) {
             return false;
         }
 
+        final Block block = blockState.getBlock();
         final int id = BLOCK_REGISTRY.getId(block);
         if (id == -1) {
             return false;
         }
 
+        final int meta = block.getMetaFromState(blockState);
+        final int x = pos.getX();
+        final int y = pos.getY();
+        final int z = pos.getZ();
+
         this.blocks[x][y][z] = (short) id;
-        setBlockMetadata(x, y, z, metadata);
+        this.metadata[x][y][z] = (byte) meta;
         return true;
     }
 
     @Override
-    public TileEntity getTileEntity(final int x, final int y, final int z) {
+    public TileEntity getTileEntity(final BlockPos pos) {
         for (final TileEntity tileEntity : this.tileEntities) {
-            if (tileEntity.xCoord == x && tileEntity.yCoord == y && tileEntity.zCoord == z) {
+            if (tileEntity.getPos().equals(pos)) {
                 return tileEntity;
             }
         }
@@ -81,45 +89,26 @@ public class Schematic implements ISchematic {
     }
 
     @Override
-    public void setTileEntity(final int x, final int y, final int z, final TileEntity tileEntity) {
-        if (!isValid(x, y, z)) {
+    public void setTileEntity(final BlockPos pos, final TileEntity tileEntity) {
+        if (!isValid(pos)) {
             return;
         }
 
-        this.removeTileEntity(x, y, z);
+        removeTileEntity(pos);
 
         this.tileEntities.add(tileEntity);
     }
 
     @Override
-    public void removeTileEntity(final int x, final int y, final int z) {
+    public void removeTileEntity(final BlockPos pos) {
         final Iterator<TileEntity> iterator = this.tileEntities.iterator();
 
         while (iterator.hasNext()) {
             final TileEntity tileEntity = iterator.next();
-            if (tileEntity.xCoord == x && tileEntity.yCoord == y && tileEntity.zCoord == z) {
+            if (tileEntity.getPos().equals(pos)) {
                 iterator.remove();
             }
         }
-    }
-
-    @Override
-    public int getBlockMetadata(final int x, final int y, final int z) {
-        if (!isValid(x, y, z)) {
-            return 0;
-        }
-
-        return this.metadata[x][y][z];
-    }
-
-    @Override
-    public boolean setBlockMetadata(final int x, final int y, final int z, final int metadata) {
-        if (!isValid(x, y, z)) {
-            return false;
-        }
-
-        this.metadata[x][y][z] = (byte) (metadata & 0x0F);
-        return true;
     }
 
     @Override
@@ -151,7 +140,11 @@ public class Schematic implements ISchematic {
         return this.height;
     }
 
-    private boolean isValid(final int x, final int y, final int z) {
+    private boolean isValid(final BlockPos pos) {
+        final int x = pos.getX();
+        final int y = pos.getY();
+        final int z = pos.getZ();
+
         return !(x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length);
     }
 }

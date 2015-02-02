@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.renderer;
 
+import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.schematica.client.renderer.shader.ShaderProgram;
@@ -9,10 +10,12 @@ import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -20,6 +23,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -27,6 +32,7 @@ import org.lwjgl.opengl.GL20;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class RendererSchematicChunk {
     private static final ShaderProgram SHADER_ALPHA = new ShaderProgram("schematica", null, "shaders/alpha.frag");
 
@@ -42,7 +48,7 @@ public class RendererSchematicChunk {
     private final List<TileEntity> tileEntities = new ArrayList<TileEntity>();
     private final Vector3d distance = new Vector3d();
 
-    private final AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
+    private final AxisAlignedBB boundingBox;
 
     private boolean needsUpdate = true;
     private int glList = -1;
@@ -51,7 +57,8 @@ public class RendererSchematicChunk {
 
     public RendererSchematicChunk(SchematicWorld schematicWorld, int baseX, int baseY, int baseZ) {
         this.schematic = schematicWorld;
-        this.boundingBox.setBounds(baseX * Constants.SchematicChunk.WIDTH, baseY * Constants.SchematicChunk.HEIGHT, baseZ * Constants.SchematicChunk.LENGTH, (baseX + 1) * Constants.SchematicChunk.WIDTH, (baseY + 1) * Constants.SchematicChunk.HEIGHT, (baseZ + 1) * Constants.SchematicChunk.LENGTH);
+        // this.boundingBox.setBounds(baseX * Constants.SchematicChunk.WIDTH, baseY * Constants.SchematicChunk.HEIGHT, baseZ * Constants.SchematicChunk.LENGTH, (baseX + 1) * Constants.SchematicChunk.WIDTH, (baseY + 1) * Constants.SchematicChunk.HEIGHT, (baseZ + 1) * Constants.SchematicChunk.LENGTH);
+        this.boundingBox = new AxisAlignedBB(baseX * Constants.SchematicChunk.WIDTH, baseY * Constants.SchematicChunk.HEIGHT, baseZ * Constants.SchematicChunk.LENGTH, (baseX + 1) * Constants.SchematicChunk.WIDTH, (baseY + 1) * Constants.SchematicChunk.HEIGHT, (baseZ + 1) * Constants.SchematicChunk.LENGTH);
 
         this.centerPosition.x = (int) ((baseX + 0.5) * Constants.SchematicChunk.WIDTH);
         this.centerPosition.y = (int) ((baseY + 0.5) * Constants.SchematicChunk.HEIGHT);
@@ -59,9 +66,10 @@ public class RendererSchematicChunk {
 
         int x, y, z;
         for (TileEntity tileEntity : this.schematic.getTileEntities()) {
-            x = tileEntity.xCoord;
-            y = tileEntity.yCoord;
-            z = tileEntity.zCoord;
+            final BlockPos pos = tileEntity.getPos();
+            x = pos.getX();
+            y = pos.getY();
+            z = pos.getZ();
 
             if (x < this.boundingBox.minX || x >= this.boundingBox.maxX) {
                 continue;
@@ -222,10 +230,14 @@ public class RendererSchematicChunk {
 
     public void renderBlocks(int renderPass, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
         IBlockAccess mcWorld = this.minecraft.theWorld;
-        RenderBlocks renderBlocks = RendererSchematicGlobal.INSTANCE.renderBlocks;
+        BlockRendererDispatcher renderBlocks = RendererSchematicGlobal.INSTANCE.renderBlocks;
 
-        int x, y, z, wx, wy, wz;
+        final MBlockPos pos = new MBlockPos();
+        final MBlockPos mcPos = new MBlockPos();
+        final MBlockPos tmp = new MBlockPos();
+        int x, y, z;
         int sides;
+        IBlockState blockState, mcBlockState;
         Block block, mcBlock;
         Vector3f zero = new Vector3f();
         Vector3f size = new Vector3f();
@@ -233,48 +245,50 @@ public class RendererSchematicChunk {
         int ambientOcclusion = this.minecraft.gameSettings.ambientOcclusion;
         this.minecraft.gameSettings.ambientOcclusion = 0;
 
-        Tessellator.instance.startDrawingQuads();
+        final Tessellator tessellator = Tessellator.getInstance();
+        final WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+        worldRenderer.startDrawingQuads();
 
         for (y = minY; y < maxY; y++) {
             for (z = minZ; z < maxZ; z++) {
                 for (x = minX; x < maxX; x++) {
                     try {
-                        block = this.schematic.getBlock(x, y, z);
+                        pos.set(x, y, z);
+                        blockState = this.schematic.getBlockState(pos);
+                        block = blockState.getBlock();
 
-                        wx = this.schematic.position.x + x;
-                        wy = this.schematic.position.y + y;
-                        wz = this.schematic.position.z + z;
-
-                        mcBlock = mcWorld.getBlock(wx, wy, wz);
+                        mcPos.set(this.schematic.position.x + x, this.schematic.position.y + y, this.schematic.position.z + z);
+                        mcBlockState = mcWorld.getBlockState(mcPos);
+                        mcBlock = mcBlockState.getBlock();
 
                         sides = 0;
                         if (block != null) {
-                            if (block.shouldSideBeRendered(this.schematic, x, y - 1, z, 0)) {
+                            if (block.shouldSideBeRendered(this.schematic, tmp.set(pos).offset(EnumFacing.DOWN), EnumFacing.DOWN)) {
                                 sides |= RenderHelper.QUAD_DOWN;
                             }
 
-                            if (block.shouldSideBeRendered(this.schematic, x, y + 1, z, 1)) {
+                            if (block.shouldSideBeRendered(this.schematic, tmp.set(pos).offset(EnumFacing.UP), EnumFacing.UP)) {
                                 sides |= RenderHelper.QUAD_UP;
                             }
 
-                            if (block.shouldSideBeRendered(this.schematic, x, y, z - 1, 2)) {
+                            if (block.shouldSideBeRendered(this.schematic, tmp.set(pos).offset(EnumFacing.NORTH), EnumFacing.NORTH)) {
                                 sides |= RenderHelper.QUAD_NORTH;
                             }
 
-                            if (block.shouldSideBeRendered(this.schematic, x, y, z + 1, 3)) {
+                            if (block.shouldSideBeRendered(this.schematic, tmp.set(pos).offset(EnumFacing.SOUTH), EnumFacing.SOUTH)) {
                                 sides |= RenderHelper.QUAD_SOUTH;
                             }
 
-                            if (block.shouldSideBeRendered(this.schematic, x - 1, y, z, 4)) {
+                            if (block.shouldSideBeRendered(this.schematic, tmp.set(pos).offset(EnumFacing.WEST), EnumFacing.WEST)) {
                                 sides |= RenderHelper.QUAD_WEST;
                             }
 
-                            if (block.shouldSideBeRendered(this.schematic, x + 1, y, z, 5)) {
+                            if (block.shouldSideBeRendered(this.schematic, tmp.set(pos).offset(EnumFacing.EAST), EnumFacing.EAST)) {
                                 sides |= RenderHelper.QUAD_EAST;
                             }
                         }
 
-                        boolean isAirBlock = mcWorld.isAirBlock(wx, wy, wz) || ConfigurationHandler.isExtraAirBlock(mcBlock);
+                        boolean isAirBlock = mcWorld.isAirBlock(mcPos) || ConfigurationHandler.isExtraAirBlock(mcBlock);
 
                         if (!isAirBlock) {
                             if (ConfigurationHandler.highlight && renderPass == 2) {
@@ -296,7 +310,7 @@ public class RendererSchematicChunk {
                                     if (ConfigurationHandler.drawLines) {
                                         RenderHelper.drawCuboidOutline(zero, size, sides, 1.0f, 0.0f, 0.0f, 0.25f);
                                     }
-                                } else if (this.schematic.getBlockMetadata(x, y, z) != mcWorld.getBlockMetadata(wx, wy, wz)) {
+                                } else if (block.getMetaFromState(blockState) != mcBlock.getMetaFromState(mcBlockState)) {
                                     zero.set(x, y, z);
                                     size.set(x + 1, y + 1, z + 1);
                                     if (ConfigurationHandler.drawQuads) {
@@ -319,8 +333,8 @@ public class RendererSchematicChunk {
                                 }
                             }
 
-                            if (block != null && block.canRenderInPass(renderPass)) {
-                                renderBlocks.renderBlockByRenderType(block, x, y, z);
+                            if (block != null) {
+                                // renderBlocks.renderBlockByRenderType(block, x, y, z);
                             }
                         }
                     } catch (Exception e) {
@@ -330,7 +344,7 @@ public class RendererSchematicChunk {
             }
         }
 
-        Tessellator.instance.draw();
+        tessellator.draw();
 
         this.minecraft.gameSettings.ambientOcclusion = ambientOcclusion;
     }
@@ -342,6 +356,7 @@ public class RendererSchematicChunk {
 
         IBlockAccess mcWorld = this.minecraft.theWorld;
 
+        final MBlockPos pos = new MBlockPos();
         int x, y, z;
         Block mcBlock;
 
@@ -349,21 +364,25 @@ public class RendererSchematicChunk {
 
         try {
             for (TileEntity tileEntity : this.tileEntities) {
-                x = tileEntity.xCoord;
-                y = tileEntity.yCoord;
-                z = tileEntity.zCoord;
+                pos.set(tileEntity.getPos());
+                final BlockPos pos1 = tileEntity.getPos();
+                x = pos1.getX();
+                y = pos1.getY();
+                z = pos1.getZ();
 
                 if (this.schematic.isRenderingLayer && this.schematic.renderingLayer != y) {
                     continue;
                 }
 
-                mcBlock = mcWorld.getBlock(x + this.schematic.position.x, y + this.schematic.position.y, z + this.schematic.position.z);
+                final BlockPos mcPos = pos.add(this.schematic.position.x, this.schematic.position.y, this.schematic.position.z);
+                final IBlockState mcBlockState = mcWorld.getBlockState(mcPos);
+                mcBlock = mcBlockState.getBlock();
 
-                if (mcBlock == Blocks.air) {
+                if (mcBlock.isAir(mcWorld, mcPos)) {
                     TileEntitySpecialRenderer tileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRenderer(tileEntity);
                     if (tileEntitySpecialRenderer != null) {
                         try {
-                            tileEntitySpecialRenderer.renderTileEntityAt(tileEntity, x, y, z, 0);
+                            tileEntitySpecialRenderer.renderTileEntityAt(tileEntity, x, y, z, 0, -1);
 
                             OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
                             GL11.glDisable(GL11.GL_TEXTURE_2D);

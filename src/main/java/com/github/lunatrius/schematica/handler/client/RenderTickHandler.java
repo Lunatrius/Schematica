@@ -5,12 +5,12 @@ import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.tooltip.TooltipHandler;
 import com.github.lunatrius.schematica.world.SchematicWorld;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class RenderTickHandler {
     public static final RenderTickHandler INSTANCE = new RenderTickHandler();
@@ -31,7 +31,7 @@ public class RenderTickHandler {
     }
 
     private MovingObjectPosition rayTrace(final SchematicWorld schematic, final float partialTicks) {
-        final EntityLivingBase renderViewEntity = this.minecraft.renderViewEntity;
+        final Entity renderViewEntity = this.minecraft.getRenderViewEntity();
         if (renderViewEntity == null) {
             return null;
         }
@@ -46,7 +46,7 @@ public class RenderTickHandler {
         renderViewEntity.posY -= schematic.position.y;
         renderViewEntity.posZ -= schematic.position.z;
 
-        final Vec3 vecPosition = renderViewEntity.getPosition(partialTicks);
+        final Vec3 vecPosition = renderViewEntity.getPositionEyes(partialTicks);
         final Vec3 vecLook = renderViewEntity.getLook(partialTicks);
         final Vec3 vecExtendedLook = vecPosition.addVector(vecLook.xCoord * blockReachDistance, vecLook.yCoord * blockReachDistance, vecLook.zCoord * blockReachDistance);
 
@@ -54,6 +54,6 @@ public class RenderTickHandler {
         renderViewEntity.posY = posY;
         renderViewEntity.posZ = posZ;
 
-        return schematic.func_147447_a(vecPosition, vecExtendedLook, false, false, true);
+        return schematic.rayTraceBlocks(vecPosition, vecExtendedLook, false, false, true);
     }
 }

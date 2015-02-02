@@ -1,20 +1,23 @@
 package com.github.lunatrius.schematica.world.schematic;
 
+import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.api.event.PreSchematicSaveEvent;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.storage.Schematic;
-import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
+import net.minecraftforge.fml.common.registry.GameData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,12 +57,13 @@ public class SchematicAlpha extends SchematicFormat {
         Map<Short, Short> oldToNew = new HashMap<Short, Short>();
         if (tagCompound.hasKey(Names.NBT.MAPPING_SCHEMATICA)) {
             NBTTagCompound mapping = tagCompound.getCompoundTag(Names.NBT.MAPPING_SCHEMATICA);
-            Set<String> names = mapping.func_150296_c();
+            Set<String> names = mapping.getKeySet();
             for (String name : names) {
                 oldToNew.put(mapping.getShort(name), (short) BLOCK_REGISTRY.getId(name));
             }
         }
 
+        final MBlockPos pos = new MBlockPos();
         ISchematic schematic = new Schematic(icon, width, height, length);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -72,7 +76,8 @@ public class SchematicAlpha extends SchematicFormat {
                         blockID = id;
                     }
 
-                    schematic.setBlock(x, y, z, BLOCK_REGISTRY.getObjectById(blockID), meta);
+                    final Block block = BLOCK_REGISTRY.getObjectById(blockID);
+                    schematic.setBlockState(pos.set(x, y, z), block.getStateFromMeta(meta));
                 }
             }
         }
@@ -83,7 +88,7 @@ public class SchematicAlpha extends SchematicFormat {
             try {
                 TileEntity tileEntity = TileEntity.createAndLoadEntity(tileEntitiesList.getCompoundTagAt(i));
                 if (tileEntity != null) {
-                    schematic.setTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity);
+                    schematic.setTileEntity(tileEntity.getPos(), tileEntity);
                 }
             } catch (Exception e) {
                 Reference.logger.error("TileEntity failed to load properly!", e);
@@ -111,20 +116,22 @@ public class SchematicAlpha extends SchematicFormat {
         byte extraBlocksNibble[] = new byte[(int) Math.ceil(size / 2.0)];
         boolean extra = false;
 
+        final MBlockPos pos = new MBlockPos();
         Map<String, Short> mappings = new HashMap<String, Short>();
         for (int x = 0; x < schematic.getWidth(); x++) {
             for (int y = 0; y < schematic.getHeight(); y++) {
                 for (int z = 0; z < schematic.getLength(); z++) {
                     final int index = x + (y * schematic.getLength() + z) * schematic.getWidth();
-                    final Block block = schematic.getBlock(x, y, z);
+                    final IBlockState blockState = schematic.getBlockState(pos.set(x, y, z));
+                    final Block block = blockState.getBlock();
                     final int blockId = BLOCK_REGISTRY.getId(block);
                     localBlocks[index] = (byte) blockId;
-                    localMetadata[index] = (byte) schematic.getBlockMetadata(x, y, z);
+                    localMetadata[index] = (byte) block.getMetaFromState(blockState);
                     if ((extraBlocks[index] = (byte) (blockId >> 8)) > 0) {
                         extra = true;
                     }
 
-                    String name = BLOCK_REGISTRY.getNameForObject(block);
+                    String name = String.valueOf(BLOCK_REGISTRY.getNameForObject(block));
                     if (!mappings.containsKey(name)) {
                         mappings.put(name, (short) blockId);
                     }
@@ -140,14 +147,16 @@ public class SchematicAlpha extends SchematicFormat {
                 tileEntity.writeToNBT(tileEntityTagCompound);
                 tileEntitiesList.appendTag(tileEntityTagCompound);
             } catch (Exception e) {
-                int pos = tileEntity.xCoord + (tileEntity.yCoord * schematic.getLength() + tileEntity.zCoord) * schematic.getWidth();
+                final BlockPos tePos = tileEntity.getPos();
+                final int index = tePos.getX() + (tePos.getY() * schematic.getLength() + tePos.getZ()) * schematic.getWidth();
                 if (--count > 0) {
-                    Block block = schematic.getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+                    final IBlockState blockState = schematic.getBlockState(tePos);
+                    Block block = blockState.getBlock();
                     Reference.logger.error(String.format("Block %s[%s] with TileEntity %s failed to save! Replacing with bedrock...", block, block != null ? BLOCK_REGISTRY.getNameForObject(block) : "?", tileEntity.getClass().getName()), e);
                 }
-                localBlocks[pos] = (byte) BLOCK_REGISTRY.getId(Blocks.bedrock);
-                localMetadata[pos] = 0;
-                extraBlocks[pos] = 0;
+                localBlocks[index] = (byte) BLOCK_REGISTRY.getId(Blocks.bedrock);
+                localMetadata[index] = 0;
+                extraBlocks[index] = 0;
             }
         }
 

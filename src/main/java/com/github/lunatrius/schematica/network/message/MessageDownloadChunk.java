@@ -1,20 +1,22 @@
 package com.github.lunatrius.schematica.network.message;
 
+import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.handler.DownloadHandler;
 import com.github.lunatrius.schematica.nbt.NBTHelper;
 import com.github.lunatrius.schematica.reference.Constants;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
-import cpw.mods.fml.common.registry.GameData;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
+import net.minecraftforge.fml.common.registry.GameData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,14 +46,17 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
         this.tileEntities = new ArrayList<TileEntity>();
         this.entities = new ArrayList<Entity>();
 
+        final MBlockPos pos = new MBlockPos();
         for (int x = 0; x < Constants.SchematicChunk.WIDTH; x++) {
             for (int y = 0; y < Constants.SchematicChunk.HEIGHT; y++) {
                 for (int z = 0; z < Constants.SchematicChunk.LENGTH; z++) {
-                    final Block block = schematic.getBlock(baseX + x, baseY + y, baseZ + z);
+                    pos.set(baseX + x, baseY + y, baseZ + z);
+                    final IBlockState blockState = schematic.getBlockState(pos);
+                    final Block block = blockState.getBlock();
                     final int id = BLOCK_REGISTRY.getId(block);
                     this.blocks[x][y][z] = (short) id;
-                    this.metadata[x][y][z] = (byte) schematic.getBlockMetadata(baseX + x, baseY + y, baseZ + z);
-                    final TileEntity tileEntity = schematic.getTileEntity(baseX + x, baseY + y, baseZ + z);
+                    this.metadata[x][y][z] = (byte) block.getMetaFromState(blockState);
+                    final TileEntity tileEntity = schematic.getTileEntity(pos);
                     if (tileEntity != null) {
                         this.tileEntities.add(tileEntity);
                     }
@@ -61,6 +66,7 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
     }
 
     private void copyToSchematic(final ISchematic schematic) {
+        final MBlockPos pos = new MBlockPos();
         for (int x = 0; x < Constants.SchematicChunk.WIDTH; x++) {
             for (int y = 0; y < Constants.SchematicChunk.HEIGHT; y++) {
                 for (int z = 0; z < Constants.SchematicChunk.LENGTH; z++) {
@@ -68,13 +74,15 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
                     byte meta = this.metadata[x][y][z];
                     Block block = BLOCK_REGISTRY.getObjectById(id);
 
-                    schematic.setBlock(this.baseX + x, this.baseY + y, this.baseZ + z, block, meta);
+                    pos.set(this.baseX + x, this.baseY + y, this.baseZ + z);
+
+                    schematic.setBlockState(pos, block.getStateFromMeta(meta));
                 }
             }
         }
 
         for (TileEntity tileEntity : this.tileEntities) {
-            schematic.setTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity);
+            schematic.setTileEntity(tileEntity.getPos(), tileEntity);
         }
     }
 

@@ -1,8 +1,6 @@
 package com.github.lunatrius.schematica.config;
 
 import com.github.lunatrius.schematica.reference.Names;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockChest;
@@ -18,6 +16,8 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.registry.GameData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,7 +92,7 @@ public class BlockInfo {
         addIgnoredBlockMetadata(Blocks.furnace);
         addIgnoredBlockMetadata(Blocks.lit_furnace);
         addIgnoredBlockMetadata(Blocks.standing_sign);
-        addIgnoredBlockMetadata(Blocks.wooden_door);
+        // TODO: addIgnoredBlockMetadata(Blocks.wooden_door);
         addIgnoredBlockMetadata(Blocks.ladder);
         addIgnoredBlockMetadata(Blocks.rail);
         addIgnoredBlockMetadata(Blocks.stone_stairs);
@@ -114,7 +114,7 @@ public class BlockInfo {
         addIgnoredBlockMetadata(Blocks.powered_repeater);
         addIgnoredBlockMetadata(Blocks.trapdoor);
         addIgnoredBlockMetadata(Blocks.vine);
-        addIgnoredBlockMetadata(Blocks.fence_gate);
+        // TODO: addIgnoredBlockMetadata(Blocks.fence_gate);
         addIgnoredBlockMetadata(Blocks.brick_stairs);
         addIgnoredBlockMetadata(Blocks.stone_brick_stairs);
         addIgnoredBlockMetadata(Blocks.waterlily);
@@ -173,7 +173,7 @@ public class BlockInfo {
         addBlockItemMapping(Blocks.wheat, Items.wheat_seeds);
         addBlockItemMapping(Blocks.lit_furnace, Blocks.furnace);
         addBlockItemMapping(Blocks.standing_sign, Items.sign);
-        addBlockItemMapping(Blocks.wooden_door, Items.wooden_door);
+        // TODO: addBlockItemMapping(Blocks.wooden_door, Items.wooden_door);
         addBlockItemMapping(Blocks.iron_door, Items.iron_door);
         addBlockItemMapping(Blocks.wall_sign, Items.sign);
         addBlockItemMapping(Blocks.unlit_redstone_torch, Blocks.redstone_torch);
@@ -281,14 +281,14 @@ public class BlockInfo {
         addPlacementMapping(Blocks.stonebrick, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
         addPlacementMapping(Blocks.tripwire_hook, new PlacementData(PlacementType.BLOCK, -1, -1, 0, 2, 3, 1).setMaskMeta(0x3));
         addPlacementMapping(Blocks.quartz_block, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
-        addPlacementMapping(Blocks.fence_gate, new PlacementData(PlacementType.PLAYER, -1, -1, 2, 0, 1, 3).setMaskMeta(0x3));
+        // TODO: addPlacementMapping(Blocks.fence_gate, new PlacementData(PlacementType.PLAYER, -1, -1, 2, 0, 1, 3).setMaskMeta(0x3));
         addPlacementMapping(Blocks.double_wooden_slab, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
         addPlacementMapping(Blocks.wooden_slab, new PlacementData(PlacementType.BLOCK).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x7).setMaskMetaInHand(0x7));
         addPlacementMapping(Blocks.anvil, new PlacementData(PlacementType.PLAYER, -1, -1, 1, 3, 0, 2).setMaskMeta(0x3).setMaskMetaInHand(0xC).setBitShiftMetaInHand(2));
         addPlacementMapping(Blocks.stained_hardened_clay, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
         addPlacementMapping(Blocks.carpet, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
         addPlacementMapping(Blocks.stained_glass_pane, new PlacementData(PlacementType.BLOCK).setMaskMetaInHand(0xF));
-        addPlacementMapping(Items.wooden_door, new PlacementData(PlacementType.PLAYER, -1, -1, 3, 1, 2, 0).setMaskMeta(0x7));
+        // TODO: addPlacementMapping(Items.wooden_door, new PlacementData(PlacementType.PLAYER, -1, -1, 3, 1, 2, 0).setMaskMeta(0x7));
         addPlacementMapping(Items.iron_door, new PlacementData(PlacementType.PLAYER, -1, -1, 3, 1, 2, 0).setMaskMeta(0x7));
         addPlacementMapping(Items.repeater, new PlacementData(PlacementType.PLAYER, -1, -1, 0, 2, 3, 1).setMaskMeta(0x3));
         addPlacementMapping(Items.comparator, new PlacementData(PlacementType.PLAYER, -1, -1, 0, 2, 3, 1).setMaskMeta(0x3));

@@ -12,6 +12,8 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 
+import java.io.IOException;
+
 public class GuiSchematicSave extends GuiScreenBase {
     private int centerX = 0;
     private int centerY = 0;
@@ -81,7 +83,7 @@ public class GuiSchematicSave extends GuiScreenBase {
         this.btnEnable = new GuiButton(id++, this.width - 210, this.height - 30, 50, 20, ClientProxy.isRenderingGuide ? this.strOn : this.strOff);
         this.buttonList.add(this.btnEnable);
 
-        this.tfFilename = new GuiTextField(this.fontRendererObj, this.width - 155, this.height - 29, 100, 18);
+        this.tfFilename = new GuiTextField(id++, this.fontRendererObj, this.width - 155, this.height - 29, 100, 18);
         this.textFields.add(this.tfFilename);
 
         this.btnSave = new GuiButton(id++, this.width - 50, this.height - 30, 40, 20, I18n.format("schematica.gui.save"));
@@ -157,7 +159,7 @@ public class GuiSchematicSave extends GuiScreenBase {
     }
 
     @Override
-    protected void keyTyped(char character, int code) {
+    protected void keyTyped(char character, int code) throws IOException {
         super.keyTyped(character, code);
         this.filename = this.tfFilename.getText();
     }

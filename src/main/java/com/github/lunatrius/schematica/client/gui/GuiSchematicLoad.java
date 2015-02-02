@@ -57,6 +57,12 @@ public class GuiSchematicLoad extends GuiScreenBase {
     }
 
     @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        this.guiSchematicLoadSlot.handleMouseInput();
+    }
+
+    @Override
     protected void actionPerformed(GuiButton guiButton) {
         if (guiButton.enabled) {
             if (guiButton.id == this.btnOpenDir.id) {

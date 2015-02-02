@@ -56,7 +56,7 @@ public abstract class SchematicFormat {
             DataOutputStream dataOutputStream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 
             try {
-                NBTTagCompound.func_150298_a(Names.NBT.ROOT, tagCompound, dataOutputStream);
+                NBTTagCompound.writeEntry(Names.NBT.ROOT, tagCompound, dataOutputStream);
             } finally {
                 dataOutputStream.close();
             }

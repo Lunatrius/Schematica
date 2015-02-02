@@ -31,7 +31,7 @@ public class SaveHandlerSchematic implements ISaveHandler {
     public void saveWorldInfo(WorldInfo info) {}
 
     @Override
-    public IPlayerFileData getSaveHandler() {
+    public IPlayerFileData getPlayerNBTManager() {
         return null;
     }
 

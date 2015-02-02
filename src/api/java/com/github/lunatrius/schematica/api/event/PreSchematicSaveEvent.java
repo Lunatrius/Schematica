@@ -1,7 +1,8 @@
 package com.github.lunatrius.schematica.api.event;
 
-import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.eventhandler.Event;
+
 import java.util.Map;
 
 /**
