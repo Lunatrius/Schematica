@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,12 @@ public class GuiSchematicMaterials extends GuiScreenBase {
         this.buttonList.add(this.btnDone);
 
         this.guiSchematicMaterialsSlot = new GuiSchematicMaterialsSlot(this);
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        this.guiSchematicMaterialsSlot.handleMouseInput();
     }
 
     @Override

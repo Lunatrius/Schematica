@@ -4,11 +4,11 @@ import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.chunk.SchematicContainer;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -28,7 +28,7 @@ public class QueueTickHandler {
 
         // TODO: find a better way... maybe?
         try {
-            final EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
+            final EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
             if (player != null && player.sendQueue != null && !player.sendQueue.getNetworkManager().isLocalChannel()) {
                 processQueue();
             }

@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.proxy;
 
+import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.core.version.VersionChecker;
 import com.github.lunatrius.schematica.api.ISchematic;
@@ -17,16 +18,17 @@ import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.chunk.SchematicContainer;
 import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import com.github.lunatrius.schematica.world.storage.Schematic;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.io.File;
 
@@ -73,6 +75,8 @@ public abstract class CommonProxy {
     }
 
     public void copyChunkToSchematic(final ISchematic schematic, final World world, final int chunkX, final int chunkZ, final int minX, final int maxX, final int minY, final int maxY, final int minZ, final int maxZ) {
+        final MBlockPos pos = new MBlockPos();
+        final MBlockPos localPos = new MBlockPos();
         final int localMinX = minX < (chunkX << 4) ? 0 : (minX & 15);
         final int localMaxX = maxX > ((chunkX << 4) + 15) ? 15 : (maxX & 15);
         final int localMinZ = minZ < (chunkZ << 4) ? 0 : (minZ & 15);
@@ -88,20 +92,23 @@ public abstract class CommonProxy {
                     final int localY = y - minY;
                     final int localZ = z - minZ;
 
-                    try {
-                        final Block block = world.getBlock(x, y, z);
-                        final int metadata = world.getBlockMetadata(x, y, z);
-                        final boolean success = schematic.setBlock(localX, localY, localZ, block, metadata);
+                    pos.set(x, y, z);
+                    localPos.set(localX, localY, localZ);
 
-                        if (success && block.hasTileEntity(metadata)) {
-                            final TileEntity tileEntity = world.getTileEntity(x, y, z);
+                    try {
+                        final IBlockState blockState = world.getBlockState(pos);
+                        final Block block = blockState.getBlock();
+                        final boolean success = schematic.setBlockState(localPos, blockState);
+
+                        if (success && block.hasTileEntity(blockState)) {
+                            final TileEntity tileEntity = world.getTileEntity(pos);
                             if (tileEntity != null) {
                                 try {
                                     final TileEntity reloadedTileEntity = NBTHelper.reloadTileEntity(tileEntity, minX, minY, minZ);
-                                    schematic.setTileEntity(localX, localY, localZ, reloadedTileEntity);
+                                    schematic.setTileEntity(localPos, reloadedTileEntity);
                                 } catch (TileEntityException tee) {
                                     Reference.logger.error(String.format("Error while trying to save tile entity '%s'!", tileEntity), tee);
-                                    schematic.setBlock(localX, localY, localZ, Blocks.bedrock);
+                                    schematic.setBlockState(localPos, Blocks.bedrock.getDefaultState());
                                 }
                             }
                         }

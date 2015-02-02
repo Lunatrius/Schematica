@@ -6,6 +6,7 @@ import com.github.lunatrius.schematica.proxy.ClientProxy;
 
 import java.util.Comparator;
 
+@Deprecated
 public class RendererSchematicChunkComparator implements Comparator<RendererSchematicChunk> {
     private final Vector3d position = new Vector3d();
     private final Vector3d schematicPosition = new Vector3d();

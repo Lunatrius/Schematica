@@ -46,7 +46,7 @@ public class GuiSchematicLoadSlot extends GuiSlot {
     }
 
     @Override
-    protected void drawSlot(int index, int x, int y, int par4, Tessellator tessellator, int par6, int par7) {
+    protected void drawSlot(int index, int x, int y, int par4, int mouseX, int mouseY) {
         if (index < 0 || index >= this.guiSchematicLoad.schematicFiles.size()) {
             return;
         }
@@ -60,8 +60,8 @@ public class GuiSchematicLoadSlot extends GuiSlot {
             schematicName = schematicName.replaceAll("(?i)\\.schematic$", "");
         }
 
-        GuiHelper.drawItemStack(this.minecraft.renderEngine, this.minecraft.fontRenderer, x, y, schematic.getItemStack());
+        GuiHelper.drawItemStack(this.minecraft.renderEngine, this.minecraft.fontRendererObj, x, y, schematic.getItemStack());
 
-        this.guiSchematicLoad.drawString(this.minecraft.fontRenderer, schematicName, x + 24, y + 6, 0x00FFFFFF);
+        this.guiSchematicLoad.drawString(this.minecraft.fontRendererObj, schematicName, x + 24, y + 6, 0x00FFFFFF);
     }
 }

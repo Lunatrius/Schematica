@@ -14,6 +14,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentTranslation;
 import org.apache.commons.io.FilenameUtils;
 
@@ -30,14 +31,14 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return Names.Command.Download.Message.USAGE;
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+    public List tabComplete(ICommandSender sender, String[] args, BlockPos pos) {
         if (!(sender instanceof EntityPlayer)) {
-            throw new CommandException(Names.Command.Download.Message.PLAYERS_ONLY);
+            return null;
         }
 
         final File directory = Schematica.proxy.getPlayerSchematicDirectory((EntityPlayer) sender, true);
@@ -50,16 +51,16 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
                 filenames.add(FilenameUtils.removeExtension(file.getName()));
             }
 
-            return getListOfStringsFromIterableMatchingLastWord(args, filenames);
+            return getListOfStringsMatchingLastWord(args, filenames);
         }
 
         return null;
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) {
+    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         if (args.length < 1) {
-            throw new WrongUsageException(getCommandUsage(sender));
+            throw new WrongUsageException(getUsage(sender));
         }
 
         if (!(sender instanceof EntityPlayerMP)) {

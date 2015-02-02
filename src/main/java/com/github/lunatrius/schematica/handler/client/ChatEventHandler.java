@@ -4,8 +4,8 @@ import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ChatEventHandler {
     public static final ChatEventHandler INSTANCE = new ChatEventHandler();

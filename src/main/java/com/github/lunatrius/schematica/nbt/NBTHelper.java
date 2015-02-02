@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -99,9 +100,8 @@ public class NBTHelper {
             tileEntity.writeToNBT(tileEntityCompound);
 
             tileEntity = TileEntity.createAndLoadEntity(tileEntityCompound);
-            tileEntity.xCoord -= offsetX;
-            tileEntity.yCoord -= offsetY;
-            tileEntity.zCoord -= offsetZ;
+            final BlockPos pos = tileEntity.getPos();
+            tileEntity.setPos(pos.add(-offsetX, -offsetY, -offsetZ));
         } catch (Exception e) {
             throw new TileEntityException(tileEntity, e);
         }

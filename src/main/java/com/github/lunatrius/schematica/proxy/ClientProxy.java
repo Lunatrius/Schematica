@@ -5,28 +5,30 @@ import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.api.ISchematic;
+import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
 import com.github.lunatrius.schematica.handler.client.InputHandler;
+import com.github.lunatrius.schematica.handler.client.OverlayHandler;
 import com.github.lunatrius.schematica.handler.client.RenderTickHandler;
 import com.github.lunatrius.schematica.handler.client.TickHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
-import cpw.mods.fml.client.config.GuiConfigEntries;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.client.config.GuiConfigEntries;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +38,7 @@ public class ClientProxy extends CommonProxy {
     public static boolean isPendingReset = false;
 
     public static final Vector3d playerPosition = new Vector3d();
-    public static ForgeDirection orientation = ForgeDirection.UNKNOWN;
+    public static EnumFacing orientation = null;
     public static int rotationRender = 0;
 
     public static final Vector3i pointA = new Vector3i();
@@ -58,25 +60,25 @@ public class ClientProxy extends CommonProxy {
         rotationRender = MathHelper.floor_double(player.rotationYaw / 90) & 3;
     }
 
-    private static ForgeDirection getOrientation(EntityPlayer player) {
+    private static EnumFacing getOrientation(EntityPlayer player) {
         if (player.rotationPitch > 45) {
-            return ForgeDirection.DOWN;
+            return EnumFacing.DOWN;
         } else if (player.rotationPitch < -45) {
-            return ForgeDirection.UP;
+            return EnumFacing.UP;
         } else {
             switch (MathHelper.floor_double(player.rotationYaw / 90.0 + 0.5) & 3) {
             case 0:
-                return ForgeDirection.SOUTH;
+                return EnumFacing.SOUTH;
             case 1:
-                return ForgeDirection.WEST;
+                return EnumFacing.WEST;
             case 2:
-                return ForgeDirection.NORTH;
+                return EnumFacing.NORTH;
             case 3:
-                return ForgeDirection.EAST;
+                return EnumFacing.EAST;
             }
         }
 
-        return ForgeDirection.UNKNOWN;
+        return null;
     }
 
     public static void updatePoints() {
@@ -91,7 +93,7 @@ public class ClientProxy extends CommonProxy {
 
     public static void movePointToPlayer(Vector3i point) {
         point.x = (int) Math.floor(playerPosition.x);
-        point.y = (int) Math.floor(playerPosition.y - 1);
+        point.y = (int) Math.floor(playerPosition.y);
         point.z = (int) Math.floor(playerPosition.z);
 
         switch (rotationRender) {
@@ -118,7 +120,7 @@ public class ClientProxy extends CommonProxy {
         if (schematic != null) {
             Vector3i position = schematic.position;
             position.x = (int) Math.floor(playerPosition.x);
-            position.y = (int) Math.floor(playerPosition.y) - 1;
+            position.y = (int) Math.floor(playerPosition.y);
             position.z = (int) Math.floor(playerPosition.z);
 
             switch (rotationRender) {
@@ -172,8 +174,10 @@ public class ClientProxy extends CommonProxy {
         FMLCommonHandler.instance().bus().register(RenderTickHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
 
-        MinecraftForge.EVENT_BUS.register(RendererSchematicGlobal.INSTANCE);
+        // TODO: MinecraftForge.EVENT_BUS.register(RendererSchematicGlobal.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(RenderSchematic.INSTANCE);
         MinecraftForge.EVENT_BUS.register(ChatEventHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new OverlayHandler());
     }
 
     @Override
@@ -201,7 +205,7 @@ public class ClientProxy extends CommonProxy {
         setActiveSchematic(null);
 
         playerPosition.set(0, 0, 0);
-        orientation = ForgeDirection.UNKNOWN;
+        orientation = null;
         rotationRender = 0;
 
         pointA.set(0, 0, 0);

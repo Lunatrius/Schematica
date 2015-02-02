@@ -3,10 +3,10 @@ package com.github.lunatrius.schematica.world.schematic;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.registry.GameData;
 
 import java.io.File;
 import java.io.FileInputStream;

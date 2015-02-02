@@ -28,12 +28,12 @@ public class CommandSchematicaList extends CommandSchematicaBase {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getUsage(ICommandSender sender) {
         return Names.Command.List.Message.USAGE;
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] arguments) {
+    public void processCommand(ICommandSender sender, String[] arguments) throws CommandException {
         if (!(sender instanceof EntityPlayer)) {
             throw new CommandException(Names.Command.Save.Message.PLAYERS_ONLY);
         }
@@ -47,7 +47,7 @@ public class CommandSchematicaList extends CommandSchematicaBase {
                 }
             }
         } catch (NumberFormatException e) {
-            throw new WrongUsageException(getCommandUsage(sender));
+            throw new WrongUsageException(getUsage(sender));
         }
 
         final EntityPlayer player = (EntityPlayer) sender;

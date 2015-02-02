@@ -106,9 +106,10 @@ public class GuiSchematicControl extends GuiScreenBase {
 
         this.btnHide.enabled = this.schematic != null;
         this.btnMove.enabled = this.schematic != null;
-        // this.btnFlip.enabled = this.settings.schematic != null;
+        this.btnFlip.enabled = this.schematic != null;
         this.btnFlip.enabled = false;
         this.btnRotate.enabled = this.schematic != null;
+        this.btnRotate.enabled = false;
         this.btnMaterials.enabled = this.schematic != null;
         this.btnPrint.enabled = this.schematic != null && this.printer.isEnabled();
 

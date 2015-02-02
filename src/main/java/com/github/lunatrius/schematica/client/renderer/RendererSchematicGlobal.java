@@ -5,27 +5,28 @@ import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.world.SchematicWorld;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.culling.Frustrum;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.profiler.Profiler;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Deprecated
 public class RendererSchematicGlobal {
     public static final RendererSchematicGlobal INSTANCE = new RendererSchematicGlobal();
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
     private final Profiler profiler = this.minecraft.mcProfiler;
 
-    private final Frustrum frustrum = new Frustrum();
-    public RenderBlocks renderBlocks = null;
+    private final Frustum frustum = new Frustum();
+    public BlockRendererDispatcher renderBlocks = null;
     public final List<RendererSchematicChunk> sortedRendererSchematicChunk = new ArrayList<RendererSchematicChunk>();
     private final RendererSchematicChunkComparator rendererSchematicChunkComparator = new RendererSchematicChunkComparator();
 
@@ -39,6 +40,7 @@ public class RendererSchematicGlobal {
 
             this.profiler.startSection("schematica");
             SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+
             if ((schematic != null && schematic.isRendering) || ClientProxy.isRenderingGuide) {
                 render(schematic);
             }
@@ -150,9 +152,9 @@ public class RendererSchematicGlobal {
     }
 
     private void updateFrustrum(SchematicWorld schematic) {
-        this.frustrum.setPosition(ClientProxy.playerPosition.x - schematic.position.x, ClientProxy.playerPosition.y - schematic.position.y, ClientProxy.playerPosition.z - schematic.position.z);
+        this.frustum.setPosition(ClientProxy.playerPosition.x - schematic.position.x, ClientProxy.playerPosition.y - schematic.position.y, ClientProxy.playerPosition.z - schematic.position.z);
         for (RendererSchematicChunk rendererSchematicChunk : this.sortedRendererSchematicChunk) {
-            rendererSchematicChunk.isInFrustrum = this.frustrum.isBoundingBoxInFrustum(rendererSchematicChunk.getBoundingBox());
+            rendererSchematicChunk.isInFrustrum = this.frustum.isBoundingBoxInFrustum(rendererSchematicChunk.getBoundingBox());
         }
     }
 
@@ -175,7 +177,7 @@ public class RendererSchematicGlobal {
 
         destroyRendererSchematicChunks();
 
-        this.renderBlocks = new RenderBlocks(schematic);
+        this.renderBlocks = this.minecraft.getBlockRendererDispatcher();
         for (int y = 0; y < height; y++) {
             for (int z = 0; z < length; z++) {
                 for (int x = 0; x < width; x++) {
@@ -196,5 +198,7 @@ public class RendererSchematicGlobal {
         for (RendererSchematicChunk renderer : this.sortedRendererSchematicChunk) {
             renderer.setDirty();
         }
+
+        RenderSchematic.INSTANCE.loadRenderers();
     }
 }

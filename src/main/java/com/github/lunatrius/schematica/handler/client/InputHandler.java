@@ -9,17 +9,14 @@ import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import org.lwjgl.input.Keyboard;
 
 public class InputHandler {
@@ -99,7 +96,7 @@ public class InputHandler {
 
         // Minecraft.func_147112_ai
         if (objectMouseOver != null) {
-            final EntityClientPlayerMP player = this.minecraft.thePlayer;
+            final EntityPlayerSP player = this.minecraft.thePlayer;
 
             if (objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.MISS) {
                 revert = true;
@@ -110,12 +107,6 @@ public class InputHandler {
             }
 
             if (player.capabilities.isCreativeMode) {
-                final Block block = schematic.getBlock(objectMouseOver.blockX, objectMouseOver.blockY, objectMouseOver.blockZ);
-                final int metadata = schematic.getBlockMetadata(objectMouseOver.blockX, objectMouseOver.blockY, objectMouseOver.blockZ);
-                if (block == Blocks.double_stone_slab || block == Blocks.double_wooden_slab || block == Blocks.snow_layer) {
-                    player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(block, 1, metadata & 0xF));
-                }
-
                 final int slot = player.inventoryContainer.inventorySlots.size() - 9 + player.inventory.currentItem;
                 this.minecraft.playerController.sendSlotPacket(player.inventory.getStackInSlot(player.inventory.currentItem), slot);
             }

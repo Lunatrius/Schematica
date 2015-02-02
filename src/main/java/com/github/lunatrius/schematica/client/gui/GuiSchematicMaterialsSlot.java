@@ -45,7 +45,7 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
     }
 
     @Override
-    protected void drawSlot(int index, int x, int y, int par4, Tessellator tessellator, int par6, int par7) {
+    protected void drawSlot(int index, int x, int y, int par4, int mouseX, int mouseY) {
         ItemStack itemStack = this.guiSchematicMaterials.blockList.get(index);
 
         String itemName;
@@ -57,9 +57,9 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
             itemName = this.strUnknownBlock;
         }
 
-        GuiHelper.drawItemStack(this.minecraft.renderEngine, this.minecraft.fontRenderer, x, y, itemStack);
+        GuiHelper.drawItemStack(this.minecraft.renderEngine, this.minecraft.fontRendererObj, x, y, itemStack);
 
-        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, itemName, x + 24, y + 6, 0xFFFFFF);
-        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amount, x + 215 - this.minecraft.fontRenderer.getStringWidth(amount), y + 6, 0xFFFFFF);
+        this.guiSchematicMaterials.drawString(this.minecraft.fontRendererObj, itemName, x + 24, y + 6, 0xFFFFFF);
+        this.guiSchematicMaterials.drawString(this.minecraft.fontRendererObj, amount, x + 215 - this.minecraft.fontRendererObj.getStringWidth(amount), y + 6, 0xFFFFFF);
     }
 }

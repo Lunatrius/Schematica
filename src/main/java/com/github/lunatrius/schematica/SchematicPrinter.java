@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica;
 
+import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.config.PlacementData;
@@ -7,11 +8,12 @@ import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -19,12 +21,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fml.common.registry.GameData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,8 +100,8 @@ public class SchematicPrinter {
     }
 
     public boolean print() {
-        final EntityClientPlayerMP player = this.minecraft.thePlayer;
-        final World world = this.minecraft.theWorld;
+        final EntityPlayerSP player = this.minecraft.thePlayer;
+        final WorldClient world = this.minecraft.theWorld;
 
         syncSneaking(player, true);
 
@@ -112,17 +116,19 @@ public class SchematicPrinter {
         final int slot = player.inventory.currentItem;
         final boolean isSneaking = player.isSneaking();
 
+        final MBlockPos pos = new MBlockPos();
+
         final boolean isRenderingLayer = this.schematic.isRenderingLayer;
         final int renderingLayer = this.schematic.renderingLayer;
-        for (int y = minY; y < maxY; y++) {
-            if (isRenderingLayer && y != renderingLayer) {
+        for (pos.y = minY; pos.y < maxY; pos.y++) {
+            if (isRenderingLayer && pos.y != renderingLayer) {
                 continue;
             }
 
-            for (int x = minX; x < maxX; x++) {
-                for (int z = minZ; z < maxZ; z++) {
+            for (pos.x = minX; pos.x < maxX; pos.x++) {
+                for (pos.z = minZ; pos.z < maxZ; pos.z++) {
                     try {
-                        if (placeBlock(world, player, x, y, z)) {
+                        if (placeBlock(world, player, pos)) {
                             player.inventory.currentItem = slot;
                             syncSneaking(player, isSneaking);
                             return true;
@@ -142,7 +148,10 @@ public class SchematicPrinter {
         return true;
     }
 
-    private boolean placeBlock(World world, EntityPlayer player, int x, int y, int z) {
+    private boolean placeBlock(WorldClient world, EntityPlayerSP player, BlockPos pos) {
+        final int x = pos.getX();
+        final int y = pos.getY();
+        final int z = pos.getZ();
         if (this.timeout[x][y][z] > 0) {
             this.timeout[x][y][z] -= ConfigurationHandler.placeDelay;
             return false;
@@ -151,29 +160,34 @@ public class SchematicPrinter {
         final int wx = this.schematic.position.x + x;
         final int wy = this.schematic.position.y + y;
         final int wz = this.schematic.position.z + z;
+        final BlockPos realPos = new BlockPos(wx, wy, wz);
 
-        final Block block = this.schematic.getBlock(x, y, z);
-        final Block realBlock = world.getBlock(wx, wy, wz);
-        final int metadata = this.schematic.getBlockMetadata(x, y, z);
-        final int realMetadata = world.getBlockMetadata(wx, wy, wz);
+        final IBlockState blockState = this.schematic.getBlockState(pos);
+        final Block block = blockState.getBlock();
+        final int metadata = block.getMetaFromState(blockState);
 
+        final IBlockState realBlockState = world.getBlockState(realPos);
+        final Block realBlock = realBlockState.getBlock();
+        final int realMetadata = realBlock.getMetaFromState(realBlockState);
+
+        // TODO: compare block states directly?
         if (block == realBlock && metadata == realMetadata) {
             return false;
         }
 
-        if (ConfigurationHandler.destroyBlocks && !world.isAirBlock(wx, wy, wz) && this.minecraft.playerController.isInCreativeMode()) {
-            this.minecraft.playerController.clickBlock(wx, wy, wz, 0);
+        if (ConfigurationHandler.destroyBlocks && !world.isAirBlock(realPos) && this.minecraft.playerController.isInCreativeMode()) {
+            this.minecraft.playerController.clickBlock(realPos, EnumFacing.DOWN);
 
             this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
 
             return !ConfigurationHandler.destroyInstantly;
         }
 
-        if (this.schematic.isAirBlock(x, y, z)) {
+        if (this.schematic.isAirBlock(pos)) {
             return false;
         }
 
-        if (!realBlock.isReplaceable(world, wx, wy, wz)) {
+        if (!realBlock.isReplaceable(world, realPos)) {
             return false;
         }
 
@@ -183,7 +197,7 @@ public class SchematicPrinter {
             return false;
         }
 
-        if (placeBlock(this.minecraft, world, player, wx, wy, wz, item, metadata)) {
+        if (placeBlock(this.minecraft, world, player, realPos, item, metadata)) {
             this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
 
             if (!ConfigurationHandler.placeInstantly) {
@@ -194,18 +208,17 @@ public class SchematicPrinter {
         return false;
     }
 
-    private boolean isSolid(World world, int x, int y, int z, ForgeDirection side) {
-        x += side.offsetX;
-        y += side.offsetY;
-        z += side.offsetZ;
+    private boolean isSolid(World world, BlockPos pos, EnumFacing side) {
+        final BlockPos offset = new BlockPos(pos).offset(side);
 
-        Block block = world.getBlock(x, y, z);
+        final IBlockState blockState = world.getBlockState(offset);
+        Block block = blockState.getBlock();
 
         if (block == null) {
             return false;
         }
 
-        if (block.isAir(world, x, y, z)) {
+        if (block.isAir(world, offset)) {
             return false;
         }
 
@@ -213,46 +226,46 @@ public class SchematicPrinter {
             return false;
         }
 
-        if (block.isReplaceable(world, x, y, z)) {
+        if (block.isReplaceable(world, offset)) {
             return false;
         }
 
         return true;
     }
 
-    private ForgeDirection[] getSolidSides(World world, int x, int y, int z) {
-        List<ForgeDirection> list = new ArrayList<ForgeDirection>();
+    private EnumFacing[] getSolidSides(World world, BlockPos pos) {
+        List<EnumFacing> list = new ArrayList<EnumFacing>();
 
-        for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
-            if (isSolid(world, x, y, z, side)) {
+        for (EnumFacing side : EnumFacing.values()) {
+            if (isSolid(world, pos, side)) {
                 list.add(side);
             }
         }
 
-        ForgeDirection[] sides = new ForgeDirection[list.size()];
+        EnumFacing[] sides = new EnumFacing[list.size()];
         return list.toArray(sides);
     }
 
-    private boolean placeBlock(Minecraft minecraft, World world, EntityPlayer player, int x, int y, int z, Item item, int itemDamage) {
+    private boolean placeBlock(Minecraft minecraft, WorldClient world, EntityPlayerSP player, BlockPos pos, Item item, int itemDamage) {
         if (item instanceof ItemBucket || item == Items.sign) {
             return false;
         }
 
         PlacementData data = BlockInfo.getPlacementDataFromItem(item);
 
-        if (!isValidOrientation(player, x, y, z, data, itemDamage)) {
+        if (!isValidOrientation(player, pos, data, itemDamage)) {
             return false;
         }
 
-        ForgeDirection[] solidSides = getSolidSides(world, x, y, z);
-        ForgeDirection direction = ForgeDirection.UNKNOWN;
+        EnumFacing[] solidSides = getSolidSides(world, pos);
+        EnumFacing direction = null;
         float offsetY = 0.0f;
 
         if (solidSides.length > 0) {
             int metadata = WILDCARD_METADATA;
 
             if (data != null) {
-                ForgeDirection[] validDirections = data.getValidDirections(solidSides, itemDamage);
+                EnumFacing[] validDirections = data.getValidDirections(solidSides, itemDamage);
                 if (validDirections.length > 0) {
                     direction = validDirections[0];
                 }
@@ -271,14 +284,14 @@ public class SchematicPrinter {
             }
         }
 
-        if (direction != ForgeDirection.UNKNOWN || !ConfigurationHandler.placeAdjacent) {
-            return placeBlock(minecraft, world, player, x, y, z, direction, 0.0f, offsetY, 0.0f);
+        if (direction != null || !ConfigurationHandler.placeAdjacent) {
+            return placeBlock(minecraft, world, player, pos, direction, 0.0f, offsetY, 0.0f);
         }
 
         return false;
     }
 
-    private boolean isValidOrientation(EntityPlayer player, int x, int y, int z, PlacementData data, int metadata) {
+    private boolean isValidOrientation(EntityPlayer player, BlockPos pos, PlacementData data, int metadata) {
         if (data != null) {
             switch (data.type) {
             case BLOCK: {
@@ -296,7 +309,7 @@ public class SchematicPrinter {
             case PISTON: {
                 Integer integer = data.mapping.get(ClientProxy.orientation);
                 if (integer != null) {
-                    return BlockPistonBase.determineOrientation(null, x, y, z, player) == BlockPistonBase.getPistonOrientation(metadata);
+                    return BlockPistonBase.getFacingFromEntity(null, pos, player) == BlockPistonBase.getFacing(metadata);
                 }
                 break;
             }
@@ -307,21 +320,19 @@ public class SchematicPrinter {
         return true;
     }
 
-    private boolean placeBlock(Minecraft minecraft, World world, EntityPlayer player, int x, int y, int z, ForgeDirection direction, float offsetX, float offsetY, float offsetZ) {
+    private boolean placeBlock(Minecraft minecraft, WorldClient world, EntityPlayerSP player, BlockPos pos, EnumFacing direction, float offsetX, float offsetY, float offsetZ) {
         ItemStack itemStack = player.getCurrentEquippedItem();
         boolean success = false;
 
-        x += direction.offsetX;
-        y += direction.offsetY;
-        z += direction.offsetZ;
+        final BlockPos offset = new BlockPos(pos).offset(direction);
 
-        int side = direction.getOpposite().ordinal();
+        EnumFacing side = direction.getOpposite();
 
-		/* copypasted from n.m.client.Minecraft to sooth finicky servers */
-        success = !ForgeEventFactory.onPlayerInteract(minecraft.thePlayer, Action.RIGHT_CLICK_BLOCK, x, y, z, side, world).isCanceled();
+        // copypasted from n.m.client.Minecraft to sooth finicky servers
+        success = !ForgeEventFactory.onPlayerInteract(minecraft.thePlayer, Action.RIGHT_CLICK_BLOCK, world, offset, side).isCanceled();
         if (success) {
             // still not assured!
-            success = minecraft.playerController.onPlayerRightClick(player, world, itemStack, x, y, z, side, Vec3.createVectorHelper(x + offsetX, y + offsetY, z + offsetZ));
+            success = minecraft.playerController.onPlayerRightClick(player, world, itemStack, offset, side, new Vec3(offset.getX() + offsetX, offset.getY() + offsetY, offset.getZ() + offsetZ));
             if (success) {
                 // yes, some servers actually care about this.
                 minecraft.thePlayer.swingItem();
@@ -335,9 +346,9 @@ public class SchematicPrinter {
         return success;
     }
 
-    private void syncSneaking(EntityClientPlayerMP player, boolean isSneaking) {
+    private void syncSneaking(EntityPlayerSP player, boolean isSneaking) {
         player.setSneaking(isSneaking);
-        player.sendQueue.addToSendQueue(new C0BPacketEntityAction(player, isSneaking ? 1 : 2));
+        player.sendQueue.addToSendQueue(new C0BPacketEntityAction(player, isSneaking ? C0BPacketEntityAction.Action.START_SNEAKING : C0BPacketEntityAction.Action.STOP_SNEAKING));
     }
 
     private boolean swapToItem(InventoryPlayer inventory, Item item, int itemDamage) {

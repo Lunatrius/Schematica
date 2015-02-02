@@ -3,9 +3,8 @@ package com.github.lunatrius.schematica.tooltip;
 import com.github.lunatrius.core.client.gui.FontRendererHelper;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.world.SchematicWorld;
-import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
@@ -13,8 +12,12 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
+import net.minecraftforge.fml.common.registry.GameData;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -42,14 +45,14 @@ public class TooltipHandler {
                 return false;
             }
 
-            final List<String> lines = getText(schematic, objectMouseOver.blockX, objectMouseOver.blockY, objectMouseOver.blockZ);
+            final List<String> lines = getText(schematic, objectMouseOver.getBlockPos());
 
             if (!lines.isEmpty()) {
                 final ScaledResolution scaledResolution = new ScaledResolution(this.minecraft, this.minecraft.displayWidth, this.minecraft.displayHeight);
                 this.width = scaledResolution.getScaledWidth();
                 this.height = scaledResolution.getScaledHeight();
 
-                drawHoveringText(lines, ConfigurationHandler.tooltipX, ConfigurationHandler.tooltipY, this.minecraft.fontRenderer);
+                drawHoveringText(lines, ConfigurationHandler.tooltipX, ConfigurationHandler.tooltipY, this.minecraft.fontRendererObj);
             }
 
             GL11.glDisable(GL11.GL_LIGHTING);
@@ -58,18 +61,18 @@ public class TooltipHandler {
         return false;
     }
 
-    private List<String> getText(final SchematicWorld schematic, final int x, final int y, final int z) {
+    private List<String> getText(final SchematicWorld schematic, final BlockPos pos) {
         final List<String> list = new ArrayList<String>();
 
-        final Block block = schematic.getBlock(x, y, z);
-        final int blockMetadata = schematic.getBlockMetadata(x, y, z);
+        final IBlockState blockState = schematic.getBlockState(pos);
+        final Block block = blockState.getBlock();
+        final int blockMetadata = block.getMetaFromState(blockState);
 
         list.add(block.getLocalizedName());
         list.add("\u00a77" + BLOCK_REGISTRY.getNameForObject(block) + "\u00a7r : " + blockMetadata);
 
         return list;
     }
-
 
     private void drawHoveringText(final List<String> lines, final float x, final float y, final FontRenderer fontRenderer) {
         GL11.glDisable(GL12.GL_RESCALE_NORMAL);
@@ -133,14 +136,15 @@ public class TooltipHandler {
         GL11.glEnable(GL11.GL_BLEND);
         OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         GL11.glShadeModel(GL11.GL_SMOOTH);
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.setColorRGBA_F(redA, greenA, blueA, alphaA);
-        tessellator.addVertex(x1, y0, 300);
-        tessellator.addVertex(x0, y0, 300);
-        tessellator.setColorRGBA_F(redB, greenB, blueB, alphaB);
-        tessellator.addVertex(x0, y1, 300);
-        tessellator.addVertex(x1, y1, 300);
+        Tessellator tessellator = Tessellator.getInstance();
+        WorldRenderer worldRenderer = tessellator.getWorldRenderer();
+        worldRenderer.startDrawingQuads();
+        worldRenderer.setColorRGBA_F(redA, greenA, blueA, alphaA);
+        worldRenderer.addVertex(x1, y0, 300);
+        worldRenderer.addVertex(x0, y0, 300);
+        worldRenderer.setColorRGBA_F(redB, greenB, blueB, alphaB);
+        worldRenderer.addVertex(x0, y1, 300);
+        worldRenderer.addVertex(x1, y1, 300);
         tessellator.draw();
         GL11.glShadeModel(GL11.GL_FLAT);
         GL11.glDisable(GL11.GL_BLEND);
