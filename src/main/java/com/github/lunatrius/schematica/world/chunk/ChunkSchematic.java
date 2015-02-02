@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.world.chunk;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -33,5 +34,10 @@ public class ChunkSchematic extends Chunk {
     @Override
     public boolean getAreLevelsEmpty(int startY, int endY) {
         return false;
+    }
+
+    @Override
+    public TileEntity getTileEntity(BlockPos pos, EnumCreateEntityType createEntityType) {
+        return this.world.getTileEntity(pos);
     }
 }

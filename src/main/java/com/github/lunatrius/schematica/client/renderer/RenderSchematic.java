@@ -259,7 +259,10 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
         GlStateManager.pushMatrix();
         this.profiler.endStartSection("entities");
         RenderHelper.enableStandardItemLighting();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         renderEntities(entity, frustum, partialTicks);
+        GlStateManager.disableBlend();
         RenderHelper.disableStandardItemLighting();
         disableLightmap();
         GlStateManager.matrixMode(GL11.GL_MODELVIEW);
