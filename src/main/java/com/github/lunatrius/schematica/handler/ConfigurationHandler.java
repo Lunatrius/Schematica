@@ -3,7 +3,6 @@ package com.github.lunatrius.schematica.handler;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.google.common.primitives.Ints;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Configuration;
@@ -39,7 +38,9 @@ public class ConfigurationHandler {
     public static final boolean DESTROY_BLOCKS_DEFAULT = false;
     public static final boolean DESTROY_INSTANTLY_DEFAULT = false;
     public static final boolean PLACE_ADJACENT_DEFAULT = true;
-    public static final int[] SWAP_SLOTS_DEFAULT = new int[] { };
+    public static final boolean[] SWAP_SLOTS_DEFAULT = new boolean[] {
+            false, false, false, false, false, true, true, true, true
+    };
     public static final boolean TOOLTIP_ENABLED_DEFAULT = true;
     public static final double TOOLTIP_X_DEFAULT = 100;
     public static final double TOOLTIP_Y_DEFAULT = 0;
@@ -64,8 +65,8 @@ public class ConfigurationHandler {
     public static boolean destroyBlocks = DESTROY_BLOCKS_DEFAULT;
     public static boolean destroyInstantly = DESTROY_INSTANTLY_DEFAULT;
     public static boolean placeAdjacent = PLACE_ADJACENT_DEFAULT;
-    public static int[] swapSlots = SWAP_SLOTS_DEFAULT;
-    public static Queue<Integer> swapSlotsQueue = new ArrayDeque<Integer>();
+    public static boolean[] swapSlots = SWAP_SLOTS_DEFAULT;
+    public static final Queue<Integer> swapSlotsQueue = new ArrayDeque<Integer>();
     public static boolean tooltipEnabled = TOOLTIP_ENABLED_DEFAULT;
     public static float tooltipX = (float) TOOLTIP_X_DEFAULT;
     public static float tooltipY = (float) TOOLTIP_Y_DEFAULT;
@@ -89,7 +90,7 @@ public class ConfigurationHandler {
     public static Property propDestroyBlocks = null;
     public static Property propDestroyInstantly = null;
     public static Property propPlaceAdjacent = null;
-    public static Property propSwapSlots = null;
+    public static Property[] propSwapSlots = new Property[SWAP_SLOTS_DEFAULT.length];
     public static Property propTooltipEnabled = null;
     public static Property propTooltipX = null;
     public static Property propTooltipY = null;
@@ -162,10 +163,16 @@ public class ConfigurationHandler {
         propPlaceAdjacent.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_ADJACENT);
         placeAdjacent = propPlaceAdjacent.getBoolean(PLACE_ADJACENT_DEFAULT);
 
-        propSwapSlots = configuration.get(Names.Config.Category.PRINTER, Names.Config.SWAP_SLOTS, SWAP_SLOTS_DEFAULT, Names.Config.SWAP_SLOTS_DESC, 0, 8);
-        propSwapSlots.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SWAP_SLOTS);
-        swapSlots = propSwapSlots.getIntList();
-        swapSlotsQueue = new ArrayDeque<Integer>(Ints.asList(swapSlots));
+        swapSlotsQueue.clear();
+        for (int i = 0; i < SWAP_SLOTS_DEFAULT.length; i++) {
+            propSwapSlots[i] = configuration.get(Names.Config.Category.PRINTER_SWAPSLOTS, Names.Config.SWAP_SLOT + i, SWAP_SLOTS_DEFAULT[i], Names.Config.SWAP_SLOT_DESC);
+            propSwapSlots[i].setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SWAP_SLOT + i);
+            swapSlots[i] = propSwapSlots[i].getBoolean(SWAP_SLOTS_DEFAULT[i]);
+
+            if (swapSlots[i]) {
+                swapSlotsQueue.offer(i);
+            }
+        }
 
         propTooltipEnabled = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_ENABLED, TOOLTIP_ENABLED_DEFAULT, Names.Config.TOOLTIP_ENABLED_DESC);
         propTooltipEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TOOLTIP_ENABLED);

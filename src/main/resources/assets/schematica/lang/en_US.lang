@@ -35,6 +35,8 @@ schematica.config.category.render=Rendering
 schematica.config.category.render.tooltip=Render related settings.
 schematica.config.category.printer=Printer
 schematica.config.category.printer.tooltip=Printer related settings.
+schematica.config.category.printer.swapslots=Hotbar Slots
+schematica.config.category.printer.swapslots.tooltip=Allow the printer to use non empty hotbar slots.
 schematica.config.category.tooltip=Tooltip
 schematica.config.category.tooltip.tooltip=Tooltip related settings.
 schematica.config.category.general=General
@@ -71,8 +73,26 @@ schematica.config.destroyInstantly=Destroy Instantly
 schematica.config.destroyInstantly.tooltip=Destroy all blocks that can be destroyed in one tick.
 schematica.config.placeAdjacent=Place Only Adjacent
 schematica.config.placeAdjacent.tooltip=Place blocks only if there is an adjacent block next to them.
-schematica.config.swapSlots=Swap Slots
-schematica.config.swapSlots.tooltip=The printer will use these slots to swap out items in the inventory.
+
+# gui - config - printer - swap slots
+schematica.config.swapSlot0=Allow Slot 1
+schematica.config.swapSlot0.tooltip=Allow the printer to use the hotbar slot 1.
+schematica.config.swapSlot1=Allow Slot 2
+schematica.config.swapSlot1.tooltip=Allow the printer to use the hotbar slot 2.
+schematica.config.swapSlot2=Allow Slot 3
+schematica.config.swapSlot2.tooltip=Allow the printer to use the hotbar slot 3.
+schematica.config.swapSlot3=Allow Slot 4
+schematica.config.swapSlot3.tooltip=Allow the printer to use the hotbar slot 4.
+schematica.config.swapSlot4=Allow Slot 5
+schematica.config.swapSlot4.tooltip=Allow the printer to use the hotbar slot 5.
+schematica.config.swapSlot5=Allow Slot 6
+schematica.config.swapSlot5.tooltip=Allow the printer to use the hotbar slot 6.
+schematica.config.swapSlot6=Allow Slot 7
+schematica.config.swapSlot6.tooltip=Allow the printer to use the hotbar slot 7.
+schematica.config.swapSlot7=Allow Slot 8
+schematica.config.swapSlot7.tooltip=Allow the printer to use the hotbar slot 8.
+schematica.config.swapSlot8=Allow Slot 9
+schematica.config.swapSlot8.tooltip=Allow the printer to use the hotbar slot 9.
 
 # gui - config - tooltip
 schematica.config.tooltipEnabled=Tooltip Enabled
