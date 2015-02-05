@@ -4,7 +4,7 @@ import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.gui.GuiSchematicControl;
 import com.github.lunatrius.schematica.client.gui.GuiSchematicLoad;
 import com.github.lunatrius.schematica.client.gui.GuiSchematicSave;
-import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
+import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
@@ -55,7 +55,7 @@ public class InputHandler {
                 final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
                 if (schematic != null && schematic.isRenderingLayer) {
                     schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer + 1, 0, schematic.getHeight() - 1);
-                    RendererSchematicGlobal.INSTANCE.refresh();
+                    RenderSchematic.INSTANCE.refresh();
                 }
             }
 
@@ -63,7 +63,7 @@ public class InputHandler {
                 final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
                 if (schematic != null && schematic.isRenderingLayer) {
                     schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer - 1, 0, schematic.getHeight() - 1);
-                    RendererSchematicGlobal.INSTANCE.refresh();
+                    RenderSchematic.INSTANCE.refresh();
                 }
             }
 

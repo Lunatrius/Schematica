@@ -2,7 +2,6 @@ package com.github.lunatrius.schematica.client.gui;
 
 import com.github.lunatrius.core.client.gui.GuiNumericField;
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
-import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
@@ -11,6 +10,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.BlockPos;
 
 import java.io.IOException;
 
@@ -109,10 +109,10 @@ public class GuiSchematicSave extends GuiScreenBase {
         numericField.setMaximum(Constants.World.MAXIMUM_COORD);
     }
 
-    private void setPoint(GuiNumericField numX, GuiNumericField numY, GuiNumericField numZ, Vector3i point) {
-        numX.setValue(point.x);
-        numY.setValue(point.y);
-        numZ.setValue(point.z);
+    private void setPoint(GuiNumericField numX, GuiNumericField numY, GuiNumericField numZ, BlockPos point) {
+        numX.setValue(point.getX());
+        numY.setValue(point.getY());
+        numZ.setValue(point.getZ());
     }
 
     @Override

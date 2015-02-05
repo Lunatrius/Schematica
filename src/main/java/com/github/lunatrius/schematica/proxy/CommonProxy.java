@@ -1,7 +1,6 @@
 package com.github.lunatrius.schematica.proxy;
 
 import com.github.lunatrius.core.util.MBlockPos;
-import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.core.version.VersionChecker;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.command.CommandSchematicaList;
@@ -23,6 +22,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -120,7 +120,7 @@ public abstract class CommonProxy {
         }
     }
 
-    public boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, Vector3i from, Vector3i to) {
+    public boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, BlockPos from, BlockPos to) {
         try {
             String iconName = "";
 
@@ -134,12 +134,12 @@ public abstract class CommonProxy {
                 Reference.logger.error("Failed to parse icon data!", e);
             }
 
-            final int minX = Math.min(from.x, to.x);
-            final int maxX = Math.max(from.x, to.x);
-            final int minY = Math.min(from.y, to.y);
-            final int maxY = Math.max(from.y, to.y);
-            final int minZ = Math.min(from.z, to.z);
-            final int maxZ = Math.max(from.z, to.z);
+            final int minX = Math.min(from.getX(), to.getX());
+            final int maxX = Math.max(from.getX(), to.getX());
+            final int minY = Math.min(from.getY(), to.getY());
+            final int maxY = Math.max(from.getY(), to.getY());
+            final int minZ = Math.min(from.getZ(), to.getZ());
+            final int maxZ = Math.max(from.getZ(), to.getZ());
 
             final short width = (short) (Math.abs(maxX - minX) + 1);
             final short height = (short) (Math.abs(maxY - minY) + 1);

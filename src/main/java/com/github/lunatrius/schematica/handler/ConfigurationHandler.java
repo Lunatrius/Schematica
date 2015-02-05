@@ -56,7 +56,7 @@ public class ConfigurationHandler {
     public static float alpha = (float) ALPHA_DEFAULT;
     public static boolean highlight = HIGHLIGHT_DEFAULT;
     public static boolean highlightAir = HIGHLIGHT_AIR_DEFAULT;
-    public static float blockDelta = (float) BLOCK_DELTA_DEFAULT;
+    public static double blockDelta = BLOCK_DELTA_DEFAULT;
     public static boolean drawQuads = DRAW_QUADS_DEFAULT;
     public static boolean drawLines = DRAW_LINES_DEFAULT;
     public static int placeDelay = PLACE_DELAY_DEFAULT;
@@ -129,7 +129,7 @@ public class ConfigurationHandler {
 
         propBlockDelta = configuration.get(Names.Config.Category.RENDER, Names.Config.BLOCK_DELTA, BLOCK_DELTA_DEFAULT, Names.Config.BLOCK_DELTA_DESC, 0.0, 0.2);
         propBlockDelta.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.BLOCK_DELTA);
-        blockDelta = (float) propBlockDelta.getDouble(BLOCK_DELTA_DEFAULT);
+        blockDelta = propBlockDelta.getDouble(BLOCK_DELTA_DEFAULT);
 
         propDrawQuads = configuration.get(Names.Config.Category.RENDER, Names.Config.DRAW_QUADS, DRAW_QUADS_DEFAULT, Names.Config.DRAW_QUADS_DESC);
         propDrawQuads.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DRAW_QUADS);

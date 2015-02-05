@@ -1,6 +1,6 @@
 package com.github.lunatrius.schematica.command;
 
-import com.github.lunatrius.core.util.vector.Vector3i;
+import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Names;
@@ -41,8 +41,8 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
             throw new CommandException(Names.Command.Save.Message.QUOTA_EXCEEDED);
         }
 
-        Vector3i from = new Vector3i();
-        Vector3i to = new Vector3i();
+        MBlockPos from = new MBlockPos();
+        MBlockPos to = new MBlockPos();
         String filename;
         String name;
 

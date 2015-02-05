@@ -1,8 +1,6 @@
 package com.github.lunatrius.schematica.world;
 
 import com.github.lunatrius.core.util.MBlockPos;
-import com.github.lunatrius.core.util.vector.Vector3f;
-import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.reference.Reference;
@@ -52,7 +50,7 @@ public class SchematicWorld extends WorldClient {
 
     private ISchematic schematic;
 
-    public final Vector3i position = new Vector3i();
+    public final MBlockPos position = new MBlockPos();
     public boolean isRendering;
     public boolean isRenderingLayer;
     public int renderingLayer;
@@ -408,9 +406,5 @@ public class SchematicWorld extends WorldClient {
 
         refreshChests();
         */
-    }
-
-    public Vector3f dimensions() {
-        return new Vector3f(this.schematic.getWidth(), this.schematic.getHeight(), this.schematic.getLength());
     }
 }
