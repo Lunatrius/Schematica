@@ -2,7 +2,6 @@ package com.github.lunatrius.schematica.handler.client;
 
 import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
-import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Reference;
@@ -47,12 +46,6 @@ public class TickHandler {
                     printer.print();
                 }
 
-                this.minecraft.mcProfiler.endStartSection("checkDirty");
-                checkDirty(schematic);
-
-                this.minecraft.mcProfiler.endStartSection("canUpdate");
-                RendererSchematicChunk.setCanUpdate(true);
-
                 this.minecraft.mcProfiler.endSection();
             }
 
@@ -63,25 +56,5 @@ public class TickHandler {
 
             this.minecraft.mcProfiler.endSection();
         }
-    }
-
-    private void checkDirty(SchematicWorld schematic) {
-        // TODO
-        /*
-        WorldRenderer[] renderers = this.minecraft.renderGlobal.sortedWorldRenderers;
-        if (renderers != null) {
-            int count = 0;
-            for (WorldRenderer worldRenderer : renderers) {
-                if (worldRenderer != null && worldRenderer.needsUpdate && count++ < 125) {
-                    AxisAlignedBB worldRendererBoundingBox = worldRenderer.rendererBoundingBox.getOffsetBoundingBox(-schematic.position.x, -schematic.position.y, -schematic.position.z);
-                    for (RendererSchematicChunk renderer : RendererSchematicGlobal.INSTANCE.sortedRendererSchematicChunk) {
-                        if (!renderer.getDirty() && renderer.getBoundingBox().intersectsWith(worldRendererBoundingBox)) {
-                            renderer.setDirty();
-                        }
-                    }
-                }
-            }
-        }
-        */
     }
 }

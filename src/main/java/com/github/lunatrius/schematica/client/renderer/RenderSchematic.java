@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.renderer;
 
+import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.renderer.shader.ShaderProgram;
@@ -77,6 +78,8 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
     private final Minecraft mc;
     private final Profiler profiler;
     private final RenderManager renderManager;
+    private final TessellatorShape tessellator = new TessellatorShape(0x200000);
+    private final MBlockPos tmp = new MBlockPos();
     private SchematicWorld world;
     private Set<RenderChunk> chunksToUpdate = Sets.newLinkedHashSet();
     private List<RenderSchematic.ContainerLocalRenderInformation> renderInfos = Lists.newArrayListWithCapacity(CHUNKS);
@@ -176,21 +179,49 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
             ClientProxy.setPlayerData(player, event.partialTicks);
 
             this.profiler.startSection("schematica");
+            this.profiler.startSection("schematic");
             SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
 
             if (schematic != null && schematic.isRendering) {
-                Vector3d playerPosition = ClientProxy.playerPosition.clone();
-                Vector3d extra = new Vector3d();
-                extra.add(schematic.position.toVector3d());
-                playerPosition.sub(extra);
-
-                playerPosition.set(schematic.position.toVector3d()).negate().add(1, 1, 1);
-
-                GL11.glPushMatrix();
+                GlStateManager.pushMatrix();
                 renderSchematic(schematic, event.partialTicks);
-                GL11.glPopMatrix();
+                GlStateManager.popMatrix();
             }
 
+            this.profiler.endStartSection("guide");
+            if (ClientProxy.isRenderingGuide || schematic != null && schematic.isRendering) {
+                GlStateManager.pushMatrix();
+                GlStateManager.disableTexture2D();
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+
+                this.tessellator.setTranslation(-ClientProxy.playerPosition.x, -ClientProxy.playerPosition.y, -ClientProxy.playerPosition.z);
+
+                if (ClientProxy.isRenderingGuide) {
+                    this.tessellator.startQuads();
+                    this.tessellator.drawCuboid(ClientProxy.pointA, TessellatorShape.QUAD_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
+                    this.tessellator.drawCuboid(ClientProxy.pointB, TessellatorShape.QUAD_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
+                    this.tessellator.draw();
+                }
+
+                this.tessellator.startLines();
+                if (ClientProxy.isRenderingGuide) {
+                    this.tessellator.drawCuboid(ClientProxy.pointA, TessellatorShape.QUAD_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
+                    this.tessellator.drawCuboid(ClientProxy.pointB, TessellatorShape.QUAD_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
+                    this.tessellator.drawCuboid(ClientProxy.pointMin, ClientProxy.pointMax, TessellatorShape.QUAD_ALL, 0.0f, 0.75f, 0.0f, 0.5f);
+                }
+                if (schematic != null && schematic.isRendering) {
+                    this.tmp.set(schematic.position).add(schematic.getWidth() - 1, schematic.getHeight() - 1, schematic.getLength() - 1);
+                    this.tessellator.drawCuboid(schematic.position, this.tmp, TessellatorShape.LINE_ALL, 0.75f, 0.0f, 0.75f, 0.5f);
+                }
+                this.tessellator.draw();
+
+                GlStateManager.disableBlend();
+                GlStateManager.enableTexture2D();
+                GlStateManager.popMatrix();
+            }
+
+            this.profiler.endSection();
             this.profiler.endSection();
         }
     }
@@ -202,7 +233,7 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
             loadRenderers();
         }
 
-        PLAYER_POSITION_OFFSET.set(ClientProxy.playerPosition).sub(this.world.position.toVector3d());
+        PLAYER_POSITION_OFFSET.set(ClientProxy.playerPosition).sub(this.world.position.x, this.world.position.y, this.world.position.z);
 
         if (OpenGlHelper.shadersSupported && ConfigurationHandler.enableAlpha) {
             GL20.glUseProgram(SHADER_ALPHA.getProgram());
@@ -293,6 +324,10 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
         GlStateManager.disableTexture2D();
         GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+    }
+
+    public void refresh() {
+        loadRenderers();
     }
 
     @Override
@@ -764,7 +799,8 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
         markBlocksForUpdate(x1 - 1, y1 - 1, z1 - 1, x2 + 1, y2 + 1, z2 + 1);
     }
 
-    private void markBlocksForUpdate(final int x1, final int y1, final int z1, final int x2, final int y2, final int z2) {
+    @Override
+    public void markBlocksForUpdate(final int x1, final int y1, final int z1, final int x2, final int y2, final int z2) {
         this.viewFrustum.markBlocksForUpdate(x1, y1, z1, x2, y2, z2);
     }
 

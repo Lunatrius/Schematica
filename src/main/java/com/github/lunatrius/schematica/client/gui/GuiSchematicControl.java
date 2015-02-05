@@ -2,16 +2,16 @@ package com.github.lunatrius.schematica.client.gui;
 
 import com.github.lunatrius.core.client.gui.GuiNumericField;
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
-import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
-import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
+import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.util.BlockPos;
 
 public class GuiSchematicControl extends GuiScreenBase {
     private final SchematicWorld schematic;
@@ -133,10 +133,10 @@ public class GuiSchematicControl extends GuiScreenBase {
         numericField.setMaximum(Constants.World.MAXIMUM_COORD);
     }
 
-    private void setPoint(GuiNumericField numX, GuiNumericField numY, GuiNumericField numZ, Vector3i point) {
-        numX.setValue(point.x);
-        numY.setValue(point.y);
-        numZ.setValue(point.z);
+    private void setPoint(GuiNumericField numX, GuiNumericField numY, GuiNumericField numZ, BlockPos point) {
+        numX.setValue(point.getX());
+        numY.setValue(point.getY());
+        numZ.setValue(point.getZ());
     }
 
     @Override
@@ -148,34 +148,32 @@ public class GuiSchematicControl extends GuiScreenBase {
 
             if (guiButton.id == this.numericX.id) {
                 this.schematic.position.x = this.numericX.getValue();
-                RendererSchematicGlobal.INSTANCE.refresh();
+                RenderSchematic.INSTANCE.refresh();
             } else if (guiButton.id == this.numericY.id) {
                 this.schematic.position.y = this.numericY.getValue();
-                RendererSchematicGlobal.INSTANCE.refresh();
+                RenderSchematic.INSTANCE.refresh();
             } else if (guiButton.id == this.numericZ.id) {
                 this.schematic.position.z = this.numericZ.getValue();
-                RendererSchematicGlobal.INSTANCE.refresh();
+                RenderSchematic.INSTANCE.refresh();
             } else if (guiButton.id == this.btnLayerMode.id) {
                 this.schematic.isRenderingLayer = !this.schematic.isRenderingLayer;
                 this.btnLayerMode.displayString = this.schematic.isRenderingLayer ? this.strLayers : this.strAll;
                 this.nfLayer.setEnabled(this.schematic.isRenderingLayer);
-                RendererSchematicGlobal.INSTANCE.refresh();
+                RenderSchematic.INSTANCE.refresh();
             } else if (guiButton.id == this.nfLayer.id) {
                 this.schematic.renderingLayer = this.nfLayer.getValue();
-                RendererSchematicGlobal.INSTANCE.refresh();
+                RenderSchematic.INSTANCE.refresh();
             } else if (guiButton.id == this.btnHide.id) {
                 this.btnHide.displayString = this.schematic.toggleRendering() ? this.strHide : this.strShow;
             } else if (guiButton.id == this.btnMove.id) {
                 ClientProxy.moveSchematicToPlayer(this.schematic);
-                RendererSchematicGlobal.INSTANCE.refresh();
+                RenderSchematic.INSTANCE.refresh();
                 setPoint(this.numericX, this.numericY, this.numericZ, this.schematic.position);
             } else if (guiButton.id == this.btnFlip.id) {
                 this.schematic.flip();
-                RendererSchematicGlobal.INSTANCE.createRendererSchematicChunks(this.schematic);
                 SchematicPrinter.INSTANCE.refresh();
             } else if (guiButton.id == this.btnRotate.id) {
                 this.schematic.rotate();
-                RendererSchematicGlobal.INSTANCE.createRendererSchematicChunks(this.schematic);
                 SchematicPrinter.INSTANCE.refresh();
             } else if (guiButton.id == this.btnMaterials.id) {
                 this.mc.displayGuiScreen(new GuiSchematicMaterials(this));

@@ -1,12 +1,11 @@
 package com.github.lunatrius.schematica.proxy;
 
+import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.core.util.vector.Vector3d;
-import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
-import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
 import com.github.lunatrius.schematica.handler.client.InputHandler;
@@ -41,12 +40,14 @@ public class ClientProxy extends CommonProxy {
     public static EnumFacing orientation = null;
     public static int rotationRender = 0;
 
-    public static final Vector3i pointA = new Vector3i();
-    public static final Vector3i pointB = new Vector3i();
-    public static final Vector3i pointMin = new Vector3i();
-    public static final Vector3i pointMax = new Vector3i();
+    public static final MBlockPos pointA = new MBlockPos();
+    public static final MBlockPos pointB = new MBlockPos();
+    public static final MBlockPos pointMin = new MBlockPos();
+    public static final MBlockPos pointMax = new MBlockPos();
 
     public static MovingObjectPosition movingObjectPosition = null;
+
+    private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
     private SchematicWorld schematicWorld = null;
 
@@ -91,7 +92,7 @@ public class ClientProxy extends CommonProxy {
         pointMax.z = Math.max(pointA.z, pointB.z);
     }
 
-    public static void movePointToPlayer(Vector3i point) {
+    public static void movePointToPlayer(MBlockPos point) {
         point.x = (int) Math.floor(playerPosition.x);
         point.y = (int) Math.floor(playerPosition.y);
         point.z = (int) Math.floor(playerPosition.z);
@@ -118,7 +119,7 @@ public class ClientProxy extends CommonProxy {
 
     public static void moveSchematicToPlayer(SchematicWorld schematic) {
         if (schematic != null) {
-            Vector3i position = schematic.position;
+            MBlockPos position = schematic.position;
             position.x = (int) Math.floor(playerPosition.x);
             position.y = (int) Math.floor(playerPosition.y);
             position.z = (int) Math.floor(playerPosition.z);
@@ -174,7 +175,6 @@ public class ClientProxy extends CommonProxy {
         FMLCommonHandler.instance().bus().register(RenderTickHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
 
-        // TODO: MinecraftForge.EVENT_BUS.register(RendererSchematicGlobal.INSTANCE);
         MinecraftForge.EVENT_BUS.register(RenderSchematic.INSTANCE);
         MinecraftForge.EVENT_BUS.register(ChatEventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(new OverlayHandler());
@@ -182,7 +182,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public File getDataDirectory() {
-        final File file = Minecraft.getMinecraft().mcDataDir;
+        final File file = MINECRAFT.mcDataDir;
         try {
             return file.getCanonicalFile();
         } catch (IOException e) {
@@ -199,8 +199,6 @@ public class ClientProxy extends CommonProxy {
 
         SchematicPrinter.INSTANCE.setEnabled(true);
         SchematicPrinter.INSTANCE.setSchematic(null);
-
-        RendererSchematicGlobal.INSTANCE.destroyRendererSchematicChunks();
 
         setActiveSchematic(null);
 
@@ -225,7 +223,6 @@ public class ClientProxy extends CommonProxy {
         Reference.logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", filename, world.getWidth(), world.getHeight(), world.getLength()));
 
         Schematica.proxy.setActiveSchematic(world);
-        RendererSchematicGlobal.INSTANCE.createRendererSchematicChunks(world);
         SchematicPrinter.INSTANCE.setSchematic(world);
         world.isRendering = true;
 
