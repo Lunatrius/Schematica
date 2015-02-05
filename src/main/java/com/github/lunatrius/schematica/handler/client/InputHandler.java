@@ -81,7 +81,7 @@ public class InputHandler {
                 final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
                 boolean revert = true;
 
-                if (schematic != null) {
+                if (schematic != null && schematic.isRendering) {
                     revert = pickBlock(schematic, ClientProxy.movingObjectPosition);
                 }
 
@@ -103,6 +103,16 @@ public class InputHandler {
 
             if (objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.MISS) {
                 revert = true;
+            }
+
+            final MovingObjectPosition mcObjectMouseOver = this.minecraft.objectMouseOver;
+            if (mcObjectMouseOver != null && mcObjectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+                final int x = mcObjectMouseOver.blockX - schematic.position.x;
+                final int y = mcObjectMouseOver.blockY - schematic.position.y;
+                final int z = mcObjectMouseOver.blockZ - schematic.position.z;
+                if (x == objectMouseOver.blockX && y == objectMouseOver.blockY && z == objectMouseOver.blockZ) {
+                    return true;
+                }
             }
 
             if (!ForgeHooks.onPickBlock(objectMouseOver, player, schematic)) {
