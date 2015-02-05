@@ -18,7 +18,7 @@ public class OverlayHandler {
             final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
             if (schematic != null) {
                 event.left.add("[§6Schematica§r] D: " + schematic.getWidth() + "," + schematic.getHeight() + "," + schematic.getLength());
-                event.left.add("[§6Schematica§r] " + RenderSchematic.INSTANCE.getDebugInfoEntities());
+                // event.left.add("[§6Schematica§r] " + RenderSchematic.INSTANCE.getDebugInfoEntities());
                 event.left.add("[§6Schematica§r] " + RenderSchematic.INSTANCE.getDebugInfoTileEntities());
                 event.left.add("[§6Schematica§r] " + RenderSchematic.INSTANCE.getDebugInfoRenders());
             }
