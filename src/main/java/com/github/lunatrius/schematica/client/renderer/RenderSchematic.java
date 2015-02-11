@@ -266,7 +266,7 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
         RenderHelper.disableStandardItemLighting();
 
         this.profiler.endStartSection("terrain_setup");
-        setupTerrain(entity, partialTicks, frustum, this.frameCount++, false);
+        setupTerrain(entity, partialTicks, frustum, this.frameCount++, isInsideWorld(x, y, z));
 
         this.profiler.endStartSection("updatechunks");
         updateChunks(finishTimeNano);
@@ -300,24 +300,26 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
         GlStateManager.popMatrix();
 
         GlStateManager.enableCull();
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1f);
-        GlStateManager.enableBlend();
-        GlStateManager.depthMask(false);
         this.mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
+        GlStateManager.depthMask(false);
+        GlStateManager.pushMatrix();
         this.profiler.endStartSection("translucent");
         GlStateManager.enableBlend();
         GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         renderBlockLayer(EnumWorldBlockLayer.TRANSLUCENT, partialTicks, PASS, entity);
         GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
+        GlStateManager.depthMask(true);
 
         GlStateManager.shadeModel(GL11.GL_FLAT);
-        GlStateManager.depthMask(true);
         GlStateManager.enableCull();
-        GlStateManager.disableBlend();
-        GlStateManager.disableFog();
+    }
+
+    private boolean isInsideWorld(final double x, final double y, final double z) {
+        return x >= -1 && y >= -1 && z >= -1 && x <= this.world.getWidth() && y <= this.world.getHeight() && z <= this.world.getLength();
     }
 
     private void disableLightmap() {
@@ -521,7 +523,7 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
                     add = true;
                 }
 
-                if (add) {
+                if (add && !playerSpectator) {
                     this.renderInfos.add(renderInfo);
                 } else {
                     renderchunk.setFrameIndex(frameCount);
