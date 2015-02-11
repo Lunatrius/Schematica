@@ -493,7 +493,7 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
             this.renderInfos = Lists.newArrayListWithCapacity(CHUNKS);
 
             final LinkedList<ContainerLocalRenderInformation> renderInfoList = Lists.newLinkedList();
-            final boolean renderChunksMany = this.mc.renderChunksMany;
+            boolean renderChunksMany = this.mc.renderChunksMany;
 
             if (renderchunk == null) {
                 final int chunkY = posEye.getY() > 0 ? 248 : 8;
@@ -526,6 +526,10 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
                 if (add && !playerSpectator) {
                     this.renderInfos.add(renderInfo);
                 } else {
+                    if (playerSpectator && this.world.getBlockState(posEye).getBlock().isOpaqueCube()) {
+                        renderChunksMany = false;
+                    }
+
                     renderchunk.setFrameIndex(frameCount);
                     renderInfoList.add(renderInfo);
                 }
