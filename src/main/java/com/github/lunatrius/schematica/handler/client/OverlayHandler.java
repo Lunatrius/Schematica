@@ -13,11 +13,10 @@ public class OverlayHandler {
     @SubscribeEvent
     public void onText(RenderGameOverlayEvent.Text event) {
         if (this.minecraft.gameSettings.showDebugInfo) {
-            event.left.add("");
-
             final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
             if (schematic != null) {
-                event.left.add("[§6Schematica§r] D: " + schematic.getWidth() + "," + schematic.getHeight() + "," + schematic.getLength());
+                event.left.add("");
+                event.left.add("[§6Schematica§r] " + schematic.getDebugDimensions());
                 // event.left.add("[§6Schematica§r] " + RenderSchematic.INSTANCE.getDebugInfoEntities());
                 event.left.add("[§6Schematica§r] " + RenderSchematic.INSTANCE.getDebugInfoTileEntities());
                 event.left.add("[§6Schematica§r] " + RenderSchematic.INSTANCE.getDebugInfoRenders());

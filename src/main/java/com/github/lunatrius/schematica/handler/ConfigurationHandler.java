@@ -25,6 +25,7 @@ public class ConfigurationHandler {
 
     public static Configuration configuration;
 
+    public static final boolean DUMP_BLOCK_LIST_DEFAULT = false;
     public static final boolean ENABLE_ALPHA_DEFAULT = false;
     public static final double ALPHA_DEFAULT = 1.0;
     public static final boolean HIGHLIGHT_DEFAULT = true;
@@ -32,6 +33,7 @@ public class ConfigurationHandler {
     public static final double BLOCK_DELTA_DEFAULT = 0.005;
     public static final boolean DRAW_QUADS_DEFAULT = true;
     public static final boolean DRAW_LINES_DEFAULT = true;
+    public static final int RENDER_DISTANCE_DEFAULT = 8;
     public static final int PLACE_DELAY_DEFAULT = 1;
     public static final int TIMEOUT_DEFAULT = 10;
     public static final boolean PLACE_INSTANTLY_DEFAULT = false;
@@ -52,6 +54,7 @@ public class ConfigurationHandler {
     public static final boolean LOAD_ENABLED_DEFAULT = true;
     public static final int PLAYER_QUOTA_KILOBYTES_DEFAULT = 8192;
 
+    public static boolean dumpBlockList = DUMP_BLOCK_LIST_DEFAULT;
     public static boolean enableAlpha = ENABLE_ALPHA_DEFAULT;
     public static float alpha = (float) ALPHA_DEFAULT;
     public static boolean highlight = HIGHLIGHT_DEFAULT;
@@ -59,6 +62,7 @@ public class ConfigurationHandler {
     public static double blockDelta = BLOCK_DELTA_DEFAULT;
     public static boolean drawQuads = DRAW_QUADS_DEFAULT;
     public static boolean drawLines = DRAW_LINES_DEFAULT;
+    public static int renderDistance = RENDER_DISTANCE_DEFAULT;
     public static int placeDelay = PLACE_DELAY_DEFAULT;
     public static int timeout = TIMEOUT_DEFAULT;
     public static boolean placeInstantly = PLACE_INSTANTLY_DEFAULT;
@@ -77,6 +81,7 @@ public class ConfigurationHandler {
     public static boolean loadEnabled = LOAD_ENABLED_DEFAULT;
     public static int playerQuotaKilobytes = PLAYER_QUOTA_KILOBYTES_DEFAULT;
 
+    public static Property propDumpBlockList = null;
     public static Property propEnableAlpha = null;
     public static Property propAlpha = null;
     public static Property propHighlight = null;
@@ -84,6 +89,7 @@ public class ConfigurationHandler {
     public static Property propBlockDelta = null;
     public static Property propDrawQuads = null;
     public static Property propDrawLines = null;
+    public static Property propRenderDistance = null;
     public static Property propPlaceDelay = null;
     public static Property propTimeout = null;
     public static Property propPlaceInstantly = null;
@@ -111,6 +117,10 @@ public class ConfigurationHandler {
     }
 
     private static void loadConfiguration() {
+        propDumpBlockList = configuration.get(Names.Config.Category.DEBUG, Names.Config.DUMP_BLOCK_LIST, DUMP_BLOCK_LIST_DEFAULT, Names.Config.DUMP_BLOCK_LIST_DESC);
+        propDumpBlockList.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DUMP_BLOCK_LIST);
+        dumpBlockList = propDumpBlockList.getBoolean(DUMP_BLOCK_LIST_DEFAULT);
+
         propEnableAlpha = configuration.get(Names.Config.Category.RENDER, Names.Config.ALPHA_ENABLED, ENABLE_ALPHA_DEFAULT, Names.Config.ALPHA_ENABLED_DESC);
         propEnableAlpha.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.ALPHA_ENABLED);
         enableAlpha = propEnableAlpha.getBoolean(ENABLE_ALPHA_DEFAULT);
@@ -138,6 +148,10 @@ public class ConfigurationHandler {
         propDrawLines = configuration.get(Names.Config.Category.RENDER, Names.Config.DRAW_LINES, DRAW_LINES_DEFAULT, Names.Config.DRAW_LINES_DESC);
         propDrawLines.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DRAW_LINES);
         drawLines = propDrawLines.getBoolean(DRAW_LINES_DEFAULT);
+
+        propRenderDistance = configuration.get(Names.Config.Category.RENDER, Names.Config.RENDER_DISTANCE, RENDER_DISTANCE_DEFAULT, Names.Config.RENDER_DISTANCE_DESC, 2, 16);
+        propRenderDistance.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.RENDER_DISTANCE);
+        renderDistance = propRenderDistance.getInt(RENDER_DISTANCE_DEFAULT);
 
         propPlaceDelay = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_DELAY, PLACE_DELAY_DEFAULT, Names.Config.PLACE_DELAY_DESC, 0, 20);
         propPlaceDelay.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_DELAY);

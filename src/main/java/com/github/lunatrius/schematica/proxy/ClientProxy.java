@@ -152,6 +152,7 @@ public class ClientProxy extends CommonProxy {
         final Property[] sliders = {
                 ConfigurationHandler.propAlpha,
                 ConfigurationHandler.propBlockDelta,
+                ConfigurationHandler.propRenderDistance,
                 ConfigurationHandler.propPlaceDelay,
                 ConfigurationHandler.propTimeout,
                 ConfigurationHandler.propTooltipX,
