@@ -119,6 +119,7 @@ public class ConfigurationHandler {
     private static void loadConfiguration() {
         propDumpBlockList = configuration.get(Names.Config.Category.DEBUG, Names.Config.DUMP_BLOCK_LIST, DUMP_BLOCK_LIST_DEFAULT, Names.Config.DUMP_BLOCK_LIST_DESC);
         propDumpBlockList.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DUMP_BLOCK_LIST);
+        propDumpBlockList.requiresMcRestart();
         dumpBlockList = propDumpBlockList.getBoolean(DUMP_BLOCK_LIST_DEFAULT);
 
         propEnableAlpha = configuration.get(Names.Config.Category.RENDER, Names.Config.ALPHA_ENABLED, ENABLE_ALPHA_DEFAULT, Names.Config.ALPHA_ENABLED_DESC);
