@@ -336,7 +336,7 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
     public void loadRenderers() {
         if (this.world != null) {
             this.displayListEntitiesDirty = true;
-            this.renderDistanceChunks = this.mc.gameSettings.renderDistanceChunks;
+            this.renderDistanceChunks = ConfigurationHandler.renderDistance;
             final boolean vbo = this.vboEnabled;
             this.vboEnabled = OpenGlHelper.useVbo();
 
@@ -353,7 +353,7 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
             }
 
             stopChunkUpdates();
-            this.viewFrustum = new ViewFrustum(this.world, this.mc.gameSettings.renderDistanceChunks, this, this.renderChunkFactory);
+            this.viewFrustum = new ViewFrustum(this.world, this.renderDistanceChunks, this, this.renderChunkFactory);
 
             final double posX = PLAYER_POSITION_OFFSET.x;
             final double posZ = PLAYER_POSITION_OFFSET.z;
@@ -443,7 +443,7 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
 
     @Override
     public void setupTerrain(final Entity viewEntity, final double partialTicks, final ICamera camera, final int frameCount, final boolean playerSpectator) {
-        if (this.mc.gameSettings.renderDistanceChunks != this.renderDistanceChunks) {
+        if (ConfigurationHandler.renderDistance != this.renderDistanceChunks) {
             loadRenderers();
         }
 

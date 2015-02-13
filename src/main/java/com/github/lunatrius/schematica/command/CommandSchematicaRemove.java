@@ -28,14 +28,14 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    public String getCommandUsage(ICommandSender sender) {
         return Names.Command.Remove.Message.USAGE;
     }
 
     @Override
     public void processCommand(ICommandSender sender, String[] arguments) throws CommandException{
         if (arguments.length < 1) {
-            throw new WrongUsageException(getUsage(sender));
+            throw new WrongUsageException(getCommandUsage(sender));
         }
 
         if (!(sender instanceof EntityPlayer)) {

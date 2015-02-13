@@ -4,6 +4,7 @@ package com.github.lunatrius.schematica.reference;
 public final class Names {
     public static final class Config {
         public static final class Category {
+            public static final String DEBUG = "debug";
             public static final String RENDER = "render";
             public static final String PRINTER = "printer";
             public static final String PRINTER_SWAPSLOTS = "printer.swapslots";
@@ -11,6 +12,9 @@ public final class Names {
             public static final String GENERAL = "general";
             public static final String SERVER = "server";
         }
+
+        public static final String DUMP_BLOCK_LIST = "dumpBlockList";
+        public static final String DUMP_BLOCK_LIST_DESC = "Dump all block states on startup.";
 
         public static final String ALPHA_ENABLED = "alphaEnabled";
         public static final String ALPHA_ENABLED_DESC = "Enable transparent textures.";
@@ -26,6 +30,8 @@ public final class Names {
         public static final String DRAW_QUADS_DESC = "Draw surface areas.";
         public static final String DRAW_LINES = "drawLines";
         public static final String DRAW_LINES_DESC = "Draw outlines.";
+        public static final String RENDER_DISTANCE = "renderDistance";
+        public static final String RENDER_DISTANCE_DESC = "Schematic render distance.";
 
         public static final String PLACE_DELAY = "placeDelay";
         public static final String PLACE_DELAY_DESC = "Delay between placement attempts (in ticks).";

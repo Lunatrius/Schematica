@@ -407,4 +407,8 @@ public class SchematicWorld extends WorldClient {
         refreshChests();
         */
     }
+
+    public String getDebugDimensions() {
+        return "WHL: " + getWidth() + " / " + getHeight() + " / " + getLength();
+    }
 }

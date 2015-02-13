@@ -31,6 +31,8 @@ schematica.gui.printer=Printer
 schematica.gui.unknownblock=Unknown Block
 
 # gui - config - categories
+schematica.config.category.debug=Debug
+schematica.config.category.debug.tooltip=Debug/developer settings.\nDon't touch unless you know what you're doing.
 schematica.config.category.render=Rendering
 schematica.config.category.render.tooltip=Render related settings.
 schematica.config.category.printer=Printer
@@ -43,6 +45,10 @@ schematica.config.category.general=General
 schematica.config.category.general.tooltip=General settings.
 schematica.config.category.server=Server
 schematica.config.category.server.tooltip=Server-side settings.
+
+# gui - config - debug
+schematica.config.dumpBlockList=Dump Block List
+schematica.config.dumpBlockList.tooltip=Dump all block states on startup.
 
 # gui - config - render
 schematica.config.alphaEnabled=Alpha Enabled
@@ -59,6 +65,8 @@ schematica.config.drawQuads=Draw Quads
 schematica.config.drawQuads.tooltip=Draw surface areas.
 schematica.config.drawLines=Draw Lines
 schematica.config.drawLines.tooltip=Draw outlines.
+schematica.config.renderDistance=Render Distance
+schematica.config.renderDistance.tooltip=Schematic render distance.
 
 # gui - config - printer
 schematica.config.placeDelay=Placement Delay

@@ -31,12 +31,12 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    public String getCommandUsage(ICommandSender sender) {
         return Names.Command.Download.Message.USAGE;
     }
 
     @Override
-    public List tabComplete(ICommandSender sender, String[] args, BlockPos pos) {
+    public List addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
         if (!(sender instanceof EntityPlayer)) {
             return null;
         }
@@ -60,7 +60,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
         if (args.length < 1) {
-            throw new WrongUsageException(getUsage(sender));
+            throw new WrongUsageException(getCommandUsage(sender));
         }
 
         if (!(sender instanceof EntityPlayerMP)) {

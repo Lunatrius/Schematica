@@ -35,6 +35,8 @@ schematica.config.category.printer.tooltip=Printer-relaterte innstillinger.
 schematica.config.category.general=Generelt
 schematica.config.category.general.tooltip=Generelle innstillinger.
 
+# gui - config - debug
+
 # gui - config - render
 schematica.config.alphaEnabled=Alpha aktivert
 schematica.config.alphaEnabled.tooltip=Aktiver gjennomsiktige teksturer.
@@ -60,6 +62,8 @@ schematica.config.placeInstantly=Plasser umiddelbart
 schematica.config.placeInstantly.tooltip=Plasser alle blokker som kan bli plassert i ett tikk.
 schematica.config.placeAdjacent=Plasser kun tilstøtende
 schematica.config.placeAdjacent.tooltip=Plasser kun blokker hvis det er en tilstøtende blokk ved siden av dem.
+
+# gui - config - printer - swap slots
 
 # gui - config - tooltip
 

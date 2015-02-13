@@ -28,7 +28,7 @@ public class CommandSchematicaList extends CommandSchematicaBase {
     }
 
     @Override
-    public String getUsage(ICommandSender sender) {
+    public String getCommandUsage(ICommandSender sender) {
         return Names.Command.List.Message.USAGE;
     }
 
@@ -47,7 +47,7 @@ public class CommandSchematicaList extends CommandSchematicaBase {
                 }
             }
         } catch (NumberFormatException e) {
-            throw new WrongUsageException(getUsage(sender));
+            throw new WrongUsageException(getCommandUsage(sender));
         }
 
         final EntityPlayer player = (EntityPlayer) sender;
