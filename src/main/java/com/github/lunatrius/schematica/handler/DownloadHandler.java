@@ -48,7 +48,7 @@ public class DownloadHandler {
         if (!transfer.state.isWaiting()) {
             if (++transfer.timeout >= Constants.Network.TIMEOUT) {
                 if (++transfer.retries >= Constants.Network.RETRIES) {
-                    Reference.logger.warn(String.format("%s's download was dropped!", player.getDisplayName()));
+                    Reference.logger.warn(String.format("%s's download was dropped!", player.getDisplayName().getFormattedText()));
                     return;
                 }
 
