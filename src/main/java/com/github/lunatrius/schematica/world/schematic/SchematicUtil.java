@@ -2,7 +2,7 @@ package com.github.lunatrius.schematica.world.schematic;
 
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.SchematicWorld;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,6 +13,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public final class SchematicUtil {
+    public static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.grass);
+
     public static NBTTagCompound readTagCompoundFromFile(File file) throws IOException {
         try {
             return CompressedStreamTools.readCompressed(new FileInputStream(file));
@@ -48,17 +50,17 @@ public final class SchematicUtil {
             return icon;
         }
 
-        return SchematicWorld.DEFAULT_ICON.copy();
+        return DEFAULT_ICON.copy();
     }
 
     public static ItemStack getIconFromNBT(NBTTagCompound tagCompound) {
-        ItemStack icon = SchematicWorld.DEFAULT_ICON.copy();
+        ItemStack icon = DEFAULT_ICON.copy();
 
         if (tagCompound != null && tagCompound.hasKey(Names.NBT.ICON)) {
             icon.readFromNBT(tagCompound.getCompoundTag(Names.NBT.ICON));
 
             if (icon.getItem() == null) {
-                icon = SchematicWorld.DEFAULT_ICON.copy();
+                icon = DEFAULT_ICON.copy();
             }
         }
 
@@ -72,6 +74,6 @@ public final class SchematicUtil {
             Reference.logger.error("Failed to read schematic icon!", e);
         }
 
-        return SchematicWorld.DEFAULT_ICON.copy();
+        return DEFAULT_ICON.copy();
     }
 }
