@@ -46,8 +46,6 @@ public class SchematicWorld extends WorldClient {
         }
     };
 
-    public static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.grass);
-
     private ISchematic schematic;
 
     public final MBlockPos position = new MBlockPos();
