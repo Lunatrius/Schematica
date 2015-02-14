@@ -52,7 +52,7 @@ public class DownloadHandler {
                     return;
                 }
 
-                Reference.logger.warn(String.format("%s's download timed out, retrying (#%d)", player.getDisplayName(), transfer.retries));
+                Reference.logger.warn(String.format("%s's download timed out, retrying (#%d)", player.getDisplayName().getFormattedText(), transfer.retries));
 
                 sendChunk(player, transfer);
                 transfer.timeout = 0;
@@ -79,6 +79,7 @@ public class DownloadHandler {
     private void sendChunk(EntityPlayerMP player, SchematicTransfer transfer) {
         transfer.setState(SchematicTransfer.State.CHUNK);
 
+        Reference.logger.trace("Sending chunk " + transfer.baseX + "," + transfer.baseY + "," + transfer.baseZ);
         MessageDownloadChunk message = new MessageDownloadChunk(transfer.schematic, transfer.baseX, transfer.baseY, transfer.baseZ);
         PacketHandler.INSTANCE.sendTo(message, player);
     }
