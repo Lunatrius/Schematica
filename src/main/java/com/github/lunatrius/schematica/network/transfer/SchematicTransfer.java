@@ -48,15 +48,15 @@ public class SchematicTransfer {
             setState(State.CHUNK_WAIT);
             this.baseX += Constants.SchematicChunk.WIDTH;
 
-            if (this.baseX > this.width) {
+            if (this.baseX >= this.width) {
                 this.baseX = 0;
                 this.baseY += Constants.SchematicChunk.HEIGHT;
 
-                if (this.baseY > this.height) {
+                if (this.baseY >= this.height) {
                     this.baseY = 0;
                     this.baseZ += Constants.SchematicChunk.LENGTH;
 
-                    if (this.baseZ > this.length) {
+                    if (this.baseZ >= this.length) {
                         setState(State.END_WAIT);
                         return false;
                     }

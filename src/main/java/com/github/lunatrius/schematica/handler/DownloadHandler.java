@@ -79,6 +79,7 @@ public class DownloadHandler {
     private void sendChunk(EntityPlayerMP player, SchematicTransfer transfer) {
         transfer.setState(SchematicTransfer.State.CHUNK);
 
+        Reference.logger.trace("Sending chunk " + transfer.baseX + "," + transfer.baseY + "," + transfer.baseZ);
         MessageDownloadChunk message = new MessageDownloadChunk(transfer.schematic, transfer.baseX, transfer.baseY, transfer.baseZ);
         PacketHandler.INSTANCE.sendTo(message, player);
     }
