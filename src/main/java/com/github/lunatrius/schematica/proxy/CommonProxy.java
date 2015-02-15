@@ -9,8 +9,8 @@ import com.github.lunatrius.schematica.command.CommandSchematicaSave;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.DownloadHandler;
 import com.github.lunatrius.schematica.handler.QueueTickHandler;
+import com.github.lunatrius.schematica.nbt.NBTConversionException;
 import com.github.lunatrius.schematica.nbt.NBTHelper;
-import com.github.lunatrius.schematica.nbt.TileEntityException;
 import com.github.lunatrius.schematica.network.PacketHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
@@ -19,9 +19,11 @@ import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import com.github.lunatrius.schematica.world.storage.Schematic;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -31,6 +33,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.io.File;
+import java.util.List;
 
 public abstract class CommonProxy {
     public boolean isSaveEnabled = true;
@@ -106,8 +109,8 @@ public abstract class CommonProxy {
                                 try {
                                     final TileEntity reloadedTileEntity = NBTHelper.reloadTileEntity(tileEntity, minX, minY, minZ);
                                     schematic.setTileEntity(localPos, reloadedTileEntity);
-                                } catch (TileEntityException tee) {
-                                    Reference.logger.error(String.format("Error while trying to save tile entity '%s'!", tileEntity), tee);
+                                } catch (NBTConversionException nce) {
+                                    Reference.logger.error(String.format("Error while trying to save tile entity '%s'!", tileEntity), nce);
                                     schematic.setBlockState(localPos, Blocks.bedrock.getDefaultState());
                                 }
                             }
@@ -116,6 +119,21 @@ public abstract class CommonProxy {
                         Reference.logger.error("Something went wrong!", e);
                     }
                 }
+            }
+        }
+
+        final int minX1 = localMinX | (chunkX << 4);
+        final int minZ1 = localMinZ | (chunkZ << 4);
+        final int maxX1 = localMaxX | (chunkX << 4);
+        final int maxZ1 = localMaxZ | (chunkZ << 4);
+        final AxisAlignedBB bb = AxisAlignedBB.fromBounds(minX1, minY, minZ1, maxX1 + 1, maxY + 1, maxZ1 + 1);
+        final List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, bb);
+        for (Entity entity : entities) {
+            try {
+                final Entity reloadedEntity = NBTHelper.reloadEntity(entity, minX, minY, minZ);
+                schematic.addEntity(reloadedEntity);
+            } catch (NBTConversionException nce) {
+                Reference.logger.error(String.format("Error while trying to save entity '%s'!", entity), nce);
             }
         }
     }

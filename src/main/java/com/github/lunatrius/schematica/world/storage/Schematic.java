@@ -3,6 +3,8 @@ package com.github.lunatrius.schematica.world.storage;
 import com.github.lunatrius.schematica.api.ISchematic;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -22,6 +24,7 @@ public class Schematic implements ISchematic {
     private final short[][][] blocks;
     private final byte[][][] metadata;
     private final List<TileEntity> tileEntities = new ArrayList<TileEntity>();
+    private final List<Entity> entities = new ArrayList<Entity>();
     private final int width;
     private final int height;
     private final int length;
@@ -96,7 +99,9 @@ public class Schematic implements ISchematic {
 
         removeTileEntity(pos);
 
-        this.tileEntities.add(tileEntity);
+        if (tileEntity != null) {
+            this.tileEntities.add(tileEntity);
+        }
     }
 
     @Override
@@ -106,6 +111,41 @@ public class Schematic implements ISchematic {
         while (iterator.hasNext()) {
             final TileEntity tileEntity = iterator.next();
             if (tileEntity.getPos().equals(pos)) {
+                iterator.remove();
+            }
+        }
+    }
+
+    @Override
+    public List<Entity> getEntities() {
+        return this.entities;
+    }
+
+    @Override
+    public void addEntity(final Entity entity) {
+        if (entity == null || entity.getUniqueID() == null || entity instanceof EntityPlayer) {
+            return;
+        }
+
+        for (final Entity e : this.entities) {
+            if (entity.getUniqueID().equals(e.getUniqueID())) {
+                return;
+            }
+        }
+
+        this.entities.add(entity);
+    }
+
+    @Override
+    public void removeEntity(final Entity entity) {
+        if (entity == null || entity.getUniqueID() == null) {
+            return;
+        }
+
+        final Iterator<Entity> iterator = this.entities.iterator();
+        while (iterator.hasNext()) {
+            final Entity e = iterator.next();
+            if (entity.getUniqueID().equals(e.getUniqueID())) {
                 iterator.remove();
             }
         }
