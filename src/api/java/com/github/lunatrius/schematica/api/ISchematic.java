@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.api;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -37,7 +38,7 @@ public interface ISchematic {
     TileEntity getTileEntity(BlockPos pos);
 
     /**
-     * returns a list of all tile entities in the schematic.
+     * Returns a list of all tile entities in the schematic.
      *
      * @return all tile entities.
      */
@@ -57,6 +58,27 @@ public interface ISchematic {
      * @param pos the location in world space.
      */
     void removeTileEntity(BlockPos pos);
+
+    /**
+     * Returns a list of all entities in the schematic.
+     *
+     * @return all entities.
+     */
+    List<Entity> getEntities();
+
+    /**
+     * Adds an entity to the schematic if it's not a player.
+     *
+     * @param entity the entity to add.
+     */
+    void addEntity(Entity entity);
+
+    /**
+     * Removes an entity from the schematic.
+     *
+     * @param entity the entity to remove.
+     */
+    void removeEntity(Entity entity);
 
     /**
      * Retrieves the icon that will be used to save the schematic.

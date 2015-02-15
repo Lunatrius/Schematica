@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.nbt;
 
 import com.github.lunatrius.schematica.reference.Names;
+import com.github.lunatrius.schematica.world.WorldDummy;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
@@ -86,11 +87,11 @@ public class NBTHelper {
         return compound;
     }
 
-    public static TileEntity reloadTileEntity(TileEntity tileEntity) throws TileEntityException {
+    public static TileEntity reloadTileEntity(TileEntity tileEntity) throws NBTConversionException {
         return reloadTileEntity(tileEntity, 0, 0, 0);
     }
 
-    public static TileEntity reloadTileEntity(TileEntity tileEntity, int offsetX, int offsetY, int offsetZ) throws TileEntityException {
+    public static TileEntity reloadTileEntity(TileEntity tileEntity, int offsetX, int offsetY, int offsetZ) throws NBTConversionException {
         if (tileEntity == null) {
             return null;
         }
@@ -102,10 +103,37 @@ public class NBTHelper {
             tileEntity = TileEntity.createAndLoadEntity(tileEntityCompound);
             final BlockPos pos = tileEntity.getPos();
             tileEntity.setPos(pos.add(-offsetX, -offsetY, -offsetZ));
-        } catch (Exception e) {
-            throw new TileEntityException(tileEntity, e);
+        } catch (Throwable t) {
+            throw new NBTConversionException(tileEntity, t);
         }
 
         return tileEntity;
+    }
+
+    public static Entity reloadEntity(Entity entity) throws NBTConversionException {
+        return reloadEntity(entity, 0, 0, 0);
+    }
+
+    public static Entity reloadEntity(Entity entity, int offsetX, int offsetY, int offsetZ) throws NBTConversionException {
+        if (entity == null) {
+            return null;
+        }
+
+        try {
+            final NBTTagCompound entityCompound = new NBTTagCompound();
+            if (entity.writeToNBTOptional(entityCompound)) {
+                entity = EntityList.createEntityFromNBT(entityCompound, WorldDummy.instance());
+
+                if (entity != null) {
+                    entity.posX -= offsetX;
+                    entity.posY -= offsetY;
+                    entity.posZ -= offsetZ;
+                }
+            }
+        } catch (Throwable t) {
+            throw new NBTConversionException(entity, t);
+        }
+
+        return entity;
     }
 }

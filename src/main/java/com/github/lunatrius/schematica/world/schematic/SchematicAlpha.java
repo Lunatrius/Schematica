@@ -8,6 +8,7 @@ import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.storage.Schematic;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +21,7 @@ import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -168,6 +170,18 @@ public class SchematicAlpha extends SchematicFormat {
             }
         }
 
+        final NBTTagList entityList = new NBTTagList();
+        final List<Entity> entities = schematic.getEntities();
+        for (Entity entity : entities) {
+            try{
+            final NBTTagCompound entityCompound = new NBTTagCompound();
+            if (entity.writeToNBTOptional(entityCompound)) {
+                entityList.appendTag(entityCompound);
+            }   }catch(Throwable t){
+                Reference.logger.fatal("wat", t);
+            }
+        }
+
         PreSchematicSaveEvent event = new PreSchematicSaveEvent(mappings);
         MinecraftForge.EVENT_BUS.post(event);
 
@@ -182,7 +196,7 @@ public class SchematicAlpha extends SchematicFormat {
         if (extra) {
             tagCompound.setByteArray(Names.NBT.ADD_BLOCKS, extraBlocksNibble);
         }
-        tagCompound.setTag(Names.NBT.ENTITIES, new NBTTagList());
+        tagCompound.setTag(Names.NBT.ENTITIES, entityList);
         tagCompound.setTag(Names.NBT.TILE_ENTITIES, tileEntitiesList);
         tagCompound.setTag(Names.NBT.MAPPING_SCHEMATICA, nbtMapping);
         final NBTTagCompound extendedMetadata = event.extendedMetadata;
