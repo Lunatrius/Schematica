@@ -173,12 +173,13 @@ public class SchematicAlpha extends SchematicFormat {
         final NBTTagList entityList = new NBTTagList();
         final List<Entity> entities = schematic.getEntities();
         for (Entity entity : entities) {
-            try{
-            final NBTTagCompound entityCompound = new NBTTagCompound();
-            if (entity.writeToNBTOptional(entityCompound)) {
-                entityList.appendTag(entityCompound);
-            }   }catch(Throwable t){
-                Reference.logger.fatal("wat", t);
+            try {
+                final NBTTagCompound entityCompound = new NBTTagCompound();
+                if (entity.writeToNBTOptional(entityCompound)) {
+                    entityList.appendTag(entityCompound);
+                }
+            } catch (Throwable t) {
+                Reference.logger.error(String.format("Entity %s failed to save, skipping!", entity), t);
             }
         }
 
