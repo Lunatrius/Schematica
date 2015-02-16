@@ -79,7 +79,13 @@ public class SchematicAlpha extends SchematicFormat {
                     }
 
                     final Block block = BLOCK_REGISTRY.getObjectById(blockID);
-                    schematic.setBlockState(pos.set(x, y, z), block.getStateFromMeta(meta));
+                    pos.set(x, y, z);
+                    try {
+                        final IBlockState blockState = block.getStateFromMeta(meta);
+                        schematic.setBlockState(pos, blockState);
+                    } catch (Exception e) {
+                        Reference.logger.error(String.format("Could not set block state at %s to %s with metadata %d", pos, BLOCK_REGISTRY.getNameForObject(block), meta), e);
+                    }
                 }
             }
         }
