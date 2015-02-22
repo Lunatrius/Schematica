@@ -83,7 +83,7 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
     private final MBlockPos tmp = new MBlockPos();
     private SchematicWorld world;
     private Set<RenderChunk> chunksToUpdate = Sets.newLinkedHashSet();
-    private List<RenderSchematic.ContainerLocalRenderInformation> renderInfos = Lists.newArrayListWithCapacity(CHUNKS);
+    private List<ContainerLocalRenderInformation> renderInfos = Lists.newArrayListWithCapacity(CHUNKS);
     private ViewFrustum viewFrustum;
     private double frustumUpdatePosX = Double.MIN_VALUE;
     private double frustumUpdatePosY = Double.MIN_VALUE;
@@ -480,15 +480,12 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
         }
 
         this.profiler.endStartSection("renderlistcamera");
-        final double x = PLAYER_POSITION_OFFSET.x;
-        final double y = PLAYER_POSITION_OFFSET.y;
-        final double z = PLAYER_POSITION_OFFSET.z;
-        this.renderContainer.initialize(x, y, z);
+        this.renderContainer.initialize(posX, posY, posZ);
 
         this.profiler.endStartSection("culling");
-        final BlockPos posEye = new BlockPos(x, y + viewEntity.getEyeHeight(), z);
+        final BlockPos posEye = new BlockPos(posX, posY + viewEntity.getEyeHeight(), posZ);
         final RenderChunk renderchunk = this.viewFrustum.getRenderChunk(posEye);
-        final BlockPos blockpos = new BlockPos(MathHelper.floor_double(x) & ~0xF, MathHelper.floor_double(y) & ~0xF, MathHelper.floor_double(z) & ~0xF);
+        final BlockPos blockpos = new BlockPos(MathHelper.floor_double(posX) & ~0xF, MathHelper.floor_double(posY) & ~0xF, MathHelper.floor_double(posZ) & ~0xF);
 
         this.displayListEntitiesDirty = this.displayListEntitiesDirty || !this.chunksToUpdate.isEmpty() || posX != this.lastViewEntityX || posY != this.lastViewEntityY || posZ != this.lastViewEntityZ || viewEntity.rotationPitch != this.lastViewEntityPitch || viewEntity.rotationYaw != this.lastViewEntityYaw;
         this.lastViewEntityX = posX;
@@ -513,13 +510,13 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
 
                         if (renderChunk != null && camera.isBoundingBoxInFrustum(renderChunk.boundingBox)) {
                             renderChunk.setFrameIndex(frameCount);
-                            renderInfoList.add(new ContainerLocalRenderInformation(renderChunk, null, 0, null));
+                            renderInfoList.add(new ContainerLocalRenderInformation(renderChunk, null, 0));
                         }
                     }
                 }
             } else {
                 boolean add = false;
-                final ContainerLocalRenderInformation renderInfo = new ContainerLocalRenderInformation(renderchunk, null, 0, null);
+                final ContainerLocalRenderInformation renderInfo = new ContainerLocalRenderInformation(renderchunk, null, 0);
                 final Set<EnumFacing> visibleSides = getVisibleSides(posEye);
 
                 if (!visibleSides.isEmpty() && visibleSides.size() == 1) {
@@ -555,7 +552,7 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
                     final RenderChunk neighborRenderChunk = getNeighborRenderChunk(posEye, posChunk, side);
 
                     if ((!renderChunksMany || !renderInfo.setFacing.contains(side.getOpposite())) && (!renderChunksMany || facing == null || renderChunk.getCompiledChunk().isVisible(facing.getOpposite(), side)) && neighborRenderChunk != null && neighborRenderChunk.setFrameIndex(frameCount) && camera.isBoundingBoxInFrustum(neighborRenderChunk.boundingBox)) {
-                        final ContainerLocalRenderInformation renderInfoNext = new ContainerLocalRenderInformation(neighborRenderChunk, side, renderInfo.counter + 1, null);
+                        final ContainerLocalRenderInformation renderInfoNext = new ContainerLocalRenderInformation(neighborRenderChunk, side, renderInfo.counter + 1);
                         renderInfoNext.setFacing.addAll(renderInfo.setFacing);
                         renderInfoNext.setFacing.add(side);
                         renderInfoList.add(renderInfoNext);
@@ -861,15 +858,11 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
         final Set<EnumFacing> setFacing;
         final int counter;
 
-        private ContainerLocalRenderInformation(final RenderChunk renderChunk, final EnumFacing facing, final int counter) {
+        ContainerLocalRenderInformation(final RenderChunk renderChunk, final EnumFacing facing, final int counter) {
             this.setFacing = EnumSet.noneOf(EnumFacing.class);
             this.renderChunk = renderChunk;
             this.facing = facing;
             this.counter = counter;
-        }
-
-        ContainerLocalRenderInformation(final RenderChunk p_i46249_2_, final EnumFacing p_i46249_3_, final int p_i46249_4_, final Object p_i46249_5_) {
-            this(p_i46249_2_, p_i46249_3_, p_i46249_4_);
         }
     }
 }
