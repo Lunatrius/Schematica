@@ -1,5 +1,7 @@
 package com.github.lunatrius.schematica.client.renderer;
 
+import com.github.lunatrius.core.client.renderer.GeometryMasks;
+import com.github.lunatrius.core.client.renderer.GeometryTessellator;
 import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.schematica.Schematica;
@@ -78,7 +80,6 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
     private final Minecraft mc;
     private final Profiler profiler;
     private final RenderManager renderManager;
-    private final TessellatorShape tessellator = new TessellatorShape(0x200000);
     private final MBlockPos tmp = new MBlockPos();
     private SchematicWorld world;
     private Set<RenderChunk> chunksToUpdate = Sets.newLinkedHashSet();
@@ -176,48 +177,22 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
     public void onRenderWorldLast(RenderWorldLastEvent event) {
         EntityPlayerSP player = this.mc.thePlayer;
         if (player != null) {
-            ClientProxy.setPlayerData(player, event.partialTicks);
-
             this.profiler.startSection("schematica");
-            this.profiler.startSection("schematic");
-            SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+            ClientProxy.setPlayerData(player, event.partialTicks);
+            final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+            final boolean isRenderingSchematic = schematic != null && schematic.isRendering;
 
-            if (schematic != null && schematic.isRendering) {
+            this.profiler.startSection("schematic");
+            if (isRenderingSchematic) {
                 GlStateManager.pushMatrix();
                 renderSchematic(schematic, event.partialTicks);
                 GlStateManager.popMatrix();
             }
 
             this.profiler.endStartSection("guide");
-            if (ClientProxy.isRenderingGuide || schematic != null && schematic.isRendering) {
+            if (ClientProxy.isRenderingGuide || isRenderingSchematic) {
                 GlStateManager.pushMatrix();
-                GlStateManager.disableTexture2D();
-                GlStateManager.enableBlend();
-                GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
-
-                this.tessellator.setTranslation(-ClientProxy.playerPosition.x, -ClientProxy.playerPosition.y, -ClientProxy.playerPosition.z);
-
-                if (ClientProxy.isRenderingGuide) {
-                    this.tessellator.startQuads();
-                    this.tessellator.drawCuboid(ClientProxy.pointA, TessellatorShape.QUAD_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
-                    this.tessellator.drawCuboid(ClientProxy.pointB, TessellatorShape.QUAD_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
-                    this.tessellator.draw();
-                }
-
-                this.tessellator.startLines();
-                if (ClientProxy.isRenderingGuide) {
-                    this.tessellator.drawCuboid(ClientProxy.pointA, TessellatorShape.QUAD_ALL, 0.75f, 0.0f, 0.0f, 0.25f);
-                    this.tessellator.drawCuboid(ClientProxy.pointB, TessellatorShape.QUAD_ALL, 0.0f, 0.0f, 0.75f, 0.25f);
-                    this.tessellator.drawCuboid(ClientProxy.pointMin, ClientProxy.pointMax, TessellatorShape.QUAD_ALL, 0.0f, 0.75f, 0.0f, 0.5f);
-                }
-                if (schematic != null && schematic.isRendering) {
-                    this.tmp.set(schematic.position).add(schematic.getWidth() - 1, schematic.getHeight() - 1, schematic.getLength() - 1);
-                    this.tessellator.drawCuboid(schematic.position, this.tmp, TessellatorShape.LINE_ALL, 0.75f, 0.0f, 0.75f, 0.5f);
-                }
-                this.tessellator.draw();
-
-                GlStateManager.disableBlend();
-                GlStateManager.enableTexture2D();
+                renderOverlay(schematic, isRenderingSchematic);
                 GlStateManager.popMatrix();
             }
 
@@ -246,6 +221,40 @@ public class RenderSchematic extends RenderGlobal implements IWorldAccess, IReso
         if (OpenGlHelper.shadersSupported && ConfigurationHandler.enableAlpha) {
             GL20.glUseProgram(0);
         }
+    }
+
+    private void renderOverlay(SchematicWorld schematic, boolean isRenderingSchematic) {
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+
+        final GeometryTessellator tessellator = GeometryTessellator.getInstance();
+        tessellator.setTranslation(-ClientProxy.playerPosition.x, -ClientProxy.playerPosition.y, -ClientProxy.playerPosition.z);
+        tessellator.setDelta(ConfigurationHandler.blockDelta);
+
+        if (ClientProxy.isRenderingGuide) {
+            tessellator.startQuads();
+            tessellator.drawCuboid(ClientProxy.pointA, GeometryMasks.Quad.ALL, 0xBF0000, 0x3F);
+            tessellator.drawCuboid(ClientProxy.pointB, GeometryMasks.Quad.ALL, 0x0000BF, 0x3F);
+            tessellator.draw();
+        }
+
+        tessellator.startLines();
+        if (ClientProxy.isRenderingGuide) {
+            tessellator.drawCuboid(ClientProxy.pointA, GeometryMasks.Line.ALL, 0xBF0000, 0x3F);
+            tessellator.drawCuboid(ClientProxy.pointB, GeometryMasks.Line.ALL, 0x0000BF, 0x3F);
+            tessellator.drawCuboid(ClientProxy.pointMin, ClientProxy.pointMax, GeometryMasks.Line.ALL, 0x00BF00, 0x7F);
+        }
+        if (isRenderingSchematic) {
+            this.tmp.set(schematic.position).add(schematic.getWidth() - 1, schematic.getHeight() - 1, schematic.getLength() - 1);
+            tessellator.drawCuboid(schematic.position, this.tmp, GeometryMasks.Line.ALL, 0xBF00BF, 0x7F);
+        }
+        tessellator.draw();
+
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
     }
 
     private void renderWorld(final float partialTicks, final long finishTimeNano) {
