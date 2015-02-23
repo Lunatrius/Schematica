@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.command;
 import com.github.lunatrius.schematica.FileFilterSchematic;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.reference.Names;
+import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.util.FileUtils;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -58,8 +59,20 @@ public class CommandSchematicaList extends CommandSchematicaBase {
 
         LinkedList<IChatComponent> componentsToSend = new LinkedList<IChatComponent>();
 
-        File file = Schematica.proxy.getPlayerSchematicDirectory(player, true);
-        final File[] files = file.listFiles(FILE_FILTER_SCHEMATIC);
+        File schematicDirectory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
+        if (schematicDirectory == null) {
+            Reference.logger.info(String.format("Unable to determine the schematic directory for player %s", player));
+            throw new CommandException(Names.Command.Save.Message.PLAYER_SCHEMATIC_DIR_UNAVAILABLE);
+        }
+
+        if (!schematicDirectory.exists()) {
+            if (!schematicDirectory.mkdirs()) {
+                Reference.logger.info(String.format("Could not create player schematic directory %s", schematicDirectory.getAbsolutePath()));
+                throw new CommandException(Names.Command.Save.Message.PLAYER_SCHEMATIC_DIR_UNAVAILABLE);
+            }
+        }
+
+        final File[] files = schematicDirectory.listFiles(FILE_FILTER_SCHEMATIC);
         for (File path : files) {
             if (currentFile >= pageStart && currentFile < pageEnd) {
                 String fileName = FilenameUtils.removeExtension(path.getName());
