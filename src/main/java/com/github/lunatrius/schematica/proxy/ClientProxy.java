@@ -3,9 +3,9 @@ package com.github.lunatrius.schematica.proxy;
 import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.schematica.SchematicPrinter;
-import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
+import com.github.lunatrius.schematica.client.renderer.SchematicBlockRendererDispatcher;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
 import com.github.lunatrius.schematica.handler.client.InputHandler;
@@ -16,6 +16,7 @@ import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -27,6 +28,7 @@ import net.minecraftforge.fml.client.config.GuiConfigEntries;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
@@ -48,6 +50,8 @@ public class ClientProxy extends CommonProxy {
     public static MovingObjectPosition movingObjectPosition = null;
 
     private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
+    private static BlockRendererDispatcher dispatcherVanilla = null;
+    private static BlockRendererDispatcher dispatcherSchematic = null;
 
     private SchematicWorld schematicWorld = null;
 
@@ -145,6 +149,14 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
+    public static void setDispatcherSchematic() {
+        MINECRAFT.blockRenderDispatcher = dispatcherSchematic;
+    }
+
+    public static void setDispatcherVanilla() {
+        MINECRAFT.blockRenderDispatcher = dispatcherVanilla;
+    }
+
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
@@ -182,6 +194,14 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
+    public void postInit(FMLPostInitializationEvent event) {
+        super.postInit(event);
+
+        dispatcherVanilla = MINECRAFT.getBlockRendererDispatcher();
+        dispatcherSchematic = new SchematicBlockRendererDispatcher(dispatcherVanilla.getBlockModelShapes(), MINECRAFT.gameSettings);
+    }
+
+    @Override
     public File getDataDirectory() {
         final File file = MINECRAFT.mcDataDir;
         try {
@@ -202,6 +222,9 @@ public class ClientProxy extends CommonProxy {
         SchematicPrinter.INSTANCE.setSchematic(null);
 
         setActiveSchematic(null);
+        if (MINECRAFT.theWorld != null) {
+            MINECRAFT.theWorld.removeWorldAccess(RenderSchematic.INSTANCE);
+        }
 
         playerPosition.set(0, 0, 0);
         orientation = null;
@@ -223,7 +246,8 @@ public class ClientProxy extends CommonProxy {
 
         Reference.logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", filename, world.getWidth(), world.getHeight(), world.getLength()));
 
-        Schematica.proxy.setActiveSchematic(world);
+        setActiveSchematic(world);
+        MINECRAFT.theWorld.addWorldAccess(RenderSchematic.INSTANCE);
         SchematicPrinter.INSTANCE.setSchematic(world);
         world.isRendering = true;
 

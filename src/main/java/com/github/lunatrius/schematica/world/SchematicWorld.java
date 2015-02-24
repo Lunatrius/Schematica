@@ -409,4 +409,12 @@ public class SchematicWorld extends WorldClient {
     public String getDebugDimensions() {
         return "WHL: " + getWidth() + " / " + getHeight() + " / " + getLength();
     }
+
+    public boolean isInside(final BlockPos pos) {
+        final int x = pos.getX();
+        final int y = pos.getY();
+        final int z = pos.getZ();
+
+        return !(x < 0 || y < 0 || z < 0 || x >= getWidth() || y >= getHeight() || z >= getLength());
+    }
 }
