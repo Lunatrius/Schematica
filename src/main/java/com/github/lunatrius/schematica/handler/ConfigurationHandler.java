@@ -31,8 +31,6 @@ public class ConfigurationHandler {
     public static final boolean HIGHLIGHT_DEFAULT = true;
     public static final boolean HIGHLIGHT_AIR_DEFAULT = true;
     public static final double BLOCK_DELTA_DEFAULT = 0.005;
-    public static final boolean DRAW_QUADS_DEFAULT = true;
-    public static final boolean DRAW_LINES_DEFAULT = true;
     public static final int RENDER_DISTANCE_DEFAULT = 8;
     public static final int PLACE_DELAY_DEFAULT = 1;
     public static final int TIMEOUT_DEFAULT = 10;
@@ -60,8 +58,6 @@ public class ConfigurationHandler {
     public static boolean highlight = HIGHLIGHT_DEFAULT;
     public static boolean highlightAir = HIGHLIGHT_AIR_DEFAULT;
     public static double blockDelta = BLOCK_DELTA_DEFAULT;
-    public static boolean drawQuads = DRAW_QUADS_DEFAULT;
-    public static boolean drawLines = DRAW_LINES_DEFAULT;
     public static int renderDistance = RENDER_DISTANCE_DEFAULT;
     public static int placeDelay = PLACE_DELAY_DEFAULT;
     public static int timeout = TIMEOUT_DEFAULT;
@@ -87,8 +83,6 @@ public class ConfigurationHandler {
     public static Property propHighlight = null;
     public static Property propHighlightAir = null;
     public static Property propBlockDelta = null;
-    public static Property propDrawQuads = null;
-    public static Property propDrawLines = null;
     public static Property propRenderDistance = null;
     public static Property propPlaceDelay = null;
     public static Property propTimeout = null;
@@ -141,14 +135,6 @@ public class ConfigurationHandler {
         propBlockDelta = configuration.get(Names.Config.Category.RENDER, Names.Config.BLOCK_DELTA, BLOCK_DELTA_DEFAULT, Names.Config.BLOCK_DELTA_DESC, 0.0, 0.2);
         propBlockDelta.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.BLOCK_DELTA);
         blockDelta = propBlockDelta.getDouble(BLOCK_DELTA_DEFAULT);
-
-        propDrawQuads = configuration.get(Names.Config.Category.RENDER, Names.Config.DRAW_QUADS, DRAW_QUADS_DEFAULT, Names.Config.DRAW_QUADS_DESC);
-        propDrawQuads.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DRAW_QUADS);
-        drawQuads = propDrawQuads.getBoolean(DRAW_QUADS_DEFAULT);
-
-        propDrawLines = configuration.get(Names.Config.Category.RENDER, Names.Config.DRAW_LINES, DRAW_LINES_DEFAULT, Names.Config.DRAW_LINES_DESC);
-        propDrawLines.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DRAW_LINES);
-        drawLines = propDrawLines.getBoolean(DRAW_LINES_DEFAULT);
 
         propRenderDistance = configuration.get(Names.Config.Category.RENDER, Names.Config.RENDER_DISTANCE, RENDER_DISTANCE_DEFAULT, Names.Config.RENDER_DISTANCE_DESC, 2, 16);
         propRenderDistance.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.RENDER_DISTANCE);
