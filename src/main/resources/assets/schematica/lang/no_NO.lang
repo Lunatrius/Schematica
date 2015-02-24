@@ -48,10 +48,6 @@ schematica.config.highlightAir=Marker luft
 schematica.config.highlightAir.tooltip=Marker blokker som bør være luft.
 schematica.config.blockDelta=Block Delta
 schematica.config.blockDelta.tooltip=Delta-verdi brukt for markering (hvis du opplever z-kollisjoner, øk dette).
-schematica.config.drawQuads=Tegn overflater
-schematica.config.drawQuads.tooltip=Tegn overflateområder.
-schematica.config.drawLines=Tegn linjer
-schematica.config.drawLines.tooltip=Tegn kantlinjer.
 
 # gui - config - printer
 schematica.config.placeDelay=Plasseringsforsinkelse

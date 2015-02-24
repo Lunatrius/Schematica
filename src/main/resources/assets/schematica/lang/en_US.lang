@@ -61,10 +61,6 @@ schematica.config.highlightAir=Highlight Air
 schematica.config.highlightAir.tooltip=Highlight blocks that should be air.
 schematica.config.blockDelta=Block Delta
 schematica.config.blockDelta.tooltip=Delta value used for highlighting (if you experience z-fighting increase this).
-schematica.config.drawQuads=Draw Quads
-schematica.config.drawQuads.tooltip=Draw surface areas.
-schematica.config.drawLines=Draw Lines
-schematica.config.drawLines.tooltip=Draw outlines.
 schematica.config.renderDistance=Render Distance
 schematica.config.renderDistance.tooltip=Schematic render distance.
 

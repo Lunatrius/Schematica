@@ -26,10 +26,6 @@ public final class Names {
         public static final String HIGHLIGHT_AIR_DESC = "Highlight blocks that should be air.";
         public static final String BLOCK_DELTA = "blockDelta";
         public static final String BLOCK_DELTA_DESC = "Delta value used for highlighting (if you experience z-fighting increase this).";
-        public static final String DRAW_QUADS = "drawQuads";
-        public static final String DRAW_QUADS_DESC = "Draw surface areas.";
-        public static final String DRAW_LINES = "drawLines";
-        public static final String DRAW_LINES_DESC = "Draw outlines.";
         public static final String RENDER_DISTANCE = "renderDistance";
         public static final String RENDER_DISTANCE_DESC = "Schematic render distance.";
 
