@@ -260,7 +260,7 @@ public class RenderSchematic extends RenderGlobal {
 
         final GeometryTessellator tessellator = GeometryTessellator.getInstance();
         tessellator.setTranslation(-ClientProxy.playerPosition.x, -ClientProxy.playerPosition.y, -ClientProxy.playerPosition.z);
-        GeometryTessellator.setDelta(ConfigurationHandler.blockDelta);
+        tessellator.setDelta(ConfigurationHandler.blockDelta);
 
         if (ClientProxy.isRenderingGuide) {
             tessellator.startQuads();
