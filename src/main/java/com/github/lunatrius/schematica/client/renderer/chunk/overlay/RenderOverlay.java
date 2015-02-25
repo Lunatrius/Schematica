@@ -71,7 +71,7 @@ public class RenderOverlay extends RenderChunk {
             final EnumWorldBlockLayer layer = EnumWorldBlockLayer.TRANSLUCENT;
             final WorldRenderer worldRenderer = generator.getRegionRenderCacheBuilder().getWorldRendererByLayer(layer);
 
-            GeometryTessellator.setDelta(ConfigurationHandler.blockDelta);
+            GeometryTessellator.setStaticDelta(ConfigurationHandler.blockDelta);
 
             for (BlockPos pos : (Iterable<BlockPos>) BlockPos.getAllInBox(from, to)) {
                 if (schematic.isRenderingLayer && schematic.renderingLayer != pos.getY() || !schematic.isInside(pos)) {
