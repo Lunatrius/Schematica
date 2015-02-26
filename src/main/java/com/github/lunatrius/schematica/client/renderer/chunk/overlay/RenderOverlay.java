@@ -24,11 +24,7 @@ import net.minecraft.util.EnumWorldBlockLayer;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class RenderOverlay extends RenderChunk {
-    private static final Map<EnumFacing, Integer> FACING_TO_QUAD = new HashMap<EnumFacing, Integer>();
     private final VertexBuffer vertexBuffer;
 
     public RenderOverlay(final World world, final RenderGlobal renderGlobal, final BlockPos pos, final int index) {
@@ -104,12 +100,6 @@ public class RenderOverlay extends RenderChunk {
                 }
 
                 if (!render) {
-                    for (EnumFacing facing : EnumFacing.values()) {
-                        if (schBlock.shouldSideBeRendered(schematic, pos.offset(facing), facing)) {
-                            sides |= FACING_TO_QUAD.get(facing);
-                        }
-                    }
-
                     if (ConfigurationHandler.highlight) {
                         if (!isAirBlock) {
                             if (schBlock != mcBlock) {
@@ -122,6 +112,32 @@ public class RenderOverlay extends RenderChunk {
                         } else if (!schematic.isAirBlock(pos)) {
                             render = true;
                             color = 0x00BFFF;
+                        }
+                    }
+
+                    if (render) {
+                        if (schBlock.shouldSideBeRendered(schematic, pos.offset(EnumFacing.DOWN), EnumFacing.DOWN)) {
+                            sides |= GeometryMasks.Quad.DOWN;
+                        }
+
+                        if (schBlock.shouldSideBeRendered(schematic, pos.offset(EnumFacing.UP), EnumFacing.UP)) {
+                            sides |= GeometryMasks.Quad.UP;
+                        }
+
+                        if (schBlock.shouldSideBeRendered(schematic, pos.offset(EnumFacing.NORTH), EnumFacing.NORTH)) {
+                            sides |= GeometryMasks.Quad.NORTH;
+                        }
+
+                        if (schBlock.shouldSideBeRendered(schematic, pos.offset(EnumFacing.SOUTH), EnumFacing.SOUTH)) {
+                            sides |= GeometryMasks.Quad.SOUTH;
+                        }
+
+                        if (schBlock.shouldSideBeRendered(schematic, pos.offset(EnumFacing.WEST), EnumFacing.WEST)) {
+                            sides |= GeometryMasks.Quad.WEST;
+                        }
+
+                        if (schBlock.shouldSideBeRendered(schematic, pos.offset(EnumFacing.EAST), EnumFacing.EAST)) {
+                            sides |= GeometryMasks.Quad.EAST;
                         }
                     }
                 }
@@ -159,14 +175,5 @@ public class RenderOverlay extends RenderChunk {
         if (this.vertexBuffer != null) {
             this.vertexBuffer.deleteGlBuffers();
         }
-    }
-
-    static {
-        FACING_TO_QUAD.put(EnumFacing.DOWN, GeometryMasks.Quad.DOWN);
-        FACING_TO_QUAD.put(EnumFacing.UP, GeometryMasks.Quad.UP);
-        FACING_TO_QUAD.put(EnumFacing.NORTH, GeometryMasks.Quad.NORTH);
-        FACING_TO_QUAD.put(EnumFacing.SOUTH, GeometryMasks.Quad.SOUTH);
-        FACING_TO_QUAD.put(EnumFacing.WEST, GeometryMasks.Quad.WEST);
-        FACING_TO_QUAD.put(EnumFacing.EAST, GeometryMasks.Quad.EAST);
     }
 }
