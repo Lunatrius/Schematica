@@ -540,8 +540,9 @@ public class RenderSchematic extends RenderGlobal {
 
                 for (int chunkX = -this.renderDistanceChunks; chunkX <= this.renderDistanceChunks; chunkX++) {
                     for (int chunkZ = -this.renderDistanceChunks; chunkZ <= this.renderDistanceChunks; chunkZ++) {
-                        final RenderChunk renderChunk = this.viewFrustum.getRenderChunk(new BlockPos((chunkX << 4) + 8, chunkY, (chunkZ << 4) + 8));
-                        final RenderOverlay renderOverlay = this.viewFrustum.getRenderOverlay(new BlockPos((chunkX << 4) + 8, chunkY, (chunkZ << 4) + 8));
+                        final BlockPos pos = new BlockPos((chunkX << 4) + 8, chunkY, (chunkZ << 4) + 8);
+                        final RenderChunk renderChunk = this.viewFrustum.getRenderChunk(pos);
+                        final RenderOverlay renderOverlay = this.viewFrustum.getRenderOverlay(pos);
 
                         if (renderChunk != null && camera.isBoundingBoxInFrustum(renderChunk.boundingBox)) {
                             renderChunk.setFrameIndex(frameCount);
