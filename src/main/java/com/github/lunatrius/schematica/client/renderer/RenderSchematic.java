@@ -417,8 +417,8 @@ public class RenderSchematic extends RenderGlobal {
         final int entityPass = 0;
 
         this.profiler.startSection("prepare");
-        TileEntityRendererDispatcher.instance.cacheActiveRenderInfo(this.world, this.mc.getTextureManager(), this.mc.fontRendererObj, this.mc.getRenderViewEntity(), partialTicks);
-        this.renderManager.cacheActiveRenderInfo(this.world, this.mc.fontRendererObj, this.mc.getRenderViewEntity(), this.mc.pointedEntity, this.mc.gameSettings, partialTicks);
+        TileEntityRendererDispatcher.instance.cacheActiveRenderInfo(this.world, this.mc.getTextureManager(), this.mc.fontRendererObj, renderViewEntity, partialTicks);
+        this.renderManager.cacheActiveRenderInfo(this.world, this.mc.fontRendererObj, renderViewEntity, this.mc.pointedEntity, this.mc.gameSettings, partialTicks);
 
         this.countEntitiesTotal = 0;
         this.countEntitiesRendered = 0;
@@ -433,6 +433,10 @@ public class RenderSchematic extends RenderGlobal {
         TileEntityRendererDispatcher.staticPlayerX = x;
         TileEntityRendererDispatcher.staticPlayerY = y;
         TileEntityRendererDispatcher.staticPlayerZ = z;
+
+        TileEntityRendererDispatcher.instance.entityX = x;
+        TileEntityRendererDispatcher.instance.entityY = y;
+        TileEntityRendererDispatcher.instance.entityZ = z;
 
         this.renderManager.setRenderPosition(x, y, z);
         this.mc.entityRenderer.enableLightmap();
