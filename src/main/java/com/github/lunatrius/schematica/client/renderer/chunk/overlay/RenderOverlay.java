@@ -110,8 +110,8 @@ public class RenderOverlay extends RenderChunk {
                         }
                     }
 
-                    if (!isAirBlock) {
-                        if (ConfigurationHandler.highlight) {
+                    if (ConfigurationHandler.highlight) {
+                        if (!isAirBlock) {
                             if (schBlock != mcBlock) {
                                 render = true;
                                 color = 0xFF0000;
@@ -119,16 +119,14 @@ public class RenderOverlay extends RenderChunk {
                                 render = true;
                                 color = 0xBF5F00;
                             }
-                        }
-                    } else if (!schematic.isAirBlock(pos)) {
-                        if (ConfigurationHandler.highlight) {
+                        } else if (!schematic.isAirBlock(pos)) {
                             render = true;
                             color = 0x00BFFF;
                         }
                     }
                 }
 
-                if (render) {
+                if (render && sides != 0) {
                     if (!compiledOverlay.isLayerStarted(layer)) {
                         compiledOverlay.setLayerStarted(layer);
                         preRenderBlocks(worldRenderer, from);
