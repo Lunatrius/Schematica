@@ -519,7 +519,6 @@ public class RenderSchematic extends RenderGlobal {
         final BlockPos posEye = new BlockPos(posX, posY + viewEntity.getEyeHeight(), posZ);
         final RenderChunk renderchunk = this.viewFrustum.getRenderChunk(posEye);
         final RenderOverlay renderoverlay = this.viewFrustum.getRenderOverlay(posEye);
-        final BlockPos blockpos = new BlockPos(MathHelper.floor_double(posX) & ~0xF, MathHelper.floor_double(posY) & ~0xF, MathHelper.floor_double(posZ) & ~0xF);
 
         this.displayListEntitiesDirty = this.displayListEntitiesDirty || !this.chunksToUpdate.isEmpty() || posX != this.lastViewEntityX || posY != this.lastViewEntityY || posZ != this.lastViewEntityZ || viewEntity.rotationPitch != this.lastViewEntityPitch || viewEntity.rotationYaw != this.lastViewEntityYaw;
         this.lastViewEntityX = posX;
@@ -628,23 +627,6 @@ public class RenderSchematic extends RenderGlobal {
         this.profiler.endSection();
     }
 
-    private boolean isPositionInRenderChunk(final BlockPos pos, final RenderChunk renderChunk) {
-        final BlockPos blockPos = renderChunk.getPosition();
-        if (MathHelper.abs_int(pos.getX() - blockPos.getX()) > 16) {
-            return false;
-        }
-
-        if (MathHelper.abs_int(pos.getY() - blockPos.getY()) > 16) {
-            return false;
-        }
-
-        if (MathHelper.abs_int(pos.getZ() - blockPos.getZ()) > 16) {
-            return false;
-        }
-
-        return true;
-    }
-
     private Set<EnumFacing> getVisibleSides(final BlockPos pos) {
         final VisGraph visgraph = new VisGraph();
         final BlockPos posChunk = new BlockPos(pos.getX() & ~0xF, pos.getY() & ~0xF, pos.getZ() & ~0xF);
@@ -690,23 +672,6 @@ public class RenderSchematic extends RenderGlobal {
         }
 
         return this.viewFrustum.getRenderOverlay(offset);
-    }
-
-    @Override
-    protected Vector3f getViewVector(final Entity entity, final double partialTicks) {
-        float rotationPitch = (float) (entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks);
-        final float rotationYaw = (float) (entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks);
-
-        if (this.mc.gameSettings.thirdPersonView == 2) {
-            rotationPitch += 180.0f;
-        }
-
-        final float f1 = (float) (1 / (360 / (Math.PI * 2)));
-        final float f2 = MathHelper.cos(-rotationYaw * f1 - (float) Math.PI);
-        final float f3 = MathHelper.sin(-rotationYaw * f1 - (float) Math.PI);
-        final float f4 = -MathHelper.cos(-rotationPitch * f1);
-        final float f5 = MathHelper.sin(-rotationPitch * f1);
-        return new Vector3f(f3 * f4, f5, f2 * f4);
     }
 
     @Override
