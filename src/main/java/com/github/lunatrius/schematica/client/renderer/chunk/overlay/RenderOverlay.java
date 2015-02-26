@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.RegionRenderCache;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.chunk.ChunkCompileTaskGenerator;
+import net.minecraft.client.renderer.chunk.CompiledChunk;
 import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.client.renderer.chunk.VisGraph;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
@@ -44,9 +45,15 @@ public class RenderOverlay extends RenderChunk {
         final BlockPos to = from.add(15, 15, 15);
         generator.getLock().lock();
         RegionRenderCache regionRenderCache;
+        final SchematicWorld schematic = (SchematicWorld) this.world;
 
         try {
             if (generator.getStatus() != ChunkCompileTaskGenerator.Status.COMPILING) {
+                return;
+            }
+
+            if (from.getX() < 0 || from.getZ() < 0 || from.getX() >= schematic.getWidth() || from.getZ() >= schematic.getLength()) {
+                generator.setCompiledChunk(CompiledChunk.DUMMY);
                 return;
             }
 
@@ -61,7 +68,6 @@ public class RenderOverlay extends RenderChunk {
         if (!regionRenderCache.extendedLevelsInChunkCache()) {
             ++renderChunksUpdated;
 
-            final SchematicWorld schematic = (SchematicWorld) this.world;
             final World mcWorld = Minecraft.getMinecraft().theWorld;
 
             final EnumWorldBlockLayer layer = EnumWorldBlockLayer.TRANSLUCENT;
