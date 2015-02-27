@@ -17,6 +17,7 @@ import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -199,6 +200,7 @@ public class ClientProxy extends CommonProxy {
 
         dispatcherVanilla = MINECRAFT.getBlockRendererDispatcher();
         dispatcherSchematic = new SchematicBlockRendererDispatcher(dispatcherVanilla.getBlockModelShapes(), MINECRAFT.gameSettings);
+        ((IReloadableResourceManager) MINECRAFT.getResourceManager()).registerReloadListener(dispatcherSchematic);
     }
 
     @Override
