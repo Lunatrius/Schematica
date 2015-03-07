@@ -48,6 +48,8 @@ public class ClientProxy extends CommonProxy {
     public static final MBlockPos pointMin = new MBlockPos();
     public static final MBlockPos pointMax = new MBlockPos();
 
+    public static EnumFacing axisRotation = EnumFacing.UP;
+
     public static MovingObjectPosition movingObjectPosition = null;
 
     private static final Minecraft MINECRAFT = Minecraft.getMinecraft();

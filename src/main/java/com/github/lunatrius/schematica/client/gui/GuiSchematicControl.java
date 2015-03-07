@@ -7,11 +7,16 @@ import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
+import com.github.lunatrius.schematica.util.RotationHelper;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.client.config.GuiUnicodeGlyphButton;
+
+import java.io.IOException;
 
 public class GuiSchematicControl extends GuiScreenBase {
     private final SchematicWorld schematic;
@@ -30,6 +35,7 @@ public class GuiSchematicControl extends GuiScreenBase {
     private GuiButton btnHide = null;
     private GuiButton btnMove = null;
     private GuiButton btnFlip = null;
+    private GuiButton btnRotateDirection = null;
     private GuiButton btnRotate = null;
 
     private GuiButton btnMaterials = null;
@@ -88,7 +94,10 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnFlip = new GuiButton(id++, this.width - 90, this.height - 55, 80, 20, I18n.format("schematica.gui.flip"));
         this.buttonList.add(this.btnFlip);
 
-        this.btnRotate = new GuiButton(id++, this.width - 90, this.height - 30, 80, 20, I18n.format("schematica.gui.rotate"));
+        this.btnRotateDirection = new GuiButton(id++, this.width - 180, this.height - 30, 80, 20, I18n.format("schematica.gui." + ClientProxy.axisRotation.getName()));
+        this.buttonList.add(this.btnRotateDirection);
+
+        this.btnRotate = new GuiUnicodeGlyphButton(id++, this.width - 90, this.height - 30, 80, 20, " " + I18n.format("schematica.gui.rotate"), "\u21bb", 2.0f);
         this.buttonList.add(this.btnRotate);
 
         this.btnMaterials = new GuiButton(id++, 10, this.height - 70, 80, 20, this.strMaterials);
@@ -108,8 +117,8 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnMove.enabled = this.schematic != null;
         this.btnFlip.enabled = this.schematic != null;
         this.btnFlip.enabled = false;
+        this.btnRotateDirection.enabled = this.schematic != null;
         this.btnRotate.enabled = this.schematic != null;
-        this.btnRotate.enabled = false;
         this.btnMaterials.enabled = this.schematic != null;
         this.btnPrint.enabled = this.schematic != null && this.printer.isEnabled();
 
@@ -170,10 +179,16 @@ public class GuiSchematicControl extends GuiScreenBase {
                 RenderSchematic.INSTANCE.refresh();
                 setPoint(this.numericX, this.numericY, this.numericZ, this.schematic.position);
             } else if (guiButton.id == this.btnFlip.id) {
-                this.schematic.flip();
+                // TODO: implement flip logic
                 SchematicPrinter.INSTANCE.refresh();
+            } else if (guiButton.id == this.btnRotateDirection.id) {
+                final EnumFacing[] values = EnumFacing.values();
+                ClientProxy.axisRotation = values[((ClientProxy.axisRotation.ordinal() + 1) % values.length)];
+                guiButton.displayString = I18n.format("schematica.gui." + ClientProxy.axisRotation.getName());
             } else if (guiButton.id == this.btnRotate.id) {
-                this.schematic.rotate();
+                RotationHelper.INSTANCE.rotate(this.schematic, ClientProxy.axisRotation, isShiftKeyDown());
+                setPoint(this.numericX, this.numericY, this.numericZ, this.schematic.position);
+                RenderSchematic.INSTANCE.refresh();
                 SchematicPrinter.INSTANCE.refresh();
             } else if (guiButton.id == this.btnMaterials.id) {
                 this.mc.displayGuiScreen(new GuiSchematicMaterials(this));
@@ -181,6 +196,19 @@ public class GuiSchematicControl extends GuiScreenBase {
                 boolean isPrinting = this.printer.togglePrinting();
                 this.btnPrint.displayString = isPrinting ? this.strOn : this.strOff;
             }
+        }
+    }
+
+    @Override
+    public void handleKeyboardInput() throws IOException {
+        super.handleKeyboardInput();
+
+        if (this.btnFlip.enabled) {
+            this.btnFlip.packedFGColour = isShiftKeyDown() ? 0xFF0000 : 0x000000;
+        }
+
+        if (this.btnRotate.enabled) {
+            this.btnRotate.packedFGColour = isShiftKeyDown() ? 0xFF0000 : 0x000000;
         }
     }
 
