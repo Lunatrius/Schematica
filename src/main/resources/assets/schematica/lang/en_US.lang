@@ -29,6 +29,12 @@ schematica.gui.materialname=Material
 schematica.gui.materialamount=Amount
 schematica.gui.printer=Printer
 schematica.gui.unknownblock=Unknown Block
+schematica.gui.down=Down
+schematica.gui.up=Up
+schematica.gui.north=North
+schematica.gui.south=South
+schematica.gui.west=West
+schematica.gui.east=East
 
 # gui - config - categories
 schematica.config.category.debug=Debug
