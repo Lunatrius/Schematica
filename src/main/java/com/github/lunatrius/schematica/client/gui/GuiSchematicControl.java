@@ -186,10 +186,11 @@ public class GuiSchematicControl extends GuiScreenBase {
                 ClientProxy.axisRotation = values[((ClientProxy.axisRotation.ordinal() + 1) % values.length)];
                 guiButton.displayString = I18n.format("schematica.gui." + ClientProxy.axisRotation.getName());
             } else if (guiButton.id == this.btnRotate.id) {
-                RotationHelper.INSTANCE.rotate(this.schematic, ClientProxy.axisRotation, isShiftKeyDown());
-                setPoint(this.numericX, this.numericY, this.numericZ, this.schematic.position);
-                RenderSchematic.INSTANCE.refresh();
-                SchematicPrinter.INSTANCE.refresh();
+                if (RotationHelper.INSTANCE.rotate(this.schematic, ClientProxy.axisRotation, isShiftKeyDown())) {
+                    setPoint(this.numericX, this.numericY, this.numericZ, this.schematic.position);
+                    RenderSchematic.INSTANCE.refresh();
+                    SchematicPrinter.INSTANCE.refresh();
+                }
             } else if (guiButton.id == this.btnMaterials.id) {
                 this.mc.displayGuiScreen(new GuiSchematicMaterials(this));
             } else if (guiButton.id == this.btnPrint.id && this.printer.isEnabled()) {

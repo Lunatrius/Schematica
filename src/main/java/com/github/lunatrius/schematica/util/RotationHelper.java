@@ -25,10 +25,6 @@ public class RotationHelper {
     private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
     private static final EnumFacing[][] ROTATION_MATRIX = new EnumFacing[6][];
 
-    public boolean rotate(final SchematicWorld world) {
-        return rotate(world, EnumFacing.UP, false);
-    }
-
     public boolean rotate(final SchematicWorld world, final EnumFacing axis, final boolean forced) {
         if (world == null) {
             return false;
