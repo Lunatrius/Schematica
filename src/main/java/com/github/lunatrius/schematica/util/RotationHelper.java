@@ -6,8 +6,12 @@ import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.storage.Schematic;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLever;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockQuartz;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -23,7 +27,10 @@ public class RotationHelper {
     public static final RotationHelper INSTANCE = new RotationHelper();
 
     private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
-    private static final EnumFacing[][] ROTATION_MATRIX = new EnumFacing[6][];
+    private static final EnumFacing[][] FACINGS = new EnumFacing[EnumFacing.values().length][];
+    private static final EnumFacing.Axis[][] AXISES = new EnumFacing.Axis[EnumFacing.Axis.values().length][];
+    private static final BlockLog.EnumAxis[][] AXISES_LOG = new BlockLog.EnumAxis[EnumFacing.Axis.values().length][];
+    private static final BlockQuartz.EnumType[][] AXISES_QUARTZ = new BlockQuartz.EnumType[EnumFacing.Axis.values().length][];
 
     public boolean rotate(final SchematicWorld world, final EnumFacing axis, final boolean forced) {
         if (world == null) {
@@ -45,6 +52,8 @@ public class RotationHelper {
             return true;
         } catch (final RotationException re) {
             Reference.logger.error(re.getMessage());
+        } catch (final Exception e) {
+            Reference.logger.fatal("Something went wrong!", e);
         }
 
         return false;
@@ -142,62 +151,156 @@ public class RotationHelper {
     }
 
     private IBlockState rotateBlock(final IBlockState blockState, final EnumFacing axis, boolean forced) throws RotationException {
-        final PropertyDirection facingProperty = getFacingProperty(blockState);
-        if (facingProperty == null) {
-            return blockState;
+        final IProperty propertyFacing = getProperty(blockState, "facing");
+        if (propertyFacing instanceof PropertyDirection) {
+            final Comparable value = blockState.getValue(propertyFacing);
+            if (value instanceof EnumFacing) {
+                final EnumFacing facing = getRotatedFacing(axis, (EnumFacing) value);
+                if (propertyFacing.getAllowedValues().contains(facing)) {
+                    return blockState.withProperty(propertyFacing, facing);
+                }
+            }
+        } else if (propertyFacing instanceof PropertyEnum) {
+            if (BlockLever.EnumOrientation.class.isAssignableFrom(propertyFacing.getValueClass())) {
+                final BlockLever.EnumOrientation value = (BlockLever.EnumOrientation) blockState.getValue(propertyFacing);
+                final BlockLever.EnumOrientation valueRotated = getRotatedLeverFacing(axis, value);
+                return blockState.withProperty(propertyFacing, valueRotated);
+            }
+        } else if (propertyFacing != null) {
+            Reference.logger.error("'{}': found 'facing' property with unknown type {}", BLOCK_REGISTRY.getNameForObject(blockState.getBlock()), propertyFacing.getClass().getSimpleName());
         }
 
-        final Comparable value = blockState.getValue(facingProperty);
-        if (value instanceof EnumFacing) {
-            final EnumFacing facing = getRotatedFacing(axis, (EnumFacing) value);
-            if (facingProperty.getAllowedValues().contains(facing)) {
-                return blockState.withProperty(facingProperty, facing);
+        final IProperty propertyAxis = getProperty(blockState, "axis");
+        if (propertyAxis instanceof PropertyEnum) {
+            if (EnumFacing.Axis.class.isAssignableFrom(propertyAxis.getValueClass())) {
+                final EnumFacing.Axis value = (EnumFacing.Axis) blockState.getValue(propertyAxis);
+                final EnumFacing.Axis valueRotated = getRotatedAxis(axis, value);
+                return blockState.withProperty(propertyAxis, valueRotated);
+            }
+
+            if (BlockLog.EnumAxis.class.isAssignableFrom(propertyAxis.getValueClass())) {
+                final BlockLog.EnumAxis value = (BlockLog.EnumAxis) blockState.getValue(propertyAxis);
+                final BlockLog.EnumAxis valueRotated = getRotatedLogAxis(axis, value);
+                return blockState.withProperty(propertyAxis, valueRotated);
+            }
+        } else if (propertyAxis != null) {
+            Reference.logger.error("'{}': found 'axis' property with unknown type {}", BLOCK_REGISTRY.getNameForObject(blockState.getBlock()), propertyFacing.getClass().getSimpleName());
+        }
+
+        final IProperty propertyVariant = getProperty(blockState, "variant");
+        if (propertyVariant instanceof PropertyEnum) {
+            if (BlockQuartz.EnumType.class.isAssignableFrom(propertyVariant.getValueClass())) {
+                final BlockQuartz.EnumType value = (BlockQuartz.EnumType) blockState.getValue(propertyVariant);
+                final BlockQuartz.EnumType valueRotated = getRotatedQuartzType(axis, value);
+                return blockState.withProperty(propertyVariant, valueRotated);
             }
         }
 
-        if (!forced) {
+        if (!forced && (propertyFacing != null || propertyAxis != null)) {
             throw new RotationException("'%s' cannot be rotated around '%s'", BLOCK_REGISTRY.getNameForObject(blockState.getBlock()), axis);
         }
 
         return blockState;
     }
 
-    private PropertyDirection getFacingProperty(final IBlockState blockState) {
+    private IProperty getProperty(final IBlockState blockState, final String name) {
         for (final IProperty prop : (Set<IProperty>) blockState.getProperties().keySet()) {
-            if (prop.getName().equals("facing")) {
-                if (prop instanceof PropertyDirection) {
-                    return (PropertyDirection) prop;
-                }
-
-                Reference.logger.error("'{}': {} is not an instance of {}", BLOCK_REGISTRY.getNameForObject(blockState.getBlock()), prop.getClass().getSimpleName(), PropertyDirection.class.getSimpleName());
+            if (prop.getName().equals(name)) {
+                return prop;
             }
         }
 
         return null;
     }
 
-    private static EnumFacing getRotatedFacing(final EnumFacing axis, final EnumFacing side) {
-        return ROTATION_MATRIX[axis.ordinal()][side.ordinal()];
+    private static EnumFacing getRotatedFacing(final EnumFacing source, final EnumFacing side) {
+        return FACINGS[source.ordinal()][side.ordinal()];
+    }
+
+    private static EnumFacing.Axis getRotatedAxis(final EnumFacing source, final EnumFacing.Axis axis) {
+        return AXISES[source.getAxis().ordinal()][axis.ordinal()];
+    }
+
+    private static BlockLog.EnumAxis getRotatedLogAxis(final EnumFacing source, final BlockLog.EnumAxis axis) {
+        return AXISES_LOG[source.getAxis().ordinal()][axis.ordinal()];
+    }
+
+    private static BlockQuartz.EnumType getRotatedQuartzType(final EnumFacing source, final BlockQuartz.EnumType type) {
+        return AXISES_QUARTZ[source.getAxis().ordinal()][type.ordinal()];
+    }
+
+    private static BlockLever.EnumOrientation getRotatedLeverFacing(final EnumFacing source, final BlockLever.EnumOrientation side) {
+        final EnumFacing facing;
+        if (source.getAxis().isVertical() && side.getFacing().getAxis().isVertical()) {
+            facing = side == BlockLever.EnumOrientation.UP_X || side == BlockLever.EnumOrientation.DOWN_X ? EnumFacing.NORTH : EnumFacing.WEST;
+        } else {
+            facing = side.getFacing();
+        }
+
+        final EnumFacing facingRotated = getRotatedFacing(source, side.getFacing());
+        return BlockLever.EnumOrientation.forFacings(facingRotated, facing);
     }
 
     static {
-        ROTATION_MATRIX[EnumFacing.DOWN.ordinal()] = new EnumFacing[] {
+        FACINGS[EnumFacing.DOWN.ordinal()] = new EnumFacing[] {
                 EnumFacing.DOWN, EnumFacing.UP, EnumFacing.WEST, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.NORTH
         };
-        ROTATION_MATRIX[EnumFacing.UP.ordinal()] = new EnumFacing[] {
+        FACINGS[EnumFacing.UP.ordinal()] = new EnumFacing[] {
                 EnumFacing.DOWN, EnumFacing.UP, EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH
         };
-        ROTATION_MATRIX[EnumFacing.NORTH.ordinal()] = new EnumFacing[] {
+        FACINGS[EnumFacing.NORTH.ordinal()] = new EnumFacing[] {
                 EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.DOWN, EnumFacing.UP
         };
-        ROTATION_MATRIX[EnumFacing.SOUTH.ordinal()] = new EnumFacing[] {
+        FACINGS[EnumFacing.SOUTH.ordinal()] = new EnumFacing[] {
                 EnumFacing.WEST, EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.UP, EnumFacing.DOWN
         };
-        ROTATION_MATRIX[EnumFacing.WEST.ordinal()] = new EnumFacing[] {
+        FACINGS[EnumFacing.WEST.ordinal()] = new EnumFacing[] {
                 EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.UP, EnumFacing.DOWN, EnumFacing.WEST, EnumFacing.EAST
         };
-        ROTATION_MATRIX[EnumFacing.EAST.ordinal()] = new EnumFacing[] {
+        FACINGS[EnumFacing.EAST.ordinal()] = new EnumFacing[] {
                 EnumFacing.SOUTH, EnumFacing.NORTH, EnumFacing.DOWN, EnumFacing.UP, EnumFacing.WEST, EnumFacing.EAST
+        };
+
+        AXISES[EnumFacing.Axis.X.ordinal()] = new EnumFacing.Axis[] {
+                EnumFacing.Axis.X, EnumFacing.Axis.Z, EnumFacing.Axis.Y
+        };
+        AXISES[EnumFacing.Axis.Y.ordinal()] = new EnumFacing.Axis[] {
+                EnumFacing.Axis.Z, EnumFacing.Axis.Y, EnumFacing.Axis.X
+        };
+        AXISES[EnumFacing.Axis.Z.ordinal()] = new EnumFacing.Axis[] {
+                EnumFacing.Axis.Y, EnumFacing.Axis.X, EnumFacing.Axis.Z
+        };
+
+        AXISES_LOG[EnumFacing.Axis.X.ordinal()] = new BlockLog.EnumAxis[] {
+                BlockLog.EnumAxis.X, BlockLog.EnumAxis.Z, BlockLog.EnumAxis.Y, BlockLog.EnumAxis.NONE
+        };
+        AXISES_LOG[EnumFacing.Axis.Y.ordinal()] = new BlockLog.EnumAxis[] {
+                BlockLog.EnumAxis.Z, BlockLog.EnumAxis.Y, BlockLog.EnumAxis.X, BlockLog.EnumAxis.NONE
+        };
+        AXISES_LOG[EnumFacing.Axis.Z.ordinal()] = new BlockLog.EnumAxis[] {
+                BlockLog.EnumAxis.Y, BlockLog.EnumAxis.X, BlockLog.EnumAxis.Z, BlockLog.EnumAxis.NONE
+        };
+
+        AXISES_QUARTZ[EnumFacing.Axis.X.ordinal()] = new BlockQuartz.EnumType[] {
+                BlockQuartz.EnumType.DEFAULT,
+                BlockQuartz.EnumType.CHISELED,
+                BlockQuartz.EnumType.LINES_Z,
+                BlockQuartz.EnumType.LINES_X,
+                BlockQuartz.EnumType.LINES_Y
+        };
+        AXISES_QUARTZ[EnumFacing.Axis.Y.ordinal()] = new BlockQuartz.EnumType[] {
+                BlockQuartz.EnumType.DEFAULT,
+                BlockQuartz.EnumType.CHISELED,
+                BlockQuartz.EnumType.LINES_Y,
+                BlockQuartz.EnumType.LINES_Z,
+                BlockQuartz.EnumType.LINES_X
+        };
+        AXISES_QUARTZ[EnumFacing.Axis.Z.ordinal()] = new BlockQuartz.EnumType[] {
+                BlockQuartz.EnumType.DEFAULT,
+                BlockQuartz.EnumType.CHISELED,
+                BlockQuartz.EnumType.LINES_X,
+                BlockQuartz.EnumType.LINES_Y,
+                BlockQuartz.EnumType.LINES_Z
         };
     }
 
