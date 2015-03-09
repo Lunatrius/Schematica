@@ -1,8 +1,4 @@
 ## Welcome to Schematica!
-[Compiling Schematica](#compile-schematica) - for those that want the latest unreleased features
-
-[Contributing](#contributing) - for those that want to help out
-
 ### Compiling
 [Setup Java](#setup-java)
 
@@ -72,44 +68,5 @@ In order to get the most up-to-date builds, you'll have to periodically update y
 3. Make sure you have not made any changes to the local repository, or else there might be issues with Git.
     * If you have, try reverting them to the status that they were when you last updated your repository.
 4. Execute `git pull master`. This pulls all commits from the official repository that do not yet exist on your local repository and updates it.
-
-### Contributing
-#### Submitting a Pull Request (PR)
-So you found a bug in the code? Think you can make it more efficient? Want to help in general? Great!
-
-1. If you haven't already, create a [GitHub account](https://github.com/signup/free).
-2. Click the `Fork` icon located at the top-right of this page (below your username).
-3. Make the changes that you want to and commit them.
-    * If you're making changes locally, you'll have to do `git add -A`, `git commit` and `git push` in your command line.
-4. Click `Pull Request` at the right-hand side of the gray bar directly below your fork's name.
-5. Click `Click to create a pull request for this comparison`, enter your pull request title, and create a detailed description explaining what you changed.
-6. Click `Send pull request`, and wait for feedback!
-
-##### Instructions/Advice when submitting a Pull Request (PR)
-I use [this](https://gist.github.com/460be5119b93d73c24ab) IDEA formatting. To be short:
-
-* spaces for indentation
-* braces on same lines
-
-When you finish up your PR you'll want to [squash](http://davidwalsh.name/squash-commits-git) them into a single commit (unless it makes sense to have them split).
-
-1. Make sure your working directory is clean by executing `git status`.
-2. Execute `git rebase -i HEAD~X` where `X` is the amount of your commits. This will make sure you squash only your own commits.
-3. You should now see a list of all your commits, prefixed with `pick`. Change all instances of `pick` (excluding the first!) into `squash` or simply `s`. Then save/quit the editor once.
-4. A second screen should show up, displaying all the commit messages (you may edit them, delete or add some). After your done save/quit the editor again.
-5. If git successfuly rebased things simply push your cleaned up commits by executing `git push -f`.
-
-#### Creating an Issue
-Crashing? Have a suggestion? Found a bug? Create an issue now!
-
-1. Make sure your issue hasn't already been answered or fixed. Also think about whether your issue is a valid one before submitting it.
-2. Go to the issues page.
-3. Click `New Issue` right below `Star` and `Fork`.
-4. Enter your issue title (something that summarizes your issue), and then add a detailed description ("Hey, could you add/change xxx?" or "Hey, found an exploit: stuff").
-    * If you are reporting a bug, make sure you include the following:
-        * Version (can be found in the mcmod.info file or in the mod list)
-        * ForgeModLoader log (please use [gists](https://gist.github.com/) for large amounts of text!)
-        * Detailed description of the bug
-5. Click `Submit new issue`, and wait for feedback!
 
 Shamelessly based this README off [pahimar's version](https://github.com/pahimar/Equivalent-Exchange-3).
