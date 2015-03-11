@@ -48,11 +48,11 @@ public class DownloadHandler {
         if (!transfer.state.isWaiting()) {
             if (++transfer.timeout >= Constants.Network.TIMEOUT) {
                 if (++transfer.retries >= Constants.Network.RETRIES) {
-                    Reference.logger.warn(String.format("%s's download was dropped!", player.getDisplayName()));
+                    Reference.logger.warn("{}'s download was dropped!", player.getDisplayName());
                     return;
                 }
 
-                Reference.logger.warn(String.format("%s's download timed out, retrying (#%d)", player.getDisplayName(), transfer.retries));
+                Reference.logger.warn("{}'s download timed out, retrying (#{})", player.getDisplayName(), transfer.retries);
 
                 sendChunk(player, transfer);
                 transfer.timeout = 0;
@@ -79,7 +79,7 @@ public class DownloadHandler {
     private void sendChunk(EntityPlayerMP player, SchematicTransfer transfer) {
         transfer.setState(SchematicTransfer.State.CHUNK);
 
-        Reference.logger.trace("Sending chunk " + transfer.baseX + "," + transfer.baseY + "," + transfer.baseZ);
+        Reference.logger.trace("Sending chunk {},{},{}", transfer.baseX, transfer.baseY, transfer.baseZ);
         MessageDownloadChunk message = new MessageDownloadChunk(transfer.schematic, transfer.baseX, transfer.baseY, transfer.baseZ);
         PacketHandler.INSTANCE.sendTo(message, player);
     }

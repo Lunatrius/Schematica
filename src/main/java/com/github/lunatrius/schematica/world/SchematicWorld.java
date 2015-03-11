@@ -188,7 +188,7 @@ public class SchematicWorld extends World {
         try {
             tileEntity.validate();
         } catch (Exception e) {
-            Reference.logger.error(String.format("TileEntity validation for %s failed!", tileEntity.getClass()), e);
+            Reference.logger.error("TileEntity validation for {} failed!", tileEntity.getClass(), e);
         }
     }
 

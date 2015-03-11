@@ -98,7 +98,7 @@ public class ServerProxy extends CommonProxy {
     public File getPlayerSchematicDirectory(EntityPlayer player, boolean privateDirectory) {
         final UUID playerId = player.getUniqueID();
         if (playerId == null) {
-            Reference.logger.warn("Unable to identify player", player.toString());
+            Reference.logger.warn("Unable to identify player {}", player.toString());
             return null;
         }
 

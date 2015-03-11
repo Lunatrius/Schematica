@@ -70,7 +70,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
         final EntityPlayerMP player = (EntityPlayerMP) sender;
         final File directory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
         if (!FileUtils.contains(directory, filename)) {
-            Reference.logger.error(player.getDisplayName() + " has tried to download the file " + filename);
+            Reference.logger.error("{} has tried to download the file {}", player.getDisplayName(), filename);
             throw new CommandException(Names.Command.Download.Message.DOWNLOAD_FAILED);
         }
 

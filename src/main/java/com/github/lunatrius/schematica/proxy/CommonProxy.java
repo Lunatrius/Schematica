@@ -63,7 +63,7 @@ public abstract class CommonProxy {
     public void createFolders() {
         if (!ConfigurationHandler.schematicDirectory.exists()) {
             if (!ConfigurationHandler.schematicDirectory.mkdirs()) {
-                Reference.logger.info("Could not create schematic directory [%s]!", ConfigurationHandler.schematicDirectory.getAbsolutePath());
+                Reference.logger.warn("Could not create schematic directory [{}]!", ConfigurationHandler.schematicDirectory.getAbsolutePath());
             }
         }
     }
@@ -103,7 +103,7 @@ public abstract class CommonProxy {
                                     final TileEntity reloadedTileEntity = NBTHelper.reloadTileEntity(tileEntity, minX, minY, minZ);
                                     schematic.setTileEntity(localX, localY, localZ, reloadedTileEntity);
                                 } catch (NBTConversionException nce) {
-                                    Reference.logger.error(String.format("Error while trying to save tile entity '%s'!", tileEntity), nce);
+                                    Reference.logger.error("Error while trying to save tile entity '{}'!", tileEntity, nce);
                                     schematic.setBlock(localX, localY, localZ, Blocks.bedrock);
                                 }
                             }
@@ -126,7 +126,7 @@ public abstract class CommonProxy {
                 final Entity reloadedEntity = NBTHelper.reloadEntity(entity, minX, minY, minZ);
                 schematic.addEntity(reloadedEntity);
             } catch (NBTConversionException nce) {
-                Reference.logger.error(String.format("Error while trying to save entity '%s'!", entity), nce);
+                Reference.logger.error("Error while trying to save entity '{}'!", entity, nce);
             }
         }
     }

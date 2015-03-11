@@ -68,7 +68,7 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
         File schematicDirectory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
         File file = new File(schematicDirectory, filename);
         if (!FileUtils.contains(schematicDirectory, file)) {
-            Reference.logger.error(player.getDisplayName() + " has tried to download the file " + filename);
+            Reference.logger.error("{} has tried to download the file {}", player.getDisplayName(), filename);
             throw new CommandException(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND);
         }
 
