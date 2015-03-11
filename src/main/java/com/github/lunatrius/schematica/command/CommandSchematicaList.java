@@ -61,13 +61,13 @@ public class CommandSchematicaList extends CommandSchematicaBase {
 
         File schematicDirectory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
         if (schematicDirectory == null) {
-            Reference.logger.info(String.format("Unable to determine the schematic directory for player %s", player));
+            Reference.logger.warn("Unable to determine the schematic directory for player {}", player);
             throw new CommandException(Names.Command.Save.Message.PLAYER_SCHEMATIC_DIR_UNAVAILABLE);
         }
 
         if (!schematicDirectory.exists()) {
             if (!schematicDirectory.mkdirs()) {
-                Reference.logger.info(String.format("Could not create player schematic directory %s", schematicDirectory.getAbsolutePath()));
+                Reference.logger.warn("Could not create player schematic directory {}", schematicDirectory.getAbsolutePath());
                 throw new CommandException(Names.Command.Save.Message.PLAYER_SCHEMATIC_DIR_UNAVAILABLE);
             }
         }

@@ -84,7 +84,7 @@ public class SchematicAlpha extends SchematicFormat {
                         final IBlockState blockState = block.getStateFromMeta(meta);
                         schematic.setBlockState(pos, blockState);
                     } catch (Exception e) {
-                        Reference.logger.error(String.format("Could not set block state at %s to %s with metadata %d", pos, BLOCK_REGISTRY.getNameForObject(block), meta), e);
+                        Reference.logger.error("Could not set block state at {} to {} with metadata {}", pos, BLOCK_REGISTRY.getNameForObject(block), meta, e);
                     }
                 }
             }
@@ -160,7 +160,7 @@ public class SchematicAlpha extends SchematicFormat {
                 if (--count > 0) {
                     final IBlockState blockState = schematic.getBlockState(tePos);
                     Block block = blockState.getBlock();
-                    Reference.logger.error(String.format("Block %s[%s] with TileEntity %s failed to save! Replacing with bedrock...", block, block != null ? BLOCK_REGISTRY.getNameForObject(block) : "?", tileEntity.getClass().getName()), e);
+                    Reference.logger.error("Block {}[{}] with TileEntity {} failed to save! Replacing with bedrock...", block, block != null ? BLOCK_REGISTRY.getNameForObject(block) : "?", tileEntity.getClass().getName(), e);
                 }
                 localBlocks[index] = (byte) BLOCK_REGISTRY.getId(Blocks.bedrock);
                 localMetadata[index] = 0;
@@ -185,7 +185,7 @@ public class SchematicAlpha extends SchematicFormat {
                     entityList.appendTag(entityCompound);
                 }
             } catch (Throwable t) {
-                Reference.logger.error(String.format("Entity %s failed to save, skipping!", entity), t);
+                Reference.logger.error("Entity {} failed to save, skipping!", entity, t);
             }
         }
 

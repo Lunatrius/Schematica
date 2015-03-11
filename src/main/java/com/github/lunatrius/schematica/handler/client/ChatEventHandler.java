@@ -19,7 +19,7 @@ public class ChatEventHandler {
         if (this.chatLines < 20) {
             this.chatLines++;
             String message = event.message.getFormattedText();
-            Reference.logger.debug(String.format("Message #%d: %s", this.chatLines, message));
+            Reference.logger.debug("Message #{}: {}", this.chatLines, message);
             if (message.contains(Names.SBC.DISABLE_PRINTER)) {
                 Reference.logger.info("Printer is disabled on this server.");
                 SchematicPrinter.INSTANCE.setEnabled(false);
