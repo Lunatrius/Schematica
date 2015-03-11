@@ -61,7 +61,7 @@ public class SchematicContainer {
             return;
         }
 
-        Reference.logger.debug(String.format("Copying chunk at [%d,%d] into %s", this.curChunkX, this.curChunkZ, this.file.getName()));
+        Reference.logger.debug("Copying chunk at [{},{}] into {}", this.curChunkX, this.curChunkZ, this.file.getName());
         Schematica.proxy.copyChunkToSchematic(this.schematic, this.world, this.curChunkX, this.curChunkZ, this.minX, this.maxX, this.minY, this.maxY, this.minZ, this.maxZ);
 
         this.processedChunks++;

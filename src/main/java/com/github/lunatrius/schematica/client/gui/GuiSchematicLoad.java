@@ -128,7 +128,7 @@ public class GuiSchematicLoad extends GuiScreenBase {
 
         File[] filesFolders = this.currentDirectory.listFiles(FILE_FILTER_FOLDER);
         if (filesFolders == null) {
-            Reference.logger.error(String.format("listFiles returned null (directory: %s)!", this.currentDirectory));
+            Reference.logger.error("listFiles returned null (directory: {})!", this.currentDirectory);
         } else {
             for (File file : filesFolders) {
                 if (file == null) {

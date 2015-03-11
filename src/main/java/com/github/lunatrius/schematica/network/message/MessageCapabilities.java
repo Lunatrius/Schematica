@@ -43,7 +43,7 @@ public class MessageCapabilities implements IMessage, IMessageHandler<MessageCap
         Schematica.proxy.isSaveEnabled = message.isSaveEnabled;
         Schematica.proxy.isLoadEnabled = message.isLoadEnabled;
 
-        Reference.logger.info(String.format("Server capabilities{printer=%s, save=%s, load=%s}", message.isPrinterEnabled, message.isSaveEnabled, message.isLoadEnabled));
+        Reference.logger.info("Server capabilities{printer={}, save={}, load={}}", message.isPrinterEnabled, message.isSaveEnabled, message.isLoadEnabled);
 
         return null;
     }

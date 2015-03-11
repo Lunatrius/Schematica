@@ -211,7 +211,7 @@ public class ClientProxy extends CommonProxy {
         try {
             return file.getCanonicalFile();
         } catch (IOException e) {
-            Reference.logger.info("Could not canonize path!", e);
+            Reference.logger.debug("Could not canonize path!", e);
         }
         return file;
     }
@@ -248,7 +248,7 @@ public class ClientProxy extends CommonProxy {
 
         SchematicWorld world = new SchematicWorld(schematic);
 
-        Reference.logger.info(String.format("Loaded %s [w:%d,h:%d,l:%d]", filename, world.getWidth(), world.getHeight(), world.getLength()));
+        Reference.logger.debug("Loaded {} [w:{},h:{},l:{}]", filename, world.getWidth(), world.getHeight(), world.getLength());
 
         setActiveSchematic(world);
         MINECRAFT.theWorld.addWorldAccess(RenderSchematic.INSTANCE);

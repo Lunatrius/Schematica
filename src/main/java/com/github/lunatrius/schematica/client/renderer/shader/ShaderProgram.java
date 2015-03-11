@@ -52,7 +52,7 @@ public class ShaderProgram {
         GL20.glLinkProgram(this.program);
 
         if (GL20.glGetProgrami(this.program, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
-            Reference.logger.error(String.format("Could not link shader: %s", GL20.glGetProgramInfoLog(this.program, 1024)));
+            Reference.logger.error("Could not link shader: {}", GL20.glGetProgramInfoLog(this.program, 1024));
             GL20.glDeleteProgram(this.program);
             this.program = 0;
             return;
@@ -61,7 +61,7 @@ public class ShaderProgram {
         GL20.glValidateProgram(this.program);
 
         if (GL20.glGetProgrami(this.program, GL20.GL_VALIDATE_STATUS) == GL11.GL_FALSE) {
-            Reference.logger.error(String.format("Could not validate shader: %s", GL20.glGetProgramInfoLog(this.program, 1024)));
+            Reference.logger.error("Could not validate shader: {}", GL20.glGetProgramInfoLog(this.program, 1024));
             GL20.glDeleteProgram(this.program);
             this.program = 0;
         }
@@ -75,7 +75,7 @@ public class ShaderProgram {
         final int handle = GL20.glCreateShader(shaderType);
 
         if (handle == 0) {
-            Reference.logger.error(String.format("Could not create shader of type %d for %s: %s", shaderType, filename, GL20.glGetProgramInfoLog(this.program, 1024)));
+            Reference.logger.error("Could not create shader of type {} for {}: {}", shaderType, filename, GL20.glGetProgramInfoLog(this.program, 1024));
             return 0;
         }
 
@@ -89,7 +89,7 @@ public class ShaderProgram {
         GL20.glCompileShader(handle);
 
         if (GL20.glGetShaderi(handle, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
-            Reference.logger.error(String.format("Could not compile shader %s: %s", filename, GL20.glGetShaderInfoLog(this.program, 1024)));
+            Reference.logger.error("Could not compile shader {}: {}", filename, GL20.glGetShaderInfoLog(this.program, 1024));
             GL20.glDeleteShader(handle);
             return 0;
         }
