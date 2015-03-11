@@ -22,8 +22,10 @@ public class TickHandler {
 
     @SubscribeEvent
     public void onClientConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+        /* TODO: is this still needed?
         Reference.logger.info("Scheduling client settings reset.");
         ClientProxy.isPendingReset = true;
+        */
     }
 
     @SubscribeEvent
@@ -52,6 +54,7 @@ public class TickHandler {
             if (ClientProxy.isPendingReset) {
                 Schematica.proxy.resetSettings();
                 ClientProxy.isPendingReset = false;
+                Reference.logger.info("Client settings have been reset.");
             }
 
             this.minecraft.mcProfiler.endSection();
