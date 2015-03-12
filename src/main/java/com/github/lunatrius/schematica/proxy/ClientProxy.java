@@ -203,6 +203,8 @@ public class ClientProxy extends CommonProxy {
         dispatcherVanilla = MINECRAFT.getBlockRendererDispatcher();
         dispatcherSchematic = new SchematicBlockRendererDispatcher(dispatcherVanilla.getBlockModelShapes(), MINECRAFT.gameSettings);
         ((IReloadableResourceManager) MINECRAFT.getResourceManager()).registerReloadListener(dispatcherSchematic);
+
+        resetSettings();
     }
 
     @Override

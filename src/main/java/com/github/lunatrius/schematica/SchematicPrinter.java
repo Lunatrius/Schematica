@@ -54,8 +54,8 @@ public class SchematicPrinter {
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
 
-    private boolean isEnabled;
-    private boolean isPrinting;
+    private boolean isEnabled = true;
+    private boolean isPrinting = false;
 
     private SchematicWorld schematic = null;
     private byte[][][] timeout = null;
