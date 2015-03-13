@@ -2,24 +2,15 @@ package com.github.lunatrius.schematica.world;
 
 import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.schematica.api.ISchematic;
-import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.chunk.ChunkProviderSchematic;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDoublePlant;
-import net.minecraft.block.BlockLeavesBase;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumDifficulty;
@@ -31,19 +22,10 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class SchematicWorld extends WorldClient {
     private static final WorldSettings WORLD_SETTINGS = new WorldSettings(0, WorldSettings.GameType.CREATIVE, false, false, WorldType.FLAT);
-    private static final Comparator<ItemStack> BLOCK_COMPARATOR = new Comparator<ItemStack>() {
-        @Override
-        public int compare(ItemStack itemStackA, ItemStack itemStackB) {
-            return itemStackA.getUnlocalizedName().compareTo(itemStackB.getUnlocalizedName());
-        }
-    };
 
     private ISchematic schematic;
 
@@ -207,104 +189,6 @@ public class SchematicWorld extends WorldClient {
 
     public List<TileEntity> getTileEntities() {
         return this.schematic.getTileEntities();
-    }
-
-    public List<ItemStack> getBlockList() {
-        final List<ItemStack> blockList = new ArrayList<ItemStack>();
-        final MBlockPos pos = new MBlockPos();
-
-        int itemDamage;
-        IBlockState blockState;
-        Block block;
-        Item item;
-        ItemStack itemStack;
-
-        final int width = this.schematic.getWidth();
-        final int height = this.schematic.getHeight();
-        final int length = this.schematic.getLength();
-
-        for (pos.y = 0; pos.y < height; pos.y++) {
-            if (this.isRenderingLayer && pos.y != this.renderingLayer) {
-                continue;
-            }
-
-            for (pos.z = 0; pos.z < length; pos.z++) {
-                for (pos.x = 0; pos.x < width; pos.x++) {
-                    blockState = getBlockState(pos);
-                    block = blockState.getBlock();
-                    item = Item.getItemFromBlock(block);
-                    itemDamage = block.getMetaFromState(blockState);
-
-                    if (block == Blocks.air || isAirBlock(pos)) {
-                        continue;
-                    }
-
-                    if (BlockInfo.BLOCK_LIST_IGNORE_BLOCK.contains(block)) {
-                        continue;
-                    }
-
-                    if (BlockInfo.BLOCK_LIST_IGNORE_METADATA.contains(block)) {
-                        itemDamage = 0;
-                    }
-
-                    Item tmp = BlockInfo.BLOCK_ITEM_MAP.get(block);
-                    if (tmp != null) {
-                        item = tmp;
-                        Block blockFromItem = Block.getBlockFromItem(item);
-                        if (blockFromItem != Blocks.air) {
-                            block = blockFromItem;
-                        } else {
-                            itemDamage = 0;
-                        }
-                    }
-
-                    if (block instanceof BlockLog || block instanceof BlockLeavesBase) {
-                        itemDamage &= 0x03;
-                    }
-
-                    if (block instanceof BlockSlab) {
-                        itemDamage &= 0x07;
-                    }
-
-                    if (block instanceof BlockDoublePlant) {
-                        if ((itemDamage & 0x08) == 0x08) {
-                            continue;
-                        }
-                    }
-
-                    if (block == Blocks.cocoa) {
-                        itemDamage = 0x03;
-                    }
-
-                    if (item == Items.skull) {
-                        TileEntity tileEntity = getTileEntity(pos);
-                        if (tileEntity instanceof TileEntitySkull) {
-                            itemDamage = ((TileEntitySkull) tileEntity).getSkullType();
-                        }
-                    }
-
-                    itemStack = null;
-                    for (ItemStack stack : blockList) {
-                        if (stack.getItem() == item && stack.getItemDamage() == itemDamage) {
-                            itemStack = stack;
-                            itemStack.stackSize++;
-                            break;
-                        }
-                    }
-
-                    if (itemStack == null) {
-                        itemStack = new ItemStack(item, 1, itemDamage);
-                        if (itemStack.getItem() != null) {
-                            blockList.add(itemStack);
-                        }
-                    }
-                }
-            }
-        }
-
-        Collections.sort(blockList, BLOCK_COMPARATOR);
-
-        return blockList;
     }
 
     public boolean toggleRendering() {
