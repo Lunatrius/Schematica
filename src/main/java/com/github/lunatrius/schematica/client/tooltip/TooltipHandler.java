@@ -1,4 +1,4 @@
-package com.github.lunatrius.schematica.tooltip;
+package com.github.lunatrius.schematica.client.tooltip;
 
 import com.github.lunatrius.core.client.gui.FontRendererHelper;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
