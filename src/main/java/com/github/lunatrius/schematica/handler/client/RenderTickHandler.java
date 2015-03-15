@@ -1,10 +1,9 @@
 package com.github.lunatrius.schematica.handler.client;
 
-import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.tooltip.TooltipHandler;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
@@ -21,7 +20,7 @@ public class RenderTickHandler {
 
     @SubscribeEvent
     public void onRenderTick(TickEvent.RenderTickEvent event) {
-        final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+        final SchematicWorld schematic = ClientProxy.schematic;
 
         ClientProxy.movingObjectPosition = schematic != null ? rayTrace(schematic, 1.0f) : null;
 

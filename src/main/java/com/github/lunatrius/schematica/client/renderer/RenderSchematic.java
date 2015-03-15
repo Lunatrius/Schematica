@@ -4,7 +4,6 @@ import com.github.lunatrius.core.client.renderer.GeometryMasks;
 import com.github.lunatrius.core.client.renderer.GeometryTessellator;
 import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.core.util.vector.Vector3d;
-import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.renderer.chunk.OverlayRenderDispatcher;
 import com.github.lunatrius.schematica.client.renderer.chunk.container.SchematicChunkRenderContainer;
 import com.github.lunatrius.schematica.client.renderer.chunk.container.SchematicChunkRenderContainerList;
@@ -15,9 +14,9 @@ import com.github.lunatrius.schematica.client.renderer.chunk.overlay.RenderOverl
 import com.github.lunatrius.schematica.client.renderer.chunk.proxy.SchematicRenderChunkList;
 import com.github.lunatrius.schematica.client.renderer.chunk.proxy.SchematicRenderChunkVbo;
 import com.github.lunatrius.schematica.client.renderer.shader.ShaderProgram;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.minecraft.client.Minecraft;
@@ -208,7 +207,7 @@ public class RenderSchematic extends RenderGlobal {
         if (player != null) {
             this.profiler.startSection("schematica");
             ClientProxy.setPlayerData(player, event.partialTicks);
-            final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+            final SchematicWorld schematic = ClientProxy.schematic;
             final boolean isRenderingSchematic = schematic != null && schematic.isRendering;
 
             this.profiler.startSection("schematic");

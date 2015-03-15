@@ -1,4 +1,4 @@
-package com.github.lunatrius.schematica;
+package com.github.lunatrius.schematica.util;
 
 import java.io.File;
 import java.io.FileFilter;

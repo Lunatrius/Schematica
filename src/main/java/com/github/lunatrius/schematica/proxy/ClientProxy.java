@@ -2,10 +2,11 @@ package com.github.lunatrius.schematica.proxy;
 
 import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.core.util.vector.Vector3d;
-import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.api.ISchematic;
+import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
 import com.github.lunatrius.schematica.client.renderer.SchematicBlockRendererDispatcher;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
 import com.github.lunatrius.schematica.handler.client.InputHandler;
@@ -13,7 +14,6 @@ import com.github.lunatrius.schematica.handler.client.OverlayHandler;
 import com.github.lunatrius.schematica.handler.client.RenderTickHandler;
 import com.github.lunatrius.schematica.handler.client.TickHandler;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -43,6 +43,8 @@ public class ClientProxy extends CommonProxy {
     public static EnumFacing orientation = null;
     public static int rotationRender = 0;
 
+    public static SchematicWorld schematic = null;
+
     public static final MBlockPos pointA = new MBlockPos();
     public static final MBlockPos pointB = new MBlockPos();
     public static final MBlockPos pointMin = new MBlockPos();
@@ -55,8 +57,6 @@ public class ClientProxy extends CommonProxy {
     private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
     private static BlockRendererDispatcher dispatcherVanilla = null;
     private static BlockRendererDispatcher dispatcherSchematic = null;
-
-    private SchematicWorld schematicWorld = null;
 
     public static void setPlayerData(EntityPlayer player, float partialTicks) {
         playerPosition.x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
@@ -227,7 +227,7 @@ public class ClientProxy extends CommonProxy {
         SchematicPrinter.INSTANCE.setEnabled(true);
         SchematicPrinter.INSTANCE.setSchematic(null);
 
-        setActiveSchematic(null);
+        schematic = null;
         if (MINECRAFT.theWorld != null) {
             MINECRAFT.theWorld.removeWorldAccess(RenderSchematic.INSTANCE);
         }
@@ -252,32 +252,12 @@ public class ClientProxy extends CommonProxy {
 
         Reference.logger.debug("Loaded {} [w:{},h:{},l:{}]", filename, world.getWidth(), world.getHeight(), world.getLength());
 
-        setActiveSchematic(world);
+        ClientProxy.schematic = world;
         MINECRAFT.theWorld.addWorldAccess(RenderSchematic.INSTANCE);
         SchematicPrinter.INSTANCE.setSchematic(world);
         world.isRendering = true;
 
         return true;
-    }
-
-    @Override
-    public void setActiveSchematic(SchematicWorld world) {
-        this.schematicWorld = world;
-    }
-
-    @Override
-    public void setActiveSchematic(SchematicWorld world, EntityPlayer player) {
-        setActiveSchematic(world);
-    }
-
-    @Override
-    public SchematicWorld getActiveSchematic() {
-        return this.schematicWorld;
-    }
-
-    @Override
-    public SchematicWorld getActiveSchematic(EntityPlayer player) {
-        return getActiveSchematic();
     }
 
     @Override
