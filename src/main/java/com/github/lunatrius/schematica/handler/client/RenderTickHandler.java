@@ -1,9 +1,9 @@
 package com.github.lunatrius.schematica.handler.client;
 
+import com.github.lunatrius.schematica.client.tooltip.TooltipHandler;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
-import com.github.lunatrius.schematica.tooltip.TooltipHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.MovingObjectPosition;
