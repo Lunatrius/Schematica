@@ -1,9 +1,9 @@
-package com.github.lunatrius.schematica.world;
+package com.github.lunatrius.schematica.client.world;
 
 import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.schematica.api.ISchematic;
+import com.github.lunatrius.schematica.client.world.chunk.ChunkProviderSchematic;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.chunk.ChunkProviderSchematic;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;

@@ -1,8 +1,8 @@
 package com.github.lunatrius.schematica.tooltip;
 
 import com.github.lunatrius.core.client.gui.FontRendererHelper;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

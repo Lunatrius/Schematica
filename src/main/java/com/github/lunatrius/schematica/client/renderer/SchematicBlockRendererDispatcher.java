@@ -1,7 +1,7 @@
 package com.github.lunatrius.schematica.client.renderer;
 
-import com.github.lunatrius.schematica.Schematica;
-import com.github.lunatrius.schematica.world.SchematicWorld;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
+import com.github.lunatrius.schematica.proxy.ClientProxy;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -21,7 +21,7 @@ public class SchematicBlockRendererDispatcher extends BlockRendererDispatcher {
 
     @Override
     public boolean renderBlock(final IBlockState blockState, final BlockPos pos, final IBlockAccess blockAccess, final WorldRenderer worldRenderer) {
-        final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+        final SchematicWorld schematic = ClientProxy.schematic;
         final BlockPos realPos = new BlockPos(pos.getX() + schematic.position.x, pos.getY() + schematic.position.y, pos.getZ() + schematic.position.z);
         final WorldClient world = this.minecraft.theWorld;
 

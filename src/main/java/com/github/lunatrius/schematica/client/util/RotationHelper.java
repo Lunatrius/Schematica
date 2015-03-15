@@ -1,9 +1,9 @@
-package com.github.lunatrius.schematica.util;
+package com.github.lunatrius.schematica.client.util;
 
 import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.schematica.api.ISchematic;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.storage.Schematic;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLever;

@@ -1,6 +1,6 @@
-package com.github.lunatrius.schematica.world.chunk;
+package com.github.lunatrius.schematica.client.world.chunk;
 
-import com.github.lunatrius.schematica.world.SchematicWorld;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.IProgressUpdate;
@@ -17,13 +17,11 @@ import java.util.Map;
 public class ChunkProviderSchematic implements IChunkProvider {
     private final SchematicWorld world;
     private final Chunk emptyChunk;
-    // private final ChunkSchematic chunks[][];
     private final Map<Long, ChunkSchematic> chunks = new HashMap<Long, ChunkSchematic>();
 
     public ChunkProviderSchematic(SchematicWorld world) {
         this.world = world;
         this.emptyChunk = new EmptyChunk(world, 0, 0);
-        // this.chunks = new ChunkSchematic[this.width][this.length];
     }
 
     @Override
