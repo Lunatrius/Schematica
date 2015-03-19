@@ -253,6 +253,7 @@ public class ClientProxy extends CommonProxy {
         Reference.logger.debug("Loaded {} [w:{},h:{},l:{}]", filename, world.getWidth(), world.getHeight(), world.getLength());
 
         ClientProxy.schematic = world;
+        RenderSchematic.INSTANCE.setWorldAndLoadRenderers(world);
         MINECRAFT.theWorld.addWorldAccess(RenderSchematic.INSTANCE);
         SchematicPrinter.INSTANCE.setSchematic(world);
         world.isRendering = true;
