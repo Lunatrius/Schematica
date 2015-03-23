@@ -1,31 +1,35 @@
 # gui - general
-schematica.gui.openFolder=Şematik klasörünü aç
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.done=Tamam
+
+# gui - general - load
 schematica.gui.title=Şematik dosyasını seçin
 schematica.gui.folderInfo=(Şematik dosyalarını buraya koyun)
+schematica.gui.openFolder=Şematik klasörünü aç
 schematica.gui.noschematic=--Şematik yok--
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=Gizle
+
+# gui - general - save
+schematica.gui.point.red=Kırmızı nokta
+schematica.gui.point.blue=Mavi nokta
+schematica.gui.save=Kaydet
+schematica.gui.saveselection=Seçimi şematik olarak kaydet
+
+# gui - general - control
+schematica.gui.moveschematic=Şematik taşıma
+schematica.gui.materials=Malzemeler
+schematica.gui.printer=Yazıcı
+schematica.gui.operations=İşlemler
 schematica.gui.all=HEPSİ
+schematica.gui.layers=Katmanlar
+schematica.gui.hide=Gizle
 schematica.gui.show=Göster
 schematica.gui.movehere=Buraya Taşı
 schematica.gui.flip=Ters çevir
 schematica.gui.rotate=Döndür
-schematica.gui.save=Kaydet
-schematica.gui.moveschematic=Şematik taşıma
-schematica.gui.layers=Katmanlar
-schematica.gui.operations=İşlemler
-schematica.gui.point.red=Kırmızı nokta
-schematica.gui.point.blue=Mavi nokta
-schematica.gui.saveselection=Seçimi şematik olarak kaydet
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=Malzemeler
 schematica.gui.materialname=Malzeme
 schematica.gui.materialamount=Miktar
-schematica.gui.printer=Yazıcı
 
 # gui - config - categories
 
@@ -55,3 +59,5 @@ schematica.key.control=Şematiki işleyin
 # commands - remove
 
 # commands - download
+
+# messages

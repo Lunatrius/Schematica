@@ -1,31 +1,35 @@
 # gui - general
-schematica.gui.openFolder=Ouvrir le dossier schematic
+schematica.gui.x=X :
+schematica.gui.y=Y :
+schematica.gui.z=Z :
 schematica.gui.done=Terminé
+
+# gui - general - load
 schematica.gui.title=Sélectionner un schematic
 schematica.gui.folderInfo=(Placez vos schematics ici)
+schematica.gui.openFolder=Ouvrir le dossier schematic
 schematica.gui.noschematic=-- Aucun schematic --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=Cacher
+
+# gui - general - save
+schematica.gui.point.red=Point rouge
+schematica.gui.point.blue=Point bleu
+schematica.gui.save=Enregistrer
+schematica.gui.saveselection=Sauvegarder la sélection en tant que schematic
+
+# gui - general - control
+schematica.gui.moveschematic=Déplacer le schematic
+schematica.gui.materials=Matériaux
+schematica.gui.printer=Mode imprimante
+schematica.gui.operations=Opérations
 schematica.gui.all=TOUTES
+schematica.gui.layers=Couches
+schematica.gui.hide=Cacher
 schematica.gui.show=Montrer
 schematica.gui.movehere=Déplacer ici
 schematica.gui.flip=Retourner
 schematica.gui.rotate=Pivoter
-schematica.gui.save=Enregistrer
-schematica.gui.moveschematic=Déplacer le schematic
-schematica.gui.layers=Couches
-schematica.gui.operations=Opérations
-schematica.gui.point.red=Point rouge
-schematica.gui.point.blue=Point bleu
-schematica.gui.saveselection=Sauvegarder la sélection en tant que schematic
-schematica.gui.x=X :
-schematica.gui.y=Y :
-schematica.gui.z=Z :
-schematica.gui.materials=Matériaux
 schematica.gui.materialname=Matériau
 schematica.gui.materialamount=Quantité
-schematica.gui.printer=Mode imprimante
 
 # gui - config - categories
 
@@ -55,3 +59,5 @@ schematica.key.control=Manipuler le schematic
 # commands - remove
 
 # commands - download
+
+# messages

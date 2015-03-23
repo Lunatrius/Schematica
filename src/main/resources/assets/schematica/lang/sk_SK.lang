@@ -1,31 +1,35 @@
 # gui - general
-schematica.gui.openFolder=Otvoriť priečinok so schématami
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.done=Hotovo
+
+# gui - general - load
 schematica.gui.title=Vyberte schematický súbor
 schematica.gui.folderInfo=(Tu vložte schematické súbory)
+schematica.gui.openFolder=Otvoriť priečinok so schématami
 schematica.gui.noschematic=-- Žiadna schéma --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=Skrýť
+
+# gui - general - save
+schematica.gui.point.red=Červený bod
+schematica.gui.point.blue=Modrý bod
+schematica.gui.save=Uložiť
+schematica.gui.saveselection=Uložiť výber ako schému
+
+# gui - general - control
+schematica.gui.moveschematic=Presunúť schému
+schematica.gui.materials=Materiály
+schematica.gui.printer=Tlačiareň
+schematica.gui.operations=Operácie
 schematica.gui.all=Všetko
+schematica.gui.layers=Vrstvy
+schematica.gui.hide=Skrýť
 schematica.gui.show=Zobraziť
 schematica.gui.movehere=Presunúť tu
 schematica.gui.flip=Prevrátiť
 schematica.gui.rotate=Otočiť
-schematica.gui.save=Uložiť
-schematica.gui.moveschematic=Presunúť schému
-schematica.gui.layers=Vrstvy
-schematica.gui.operations=Operácie
-schematica.gui.point.red=Červený bod
-schematica.gui.point.blue=Modrý bod
-schematica.gui.saveselection=Uložiť výber ako schému
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=Materiály
 schematica.gui.materialname=Materiál
 schematica.gui.materialamount=Množstvo
-schematica.gui.printer=Tlačiareň
 
 # gui - config - categories
 
@@ -55,3 +59,5 @@ schematica.key.control=Manipulovať so schémou
 # commands - remove
 
 # commands - download
+
+# messages

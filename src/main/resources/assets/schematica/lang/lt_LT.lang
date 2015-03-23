@@ -1,28 +1,32 @@
 # gui - general
-schematica.gui.openFolder=Atidaryti schemø aplankà
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.done=Baigta
+
+# gui - general - load
 schematica.gui.title=Pasirinkite schemos failà
 schematica.gui.folderInfo=(Dëkite schemø failus èia\!)
+schematica.gui.openFolder=Atidaryti schemø aplankà
 schematica.gui.noschematic=-- Nëra schemos --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=Slëpti
+
+# gui - general - save
+schematica.gui.point.red=Raudonasis taðkas
+schematica.gui.point.blue=Mëlynasis taðkas
+schematica.gui.save=Iðsaugoti
+schematica.gui.saveselection=Iðsaugoti paþymëta plotà kaip schemà?
+
+# gui - general - control
+schematica.gui.moveschematic=Patraukti schemà
+schematica.gui.materials=Medþiagos
+schematica.gui.operations=Veiksmas
 schematica.gui.all=VISI
+schematica.gui.layers=Sluoksnis
+schematica.gui.hide=Slëpti
 schematica.gui.show=Rodyti
 schematica.gui.movehere=Perkelti èia
 schematica.gui.flip=Veidrodinis vaizdas
 schematica.gui.rotate=Pasukti
-schematica.gui.save=Iðsaugoti
-schematica.gui.moveschematic=Patraukti schemà
-schematica.gui.layers=Sluoksnis
-schematica.gui.operations=Veiksmas
-schematica.gui.point.red=Raudonasis taðkas
-schematica.gui.point.blue=Mëlynasis taðkas
-schematica.gui.saveselection=Iðsaugoti paþymëta plotà kaip schemà?
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=Medþiagos
 schematica.gui.materialname=Medþiaga
 schematica.gui.materialamount=Kiekis
 
@@ -54,3 +58,5 @@ schematica.key.control=Manipuliuoti schemà
 # commands - remove
 
 # commands - download
+
+# messages

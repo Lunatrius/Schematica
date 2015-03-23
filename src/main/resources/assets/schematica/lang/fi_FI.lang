@@ -1,31 +1,35 @@
 # gui - general
-schematica.gui.openFolder=Avaa kaavion sijainti
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.done=Valmis
+
+# gui - general - load
 schematica.gui.title=Valitse kaavio tiedosto
 schematica.gui.folderInfo=(Sijoita kaavio tiedostot tänne)
+schematica.gui.openFolder=Avaa kaavion sijainti
 schematica.gui.noschematic=-- Ei kaaviota --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=Piilota
+
+# gui - general - save
+schematica.gui.point.red=Punainen piste
+schematica.gui.point.blue=Sininen piste
+schematica.gui.save=Tallenna
+schematica.gui.saveselection=Tallenna valinta kaavana
+
+# gui - general - control
+schematica.gui.moveschematic=Siirrä kaaviota
+schematica.gui.materials=Materiaalit
+schematica.gui.printer=Tulostin
+schematica.gui.operations=Toiminnot
 schematica.gui.all=KAIKKI
+schematica.gui.layers=Kerrokset
+schematica.gui.hide=Piilota
 schematica.gui.show=Näytä
 schematica.gui.movehere=Siirrä tänne
 schematica.gui.flip=Käännä
 schematica.gui.rotate=Pyöritä
-schematica.gui.save=Tallenna
-schematica.gui.moveschematic=Siirrä kaaviota
-schematica.gui.layers=Kerrokset
-schematica.gui.operations=Toiminnot
-schematica.gui.point.red=Punainen piste
-schematica.gui.point.blue=Sininen piste
-schematica.gui.saveselection=Tallenna valinta kaavana
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=Materiaalit
 schematica.gui.materialname=Materiaali
 schematica.gui.materialamount=Määrä
-schematica.gui.printer=Tulostin
 
 # gui - config - categories
 
@@ -55,3 +59,5 @@ schematica.key.control=Käsittele kaavaa
 # commands - remove
 
 # commands - download
+
+# messages

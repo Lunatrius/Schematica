@@ -1,30 +1,34 @@
 # gui - general
-schematica.gui.openFolder=Otworz folder z schematami
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.done=Gotowe
+
+# gui - general - load
 schematica.gui.title=Wybierz plik schematu
 schematica.gui.folderInfo=(Tutaj wrzucaj schematy)
+schematica.gui.openFolder=Otworz folder z schematami
 schematica.gui.noschematic=-- Nie ma schematu --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=Schowaj
+
+# gui - general - save
+schematica.gui.point.red=Czerwony znacznik
+schematica.gui.point.blue=Niebieski znacznik
+schematica.gui.save=Zapisz
+schematica.gui.saveselection=Zapisz zaznaczenie jako schemat
+
+# gui - general - control
+schematica.gui.moveschematic=Przenies schemat
+schematica.gui.materials=Materialy
+schematica.gui.printer=Drukarka
+schematica.gui.operations=Operacje
 schematica.gui.all=Wszystko
+schematica.gui.layers=Warstwy
+schematica.gui.hide=Schowaj
 schematica.gui.show=Pokarz
 schematica.gui.movehere=Przenies tutaj
 schematica.gui.flip=Odwroc
 schematica.gui.rotate=Obroc
-schematica.gui.save=Zapisz
-schematica.gui.moveschematic=Przenies schemat
-schematica.gui.layers=Warstwy
-schematica.gui.operations=Operacje
-schematica.gui.point.red=Czerwony znacznik
-schematica.gui.point.blue=Niebieski znacznik
-schematica.gui.saveselection=Zapisz zaznaczenie jako schemat
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=Materialy
 schematica.gui.materialamount=Ilosc
-schematica.gui.printer=Drukarka
 
 # gui - config - categories
 
@@ -54,3 +58,5 @@ schematica.key.control=Manipulacja schematem
 # commands - remove
 
 # commands - download
+
+# messages

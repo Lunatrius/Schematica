@@ -1,28 +1,32 @@
 # gui - general
-schematica.gui.openFolder=Apri cartella schematiche
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.done=Fatto
+
+# gui - general - load
 schematica.gui.title=Seleziona file schematico
 schematica.gui.folderInfo=(Posiziona qui i file schematici)
+schematica.gui.openFolder=Apri cartella schematiche
 schematica.gui.noschematic=-- Nessuna Schematica --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=Nascondi
+
+# gui - general - save
+schematica.gui.point.red=Punto rosso
+schematica.gui.point.blue=Punto blu
+schematica.gui.save=Salva
+schematica.gui.saveselection=Salva la selezione come schematica
+
+# gui - general - control
+schematica.gui.moveschematic=Movi schematica
+schematica.gui.materials=Materiali
+schematica.gui.operations=Operazioni
 schematica.gui.all=TUTTI
+schematica.gui.layers=Livelli
+schematica.gui.hide=Nascondi
 schematica.gui.show=Visualizza
 schematica.gui.movehere=Posiziona qui
 schematica.gui.flip=Specchia
 schematica.gui.rotate=Ruota
-schematica.gui.save=Salva
-schematica.gui.moveschematic=Movi schematica
-schematica.gui.layers=Livelli
-schematica.gui.operations=Operazioni
-schematica.gui.point.red=Punto rosso
-schematica.gui.point.blue=Punto blu
-schematica.gui.saveselection=Salva la selezione come schematica
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=Materiali
 schematica.gui.materialname=Materiale
 schematica.gui.materialamount=Quantità
 
@@ -54,3 +58,5 @@ schematica.key.control=Manipola schematica
 # commands - remove
 
 # commands - download
+
+# messages

@@ -1,31 +1,35 @@
 # gui - general
-schematica.gui.openFolder=Åpne tegningsmappen
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.done=Ferdig
+
+# gui - general - load
 schematica.gui.title=Velg tegningsfil
 schematica.gui.folderInfo=(Plasser tegningsfiler her)
+schematica.gui.openFolder=Åpne tegningsmappen
 schematica.gui.noschematic=-- Ingen tegninger --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=Skjul
+
+# gui - general - save
+schematica.gui.point.red=Rødt punkt
+schematica.gui.point.blue=Blått punkt
+schematica.gui.save=Lagre
+schematica.gui.saveselection=Lagre utvalget som en tegning
+
+# gui - general - control
+schematica.gui.moveschematic=Flytt tegning
+schematica.gui.materials=Materialer
+schematica.gui.printer=Printer
+schematica.gui.operations=Operasjoner
 schematica.gui.all=ALLE
+schematica.gui.layers=Lag
+schematica.gui.hide=Skjul
 schematica.gui.show=Vis
 schematica.gui.movehere=Flytt hit
 schematica.gui.flip=Vend
 schematica.gui.rotate=Roter
-schematica.gui.save=Lagre
-schematica.gui.moveschematic=Flytt tegning
-schematica.gui.layers=Lag
-schematica.gui.operations=Operasjoner
-schematica.gui.point.red=Rødt punkt
-schematica.gui.point.blue=Blått punkt
-schematica.gui.saveselection=Lagre utvalget som en tegning
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=Materialer
 schematica.gui.materialname=Materiale
 schematica.gui.materialamount=Mengde
-schematica.gui.printer=Printer
 
 # gui - config - categories
 schematica.config.category.render=Gjengivelse
@@ -82,3 +86,5 @@ schematica.key.control=Manipuler tegning
 # commands - remove
 
 # commands - download
+
+# messages

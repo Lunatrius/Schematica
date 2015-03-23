@@ -1,31 +1,35 @@
 # gui - general
-schematica.gui.openFolder=เปิดโฟลเดอร์ Schematic
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.done=เสร็จสิ้น
+
+# gui - general - load
 schematica.gui.title=เลือกไฟล์ Schematic ที่ต้องการ
 schematica.gui.folderInfo=(ให้วางไฟล์ .schematic ในโฟลเดอร์นี้)
+schematica.gui.openFolder=เปิดโฟลเดอร์ Schematic
 schematica.gui.noschematic=-- ไม่มี Schematic --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=ซ่อน
+
+# gui - general - save
+schematica.gui.point.red=จุดแดง
+schematica.gui.point.blue=จุดน้ำเงิน
+schematica.gui.save=บันทึก
+schematica.gui.saveselection=บันทึกจุดที่เลือกไปยัง Schematic
+
+# gui - general - control
+schematica.gui.moveschematic=ย้าย Schematic
+schematica.gui.materials=ส่วนประกอบ
+schematica.gui.printer=การปริ๊น
+schematica.gui.operations=การดำเนินงาน
 schematica.gui.all=ทั้งหมด
+schematica.gui.layers=เลเยอร์
+schematica.gui.hide=ซ่อน
 schematica.gui.show=แสดง
 schematica.gui.movehere=ย้ายมาตรงนี้
 schematica.gui.flip=พลิก
 schematica.gui.rotate=หมุน
-schematica.gui.save=บันทึก
-schematica.gui.moveschematic=ย้าย Schematic
-schematica.gui.layers=เลเยอร์
-schematica.gui.operations=การดำเนินงาน
-schematica.gui.point.red=จุดแดง
-schematica.gui.point.blue=จุดน้ำเงิน
-schematica.gui.saveselection=บันทึกจุดที่เลือกไปยัง Schematic
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=ส่วนประกอบ
 schematica.gui.materialname=ส่วนประกอบ
 schematica.gui.materialamount=จำนวน
-schematica.gui.printer=การปริ๊น
 
 # gui - config - categories
 
@@ -55,3 +59,5 @@ schematica.key.control=จัดการ Schematic
 # commands - remove
 
 # commands - download
+
+# messages
