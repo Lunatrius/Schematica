@@ -1,30 +1,34 @@
 # gui - general
-schematica.gui.openFolder=Abrir carpeta de esquemas
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.done=Hecho
+
+# gui - general - load
 schematica.gui.title=Seleccionar archivo de esquema
 schematica.gui.folderInfo=Pon aquí los esquemas
+schematica.gui.openFolder=Abrir carpeta de esquemas
 schematica.gui.noschematic=-- No hay esquemas --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=Esconder
+
+# gui - general - save
+schematica.gui.point.red=Punto rojo
+schematica.gui.point.blue=Punto Azul
+schematica.gui.save=Guardar
+schematica.gui.saveselection=Guardar selección como esquema
+
+# gui - general - control
+schematica.gui.moveschematic=Mover esquema
+schematica.gui.materials=Materiales
+schematica.gui.printer=Impresora
+schematica.gui.operations=Acciones
 schematica.gui.all=Todas
+schematica.gui.layers=Capas
+schematica.gui.hide=Esconder
 schematica.gui.show=Mostrar
 schematica.gui.movehere=Mover aquí
 schematica.gui.flip=Voltear
 schematica.gui.rotate=Girar
-schematica.gui.save=Guardar
-schematica.gui.moveschematic=Mover esquema
-schematica.gui.layers=Capas
-schematica.gui.operations=Acciones
-schematica.gui.point.red=Punto rojo
-schematica.gui.point.blue=Punto Azul
-schematica.gui.saveselection=Guardar selección como esquema
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=Materiales
 schematica.gui.materialamount=Cantidad
-schematica.gui.printer=Impresora
 
 # gui - config - categories
 
@@ -54,3 +58,5 @@ schematica.key.control=Editar esquema
 # commands - remove
 
 # commands - download
+
+# messages

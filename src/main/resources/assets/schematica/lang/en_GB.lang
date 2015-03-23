@@ -1,34 +1,37 @@
 # gui - general
-schematica.gui.openFolder=Open schematic folder
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
+schematica.gui.on=ON
+schematica.gui.off=OFF
 schematica.gui.done=Done
+
+# gui - general - load
 schematica.gui.title=Select schematic file
 schematica.gui.folderInfo=(Place schematic files here)
+schematica.gui.openFolder=Open schematic folder
 schematica.gui.noschematic=-- No schematic --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=Hide
+
+# gui - general - save
+schematica.gui.point.red=Red point
+schematica.gui.point.blue=Blue point
+schematica.gui.save=Save
+schematica.gui.saveselection=Save the selection as a schematic
+
+# gui - general - control
+schematica.gui.moveschematic=Move schematic
+schematica.gui.materials=Materials
+schematica.gui.printer=Printer
+schematica.gui.operations=Operations
 schematica.gui.all=ALL
+schematica.gui.layers=Layers
+schematica.gui.hide=Hide
 schematica.gui.show=Show
 schematica.gui.movehere=Move here
 schematica.gui.flip=Flip
 schematica.gui.rotate=Rotate
-schematica.gui.save=Save
-schematica.gui.moveschematic=Move schematic
-schematica.gui.layers=Layers
-schematica.gui.operations=Operations
-schematica.gui.point.red=Red point
-schematica.gui.point.blue=Blue point
-schematica.gui.saveselection=Save the selection as a schematic
-schematica.gui.on=ON
-schematica.gui.off=OFF
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=Materials
 schematica.gui.materialname=Material
 schematica.gui.materialamount=Amount
-schematica.gui.printer=Printer
-schematica.gui.unknownblock=Unknown Block
 
 # gui - config - categories
 schematica.config.category.render=Rendering
@@ -97,3 +100,5 @@ schematica.key.control=Manipulate schematic
 # commands - remove
 
 # commands - download
+
+# messages

@@ -1,31 +1,35 @@
 # gui - general
-schematica.gui.openFolder=Odpri shematično mapo
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.done=Končano
+
+# gui - general - load
 schematica.gui.title=Izberi shematično datoteko
 schematica.gui.folderInfo=(Sheme vstavi v to mapo)
+schematica.gui.openFolder=Odpri shematično mapo
 schematica.gui.noschematic=-- Ni sheme --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=Skrij
+
+# gui - general - save
+schematica.gui.point.red=Rdeča točka
+schematica.gui.point.blue=Modra točka
+schematica.gui.save=Shrani
+schematica.gui.saveselection=Shrani izbrano območje kot shemo
+
+# gui - general - control
+schematica.gui.moveschematic=Premakni shemo
+schematica.gui.materials=Materiali
+schematica.gui.printer=Tiskalnik
+schematica.gui.operations=Operacije
 schematica.gui.all=VSE
+schematica.gui.layers=Sloji
+schematica.gui.hide=Skrij
 schematica.gui.show=Pokaži
 schematica.gui.movehere=Premakni sem
 schematica.gui.flip=Zrcali
 schematica.gui.rotate=Rotiraj
-schematica.gui.save=Shrani
-schematica.gui.moveschematic=Premakni shemo
-schematica.gui.layers=Sloji
-schematica.gui.operations=Operacije
-schematica.gui.point.red=Rdeča točka
-schematica.gui.point.blue=Modra točka
-schematica.gui.saveselection=Shrani izbrano območje kot shemo
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=Materiali
 schematica.gui.materialname=Material
 schematica.gui.materialamount=Količina
-schematica.gui.printer=Tiskalnik
 
 # gui - config - categories
 
@@ -55,3 +59,5 @@ schematica.key.control=Manipuliraj shemo
 # commands - remove
 
 # commands - download
+
+# messages

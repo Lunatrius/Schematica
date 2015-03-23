@@ -1,4 +1,4 @@
-package com.github.lunatrius.schematica.client.gui;
+package com.github.lunatrius.schematica.client.gui.load;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

@@ -69,7 +69,7 @@ public class SchematicPrinter {
     }
 
     public boolean togglePrinting() {
-        this.isPrinting = !this.isPrinting;
+        this.isPrinting = !this.isPrinting && this.schematic != null;
         return this.isPrinting;
     }
 

@@ -1,4 +1,4 @@
-package com.github.lunatrius.schematica.client.gui;
+package com.github.lunatrius.schematica.client.gui.control;
 
 import com.github.lunatrius.core.client.gui.GuiNumericField;
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
@@ -8,6 +8,7 @@ import com.github.lunatrius.schematica.client.util.RotationHelper;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
+import com.github.lunatrius.schematica.reference.Names;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -40,19 +41,19 @@ public class GuiSchematicControl extends GuiScreenBase {
     private GuiButton btnMaterials = null;
     private GuiButton btnPrint = null;
 
-    private final String strMoveSchematic = I18n.format("schematica.gui.moveschematic");
-    private final String strOperations = I18n.format("schematica.gui.operations");
-    private final String strAll = I18n.format("schematica.gui.all");
-    private final String strLayers = I18n.format("schematica.gui.layers");
-    private final String strX = I18n.format("schematica.gui.x");
-    private final String strY = I18n.format("schematica.gui.y");
-    private final String strZ = I18n.format("schematica.gui.z");
-    private final String strMaterials = I18n.format("schematica.gui.materials");
-    private final String strPrinter = I18n.format("schematica.gui.printer");
-    private final String strHide = I18n.format("schematica.gui.hide");
-    private final String strShow = I18n.format("schematica.gui.show");
-    private final String strOn = I18n.format("schematica.gui.on");
-    private final String strOff = I18n.format("schematica.gui.off");
+    private final String strMoveSchematic = I18n.format(Names.Gui.Control.MOVE_SCHEMATIC);
+    private final String strOperations = I18n.format(Names.Gui.Control.OPERATIONS);
+    private final String strAll = I18n.format(Names.Gui.Control.MODE_ALL);
+    private final String strLayers = I18n.format(Names.Gui.Control.MODE_LAYERS);
+    private final String strMaterials = I18n.format(Names.Gui.Control.MATERIALS);
+    private final String strPrinter = I18n.format(Names.Gui.Control.PRINTER);
+    private final String strHide = I18n.format(Names.Gui.Control.HIDE);
+    private final String strShow = I18n.format(Names.Gui.Control.SHOW);
+    private final String strX = I18n.format(Names.Gui.X);
+    private final String strY = I18n.format(Names.Gui.Y);
+    private final String strZ = I18n.format(Names.Gui.Z);
+    private final String strOn = I18n.format(Names.Gui.ON);
+    private final String strOff = I18n.format(Names.Gui.OFF);
 
     public GuiSchematicControl(GuiScreen guiScreen) {
         super(guiScreen);
@@ -87,16 +88,16 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnHide = new GuiButton(id++, this.width - 90, this.height - 105, 80, 20, this.schematic != null && this.schematic.isRendering ? this.strHide : this.strShow);
         this.buttonList.add(this.btnHide);
 
-        this.btnMove = new GuiButton(id++, this.width - 90, this.height - 80, 80, 20, I18n.format("schematica.gui.movehere"));
+        this.btnMove = new GuiButton(id++, this.width - 90, this.height - 80, 80, 20, I18n.format(Names.Gui.Control.MOVE_HERE));
         this.buttonList.add(this.btnMove);
 
-        this.btnFlip = new GuiButton(id++, this.width - 90, this.height - 55, 80, 20, I18n.format("schematica.gui.flip"));
+        this.btnFlip = new GuiButton(id++, this.width - 90, this.height - 55, 80, 20, I18n.format(Names.Gui.Control.FLIP));
         this.buttonList.add(this.btnFlip);
 
-        this.btnRotateDirection = new GuiButton(id++, this.width - 180, this.height - 30, 80, 20, I18n.format("schematica.gui." + ClientProxy.axisRotation.getName()));
+        this.btnRotateDirection = new GuiButton(id++, this.width - 180, this.height - 30, 80, 20, I18n.format(Names.Gui.Control.TRANSFORM_PREFIX + ClientProxy.axisRotation.getName()));
         this.buttonList.add(this.btnRotateDirection);
 
-        this.btnRotate = new GuiUnicodeGlyphButton(id++, this.width - 90, this.height - 30, 80, 20, " " + I18n.format("schematica.gui.rotate"), "\u21bb", 2.0f);
+        this.btnRotate = new GuiUnicodeGlyphButton(id++, this.width - 90, this.height - 30, 80, 20, " " + I18n.format(Names.Gui.Control.ROTATE), "\u21bb", 2.0f);
         this.buttonList.add(this.btnRotate);
 
         this.btnMaterials = new GuiButton(id++, 10, this.height - 70, 80, 20, this.strMaterials);
@@ -183,7 +184,7 @@ public class GuiSchematicControl extends GuiScreenBase {
             } else if (guiButton.id == this.btnRotateDirection.id) {
                 final EnumFacing[] values = EnumFacing.values();
                 ClientProxy.axisRotation = values[((ClientProxy.axisRotation.ordinal() + 1) % values.length)];
-                guiButton.displayString = I18n.format("schematica.gui." + ClientProxy.axisRotation.getName());
+                guiButton.displayString = I18n.format(Names.Gui.Control.TRANSFORM_PREFIX + ClientProxy.axisRotation.getName());
             } else if (guiButton.id == this.btnRotate.id) {
                 if (RotationHelper.INSTANCE.rotate(this.schematic, ClientProxy.axisRotation, isShiftKeyDown())) {
                     setPoint(this.numericX, this.numericY, this.numericZ, this.schematic.position);

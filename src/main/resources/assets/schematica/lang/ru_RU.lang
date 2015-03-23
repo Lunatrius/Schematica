@@ -1,31 +1,35 @@
 # gui - general
-schematica.gui.openFolder=Открыть папку со схемами
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.done=Готово
+
+# gui - general - load
 schematica.gui.title=Выберите файл схемы
 schematica.gui.folderInfo=(Место хранения схем)
+schematica.gui.openFolder=Открыть папку со схемами
 schematica.gui.noschematic=-- Нет схем --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=Спрятать
+
+# gui - general - save
+schematica.gui.point.red=Красная точка
+schematica.gui.point.blue=Синяя точка
+schematica.gui.save=Сохранить
+schematica.gui.saveselection=Сохранить схему выделенной области 
+
+# gui - general - control
+schematica.gui.moveschematic=Передвинуть схему
+schematica.gui.materials=Материалы
+schematica.gui.printer=Принтер
+schematica.gui.operations=Операции
 schematica.gui.all=ВСЕ
+schematica.gui.layers=Слои
+schematica.gui.hide=Спрятать
 schematica.gui.show=Показать
 schematica.gui.movehere=Передвинуть сюда
 schematica.gui.flip=Отразить
 schematica.gui.rotate=Повернуть
-schematica.gui.save=Сохранить
-schematica.gui.moveschematic=Передвинуть схему
-schematica.gui.layers=Слои
-schematica.gui.operations=Операции
-schematica.gui.point.red=Красная точка
-schematica.gui.point.blue=Синяя точка
-schematica.gui.saveselection=Сохранить схему выделенной области 
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=Материалы
 schematica.gui.materialname=Материал
 schematica.gui.materialamount=Количество
-schematica.gui.printer=Принтер
 
 # gui - config - categories
 
@@ -56,3 +60,5 @@ schematica.key.control=Манипулирование схемой
 # commands - remove
 
 # commands - download
+
+# messages

@@ -1,29 +1,33 @@
 # gui - general
-schematica.gui.openFolder=Obrir carpeta d'esquemes
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.done=Fet
+
+# gui - general - load
 schematica.gui.title=Seleccionar arxiu d'esquemes
 schematica.gui.folderInfo=(Posar l'arxiu d'esquemes aquí)
+schematica.gui.openFolder=Obrir carpeta d'esquemes
 schematica.gui.noschematic=-- Sense esquemes --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=Ocultar
+
+# gui - general - save
+schematica.gui.point.red=Punt Vermell
+schematica.gui.point.blue=Punt Blau
+schematica.gui.save=Guardar
+schematica.gui.saveselection=Guardar la selecció com un esquema
+
+# gui - general - control
+schematica.gui.moveschematic=Moure esquema
+schematica.gui.printer=Imprimir
+schematica.gui.operations=Operacions
 schematica.gui.all=Tots
+schematica.gui.layers=Capes
+schematica.gui.hide=Ocultar
 schematica.gui.show=Mostrar
 schematica.gui.movehere=Moure aquí
 schematica.gui.flip=Voltejar
 schematica.gui.rotate=Gurar
-schematica.gui.save=Guardar
-schematica.gui.moveschematic=Moure esquema
-schematica.gui.layers=Capes
-schematica.gui.operations=Operacions
-schematica.gui.point.red=Punt Vermell
-schematica.gui.point.blue=Punt Blau
-schematica.gui.saveselection=Guardar la selecció com un esquema
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
 schematica.gui.materialamount=Quantitat
-schematica.gui.printer=Imprimir
 
 # gui - config - categories
 
@@ -53,3 +57,5 @@ schematica.key.control=Manipular esquema
 # commands - remove
 
 # commands - download
+
+# messages

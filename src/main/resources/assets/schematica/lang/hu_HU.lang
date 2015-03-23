@@ -1,31 +1,35 @@
 # gui - general
-schematica.gui.openFolder=Klisé könyvtár megnyitása
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.done=Kész
+
+# gui - general - load
 schematica.gui.title=Klisé megnyitása
 schematica.gui.folderInfo=(Helyezd ide a klisé fájlokat)
+schematica.gui.openFolder=Klisé könyvtár megnyitása
 schematica.gui.noschematic=-- Nem található klisé --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=Elrejt
+
+# gui - general - save
+schematica.gui.point.red=Piros pont
+schematica.gui.point.blue=Kék pont
+schematica.gui.save=Mentés
+schematica.gui.saveselection=Kijelölés mentése kliséként
+
+# gui - general - control
+schematica.gui.moveschematic=Klisé mozgatása
+schematica.gui.materials=Anyagfelhasználás
+schematica.gui.printer=Nyomtató
+schematica.gui.operations=Műveletek
 schematica.gui.all=MIND
+schematica.gui.layers=Szeletek
+schematica.gui.hide=Elrejt
 schematica.gui.show=Mutat
 schematica.gui.movehere=Mozgatás ide
 schematica.gui.flip=Tükröz
 schematica.gui.rotate=Forgat
-schematica.gui.save=Mentés
-schematica.gui.moveschematic=Klisé mozgatása
-schematica.gui.layers=Szeletek
-schematica.gui.operations=Műveletek
-schematica.gui.point.red=Piros pont
-schematica.gui.point.blue=Kék pont
-schematica.gui.saveselection=Kijelölés mentése kliséként
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=Anyagfelhasználás
 schematica.gui.materialname=Anyag
 schematica.gui.materialamount=Mennyiség
-schematica.gui.printer=Nyomtató
 
 # gui - config - categories
 
@@ -55,3 +59,5 @@ schematica.key.control=Klisé módosítása
 # commands - remove
 
 # commands - download
+
+# messages

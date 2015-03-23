@@ -1,34 +1,37 @@
 # gui - general
-schematica.gui.openFolder=Schematic 폴더 열기
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
+schematica.gui.on=켜기
+schematica.gui.off=끄기
 schematica.gui.done=완료
+
+# gui - general - load
 schematica.gui.title=Schematic 파일 선택
 schematica.gui.folderInfo=(여기에 schematic 파일을 놓으세요)
+schematica.gui.openFolder=Schematic 폴더 열기
 schematica.gui.noschematic=-- Schematic 없음 --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=숨기기
+
+# gui - general - save
+schematica.gui.point.red=빨간 점
+schematica.gui.point.blue=푸른 점
+schematica.gui.save=저장
+schematica.gui.saveselection=선택 영역을 schematic으로 저장
+
+# gui - general - control
+schematica.gui.moveschematic=Schematic 이동
+schematica.gui.materials=재료
+schematica.gui.printer=프린터
+schematica.gui.operations=동작
 schematica.gui.all=모두
+schematica.gui.layers=레이어
+schematica.gui.hide=숨기기
 schematica.gui.show=표시
 schematica.gui.movehere=여기에 옮기기
 schematica.gui.flip=뒤집기
 schematica.gui.rotate=회전
-schematica.gui.save=저장
-schematica.gui.moveschematic=Schematic 이동
-schematica.gui.layers=레이어
-schematica.gui.operations=동작
-schematica.gui.point.red=빨간 점
-schematica.gui.point.blue=푸른 점
-schematica.gui.saveselection=선택 영역을 schematic으로 저장
-schematica.gui.on=켜기
-schematica.gui.off=끄기
-schematica.gui.x=X:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=재료
 schematica.gui.materialname=재료
 schematica.gui.materialamount=양
-schematica.gui.printer=프린터
-schematica.gui.unknownblock=알 수 없는 블럭
 
 # gui - config - categories
 schematica.config.category.render=렌더링
@@ -109,3 +112,5 @@ schematica.command.save.saveFailed=Schematic %s을(를) 저장하는데 문제�
 # commands - remove
 
 # commands - download
+
+# messages

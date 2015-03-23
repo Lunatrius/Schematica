@@ -1,31 +1,35 @@
 # gui - general
-schematica.gui.openFolder=Відкрити папку з технологічними схемами
+schematica.gui.x=Х:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
 schematica.gui.done=Готово
+
+# gui - general - load
 schematica.gui.title=вибррати файл технологічної схеми
 schematica.gui.folderInfo=(збережені технологічні схеми)
+schematica.gui.openFolder=Відкрити папку з технологічними схемами
 schematica.gui.noschematic=-- немає технологічних схем --
-schematica.gui.increase=+
-schematica.gui.decrease=-
-schematica.gui.hide=сховати
+
+# gui - general - save
+schematica.gui.point.red=Червона мітка
+schematica.gui.point.blue=Синя мітка
+schematica.gui.save=Зберегти
+schematica.gui.saveselection=Зберегти виділену технологічну схему
+
+# gui - general - control
+schematica.gui.moveschematic=Перемістити технологічну схему
+schematica.gui.materials=Матеріали
+schematica.gui.printer=Принтер
+schematica.gui.operations=Операції
 schematica.gui.all=всі
+schematica.gui.layers=Шар
+schematica.gui.hide=сховати
 schematica.gui.show=показати
 schematica.gui.movehere=перемістити сюди
 schematica.gui.flip=відбити
 schematica.gui.rotate=Обернути
-schematica.gui.save=Зберегти
-schematica.gui.moveschematic=Перемістити технологічну схему
-schematica.gui.layers=Шар
-schematica.gui.operations=Операції
-schematica.gui.point.red=Червона мітка
-schematica.gui.point.blue=Синя мітка
-schematica.gui.saveselection=Зберегти виділену технологічну схему
-schematica.gui.x=Х:
-schematica.gui.y=Y:
-schematica.gui.z=Z:
-schematica.gui.materials=Матеріали
 schematica.gui.materialname=Матеріал
 schematica.gui.materialamount=кількість
-schematica.gui.printer=Принтер
 
 # gui - config - categories
 
@@ -55,3 +59,5 @@ schematica.key.control=маніпулювати технологічною сх�
 # commands - remove
 
 # commands - download
+
+# messages

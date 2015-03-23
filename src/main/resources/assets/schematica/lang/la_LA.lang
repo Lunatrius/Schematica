@@ -1,9 +1,15 @@
 # gui - general
 schematica.gui.done=Perfectus
-schematica.gui.all=OMNES
-schematica.gui.show=Ostende
+
+# gui - general - load
+
+# gui - general - save
 schematica.gui.point.red=Rubra res
 schematica.gui.point.blue=Caerulea res
+
+# gui - general - control
+schematica.gui.all=OMNES
+schematica.gui.show=Ostende
 schematica.gui.materialamount=Numerus
 
 # gui - config - categories
@@ -31,3 +37,5 @@ schematica.gui.materialamount=Numerus
 # commands - remove
 
 # commands - download
+
+# messages
