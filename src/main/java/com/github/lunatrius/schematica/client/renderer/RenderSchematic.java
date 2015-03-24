@@ -588,7 +588,7 @@ public class RenderSchematic extends RenderGlobal {
                 final BlockPos posChunk = renderChunk.getPosition();
                 this.renderInfos.add(renderInfo);
 
-                for (final EnumFacing side : EnumFacing.values()) {
+                for (final EnumFacing side : EnumFacing.VALUES) {
                     final RenderChunk neighborRenderChunk = getNeighborRenderChunk(posEye, posChunk, side);
                     final RenderOverlay neighborRenderOverlay = getNeighborRenderOverlay(posEye, posChunk, side);
 

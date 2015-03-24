@@ -182,7 +182,7 @@ public class GuiSchematicControl extends GuiScreenBase {
                 // TODO: implement flip logic
                 SchematicPrinter.INSTANCE.refresh();
             } else if (guiButton.id == this.btnRotateDirection.id) {
-                final EnumFacing[] values = EnumFacing.values();
+                final EnumFacing[] values = EnumFacing.VALUES;
                 ClientProxy.axisRotation = values[((ClientProxy.axisRotation.ordinal() + 1) % values.length)];
                 guiButton.displayString = I18n.format(Names.Gui.Control.TRANSFORM_PREFIX + ClientProxy.axisRotation.getName());
             } else if (guiButton.id == this.btnRotate.id) {
