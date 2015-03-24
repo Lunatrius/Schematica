@@ -27,7 +27,7 @@ public class RotationHelper {
     public static final RotationHelper INSTANCE = new RotationHelper();
 
     private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
-    private static final EnumFacing[][] FACINGS = new EnumFacing[EnumFacing.values().length][];
+    private static final EnumFacing[][] FACINGS = new EnumFacing[EnumFacing.VALUES.length][];
     private static final EnumFacing.Axis[][] AXISES = new EnumFacing.Axis[EnumFacing.Axis.values().length][];
     private static final BlockLog.EnumAxis[][] AXISES_LOG = new BlockLog.EnumAxis[EnumFacing.Axis.values().length][];
     private static final BlockQuartz.EnumType[][] AXISES_QUARTZ = new BlockQuartz.EnumType[EnumFacing.Axis.values().length][];
