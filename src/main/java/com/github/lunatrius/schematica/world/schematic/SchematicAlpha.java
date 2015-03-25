@@ -57,7 +57,13 @@ public class SchematicAlpha extends SchematicFormat {
 
         Short id = null;
         Map<Short, Short> oldToNew = new HashMap<Short, Short>();
-        if (tagCompound.hasKey(Names.NBT.MAPPING_SCHEMATICA)) {
+        if (tagCompound.hasKey(Names.NBT.MAPPING)) {
+            NBTTagCompound mapping = tagCompound.getCompoundTag(Names.NBT.MAPPING);
+            Set<String> names = mapping.getKeySet();
+            for (String name : names) {
+                oldToNew.put(mapping.getShort(name), (short) BLOCK_REGISTRY.getId(name));
+            }
+        } else if (tagCompound.hasKey(Names.NBT.MAPPING_SCHEMATICA)) {
             NBTTagCompound mapping = tagCompound.getCompoundTag(Names.NBT.MAPPING_SCHEMATICA);
             Set<String> names = mapping.getKeySet();
             for (String name : names) {
@@ -205,7 +211,7 @@ public class SchematicAlpha extends SchematicFormat {
         }
         tagCompound.setTag(Names.NBT.ENTITIES, entityList);
         tagCompound.setTag(Names.NBT.TILE_ENTITIES, tileEntitiesList);
-        tagCompound.setTag(Names.NBT.MAPPING_SCHEMATICA, nbtMapping);
+        tagCompound.setTag(Names.NBT.MAPPING, nbtMapping);
         final NBTTagCompound extendedMetadata = event.extendedMetadata;
         if (!extendedMetadata.hasNoTags()) {
             tagCompound.setTag(Names.NBT.EXTENDED_METADATA, extendedMetadata);
