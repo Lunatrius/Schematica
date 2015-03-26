@@ -149,7 +149,7 @@ public final class Names {
         public static final String WIDTH = "Width";
         public static final String LENGTH = "Length";
         public static final String HEIGHT = "Height";
-        public static final String MAPPING = "Mapping";
+        public static final String MAPPING = "..."; // TODO: use this once MCEdit adds support for it
         public static final String MAPPING_SCHEMATICA = "SchematicaMapping";
         public static final String TILE_ENTITIES = "TileEntities";
         public static final String ENTITIES = "Entities";
