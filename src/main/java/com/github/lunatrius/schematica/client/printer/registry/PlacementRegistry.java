@@ -291,6 +291,8 @@ public class PlacementRegistry {
         addPlacementMapping(Blocks.piston_head, new PlacementData(playerFacingIgnore));
         addPlacementMapping(Blocks.portal, new PlacementData(playerFacingIgnore));
         addPlacementMapping(Blocks.skull, new PlacementData(playerFacingIgnore));
+        addPlacementMapping(Blocks.standing_banner, new PlacementData(playerFacingIgnore));
+        addPlacementMapping(Blocks.wall_banner, new PlacementData(playerFacingIgnore));
     }
 
     private PlacementData addPlacementMapping(final Class<? extends Block> clazz, final PlacementData data) {
