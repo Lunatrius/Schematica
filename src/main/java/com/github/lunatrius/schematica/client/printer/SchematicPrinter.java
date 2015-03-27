@@ -284,19 +284,16 @@ public class SchematicPrinter {
         boolean success = false;
 
         final BlockPos offset = new BlockPos(pos).offset(direction);
-
         final EnumFacing side = direction.getOpposite();
 
-        // copypasted from n.m.client.Minecraft to sooth finicky servers
-        success = !ForgeEventFactory.onPlayerInteract(this.minecraft.thePlayer, Action.RIGHT_CLICK_BLOCK, world, offset, side).isCanceled();
+        success = !ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_BLOCK, world, offset, side).isCanceled();
         if (success) {
-            // still not assured!
-            success = this.minecraft.playerController.onPlayerRightClick(player, world, itemStack, pos, side, new Vec3(offset.getX() + offsetX, offset.getY() + offsetY, offset.getZ() + offsetZ));
+            success = this.minecraft.playerController.onPlayerRightClick(player, world, itemStack, offset, side, new Vec3(offset.getX() + offsetX, offset.getY() + offsetY, offset.getZ() + offsetZ));
             if (success) {
-                // yes, some servers actually care about this.
-                this.minecraft.thePlayer.swingItem();
+                player.swingItem();
             }
         }
+
 
         if (itemStack != null && itemStack.stackSize == 0 && success) {
             player.inventory.mainInventory[player.inventory.currentItem] = null;
