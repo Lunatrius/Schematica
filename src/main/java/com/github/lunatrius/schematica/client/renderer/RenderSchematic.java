@@ -452,6 +452,10 @@ public class RenderSchematic extends RenderGlobal {
                     continue;
                 }
 
+                if (!this.mc.theWorld.isAirBlock(tileEntity.getPos().add(this.world.position))) {
+                    continue;
+                }
+
                 TileEntityRendererDispatcher.instance.renderTileEntity(tileEntity, partialTicks, -1);
                 this.countTileEntitiesRendered++;
             }
