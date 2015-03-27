@@ -176,6 +176,26 @@ public class PlacementRegistry {
                 return list;
             }
         };
+        final IValidBlockFacing blockFacingSame = new IValidBlockFacing() {
+            @Override
+            public List<EnumFacing> getValidBlockFacings(final List<EnumFacing> solidSides, final IBlockState blockState) {
+                final List<EnumFacing> list = new ArrayList<EnumFacing>();
+
+                final IProperty propertyFacing = BlockStateHelper.getProperty(blockState, "facing");
+                if (propertyFacing != null && propertyFacing.getValueClass().equals(EnumFacing.class)) {
+                    final EnumFacing facing = (EnumFacing) blockState.getValue(propertyFacing);
+                    for (final EnumFacing side : solidSides) {
+                        if (facing != side) {
+                            continue;
+                        }
+
+                        list.add(side);
+                    }
+                }
+
+                return list;
+            }
+        };
         final IValidBlockFacing blockFacingHopper = new IValidBlockFacing() {
             @Override
             public List<EnumFacing> getValidBlockFacings(final List<EnumFacing> solidSides, final IBlockState blockState) {
@@ -255,6 +275,7 @@ public class PlacementRegistry {
         addPlacementMapping(BlockTrapDoor.class, new PlacementData(blockFacingOpposite).setOffsetY(offsetTrapDoor));
 
         addPlacementMapping(Blocks.anvil, new PlacementData(playerFacingRotateY));
+        addPlacementMapping(Blocks.cocoa, new PlacementData(blockFacingSame));
         addPlacementMapping(Blocks.end_portal_frame, new PlacementData(playerFacingEntityOpposite));
         addPlacementMapping(Blocks.ladder, new PlacementData(blockFacingOpposite));
         addPlacementMapping(Blocks.lever, new PlacementData(playerFacingLever, blockFacingLever));
