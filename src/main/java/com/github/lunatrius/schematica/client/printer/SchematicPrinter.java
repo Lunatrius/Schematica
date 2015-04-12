@@ -100,6 +100,7 @@ public class SchematicPrinter {
         final int slot = player.inventory.currentItem;
         final boolean isSneaking = player.isSneaking();
 
+        // TODO: clean up the loop, BlockPos.getAllInBox is not suitable due to the x, y, z iteration instead of y, x, z
         final MBlockPos pos = new MBlockPos();
 
         final boolean isRenderingLayer = this.schematic.isRenderingLayer;
@@ -112,7 +113,7 @@ public class SchematicPrinter {
             for (pos.x = minX; pos.x < maxX; pos.x++) {
                 for (pos.z = minZ; pos.z < maxZ; pos.z++) {
                     try {
-                        if (placeBlock(world, player, pos)) {
+                        if (placeBlock(world, player, new BlockPos(pos))) {
                             player.inventory.currentItem = slot;
                             syncSneaking(player, isSneaking);
                             return true;
