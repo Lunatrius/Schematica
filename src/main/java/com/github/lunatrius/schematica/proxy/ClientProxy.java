@@ -5,7 +5,6 @@ import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
-import com.github.lunatrius.schematica.client.renderer.SchematicBlockRendererDispatcher;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
@@ -16,8 +15,6 @@ import com.github.lunatrius.schematica.handler.client.TickHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
@@ -55,8 +52,6 @@ public class ClientProxy extends CommonProxy {
     public static MovingObjectPosition movingObjectPosition = null;
 
     private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
-    private static BlockRendererDispatcher dispatcherVanilla = null;
-    private static BlockRendererDispatcher dispatcherSchematic = null;
 
     public static void setPlayerData(EntityPlayer player, float partialTicks) {
         playerPosition.x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
@@ -152,14 +147,6 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
-    public static void setDispatcherSchematic() {
-        MINECRAFT.blockRenderDispatcher = dispatcherSchematic;
-    }
-
-    public static void setDispatcherVanilla() {
-        MINECRAFT.blockRenderDispatcher = dispatcherVanilla;
-    }
-
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
@@ -199,10 +186,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
-
-        dispatcherVanilla = MINECRAFT.getBlockRendererDispatcher();
-        dispatcherSchematic = new SchematicBlockRendererDispatcher(dispatcherVanilla.getBlockModelShapes(), MINECRAFT.gameSettings);
-        ((IReloadableResourceManager) MINECRAFT.getResourceManager()).registerReloadListener(dispatcherSchematic);
 
         resetSettings();
     }
