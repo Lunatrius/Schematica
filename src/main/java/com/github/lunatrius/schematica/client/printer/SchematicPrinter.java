@@ -194,7 +194,7 @@ public class SchematicPrinter {
     }
 
     private boolean isSolid(final World world, final BlockPos pos, final EnumFacing side) {
-        final BlockPos offset = new BlockPos(pos).offset(side);
+        final BlockPos offset = pos.offset(side);
 
         final IBlockState blockState = world.getBlockState(offset);
         final Block block = blockState.getBlock();
@@ -284,7 +284,7 @@ public class SchematicPrinter {
         final ItemStack itemStack = player.getCurrentEquippedItem();
         boolean success = false;
 
-        final BlockPos offset = new BlockPos(pos).offset(direction);
+        final BlockPos offset = pos.offset(direction);
         final EnumFacing side = direction.getOpposite();
 
         success = !ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_BLOCK, world, offset, side).isCanceled();
