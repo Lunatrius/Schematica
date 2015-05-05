@@ -264,6 +264,10 @@ public class SchematicPrinter {
                 }
             } else {
                 direction = solidSides[0];
+
+                if (item.getHasSubtypes()) {
+                    metadata = itemDamage;
+                }
             }
 
             if (!swapToItem(player.inventory, item, metadata)) {
