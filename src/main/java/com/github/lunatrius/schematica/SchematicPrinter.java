@@ -382,8 +382,7 @@ public class SchematicPrinter {
         if (ConfigurationHandler.swapSlotsQueue.size() > 0) {
             int slot = getNextSlot();
 
-            ItemStack itemStack = inventory.mainInventory[slot + INV_OFFSET_HOTBAR];
-            swapSlots(from, slot, itemStack == null || itemStack.stackSize == 0);
+            swapSlots(from, slot);
             return true;
         }
 
@@ -396,33 +395,7 @@ public class SchematicPrinter {
         return slot;
     }
 
-    private boolean swapSlots(int from, int to, boolean targetEmpty) {
-        if (from >= INV_OFFSET_HOTBAR && from < INV_OFFSET_HOTBAR + SIZE_HOTBAR) {
-            from = SLOT_OFFSET_HOTBAR + (from - INV_OFFSET_HOTBAR);
-        } else if (from >= INV_OFFSET_INVENTORY && from < INV_OFFSET_INVENTORY + SIZE_INVENTORY) {
-            from = SLOT_OFFSET_INVENTORY + (from - INV_OFFSET_INVENTORY);
-        } else {
-            return false;
-        }
-
-        if (to >= INV_OFFSET_HOTBAR && to < INV_OFFSET_HOTBAR + SIZE_HOTBAR) {
-            to = SLOT_OFFSET_HOTBAR + (to - INV_OFFSET_HOTBAR);
-        } else if (to >= INV_OFFSET_INVENTORY && to < INV_OFFSET_INVENTORY + SIZE_INVENTORY) {
-            to = SLOT_OFFSET_INVENTORY + (to - INV_OFFSET_INVENTORY);
-        } else {
-            return false;
-        }
-
-        clickSlot(from);
-        clickSlot(to);
-        if (!targetEmpty) {
-            clickSlot(from);
-        }
-
-        return true;
-    }
-
-    private ItemStack clickSlot(int slot) {
-        return this.minecraft.playerController.windowClick(this.minecraft.thePlayer.inventoryContainer.windowId, slot, 0, 0, this.minecraft.thePlayer);
+    private boolean swapSlots(final int from, final int to) {
+        return this.minecraft.playerController.windowClick(this.minecraft.thePlayer.inventoryContainer.windowId, from, to, 2, this.minecraft.thePlayer) == null;
     }
 }
