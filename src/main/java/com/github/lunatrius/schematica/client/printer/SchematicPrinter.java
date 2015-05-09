@@ -347,8 +347,7 @@ public class SchematicPrinter {
         if (ConfigurationHandler.swapSlotsQueue.size() > 0) {
             final int slot = getNextSlot();
 
-            final ItemStack itemStack = inventory.mainInventory[slot + Constants.Inventory.InventoryOffset.HOTBAR];
-            swapSlots(from, slot, itemStack == null || itemStack.stackSize == 0);
+            swapSlots(from, slot);
             return true;
         }
 
@@ -361,33 +360,7 @@ public class SchematicPrinter {
         return slot;
     }
 
-    private boolean swapSlots(int from, int to, final boolean targetEmpty) {
-        if (from >= Constants.Inventory.InventoryOffset.HOTBAR && from < Constants.Inventory.InventoryOffset.HOTBAR + Constants.Inventory.Size.HOTBAR) {
-            from = Constants.Inventory.SlotOffset.HOTBAR + (from - Constants.Inventory.InventoryOffset.HOTBAR);
-        } else if (from >= Constants.Inventory.InventoryOffset.INVENTORY && from < Constants.Inventory.InventoryOffset.INVENTORY + Constants.Inventory.Size.INVENTORY) {
-            from = Constants.Inventory.SlotOffset.INVENTORY + (from - Constants.Inventory.InventoryOffset.INVENTORY);
-        } else {
-            return false;
-        }
-
-        if (to >= Constants.Inventory.InventoryOffset.HOTBAR && to < Constants.Inventory.InventoryOffset.HOTBAR + Constants.Inventory.Size.HOTBAR) {
-            to = Constants.Inventory.SlotOffset.HOTBAR + (to - Constants.Inventory.InventoryOffset.HOTBAR);
-        } else if (to >= Constants.Inventory.InventoryOffset.INVENTORY && to < Constants.Inventory.InventoryOffset.INVENTORY + Constants.Inventory.Size.INVENTORY) {
-            to = Constants.Inventory.SlotOffset.INVENTORY + (to - Constants.Inventory.InventoryOffset.INVENTORY);
-        } else {
-            return false;
-        }
-
-        clickSlot(from);
-        clickSlot(to);
-        if (!targetEmpty) {
-            clickSlot(from);
-        }
-
-        return true;
-    }
-
-    private ItemStack clickSlot(final int slot) {
-        return this.minecraft.playerController.windowClick(this.minecraft.thePlayer.inventoryContainer.windowId, slot, 0, 0, this.minecraft.thePlayer);
+    private boolean swapSlots(final int from, final int to) {
+        return this.minecraft.playerController.windowClick(this.minecraft.thePlayer.inventoryContainer.windowId, from, to, 2, this.minecraft.thePlayer) == null;
     }
 }
