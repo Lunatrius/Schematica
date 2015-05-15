@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.api.event;
 
+import com.github.lunatrius.schematica.api.ISchematic;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
@@ -14,11 +15,22 @@ public class PreSchematicSaveEvent extends Event {
     private final Map<String, Short> mappings;
 
     /**
+     * The schematic that will be saved.
+     */
+    public final ISchematic schematic;
+
+    /**
      * The Extended Metadata tag compound provides a facility to add custom metadata to the schematic.
      */
     public final NBTTagCompound extendedMetadata;
 
+    @Deprecated
     public PreSchematicSaveEvent(Map<String, Short> mappings) {
+        this(null, mappings);
+    }
+
+    public PreSchematicSaveEvent(ISchematic schematic, Map<String, Short> mappings) {
+        this.schematic = schematic;
         this.mappings = mappings;
         this.extendedMetadata = new NBTTagCompound();
     }
