@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.printer;
 
+import com.github.lunatrius.core.util.BlockPosHelper;
 import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.client.printer.registry.PlacementData;
@@ -87,50 +88,48 @@ public class SchematicPrinter {
         final EntityPlayerSP player = this.minecraft.thePlayer;
         final WorldClient world = this.minecraft.theWorld;
 
-        syncSneaking(player, true);
-
         final Vector3i trans = ClientProxy.playerPosition.clone().sub(this.schematic.position.x, this.schematic.position.y, this.schematic.position.z).toVector3i();
-        final int minX = Math.max(0, trans.x - 3);
-        final int maxX = Math.min(this.schematic.getWidth(), trans.x + 4);
-        final int minY = Math.max(0, trans.y - 3);
-        final int maxY = Math.min(this.schematic.getHeight(), trans.y + 4);
-        final int minZ = Math.max(0, trans.z - 3);
-        final int maxZ = Math.min(this.schematic.getLength(), trans.z + 4);
+        int minX = Math.max(0, trans.x - 3);
+        int maxX = Math.min(this.schematic.getWidth(), trans.x + 4);
+        int minY = Math.max(0, trans.y - 3);
+        int maxY = Math.min(this.schematic.getHeight(), trans.y + 4);
+        int minZ = Math.max(0, trans.z - 3);
+        int maxZ = Math.min(this.schematic.getLength(), trans.z + 4);
 
         final int slot = player.inventory.currentItem;
         final boolean isSneaking = player.isSneaking();
 
-        // TODO: clean up the loop, BlockPos.getAllInBox is not suitable due to the x, y, z iteration instead of y, x, z
-        final MBlockPos pos = new MBlockPos();
-
         final boolean isRenderingLayer = this.schematic.isRenderingLayer;
         final int renderingLayer = this.schematic.renderingLayer;
-        for (pos.y = minY; pos.y < maxY; pos.y++) {
-            if (isRenderingLayer && pos.y != renderingLayer) {
-                continue;
+
+        if (isRenderingLayer) {
+            if (renderingLayer > maxY || renderingLayer < minY) {
+                return false;
             }
 
-            for (pos.x = minX; pos.x < maxX; pos.x++) {
-                for (pos.z = minZ; pos.z < maxZ; pos.z++) {
-                    try {
-                        if (placeBlock(world, player, new BlockPos(pos))) {
-                            player.inventory.currentItem = slot;
-                            syncSneaking(player, isSneaking);
-                            return true;
-                        }
-                    } catch (Exception e) {
-                        Reference.logger.error("Could not place block!", e);
-                        player.inventory.currentItem = slot;
-                        syncSneaking(player, isSneaking);
-                        return false;
-                    }
+            minY = maxY = renderingLayer;
+        }
+
+        syncSneaking(player, true);
+
+        for (final MBlockPos pos : BlockPosHelper.getAllInBoxYXZ(minX, minY, minZ, maxX, maxY, maxZ)) {
+            try {
+                if (placeBlock(world, player, pos)) {
+                    return syncSlotAndSneaking(player, slot, isSneaking, true);
                 }
+            } catch (Exception e) {
+                Reference.logger.error("Could not place block!", e);
+                return syncSlotAndSneaking(player, slot, isSneaking, false);
             }
         }
 
+        return syncSlotAndSneaking(player, slot, isSneaking, true);
+    }
+
+    private boolean syncSlotAndSneaking(final EntityPlayerSP player, final int slot, final boolean isSneaking, final boolean success) {
         player.inventory.currentItem = slot;
         syncSneaking(player, isSneaking);
-        return true;
+        return success;
     }
 
     private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final BlockPos pos) {
