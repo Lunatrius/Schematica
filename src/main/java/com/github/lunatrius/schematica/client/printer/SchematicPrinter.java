@@ -90,11 +90,15 @@ public class SchematicPrinter {
 
         final Vector3i trans = ClientProxy.playerPosition.clone().sub(this.schematic.position.x, this.schematic.position.y, this.schematic.position.z).toVector3i();
         int minX = Math.max(0, trans.x - 3);
-        int maxX = Math.min(this.schematic.getWidth(), trans.x + 4);
+        int maxX = Math.min(this.schematic.getWidth() - 1, trans.x + 3);
         int minY = Math.max(0, trans.y - 3);
-        int maxY = Math.min(this.schematic.getHeight(), trans.y + 4);
+        int maxY = Math.min(this.schematic.getHeight() - 1, trans.y + 3);
         int minZ = Math.max(0, trans.z - 3);
-        int maxZ = Math.min(this.schematic.getLength(), trans.z + 4);
+        int maxZ = Math.min(this.schematic.getLength() - 1, trans.z + 3);
+
+        if (minX > maxX || minY > maxY || minZ > maxZ) {
+            return false;
+        }
 
         final int slot = player.inventory.currentItem;
         final boolean isSneaking = player.isSneaking();
@@ -112,7 +116,7 @@ public class SchematicPrinter {
 
         syncSneaking(player, true);
 
-        for (final MBlockPos pos : BlockPosHelper.getAllInBoxXZY(minX, minY, minZ, maxX - 1, maxY - 1, maxZ - 1)) {
+        for (final MBlockPos pos : BlockPosHelper.getAllInBoxXZY(minX, minY, minZ, maxX, maxY, maxZ)) {
             try {
                 if (placeBlock(world, player, pos)) {
                     return syncSlotAndSneaking(player, slot, isSneaking, true);
