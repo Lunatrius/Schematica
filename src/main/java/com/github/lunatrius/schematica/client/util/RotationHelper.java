@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.util;
 
+import com.github.lunatrius.core.util.BlockPosHelper;
 import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
@@ -92,7 +93,7 @@ public class RotationHelper {
         final Schematic schematicRotated = new Schematic(schematic.getIcon(), dimensionsRotated.getX(), dimensionsRotated.getY(), dimensionsRotated.getZ());
         final MBlockPos tmp = new MBlockPos();
 
-        for (final MBlockPos pos : MBlockPos.getAllInRange(BlockPos.ORIGIN, new BlockPos(schematic.getWidth() - 1, schematic.getHeight() - 1, schematic.getLength() - 1))) {
+        for (final MBlockPos pos : BlockPosHelper.getAllInBox(0, 0, 0, schematic.getWidth() - 1, schematic.getHeight() - 1, schematic.getLength() - 1)) {
             final IBlockState blockState = schematic.getBlockState(pos);
             final IBlockState blockStateRotated = rotateBlock(blockState, axis, forced);
             schematicRotated.setBlockState(rotatePos(pos, axis, dimensionsRotated, tmp), blockStateRotated);
