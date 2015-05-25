@@ -112,7 +112,7 @@ public class SchematicPrinter {
 
         syncSneaking(player, true);
 
-        for (final MBlockPos pos : BlockPosHelper.getAllInBoxYXZ(minX, minY, minZ, maxX, maxY, maxZ)) {
+        for (final MBlockPos pos : BlockPosHelper.getAllInBoxXZY(minX, minY, minZ, maxX - 1, maxY - 1, maxZ - 1)) {
             try {
                 if (placeBlock(world, player, pos)) {
                     return syncSlotAndSneaking(player, slot, isSneaking, true);
