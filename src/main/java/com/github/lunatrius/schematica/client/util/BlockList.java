@@ -12,21 +12,9 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class BlockList {
-    private static final Comparator<ItemStack> BLOCK_COMPARATOR = new Comparator<ItemStack>() {
-        @Override
-        public int compare(final ItemStack itemStackA, final ItemStack itemStackB) {
-            final String nameA = itemStackA.getItem().getItemStackDisplayName(itemStackA);
-            final String nameB = itemStackB.getItem().getItemStackDisplayName(itemStackB);
-
-            return nameA.compareTo(nameB);
-        }
-    };
-
     private final Minecraft minecraft = Minecraft.getMinecraft();
 
     public List<ItemStack> getList(final SchematicWorld world) {
@@ -70,12 +58,6 @@ public class BlockList {
             } else {
                 Reference.logger.debug("Could not find the item for: {}", blockState);
             }
-        }
-
-        try {
-            Collections.sort(blockList, BLOCK_COMPARATOR);
-        } catch (final Exception e) {
-            Reference.logger.error("Could not sort the block list", e);
         }
 
         return blockList;

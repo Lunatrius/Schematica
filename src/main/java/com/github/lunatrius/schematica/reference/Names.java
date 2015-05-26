@@ -160,6 +160,9 @@ public final class Names {
 
             public static final String MATERIAL_NAME = "schematica.gui.materialname";
             public static final String MATERIAL_AMOUNT = "schematica.gui.materialamount";
+
+            public static final String SORT_PREFIX = "schematica.gui.material";
+            public static final String DUMP = "schematica.gui.materialdump";
         }
 
         public static final String X = "schematica.gui.x";
@@ -168,7 +171,6 @@ public final class Names {
         public static final String ON = "schematica.gui.on";
         public static final String OFF = "schematica.gui.off";
         public static final String DONE = "schematica.gui.done";
-
     }
 
     public static final class ModId {
