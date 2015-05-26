@@ -32,6 +32,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public abstract class CommonProxy {
@@ -70,6 +71,25 @@ public abstract class CommonProxy {
     }
 
     public abstract File getDataDirectory();
+
+    public File getDirectory(final String directory) {
+        final File dataDirectory = getDataDirectory();
+        final File subDirectory = new File(dataDirectory, directory);
+
+        if (!subDirectory.exists()) {
+            if (!subDirectory.mkdirs()) {
+                Reference.logger.error("Could not create directory [{}]!", subDirectory.getAbsolutePath());
+            }
+        }
+
+        try {
+            return subDirectory.getCanonicalFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return subDirectory;
+    }
 
     public void resetSettings() {
         this.isSaveEnabled = true;

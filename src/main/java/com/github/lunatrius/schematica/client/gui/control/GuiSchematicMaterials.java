@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.client.gui.control;
 
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
+import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.util.BlockList;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
@@ -11,7 +12,10 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.client.config.GuiUnicodeGlyphButton;
+import org.apache.commons.io.IOUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Formatter;
 import java.util.List;
@@ -116,7 +120,16 @@ public class GuiSchematicMaterials extends GuiScreenBase {
             stringBuilder.append(System.lineSeparator());
         }
 
-        // TODO: save to file
-        Reference.logger.info(stringBuilder.toString());
+        final File dumps = Schematica.proxy.getDirectory("dumps");
+        try {
+            final FileOutputStream outputStream = new FileOutputStream(new File(dumps, Reference.MODID + "-materials.txt"));
+            try {
+                IOUtils.write(stringBuilder.toString(), outputStream);
+            } finally {
+                outputStream.close();
+            }
+        } catch (final Exception e) {
+            Reference.logger.error("Could not dump the material list!", e);
+        }
     }
 }
