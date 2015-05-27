@@ -4,9 +4,11 @@ import com.github.lunatrius.core.client.gui.GuiScreenBase;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.util.BlockList;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
+import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
+import com.github.lunatrius.schematica.util.ItemStackSortType;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -23,7 +25,7 @@ import java.util.List;
 public class GuiSchematicMaterials extends GuiScreenBase {
     private GuiSchematicMaterialsSlot guiSchematicMaterialsSlot;
 
-    private SortType sortType = SortType.NAME_ASC;
+    private ItemStackSortType sortType = ItemStackSortType.fromString(ConfigurationHandler.sortType);
 
     private GuiUnicodeGlyphButton btnSort = null;
     private GuiButton btnDump = null;
@@ -71,6 +73,9 @@ public class GuiSchematicMaterials extends GuiScreenBase {
                 this.sortType.sort(this.blockList);
                 this.btnSort.displayString = " " + I18n.format(Names.Gui.Control.SORT_PREFIX + this.sortType.label);
                 this.btnSort.glyph = this.sortType.glyph;
+
+                ConfigurationHandler.propSortType.set(String.valueOf(this.sortType));
+                ConfigurationHandler.loadConfiguration();
             } else if (guiButton.id == this.btnDump.id) {
                 dumpMaterialList(this.blockList);
             } else if (guiButton.id == this.btnDone.id) {

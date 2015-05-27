@@ -1,4 +1,4 @@
-package com.github.lunatrius.schematica.client.gui.control;
+package com.github.lunatrius.schematica.util;
 
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.item.ItemStack;
@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public enum SortType {
+public enum ItemStackSortType {
     NAME_ASC("name", "\u2191", new Comparator<ItemStack>() {
         @Override
         public int compare(final ItemStack itemStackA, final ItemStack itemStackB) {
@@ -44,7 +44,7 @@ public enum SortType {
     public final String label;
     public final String glyph;
 
-    private SortType(final String label, final String glyph, final Comparator<ItemStack> comparator) {
+    private ItemStackSortType(final String label, final String glyph, final Comparator<ItemStack> comparator) {
         this.label = label;
         this.glyph = glyph;
         this.comparator = comparator;
@@ -58,8 +58,17 @@ public enum SortType {
         }
     }
 
-    public SortType next() {
-        final SortType[] values = values();
+    public ItemStackSortType next() {
+        final ItemStackSortType[] values = values();
         return values[(ordinal() + 1) % values.length];
+    }
+
+    public static ItemStackSortType fromString(final String name) {
+        try {
+            return valueOf(name);
+        } catch (final Exception ignored) {
+        }
+
+        return NAME_ASC;
     }
 }

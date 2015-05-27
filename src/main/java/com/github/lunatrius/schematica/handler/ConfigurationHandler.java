@@ -47,6 +47,7 @@ public class ConfigurationHandler {
     public static final String SCHEMATIC_DIRECTORY_STR = "schematics";
     public static final File SCHEMATIC_DIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATIC_DIRECTORY_STR);
     public static final String[] EXTRA_AIR_BLOCKS_DEFAULT = { };
+    public static final String SORT_TYPE_DEFAULT = "";
     public static final boolean PRINTER_ENABLED_DEFAULT = true;
     public static final boolean SAVE_ENABLED_DEFAULT = true;
     public static final boolean LOAD_ENABLED_DEFAULT = true;
@@ -72,6 +73,7 @@ public class ConfigurationHandler {
     public static float tooltipY = (float) TOOLTIP_Y_DEFAULT;
     public static File schematicDirectory = SCHEMATIC_DIRECTORY_DEFAULT;
     public static String[] extraAirBlocks = EXTRA_AIR_BLOCKS_DEFAULT;
+    public static String sortType = SORT_TYPE_DEFAULT;
     public static boolean printerEnabled = PRINTER_ENABLED_DEFAULT;
     public static boolean saveEnabled = SAVE_ENABLED_DEFAULT;
     public static boolean loadEnabled = LOAD_ENABLED_DEFAULT;
@@ -96,6 +98,7 @@ public class ConfigurationHandler {
     public static Property propTooltipY = null;
     public static Property propSchematicDirectory = null;
     public static Property propExtraAirBlocks = null;
+    public static Property propSortType = null;
     public static Property propPrinterEnabled = null;
     public static Property propSaveEnabled = null;
     public static Property propLoadEnabled = null;
@@ -110,7 +113,7 @@ public class ConfigurationHandler {
         }
     }
 
-    private static void loadConfiguration() {
+    public static void loadConfiguration() {
         propDumpBlockList = configuration.get(Names.Config.Category.DEBUG, Names.Config.DUMP_BLOCK_LIST, DUMP_BLOCK_LIST_DEFAULT, Names.Config.DUMP_BLOCK_LIST_DESC);
         propDumpBlockList.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DUMP_BLOCK_LIST);
         propDumpBlockList.requiresMcRestart();
@@ -207,6 +210,10 @@ public class ConfigurationHandler {
         propExtraAirBlocks = configuration.get(Names.Config.Category.GENERAL, Names.Config.EXTRA_AIR_BLOCKS, EXTRA_AIR_BLOCKS_DEFAULT, Names.Config.EXTRA_AIR_BLOCKS_DESC);
         propExtraAirBlocks.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.EXTRA_AIR_BLOCKS);
         extraAirBlocks = propExtraAirBlocks.getStringList();
+
+        propSortType = configuration.get(Names.Config.Category.GENERAL, Names.Config.SORT_TYPE, SORT_TYPE_DEFAULT, Names.Config.SORT_TYPE_DESC);
+        propSortType.setShowInGui(false);
+        sortType = propSortType.getString();
 
         extraAirBlockList.clear();
         for (String name : extraAirBlocks) {
