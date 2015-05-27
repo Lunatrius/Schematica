@@ -55,6 +55,8 @@ public final class Names {
         public static final String SCHEMATIC_DIRECTORY_DESC = "Schematic directory.";
         public static final String EXTRA_AIR_BLOCKS = "extraAirBlocks";
         public static final String EXTRA_AIR_BLOCKS_DESC = "Extra blocks to consider as air for the schematic renderer.";
+        public static final String SORT_TYPE = "sortType";
+        public static final String SORT_TYPE_DESC = "Default sort type for the material list.";
 
         public static final String PRINTER_ENABLED = "printerEnabled";
         public static final String PRINTER_ENABLED_DESC = "Allow players to use the printer.";
