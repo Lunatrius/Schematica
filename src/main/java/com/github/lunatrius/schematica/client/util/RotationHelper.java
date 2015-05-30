@@ -151,21 +151,23 @@ public class RotationHelper {
         throw new RotationException("'%s' is not a valid axis!", axis.getName());
     }
 
-    private IBlockState rotateBlock(final IBlockState blockState, final EnumFacing axis, boolean forced) throws RotationException {
+    private IBlockState rotateBlock(final IBlockState blockState, final EnumFacing axisRotation, boolean forced) throws RotationException {
         final IProperty propertyFacing = getProperty(blockState, "facing");
         if (propertyFacing instanceof PropertyDirection) {
             final Comparable value = blockState.getValue(propertyFacing);
             if (value instanceof EnumFacing) {
-                final EnumFacing facing = getRotatedFacing(axis, (EnumFacing) value);
+                final EnumFacing facing = getRotatedFacing(axisRotation, (EnumFacing) value);
                 if (propertyFacing.getAllowedValues().contains(facing)) {
                     return blockState.withProperty(propertyFacing, facing);
                 }
             }
         } else if (propertyFacing instanceof PropertyEnum) {
             if (BlockLever.EnumOrientation.class.isAssignableFrom(propertyFacing.getValueClass())) {
-                final BlockLever.EnumOrientation value = (BlockLever.EnumOrientation) blockState.getValue(propertyFacing);
-                final BlockLever.EnumOrientation valueRotated = getRotatedLeverFacing(axis, value);
-                return blockState.withProperty(propertyFacing, valueRotated);
+                final BlockLever.EnumOrientation orientation = (BlockLever.EnumOrientation) blockState.getValue(propertyFacing);
+                final BlockLever.EnumOrientation orientationRotated = getRotatedLeverFacing(axisRotation, orientation);
+                if (propertyFacing.getAllowedValues().contains(orientationRotated)) {
+                    return blockState.withProperty(propertyFacing, orientationRotated);
+                }
             }
         } else if (propertyFacing != null) {
             Reference.logger.error("'{}': found 'facing' property with unknown type {}", BLOCK_REGISTRY.getNameForObject(blockState.getBlock()), propertyFacing.getClass().getSimpleName());
@@ -174,31 +176,31 @@ public class RotationHelper {
         final IProperty propertyAxis = getProperty(blockState, "axis");
         if (propertyAxis instanceof PropertyEnum) {
             if (EnumFacing.Axis.class.isAssignableFrom(propertyAxis.getValueClass())) {
-                final EnumFacing.Axis value = (EnumFacing.Axis) blockState.getValue(propertyAxis);
-                final EnumFacing.Axis valueRotated = getRotatedAxis(axis, value);
-                return blockState.withProperty(propertyAxis, valueRotated);
+                final EnumFacing.Axis axis = (EnumFacing.Axis) blockState.getValue(propertyAxis);
+                final EnumFacing.Axis axisRotated = getRotatedAxis(axisRotation, axis);
+                return blockState.withProperty(propertyAxis, axisRotated);
             }
 
             if (BlockLog.EnumAxis.class.isAssignableFrom(propertyAxis.getValueClass())) {
-                final BlockLog.EnumAxis value = (BlockLog.EnumAxis) blockState.getValue(propertyAxis);
-                final BlockLog.EnumAxis valueRotated = getRotatedLogAxis(axis, value);
-                return blockState.withProperty(propertyAxis, valueRotated);
+                final BlockLog.EnumAxis axis = (BlockLog.EnumAxis) blockState.getValue(propertyAxis);
+                final BlockLog.EnumAxis axisRotated = getRotatedLogAxis(axisRotation, axis);
+                return blockState.withProperty(propertyAxis, axisRotated);
             }
         } else if (propertyAxis != null) {
-            Reference.logger.error("'{}': found 'axis' property with unknown type {}", BLOCK_REGISTRY.getNameForObject(blockState.getBlock()), propertyFacing.getClass().getSimpleName());
+            Reference.logger.error("'{}': found 'axis' property with unknown type {}", BLOCK_REGISTRY.getNameForObject(blockState.getBlock()), propertyAxis.getClass().getSimpleName());
         }
 
         final IProperty propertyVariant = getProperty(blockState, "variant");
         if (propertyVariant instanceof PropertyEnum) {
             if (BlockQuartz.EnumType.class.isAssignableFrom(propertyVariant.getValueClass())) {
-                final BlockQuartz.EnumType value = (BlockQuartz.EnumType) blockState.getValue(propertyVariant);
-                final BlockQuartz.EnumType valueRotated = getRotatedQuartzType(axis, value);
-                return blockState.withProperty(propertyVariant, valueRotated);
+                final BlockQuartz.EnumType type = (BlockQuartz.EnumType) blockState.getValue(propertyVariant);
+                final BlockQuartz.EnumType typeRotated = getRotatedQuartzType(axisRotation, type);
+                return blockState.withProperty(propertyVariant, typeRotated);
             }
         }
 
         if (!forced && (propertyFacing != null || propertyAxis != null)) {
-            throw new RotationException("'%s' cannot be rotated around '%s'", BLOCK_REGISTRY.getNameForObject(blockState.getBlock()), axis);
+            throw new RotationException("'%s' cannot be rotated around '%s'", BLOCK_REGISTRY.getNameForObject(blockState.getBlock()), axisRotation);
         }
 
         return blockState;
