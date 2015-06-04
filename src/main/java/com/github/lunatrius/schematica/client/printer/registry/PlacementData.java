@@ -16,6 +16,7 @@ public class PlacementData {
     private IOffset offsetX;
     private IOffset offsetY;
     private IOffset offsetZ;
+    private IExtraClick extraClick;
 
     public PlacementData() {
         this(null, null);
@@ -52,6 +53,11 @@ public class PlacementData {
         return this;
     }
 
+    public PlacementData setExtraClick(final IExtraClick extraClick) {
+        this.extraClick = extraClick;
+        return this;
+    }
+
     public float getOffsetX(final IBlockState blockState) {
         if (this.offsetX != null) {
             return this.offsetX.getOffset(blockState);
@@ -74,6 +80,14 @@ public class PlacementData {
         }
 
         return 0.5f;
+    }
+
+    public int getExtraClicks(final IBlockState blockState) {
+        if (this.extraClick != null) {
+            return this.extraClick.getExtraClicks(blockState);
+        }
+
+        return 0;
     }
 
     public boolean isValidPlayerFacing(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {

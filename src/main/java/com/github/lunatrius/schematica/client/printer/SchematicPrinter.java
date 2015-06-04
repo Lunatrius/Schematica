@@ -257,6 +257,7 @@ public class SchematicPrinter {
         final float offsetX;
         final float offsetY;
         final float offsetZ;
+        final int extraClicks;
 
         if (data != null) {
             final List<EnumFacing> validDirections = data.getValidBlockFacings(solidSides, blockState);
@@ -268,39 +269,53 @@ public class SchematicPrinter {
             offsetX = data.getOffsetX(blockState);
             offsetY = data.getOffsetY(blockState);
             offsetZ = data.getOffsetZ(blockState);
+            extraClicks = data.getExtraClicks(blockState);
         } else {
             direction = solidSides.get(0);
             offsetX = 0.5f;
             offsetY = 0.5f;
             offsetZ = 0.5f;
+            extraClicks = 0;
         }
 
         if (!swapToItem(player.inventory, itemStack)) {
             return false;
         }
 
-        return placeBlock(world, player, pos, direction, offsetX, offsetY, offsetZ);
-
+        return placeBlock(world, player, pos, direction, offsetX, offsetY, offsetZ, extraClicks);
     }
 
-    private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final BlockPos pos, final EnumFacing direction, final float offsetX, final float offsetY, final float offsetZ) {
+    private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final BlockPos pos, final EnumFacing direction, final float offsetX, final float offsetY, final float offsetZ, final int extraClicks) {
         final ItemStack itemStack = player.getCurrentEquippedItem();
         boolean success = false;
 
-        final BlockPos offset = pos.offset(direction);
-        final EnumFacing side = direction.getOpposite();
-
-        success = !ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_BLOCK, world, offset, side).isCanceled();
-        if (success) {
-            success = this.minecraft.playerController.onPlayerRightClick(player, world, itemStack, offset, side, new Vec3(offset.getX() + offsetX, offset.getY() + offsetY, offset.getZ() + offsetZ));
-            if (success) {
-                player.swingItem();
-            }
+        if (!this.minecraft.playerController.isInCreativeMode() && itemStack != null && itemStack.stackSize <= extraClicks) {
+            return false;
         }
 
+        final BlockPos offset = pos.offset(direction);
+        final EnumFacing side = direction.getOpposite();
+        final Vec3 hitVec = new Vec3(offset.getX() + offsetX, offset.getY() + offsetY, offset.getZ() + offsetZ);
+
+        success = placeBlock(world, player, itemStack, offset, side, hitVec);
+        for (int i = 0; success && i < extraClicks; i++) {
+            success = placeBlock(world, player, itemStack, offset, side, hitVec);
+        }
 
         if (itemStack != null && itemStack.stackSize == 0 && success) {
             player.inventory.mainInventory[player.inventory.currentItem] = null;
+        }
+
+        return success;
+    }
+
+    private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final ItemStack itemStack, final BlockPos pos, final EnumFacing side, final Vec3 hitVec) {
+        boolean success = !ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_BLOCK, world, pos, side).isCanceled();
+        if (success) {
+            success = this.minecraft.playerController.onPlayerRightClick(player, world, itemStack, pos, side, hitVec);
+            if (success) {
+                player.swingItem();
+            }
         }
 
         return success;
