@@ -76,12 +76,6 @@ public class PlacementRegistry {
                 return facing == player.getHorizontalFacing().rotateY();
             }
         };
-        final IValidPlayerFacing playerFacingSingleSlab = new IValidPlayerFacing() {
-            @Override
-            public boolean isValid(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {
-                return !((BlockSlab) blockState.getBlock()).isDouble();
-            }
-        };
         final IValidPlayerFacing playerFacingLever = new IValidPlayerFacing() {
             @Override
             public boolean isValid(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {
@@ -252,6 +246,13 @@ public class PlacementRegistry {
             }
         };
 
+        final IExtraClick extraClickDoubleSlab = new IExtraClick() {
+            @Override
+            public int getExtraClicks(final IBlockState blockState) {
+                return ((BlockSlab) blockState.getBlock()).isDouble() ? 1 : 0;
+            }
+        };
+
         /**
          * minecraft
          */
@@ -269,7 +270,7 @@ public class PlacementRegistry {
         addPlacementMapping(BlockPistonBase.class, new PlacementData(playerFacingPiston));
         addPlacementMapping(BlockPumpkin.class, new PlacementData(playerFacingEntityOpposite));
         addPlacementMapping(BlockRotatedPillar.class, new PlacementData(blockFacingPillar));
-        addPlacementMapping(BlockSlab.class, new PlacementData(playerFacingSingleSlab).setOffsetY(offsetSlab));
+        addPlacementMapping(BlockSlab.class, new PlacementData().setOffsetY(offsetSlab).setExtraClick(extraClickDoubleSlab));
         addPlacementMapping(BlockStairs.class, new PlacementData(playerFacingEntity).setOffsetY(offsetStairs));
         addPlacementMapping(BlockTorch.class, new PlacementData(blockFacingOpposite));
         addPlacementMapping(BlockTrapDoor.class, new PlacementData(blockFacingOpposite).setOffsetY(offsetTrapDoor));
