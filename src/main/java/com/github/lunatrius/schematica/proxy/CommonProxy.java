@@ -9,6 +9,7 @@ import com.github.lunatrius.schematica.command.CommandSchematicaSave;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.DownloadHandler;
 import com.github.lunatrius.schematica.handler.QueueTickHandler;
+import com.github.lunatrius.schematica.nbt.ForgeMultipart;
 import com.github.lunatrius.schematica.nbt.NBTConversionException;
 import com.github.lunatrius.schematica.nbt.NBTHelper;
 import com.github.lunatrius.schematica.network.PacketHandler;
@@ -52,6 +53,7 @@ public abstract class CommonProxy {
     }
 
     public void postInit(FMLPostInitializationEvent event) {
+        ForgeMultipart.init();
     }
 
     public void serverStarting(FMLServerStartingEvent event) {

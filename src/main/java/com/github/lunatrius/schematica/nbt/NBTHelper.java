@@ -143,6 +143,10 @@ public class NBTHelper {
     }
 
     public static TileEntity readTileEntityFromCompound(final NBTTagCompound tileEntityCompound) {
+        if (tileEntityCompound.getString("id").equals("savedMultipart")) {
+            return ForgeMultipart.createFromNBT(tileEntityCompound);
+        }
+
         return TileEntity.createAndLoadEntity(tileEntityCompound);
     }
 
