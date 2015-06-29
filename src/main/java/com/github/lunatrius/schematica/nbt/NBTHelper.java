@@ -23,7 +23,7 @@ public class NBTHelper {
         final NBTTagList tagList = compound.getTagList(Names.NBT.TILE_ENTITIES, Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < tagList.tagCount(); i++) {
             final NBTTagCompound tileEntityCompound = tagList.getCompoundTagAt(i);
-            final TileEntity tileEntity = TileEntity.createAndLoadEntity(tileEntityCompound);
+            final TileEntity tileEntity = readTileEntityFromCompound(tileEntityCompound);
             tileEntities.add(tileEntity);
         }
 
@@ -37,8 +37,7 @@ public class NBTHelper {
     public static NBTTagCompound writeTileEntitiesToCompound(final List<TileEntity> tileEntities, final NBTTagCompound compound) {
         final NBTTagList tagList = new NBTTagList();
         for (TileEntity tileEntity : tileEntities) {
-            final NBTTagCompound tileEntityCompound = new NBTTagCompound();
-            tileEntity.writeToNBT(tileEntityCompound);
+            final NBTTagCompound tileEntityCompound = writeTileEntityToCompound(tileEntity);
             tagList.appendTag(tileEntityCompound);
         }
 
@@ -63,8 +62,10 @@ public class NBTHelper {
         final NBTTagList tagList = compound.getTagList(Names.NBT.ENTITIES, Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < tagList.tagCount(); i++) {
             final NBTTagCompound entityCompound = tagList.getCompoundTagAt(i);
-            final Entity entity = EntityList.createEntityFromNBT(entityCompound, world);
-            entities.add(entity);
+            final Entity entity = readEntityFromCompound(entityCompound, world);
+            if (entity != null) {
+                entities.add(entity);
+            }
         }
 
         return entities;
@@ -97,10 +98,8 @@ public class NBTHelper {
         }
 
         try {
-            NBTTagCompound tileEntityCompound = new NBTTagCompound();
-            tileEntity.writeToNBT(tileEntityCompound);
-
-            tileEntity = TileEntity.createAndLoadEntity(tileEntityCompound);
+            NBTTagCompound tileEntityCompound = writeTileEntityToCompound(tileEntity);
+            tileEntity = readTileEntityFromCompound(tileEntityCompound);
             final BlockPos pos = tileEntity.getPos();
             tileEntity.setPos(pos.add(-offsetX, -offsetY, -offsetZ));
         } catch (Throwable t) {
@@ -120,9 +119,9 @@ public class NBTHelper {
         }
 
         try {
-            final NBTTagCompound entityCompound = new NBTTagCompound();
-            if (entity.writeToNBTOptional(entityCompound)) {
-                entity = EntityList.createEntityFromNBT(entityCompound, WorldDummy.instance());
+            final NBTTagCompound entityCompound = writeEntityToCompound(entity);
+            if (entityCompound != null) {
+                entity = readEntityFromCompound(entityCompound, WorldDummy.instance());
 
                 if (entity != null) {
                     entity.posX -= offsetX;
@@ -135,5 +134,28 @@ public class NBTHelper {
         }
 
         return entity;
+    }
+
+    public static NBTTagCompound writeTileEntityToCompound(final TileEntity tileEntity) {
+        final NBTTagCompound tileEntityCompound = new NBTTagCompound();
+        tileEntity.writeToNBT(tileEntityCompound);
+        return tileEntityCompound;
+    }
+
+    public static TileEntity readTileEntityFromCompound(final NBTTagCompound tileEntityCompound) {
+        return TileEntity.createAndLoadEntity(tileEntityCompound);
+    }
+
+    public static NBTTagCompound writeEntityToCompound(final Entity entity) {
+        final NBTTagCompound entityCompound = new NBTTagCompound();
+        if (entity.writeToNBTOptional(entityCompound)) {
+            return entityCompound;
+        }
+
+        return null;
+    }
+
+    public static Entity readEntityFromCompound(final NBTTagCompound nbtTagCompound, final World world) {
+        return EntityList.createEntityFromNBT(nbtTagCompound, world);
     }
 }
