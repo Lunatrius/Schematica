@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica.world.schematic;
 
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.api.event.PreSchematicSaveEvent;
+import com.github.lunatrius.schematica.nbt.NBTHelper;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.storage.Schematic;
@@ -83,7 +84,7 @@ public class SchematicAlpha extends SchematicFormat {
 
         for (int i = 0; i < tileEntitiesList.tagCount(); i++) {
             try {
-                TileEntity tileEntity = TileEntity.createAndLoadEntity(tileEntitiesList.getCompoundTagAt(i));
+                TileEntity tileEntity = NBTHelper.readTileEntityFromCompound(tileEntitiesList.getCompoundTagAt(i));
                 if (tileEntity != null) {
                     schematic.setTileEntity(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, tileEntity);
                 }
@@ -137,9 +138,8 @@ public class SchematicAlpha extends SchematicFormat {
         int count = 20;
         NBTTagList tileEntitiesList = new NBTTagList();
         for (TileEntity tileEntity : schematic.getTileEntities()) {
-            NBTTagCompound tileEntityTagCompound = new NBTTagCompound();
             try {
-                tileEntity.writeToNBT(tileEntityTagCompound);
+                NBTTagCompound tileEntityTagCompound = NBTHelper.writeTileEntityToCompound(tileEntity);
                 tileEntitiesList.appendTag(tileEntityTagCompound);
             } catch (Exception e) {
                 int pos = tileEntity.xCoord + (tileEntity.yCoord * schematic.getLength() + tileEntity.zCoord) * schematic.getWidth();
@@ -165,8 +165,8 @@ public class SchematicAlpha extends SchematicFormat {
         final List<Entity> entities = schematic.getEntities();
         for (Entity entity : entities) {
             try {
-                final NBTTagCompound entityCompound = new NBTTagCompound();
-                if (entity.writeToNBTOptional(entityCompound)) {
+                final NBTTagCompound entityCompound = NBTHelper.writeEntityToCompound(entity);
+                if (entityCompound != null) {
                     entityList.appendTag(entityCompound);
                 }
             } catch (Throwable t) {
