@@ -114,11 +114,29 @@ public class ConfigurationHandler {
     }
 
     public static void loadConfiguration() {
+        loadConfigurationDebug();
+        loadConfigurationRender();
+        loadConfigurationPrinter();
+        loadConfigurationSwapSlots();
+        loadConfigurationTooltip();
+        loadConfigurationGeneral();
+        loadConfigurationServer();
+
+        Schematica.proxy.createFolders();
+
+        if (configuration.hasChanged()) {
+            configuration.save();
+        }
+    }
+
+    private static void loadConfigurationDebug() {
         propDumpBlockList = configuration.get(Names.Config.Category.DEBUG, Names.Config.DUMP_BLOCK_LIST, DUMP_BLOCK_LIST_DEFAULT, Names.Config.DUMP_BLOCK_LIST_DESC);
         propDumpBlockList.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DUMP_BLOCK_LIST);
         propDumpBlockList.requiresMcRestart();
         dumpBlockList = propDumpBlockList.getBoolean(DUMP_BLOCK_LIST_DEFAULT);
+    }
 
+    private static void loadConfigurationRender() {
         propEnableAlpha = configuration.get(Names.Config.Category.RENDER, Names.Config.ALPHA_ENABLED, ENABLE_ALPHA_DEFAULT, Names.Config.ALPHA_ENABLED_DESC);
         propEnableAlpha.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.ALPHA_ENABLED);
         enableAlpha = propEnableAlpha.getBoolean(ENABLE_ALPHA_DEFAULT);
@@ -142,7 +160,9 @@ public class ConfigurationHandler {
         propRenderDistance = configuration.get(Names.Config.Category.RENDER, Names.Config.RENDER_DISTANCE, RENDER_DISTANCE_DEFAULT, Names.Config.RENDER_DISTANCE_DESC, 2, 16);
         propRenderDistance.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.RENDER_DISTANCE);
         renderDistance = propRenderDistance.getInt(RENDER_DISTANCE_DEFAULT);
+    }
 
+    private static void loadConfigurationPrinter() {
         propPlaceDelay = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_DELAY, PLACE_DELAY_DEFAULT, Names.Config.PLACE_DELAY_DESC, 0, 20);
         propPlaceDelay.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_DELAY);
         placeDelay = propPlaceDelay.getInt(PLACE_DELAY_DEFAULT);
@@ -166,7 +186,9 @@ public class ConfigurationHandler {
         propPlaceAdjacent = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_ADJACENT, PLACE_ADJACENT_DEFAULT, Names.Config.PLACE_ADJACENT_DESC);
         propPlaceAdjacent.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_ADJACENT);
         placeAdjacent = propPlaceAdjacent.getBoolean(PLACE_ADJACENT_DEFAULT);
+    }
 
+    private static void loadConfigurationSwapSlots() {
         swapSlotsQueue.clear();
         for (int i = 0; i < SWAP_SLOTS_DEFAULT.length; i++) {
             propSwapSlots[i] = configuration.get(Names.Config.Category.PRINTER_SWAPSLOTS, Names.Config.SWAP_SLOT + i, SWAP_SLOTS_DEFAULT[i], Names.Config.SWAP_SLOT_DESC);
@@ -177,7 +199,9 @@ public class ConfigurationHandler {
                 swapSlotsQueue.offer(i);
             }
         }
+    }
 
+    private static void loadConfigurationTooltip() {
         propTooltipEnabled = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_ENABLED, TOOLTIP_ENABLED_DEFAULT, Names.Config.TOOLTIP_ENABLED_DESC);
         propTooltipEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TOOLTIP_ENABLED);
         tooltipEnabled = propTooltipEnabled.getBoolean(TOOLTIP_ENABLED_DEFAULT);
@@ -189,7 +213,9 @@ public class ConfigurationHandler {
         propTooltipY = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_Y, TOOLTIP_Y_DEFAULT, Names.Config.TOOLTIP_Y_DESC, 0, 100);
         propTooltipY.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TOOLTIP_Y);
         tooltipY = (float) propTooltipY.getDouble(TOOLTIP_Y_DEFAULT);
+    }
 
+    private static void loadConfigurationGeneral() {
         propSchematicDirectory = configuration.get(Names.Config.Category.GENERAL, Names.Config.SCHEMATIC_DIRECTORY, SCHEMATIC_DIRECTORY_STR, Names.Config.SCHEMATIC_DIRECTORY_DESC);
         propSchematicDirectory.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SCHEMATIC_DIRECTORY);
         schematicDirectory = new File(propSchematicDirectory.getString());
@@ -222,7 +248,9 @@ public class ConfigurationHandler {
                 extraAirBlockList.add(block);
             }
         }
+    }
 
+    private static void loadConfigurationServer() {
         propPrinterEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.PRINTER_ENABLED, PRINTER_ENABLED_DEFAULT, Names.Config.PRINTER_ENABLED_DESC);
         propPrinterEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PRINTER_ENABLED);
         printerEnabled = propPrinterEnabled.getBoolean(PRINTER_ENABLED_DEFAULT);
@@ -238,12 +266,6 @@ public class ConfigurationHandler {
         propPlayerQuotaKilobytes = configuration.get(Names.Config.Category.SERVER, Names.Config.PLAYER_QUOTA_KILOBYTES, PLAYER_QUOTA_KILOBYTES_DEFAULT, Names.Config.PLAYER_QUOTA_KILOBYTES_DESC);
         propPlayerQuotaKilobytes.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLAYER_QUOTA_KILOBYTES);
         playerQuotaKilobytes = propPlayerQuotaKilobytes.getInt(PLAYER_QUOTA_KILOBYTES_DEFAULT);
-
-        Schematica.proxy.createFolders();
-
-        if (configuration.hasChanged()) {
-            configuration.save();
-        }
     }
 
     private ConfigurationHandler() {}
