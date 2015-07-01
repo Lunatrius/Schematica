@@ -35,7 +35,6 @@ schematica.gui.materialamount=Menge
 schematica.config.category.render.tooltip=Render Einstellungen
 schematica.config.category.printer=Drucker
 schematica.config.category.printer.tooltip=Drucker Einstellungen
-schematica.config.category.tooltip.tooltip=Tooltip Einstellungen
 schematica.config.category.general=Generell
 schematica.config.category.general.tooltip=Generelle Einstellungen
 schematica.config.category.server.tooltip=Einstellungen am Server
@@ -59,10 +58,6 @@ schematica.config.placeAdjacent=Angrenzende Blöcke berücksichtigen
 schematica.config.placeAdjacent.tooltip=Platziere Blöcke nur, wenn es angrenzende Blöcke gibt.
 
 # gui - config - printer - swap slots
-
-# gui - config - tooltip
-schematica.config.tooltipEnabled=Tooltip anschalten
-schematica.config.tooltipEnabled.tooltip=Zeigt einen Tooltip an, wenn man mit der Maus über einen Block fährt.
 
 # gui - config - general
 schematica.config.schematicDirectory=Schematic Verzeichnis

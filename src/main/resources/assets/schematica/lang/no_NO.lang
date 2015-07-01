@@ -65,8 +65,6 @@ schematica.config.placeAdjacent.tooltip=Plasser kun blokker hvis det er en tilst
 
 # gui - config - printer - swap slots
 
-# gui - config - tooltip
-
 # gui - config - general
 schematica.config.schematicDirectory=Tegningskatalog
 schematica.config.schematicDirectory.tooltip=Tegningskatalog.
