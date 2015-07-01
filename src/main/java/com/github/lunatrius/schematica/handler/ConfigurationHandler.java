@@ -42,9 +42,6 @@ public class ConfigurationHandler {
     public static final boolean[] SWAP_SLOTS_DEFAULT = new boolean[] {
             false, false, false, false, false, true, true, true, true
     };
-    public static final boolean TOOLTIP_ENABLED_DEFAULT = true;
-    public static final double TOOLTIP_X_DEFAULT = 100;
-    public static final double TOOLTIP_Y_DEFAULT = 0;
     public static final String SCHEMATIC_DIRECTORY_STR = "schematics";
     public static final File SCHEMATIC_DIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATIC_DIRECTORY_STR);
     public static final String[] EXTRA_AIR_BLOCKS_DEFAULT = { };
@@ -70,9 +67,6 @@ public class ConfigurationHandler {
     public static boolean placeAdjacent = PLACE_ADJACENT_DEFAULT;
     public static boolean[] swapSlots = SWAP_SLOTS_DEFAULT;
     public static final Queue<Integer> swapSlotsQueue = new ArrayDeque<Integer>();
-    public static boolean tooltipEnabled = TOOLTIP_ENABLED_DEFAULT;
-    public static float tooltipX = (float) TOOLTIP_X_DEFAULT;
-    public static float tooltipY = (float) TOOLTIP_Y_DEFAULT;
     public static File schematicDirectory = SCHEMATIC_DIRECTORY_DEFAULT;
     public static String[] extraAirBlocks = EXTRA_AIR_BLOCKS_DEFAULT;
     public static String sortType = SORT_TYPE_DEFAULT;
@@ -96,9 +90,6 @@ public class ConfigurationHandler {
     public static Property propDestroyInstantly = null;
     public static Property propPlaceAdjacent = null;
     public static Property[] propSwapSlots = new Property[SWAP_SLOTS_DEFAULT.length];
-    public static Property propTooltipEnabled = null;
-    public static Property propTooltipX = null;
-    public static Property propTooltipY = null;
     public static Property propSchematicDirectory = null;
     public static Property propExtraAirBlocks = null;
     public static Property propSortType = null;
@@ -121,7 +112,6 @@ public class ConfigurationHandler {
         loadConfigurationRender();
         loadConfigurationPrinter();
         loadConfigurationSwapSlots();
-        loadConfigurationTooltip();
         loadConfigurationGeneral();
         loadConfigurationServer();
 
@@ -206,20 +196,6 @@ public class ConfigurationHandler {
                 swapSlotsQueue.offer(i);
             }
         }
-    }
-
-    private static void loadConfigurationTooltip() {
-        propTooltipEnabled = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_ENABLED, TOOLTIP_ENABLED_DEFAULT, Names.Config.TOOLTIP_ENABLED_DESC);
-        propTooltipEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TOOLTIP_ENABLED);
-        tooltipEnabled = propTooltipEnabled.getBoolean(TOOLTIP_ENABLED_DEFAULT);
-
-        propTooltipX = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_X, TOOLTIP_X_DEFAULT, Names.Config.TOOLTIP_X_DESC, 0, 100);
-        propTooltipX.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TOOLTIP_X);
-        tooltipX = (float) propTooltipX.getDouble(TOOLTIP_X_DEFAULT);
-
-        propTooltipY = configuration.get(Names.Config.Category.TOOLTIP, Names.Config.TOOLTIP_Y, TOOLTIP_Y_DEFAULT, Names.Config.TOOLTIP_Y_DESC, 0, 100);
-        propTooltipY.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TOOLTIP_Y);
-        tooltipY = (float) propTooltipY.getDouble(TOOLTIP_Y_DEFAULT);
     }
 
     private static void loadConfigurationGeneral() {

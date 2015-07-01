@@ -1,8 +1,6 @@
 package com.github.lunatrius.schematica.handler.client;
 
-import com.github.lunatrius.schematica.client.tooltip.TooltipHandler;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
-import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -23,10 +21,6 @@ public class RenderTickHandler {
         final SchematicWorld schematic = ClientProxy.schematic;
 
         ClientProxy.movingObjectPosition = schematic != null ? rayTrace(schematic, 1.0f) : null;
-
-        if (ConfigurationHandler.tooltipEnabled) {
-            TooltipHandler.INSTANCE.renderTooltip(schematic, ClientProxy.movingObjectPosition);
-        }
     }
 
     private MovingObjectPosition rayTrace(final SchematicWorld schematic, final float partialTicks) {
