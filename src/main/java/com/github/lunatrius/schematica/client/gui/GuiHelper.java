@@ -3,14 +3,13 @@ package com.github.lunatrius.schematica.client.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class GuiHelper {
     private static final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
@@ -19,16 +18,16 @@ public class GuiHelper {
         drawItemStackSlot(textureManager, x, y);
 
         if (itemStack != null && itemStack.getItem() != null) {
-            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+            GlStateManager.enableRescaleNormal();
             RenderHelper.enableGUIStandardItemLighting();
             renderItem.renderItemIntoGUI(itemStack, x + 2, y + 2);
             RenderHelper.disableStandardItemLighting();
-            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+            GlStateManager.disableRescaleNormal();
         }
     }
 
     public static void drawItemStackSlot(TextureManager textureManager, int x, int y) {
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
         textureManager.bindTexture(Gui.statIcons);
         Tessellator tessellator = Tessellator.getInstance();
         final WorldRenderer worldRenderer = tessellator.getWorldRenderer();
