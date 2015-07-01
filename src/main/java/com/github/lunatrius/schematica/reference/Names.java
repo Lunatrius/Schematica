@@ -15,6 +15,8 @@ public final class Names {
 
         public static final String DUMP_BLOCK_LIST = "dumpBlockList";
         public static final String DUMP_BLOCK_LIST_DESC = "Dump all block states on startup.";
+        public static final String SHOW_DEBUG_INFO = "showDebugInfo";
+        public static final String SHOW_DEBUG_INFO_DESC = "Display extra information on the debug screen (F3).";
 
         public static final String ALPHA_ENABLED = "alphaEnabled";
         public static final String ALPHA_ENABLED_DESC = "Enable transparent textures.";

@@ -59,6 +59,8 @@ schematica.config.category.server.tooltip=Server-side settings.
 # gui - config - debug
 schematica.config.dumpBlockList=Dump Block List
 schematica.config.dumpBlockList.tooltip=Dump all block states on startup.
+schematica.config.showDebugInfo=Show Debug Info
+schematica.config.showDebugInfo.tooltip=Display extra information on the debug screen (F3).
 
 # gui - config - render
 schematica.config.alphaEnabled=Alpha Enabled
