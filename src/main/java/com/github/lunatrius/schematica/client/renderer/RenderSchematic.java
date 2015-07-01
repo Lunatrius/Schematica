@@ -275,7 +275,7 @@ public class RenderSchematic extends RenderGlobal {
             tessellator.drawCuboid(ClientProxy.pointMin, ClientProxy.pointMax, GeometryMasks.Line.ALL, 0x00BF00, 0x7F);
         }
         if (isRenderingSchematic) {
-            this.tmp.set(schematic.position).add(schematic.getWidth() - 1, schematic.getHeight() - 1, schematic.getLength() - 1);
+            this.tmp.set(schematic.position.x + schematic.getWidth() - 1, schematic.position.y + schematic.getHeight() - 1, schematic.position.z + schematic.getLength() - 1);
             tessellator.drawCuboid(schematic.position, this.tmp, GeometryMasks.Line.ALL, 0xBF00BF, 0x7F);
         }
         tessellator.draw();
