@@ -1,8 +1,13 @@
 package com.github.lunatrius.schematica.util;
 
+import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumChatFormatting;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class BlockStateHelper {
@@ -23,5 +28,26 @@ public class BlockStateHelper {
         }
 
         return (T) blockState.getValue(property);
+    }
+
+    public static List<String> getFormattedProperties(final IBlockState blockState) {
+        final List<String> list = new ArrayList<String>();
+
+        final ImmutableSet<Map.Entry<IProperty, Comparable>> properties = blockState.getProperties().entrySet();
+        for (final Map.Entry<IProperty, Comparable> entry : properties) {
+            final IProperty key = entry.getKey();
+            final Comparable value = entry.getValue();
+
+            String formattedValue = value.toString();
+            if (value == Boolean.TRUE) {
+                formattedValue = EnumChatFormatting.GREEN + formattedValue + EnumChatFormatting.RESET;
+            } else if (value == Boolean.FALSE) {
+                formattedValue = EnumChatFormatting.RED + formattedValue + EnumChatFormatting.RESET;
+            }
+
+            list.add(key.getName() + ": " + formattedValue);
+        }
+
+        return list;
     }
 }
