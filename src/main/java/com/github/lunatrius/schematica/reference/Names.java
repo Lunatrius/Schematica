@@ -8,7 +8,6 @@ public final class Names {
             public static final String RENDER = "render";
             public static final String PRINTER = "printer";
             public static final String PRINTER_SWAPSLOTS = "printer.swapslots";
-            public static final String TOOLTIP = "tooltip";
             public static final String GENERAL = "general";
             public static final String SERVER = "server";
         }
@@ -45,13 +44,6 @@ public final class Names {
         public static final String PLACE_ADJACENT_DESC = "Place blocks only if there is an adjacent block next to them.";
         public static final String SWAP_SLOT = "swapSlot";
         public static final String SWAP_SLOT_DESC = "Allow the printer to use this hotbar slot.";
-
-        public static final String TOOLTIP_ENABLED = "tooltipEnabled";
-        public static final String TOOLTIP_ENABLED_DESC = "Display a tooltip when hovering over blocks in a schematic.";
-        public static final String TOOLTIP_X = "tooltipX";
-        public static final String TOOLTIP_X_DESC = "Relative tooltip X.";
-        public static final String TOOLTIP_Y = "tooltipY";
-        public static final String TOOLTIP_Y_DESC = "Relative tooltip Y.";
 
         public static final String SCHEMATIC_DIRECTORY = "schematicDirectory";
         public static final String SCHEMATIC_DIRECTORY_DESC = "Schematic directory.";
