@@ -4,6 +4,7 @@ package com.github.lunatrius.schematica.reference;
 public final class Names {
     public static final class Config {
         public static final class Category {
+            public static final String DEBUG = "debug";
             public static final String RENDER = "render";
             public static final String PRINTER = "printer";
             public static final String PRINTER_SWAPSLOTS = "printer.swapslots";
@@ -12,6 +13,8 @@ public final class Names {
             public static final String SERVER = "server";
         }
 
+        public static final String SHOW_DEBUG_INFO = "showDebugInfo";
+        public static final String SHOW_DEBUG_INFO_DESC = "Display extra information on the debug screen (F3).";
         public static final String ALPHA_ENABLED = "alphaEnabled";
         public static final String ALPHA_ENABLED_DESC = "Enable transparent textures.";
         public static final String ALPHA = "alpha";

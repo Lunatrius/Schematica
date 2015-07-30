@@ -25,6 +25,7 @@ public class ConfigurationHandler {
 
     public static Configuration configuration;
 
+    public static final boolean SHOW_DEBUG_INFO_DEFAULT = true;
     public static final boolean ENABLE_ALPHA_DEFAULT = false;
     public static final double ALPHA_DEFAULT = 1.0;
     public static final boolean HIGHLIGHT_DEFAULT = true;
@@ -52,6 +53,7 @@ public class ConfigurationHandler {
     public static final boolean LOAD_ENABLED_DEFAULT = true;
     public static final int PLAYER_QUOTA_KILOBYTES_DEFAULT = 8192;
 
+    public static boolean showDebugInfo = SHOW_DEBUG_INFO_DEFAULT;
     public static boolean enableAlpha = ENABLE_ALPHA_DEFAULT;
     public static float alpha = (float) ALPHA_DEFAULT;
     public static boolean highlight = HIGHLIGHT_DEFAULT;
@@ -77,6 +79,7 @@ public class ConfigurationHandler {
     public static boolean loadEnabled = LOAD_ENABLED_DEFAULT;
     public static int playerQuotaKilobytes = PLAYER_QUOTA_KILOBYTES_DEFAULT;
 
+    public static Property propShowDebugInfo = null;
     public static Property propEnableAlpha = null;
     public static Property propAlpha = null;
     public static Property propHighlight = null;
@@ -111,6 +114,10 @@ public class ConfigurationHandler {
     }
 
     private static void loadConfiguration() {
+        propShowDebugInfo = configuration.get(Names.Config.Category.DEBUG, Names.Config.SHOW_DEBUG_INFO, SHOW_DEBUG_INFO_DEFAULT, Names.Config.SHOW_DEBUG_INFO_DESC);
+        propShowDebugInfo.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SHOW_DEBUG_INFO);
+        showDebugInfo = propShowDebugInfo.getBoolean(SHOW_DEBUG_INFO_DEFAULT);
+
         propEnableAlpha = configuration.get(Names.Config.Category.RENDER, Names.Config.ALPHA_ENABLED, ENABLE_ALPHA_DEFAULT, Names.Config.ALPHA_ENABLED_DESC);
         propEnableAlpha.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.ALPHA_ENABLED);
         enableAlpha = propEnableAlpha.getBoolean(ENABLE_ALPHA_DEFAULT);

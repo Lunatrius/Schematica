@@ -466,4 +466,8 @@ public class SchematicWorld extends World implements IWorldAccess {
     public Vector3f dimensions() {
         return new Vector3f(this.schematic.getWidth(), this.schematic.getHeight(), this.schematic.getLength());
     }
+
+    public String getDebugDimensions() {
+        return "WHL: " + getWidth() + " / " + getHeight() + " / " + getLength();
+    }
 }
