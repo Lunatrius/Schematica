@@ -39,8 +39,6 @@ schematica.config.category.printer=Printer
 schematica.config.category.printer.tooltip=Printer related settings.
 schematica.config.category.printer.swapslots=Hotbar Slots
 schematica.config.category.printer.swapslots.tooltip=Allow the printer to use non empty hotbar slots.
-schematica.config.category.tooltip=Tooltip
-schematica.config.category.tooltip.tooltip=Tooltip related settings.
 schematica.config.category.general=General
 schematica.config.category.general.tooltip=General settings.
 schematica.config.category.server=Server
@@ -99,14 +97,6 @@ schematica.config.swapSlot7=Allow Slot 8
 schematica.config.swapSlot7.tooltip=Allow the printer to use the hotbar slot 8.
 schematica.config.swapSlot8=Allow Slot 9
 schematica.config.swapSlot8.tooltip=Allow the printer to use the hotbar slot 9.
-
-# gui - config - tooltip
-schematica.config.tooltipEnabled=Tooltip Enabled
-schematica.config.tooltipEnabled.tooltip=Display a tooltip when hovering over blocks in a schematic.
-schematica.config.tooltipX=Tooltip X
-schematica.config.tooltipX.tooltip=Relative tooltip X.
-schematica.config.tooltipY=Tooltip Y
-schematica.config.tooltipY.tooltip=Relative tooltip Y.
 
 # gui - config - general
 schematica.config.schematicDirectory=Schematic Directory
