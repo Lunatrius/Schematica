@@ -3,7 +3,6 @@ package com.github.lunatrius.schematica.proxy;
 import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.SchematicPrinter;
-import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
@@ -11,6 +10,7 @@ import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
 import com.github.lunatrius.schematica.handler.client.InputHandler;
 import com.github.lunatrius.schematica.handler.client.RenderTickHandler;
 import com.github.lunatrius.schematica.handler.client.TickHandler;
+import com.github.lunatrius.schematica.handler.client.WorldHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
@@ -45,6 +45,8 @@ public class ClientProxy extends CommonProxy {
     public static final Vector3i pointMax = new Vector3i();
 
     public static MovingObjectPosition movingObjectPosition = null;
+
+    private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
     private SchematicWorld schematicWorld = null;
 
@@ -174,11 +176,12 @@ public class ClientProxy extends CommonProxy {
 
         MinecraftForge.EVENT_BUS.register(RendererSchematicGlobal.INSTANCE);
         MinecraftForge.EVENT_BUS.register(ChatEventHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new WorldHandler());
     }
 
     @Override
     public File getDataDirectory() {
-        final File file = Minecraft.getMinecraft().mcDataDir;
+        final File file = MINECRAFT.mcDataDir;
         try {
             return file.getCanonicalFile();
         } catch (IOException e) {
@@ -198,6 +201,7 @@ public class ClientProxy extends CommonProxy {
 
         RendererSchematicGlobal.INSTANCE.destroyRendererSchematicChunks();
 
+        WorldHandler.removeWorldAccess(MINECRAFT.theWorld, getActiveSchematic());
         setActiveSchematic(null);
 
         playerPosition.set(0, 0, 0);
@@ -220,7 +224,9 @@ public class ClientProxy extends CommonProxy {
 
         Reference.logger.debug("Loaded {} [w:{},h:{},l:{}]", filename, world.getWidth(), world.getHeight(), world.getLength());
 
-        Schematica.proxy.setActiveSchematic(world);
+        WorldHandler.removeWorldAccess(MINECRAFT.theWorld, getActiveSchematic());
+        setActiveSchematic(world);
+        WorldHandler.addWorldAccess(MINECRAFT.theWorld, getActiveSchematic());
         RendererSchematicGlobal.INSTANCE.createRendererSchematicChunks(world);
         SchematicPrinter.INSTANCE.setSchematic(world);
         world.isRendering = true;

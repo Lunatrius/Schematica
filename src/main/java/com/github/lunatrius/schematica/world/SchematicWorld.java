@@ -3,6 +3,8 @@ package com.github.lunatrius.schematica.world;
 import com.github.lunatrius.core.util.vector.Vector3f;
 import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.api.ISchematic;
+import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
+import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.chunk.ChunkProviderSchematic;
@@ -16,6 +18,7 @@ import net.minecraft.block.BlockLeavesBase;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -23,7 +26,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntitySkull;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.IWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
@@ -36,7 +41,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class SchematicWorld extends World {
+public class SchematicWorld extends World implements IWorldAccess {
     private static final WorldSettings WORLD_SETTINGS = new WorldSettings(0, WorldSettings.GameType.CREATIVE, false, false, WorldType.FLAT);
     private static final Comparator<ItemStack> BLOCK_COMPARATOR = new Comparator<ItemStack>() {
         @Override
@@ -180,6 +185,62 @@ public class SchematicWorld extends World {
     @Override
     public boolean isSideSolid(int x, int y, int z, ForgeDirection side, boolean _default) {
         return getBlock(x, y, z).isSideSolid(this, x, y, z, side);
+    }
+
+    @Override
+    public void markBlockForUpdate(final int x, final int y, final int z) {
+        markBlocksForUpdate(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1);
+    }
+
+    @Override
+    public void markBlockForRenderUpdate(final int x, final int y, final int z) {
+        markBlocksForUpdate(x - 1, y - 1, z - 1, x + 1, y + 1, z + 1);
+    }
+
+    @Override
+    public void markBlockRangeForRenderUpdate(int x0, int y0, int z0, int x1, int y1, int z1) {
+        markBlocksForUpdate(x0 - 1, y0 - 1, z0 - 1, x1 + 1, y1 + 1, z1 + 1);
+    }
+
+    private void markBlocksForUpdate(final int x0, final int y0, final int z0, final int x1, final int y1, final int z1) {
+        final AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(x0 - this.position.x, y0 - this.position.y, z0 - this.position.z, x1 - this.position.x, y1 - this.position.y, z1 - this.position.z);
+        for (final RendererSchematicChunk renderer : RendererSchematicGlobal.INSTANCE.sortedRendererSchematicChunk) {
+            if (!renderer.getDirty() && renderer.getBoundingBox().intersectsWith(boundingBox)) {
+                renderer.setDirty();
+            }
+        }
+    }
+
+    @Override
+    public void playSound(final String soundName, final double x, final double y, final double z, final float volume, final float pitch) {
+    }
+
+    @Override
+    public void playSoundToNearExcept(final EntityPlayer player, final String soundName, final double x, final double y, final double z, final float volume, final float pitch) {
+    }
+
+    @Override
+    public void onEntityCreate(final Entity entity) {
+    }
+
+    @Override
+    public void onEntityDestroy(final Entity entity) {
+    }
+
+    @Override
+    public void broadcastSound(final int id, final int x, final int y, final int z, final int par5) {
+    }
+
+    @Override
+    public void playAuxSFX(final EntityPlayer player, final int id, final int x, final int y, final int z, final int par6) {
+    }
+
+    @Override
+    public void destroyBlockPartially(final int id, final int x, final int y, final int z, final int partialDamage) {
+    }
+
+    @Override
+    public void onStaticEntitiesChanged() {
     }
 
     public void initializeTileEntity(TileEntity tileEntity) {

@@ -3,7 +3,6 @@ package com.github.lunatrius.schematica.handler.client;
 import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
-import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Reference;
@@ -12,8 +11,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.util.AxisAlignedBB;
 
 public class TickHandler {
     public static final TickHandler INSTANCE = new TickHandler();
@@ -50,9 +47,6 @@ public class TickHandler {
                     printer.print();
                 }
 
-                this.minecraft.mcProfiler.endStartSection("checkDirty");
-                checkDirty(schematic);
-
                 this.minecraft.mcProfiler.endStartSection("canUpdate");
                 RendererSchematicChunk.setCanUpdate(true);
 
@@ -65,23 +59,6 @@ public class TickHandler {
             }
 
             this.minecraft.mcProfiler.endSection();
-        }
-    }
-
-    private void checkDirty(SchematicWorld schematic) {
-        WorldRenderer[] renderers = this.minecraft.renderGlobal.sortedWorldRenderers;
-        if (renderers != null) {
-            int count = 0;
-            for (WorldRenderer worldRenderer : renderers) {
-                if (worldRenderer != null && worldRenderer.needsUpdate && count++ < 125) {
-                    AxisAlignedBB worldRendererBoundingBox = worldRenderer.rendererBoundingBox.getOffsetBoundingBox(-schematic.position.x, -schematic.position.y, -schematic.position.z);
-                    for (RendererSchematicChunk renderer : RendererSchematicGlobal.INSTANCE.sortedRendererSchematicChunk) {
-                        if (!renderer.getDirty() && renderer.getBoundingBox().intersectsWith(worldRendererBoundingBox)) {
-                            renderer.setDirty();
-                        }
-                    }
-                }
-            }
         }
     }
 }
