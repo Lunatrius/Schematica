@@ -35,10 +35,10 @@ schematica.config.category.render=Rendering
 schematica.config.category.render.tooltip=Render related settings.
 schematica.config.category.printer=Printer
 schematica.config.category.printer.tooltip=Printer related settings.
-schematica.config.category.tooltip=Tooltip
-schematica.config.category.tooltip.tooltip=Tooltip related settings.
 schematica.config.category.general=General
 schematica.config.category.general.tooltip=General settings.
+
+# gui - config - debug
 
 # gui - config - render
 schematica.config.alphaEnabled=Alpha Enabled
@@ -69,16 +69,8 @@ schematica.config.destroyInstantly=Destroy Instantly
 schematica.config.destroyInstantly.tooltip=Destroy all blocks that can be destroyed in one tick.
 schematica.config.placeAdjacent=Place Only Adjacent
 schematica.config.placeAdjacent.tooltip=Place blocks only if there is an adjacent block next to them.
-schematica.config.swapSlots=Swap Slots
-schematica.config.swapSlots.tooltip=The printer will use these slots to swap out items in the inventory.
 
-# gui - config - tooltip
-schematica.config.tooltipEnabled=Tooltip Enabled
-schematica.config.tooltipEnabled.tooltip=Display a tooltip when hovering over blocks in a schematic.
-schematica.config.tooltipX=Tooltip X
-schematica.config.tooltipX.tooltip=Relative tooltip X.
-schematica.config.tooltipY=Tooltip Y
-schematica.config.tooltipY.tooltip=Relative tooltip Y.
+# gui - config - printer - swap slots
 
 # gui - config - general
 schematica.config.schematicDirectory=Schematic Directory

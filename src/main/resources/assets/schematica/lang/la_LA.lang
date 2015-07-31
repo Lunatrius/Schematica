@@ -8,11 +8,13 @@ schematica.gui.materialamount=Numerus
 
 # gui - config - categories
 
+# gui - config - debug
+
 # gui - config - render
 
 # gui - config - printer
 
-# gui - config - tooltip
+# gui - config - printer - swap slots
 
 # gui - config - general
 

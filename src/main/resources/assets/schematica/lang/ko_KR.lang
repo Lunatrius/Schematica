@@ -35,12 +35,12 @@ schematica.config.category.render=렌더링
 schematica.config.category.render.tooltip=렌더링 관련 설정.
 schematica.config.category.printer=프린터
 schematica.config.category.printer.tooltip=프린터 관련 설정.
-schematica.config.category.tooltip=툴팁
-schematica.config.category.tooltip.tooltip=툴팁 관련 설정.
 schematica.config.category.general=일반
 schematica.config.category.general.tooltip=일반 설정.
 schematica.config.category.server=서버
 schematica.config.category.server.tooltip=서버 측 설정.
+
+# gui - config - debug
 
 # gui - config - render
 schematica.config.alphaEnabled=알파 활성화됨
@@ -71,16 +71,8 @@ schematica.config.destroyInstantly=즉시 부수기
 schematica.config.destroyInstantly.tooltip=1틱안에 가능한 모든 블럭을 부수기.
 schematica.config.placeAdjacent=접촉된 블럭만 놓기
 schematica.config.placeAdjacent.tooltip=접촉된 블럭이 있을 경우에만 블럭을 놓습니다.
-schematica.config.swapSlots=슬롯 바꾸기
-schematica.config.swapSlots.tooltip=프린터는 인벤토리의 아이템을 바꾸기 위해 이 슬롯들을 사용합니다.
 
-# gui - config - tooltip
-schematica.config.tooltipEnabled=툴팁 활성화됨
-schematica.config.tooltipEnabled.tooltip=Schematic의 블럭 위에 마우스를 올릴 때 툴팁을 표시합니다.
-schematica.config.tooltipX=툴팁 X
-schematica.config.tooltipX.tooltip=툴팁 X에 관련.
-schematica.config.tooltipY=툴팁 Y
-schematica.config.tooltipY.tooltip=툴팁 Y에 관련.
+# gui - config - printer - swap slots
 
 # gui - config - general
 schematica.config.schematicDirectory=Schematic 디렉토리
