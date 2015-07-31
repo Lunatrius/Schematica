@@ -13,6 +13,7 @@ import com.github.lunatrius.schematica.handler.client.RenderTickHandler;
 import com.github.lunatrius.schematica.handler.client.TickHandler;
 import com.github.lunatrius.schematica.handler.client.WorldHandler;
 import com.github.lunatrius.schematica.reference.Reference;
+import com.github.lunatrius.schematica.world.SchematicUpdater;
 import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import cpw.mods.fml.client.config.GuiConfigEntries;
@@ -201,7 +202,7 @@ public class ClientProxy extends CommonProxy {
 
         RendererSchematicGlobal.INSTANCE.destroyRendererSchematicChunks();
 
-        WorldHandler.removeWorldAccess(MINECRAFT.theWorld, getActiveSchematic());
+        WorldHandler.removeWorldAccess(MINECRAFT.theWorld, SchematicUpdater.INSTANCE);
         setActiveSchematic(null);
 
         playerPosition.set(0, 0, 0);
@@ -224,9 +225,7 @@ public class ClientProxy extends CommonProxy {
 
         Reference.logger.debug("Loaded {} [w:{},h:{},l:{}]", filename, world.getWidth(), world.getHeight(), world.getLength());
 
-        WorldHandler.removeWorldAccess(MINECRAFT.theWorld, getActiveSchematic());
         setActiveSchematic(world);
-        WorldHandler.addWorldAccess(MINECRAFT.theWorld, getActiveSchematic());
         RendererSchematicGlobal.INSTANCE.createRendererSchematicChunks(world);
         SchematicPrinter.INSTANCE.setSchematic(world);
         world.isRendering = true;

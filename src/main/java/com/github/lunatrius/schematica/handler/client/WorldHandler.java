@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.handler.client;
 
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.world.SchematicUpdater;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.world.IWorldAccess;
 import net.minecraft.world.World;
@@ -10,14 +11,14 @@ public class WorldHandler {
     @SubscribeEvent
     public void onLoad(final WorldEvent.Load event) {
         if (event.world.isRemote) {
-            addWorldAccess(event.world, Schematica.proxy.getActiveSchematic());
+            addWorldAccess(event.world, SchematicUpdater.INSTANCE);
         }
     }
 
     @SubscribeEvent
     public void onUnload(final WorldEvent.Unload event) {
         if (event.world.isRemote) {
-            removeWorldAccess(event.world, Schematica.proxy.getActiveSchematic());
+            removeWorldAccess(event.world, SchematicUpdater.INSTANCE);
         }
     }
 
