@@ -826,8 +826,7 @@ public class RenderSchematic extends RenderGlobal {
         markBlocksForUpdate(x1 - 1, y1 - 1, z1 - 1, x2 + 1, y2 + 1, z2 + 1);
     }
 
-    @Override
-    public void markBlocksForUpdate(final int x1, final int y1, final int z1, final int x2, final int y2, final int z2) {
+    private void markBlocksForUpdate(final int x1, final int y1, final int z1, final int x2, final int y2, final int z2) {
         final MBlockPos position = this.world.position;
         this.viewFrustum.markBlocksForUpdate(x1 - position.x, y1 - position.y, z1 - position.z, x2 - position.x, y2 - position.y, z2 - position.z);
     }
