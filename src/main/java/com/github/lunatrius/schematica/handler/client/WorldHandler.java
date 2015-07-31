@@ -10,7 +10,9 @@ public class WorldHandler {
     public void onLoad(final WorldEvent.Load event) {
         if (event.world.isRemote) {
             RenderSchematic.INSTANCE.setWorldAndLoadRenderers(ClientProxy.schematic);
-            event.world.addWorldAccess(RenderSchematic.INSTANCE);
+            if (ClientProxy.schematic != null) {
+                event.world.addWorldAccess(RenderSchematic.INSTANCE);
+            }
         }
     }
 
