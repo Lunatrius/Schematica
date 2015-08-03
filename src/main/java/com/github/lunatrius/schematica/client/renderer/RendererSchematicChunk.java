@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.init.Blocks;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -274,11 +273,12 @@ public class RendererSchematicChunk {
                             }
                         }
 
-                        boolean isAirBlock = mcWorld.isAirBlock(wx, wy, wz) || ConfigurationHandler.isExtraAirBlock(mcBlock);
+                        boolean isAirBlock = this.schematic.isAirBlock(x, y, z);
+                        boolean isMcAirBlock = mcWorld.isAirBlock(wx, wy, wz) || ConfigurationHandler.isExtraAirBlock(mcBlock);
 
-                        if (!isAirBlock) {
+                        if (!isMcAirBlock) {
                             if (ConfigurationHandler.highlight && renderPass == 2) {
-                                if (block == Blocks.air && ConfigurationHandler.highlightAir) {
+                                if (isAirBlock && ConfigurationHandler.highlightAir) {
                                     zero.set(x, y, z);
                                     size.set(x + 1, y + 1, z + 1);
                                     if (ConfigurationHandler.drawQuads) {
@@ -307,7 +307,7 @@ public class RendererSchematicChunk {
                                     }
                                 }
                             }
-                        } else if (block != Blocks.air) {
+                        } else if (!isAirBlock) {
                             if (ConfigurationHandler.highlight && renderPass == 2) {
                                 zero.set(x, y, z);
                                 size.set(x + 1, y + 1, z + 1);
@@ -343,7 +343,6 @@ public class RendererSchematicChunk {
         IBlockAccess mcWorld = this.minecraft.theWorld;
 
         int x, y, z;
-        Block mcBlock;
 
         GL11.glColor4f(1.0f, 1.0f, 1.0f, ConfigurationHandler.alpha);
 
@@ -357,9 +356,9 @@ public class RendererSchematicChunk {
                     continue;
                 }
 
-                mcBlock = mcWorld.getBlock(x + this.schematic.position.x, y + this.schematic.position.y, z + this.schematic.position.z);
+                final boolean isAirBlock = mcWorld.isAirBlock(x + this.schematic.position.x, y + this.schematic.position.y, z + this.schematic.position.z);
 
-                if (mcBlock == Blocks.air) {
+                if (isAirBlock) {
                     TileEntitySpecialRenderer tileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRenderer(tileEntity);
                     if (tileEntitySpecialRenderer != null) {
                         try {

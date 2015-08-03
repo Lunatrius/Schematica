@@ -227,7 +227,7 @@ public class SchematicWorld extends World {
                     item = Item.getItemFromBlock(block);
                     itemDamage = getBlockMetadata(x, y, z);
 
-                    if (block == Blocks.air || isAirBlock(x, y, z)) {
+                    if (isAirBlock(x, y, z)) {
                         continue;
                     }
 
