@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.chunk.CompiledChunk;
 import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.client.renderer.chunk.VisGraph;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
@@ -95,10 +94,11 @@ public class RenderOverlay extends RenderChunk {
                 final IBlockState mcBlockState = mcWorld.getBlockState(mcPos);
                 final Block mcBlock = mcBlockState.getBlock();
 
-                final boolean isAirBlock = mcWorld.isAirBlock(mcPos) || ConfigurationHandler.isExtraAirBlock(mcBlock);
+                final boolean isSchAirBlock = schematic.isAirBlock(pos);
+                final boolean isMcAirBlock = mcWorld.isAirBlock(mcPos) || ConfigurationHandler.isExtraAirBlock(mcBlock);
 
-                if (!isAirBlock) {
-                    if (schBlock == Blocks.air && ConfigurationHandler.highlightAir) {
+                if (!isMcAirBlock) {
+                    if (isSchAirBlock && ConfigurationHandler.highlightAir) {
                         render = true;
                         sides = GeometryMasks.Quad.ALL;
                         color = 0xBF00BF;
@@ -107,7 +107,7 @@ public class RenderOverlay extends RenderChunk {
 
                 if (!render) {
                     if (ConfigurationHandler.highlight) {
-                        if (!isAirBlock) {
+                        if (!isMcAirBlock) {
                             if (schBlock != mcBlock) {
                                 render = true;
                                 color = 0xFF0000;
@@ -115,7 +115,7 @@ public class RenderOverlay extends RenderChunk {
                                 render = true;
                                 color = 0xBF5F00;
                             }
-                        } else if (!schematic.isAirBlock(pos)) {
+                        } else if (!isSchAirBlock) {
                             render = true;
                             color = 0x00BFFF;
                         }
