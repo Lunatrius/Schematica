@@ -1,22 +1,24 @@
 package com.github.lunatrius.schematica.client.printer;
 
 import com.github.lunatrius.core.util.vector.Vector3i;
+import com.github.lunatrius.schematica.client.printer.registry.PlacementData;
+import com.github.lunatrius.schematica.client.printer.registry.PlacementRegistry;
+import com.github.lunatrius.schematica.client.util.BlockToItemStack;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
-import com.github.lunatrius.schematica.config.BlockInfo;
-import com.github.lunatrius.schematica.config.PlacementData;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Reference;
+import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
@@ -26,14 +28,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.IFluidBlock;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SchematicPrinter {
-    public static final int WILDCARD_METADATA = -1;
-
     public static final SchematicPrinter INSTANCE = new SchematicPrinter();
+    public static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
 
@@ -164,13 +166,13 @@ public class SchematicPrinter {
             return false;
         }
 
-        final Item item = BlockInfo.getItemFromBlock(block);
-        if (item == null) {
-            Reference.logger.debug(GameData.getBlockRegistry().getNameForObject(block) + " is missing a mapping!");
+        final ItemStack itemStack = BlockToItemStack.getItemStack(player, block, this.schematic, x, y, z);
+        if (itemStack == null || itemStack.getItem() == null) {
+            Reference.logger.debug("{} is missing a mapping!", BLOCK_REGISTRY.getNameForObject(block));
             return false;
         }
 
-        if (placeBlock(this.minecraft, world, player, wx, wy, wz, item, metadata)) {
+        if (placeBlock(this.minecraft, world, player, wx, wy, wz, block, metadata, itemStack)) {
             this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
 
             if (!ConfigurationHandler.placeInstantly) {
@@ -220,14 +222,14 @@ public class SchematicPrinter {
         return list.toArray(sides);
     }
 
-    private boolean placeBlock(Minecraft minecraft, World world, EntityPlayer player, int x, int y, int z, Item item, int itemDamage) {
-        if (item instanceof ItemBucket || item == Items.sign) {
+    private boolean placeBlock(Minecraft minecraft, World world, EntityPlayer player, int x, int y, int z, Block block, int metadata, ItemStack itemStack) {
+        if (isBlacklisted(block, itemStack)) {
             return false;
         }
 
-        PlacementData data = BlockInfo.getPlacementDataFromItem(item);
+        PlacementData data = PlacementRegistry.INSTANCE.getPlacementData(block, itemStack);
 
-        if (!isValidOrientation(player, x, y, z, data, itemDamage)) {
+        if (!isValidOrientation(player, x, y, z, data, metadata)) {
             return false;
         }
 
@@ -236,34 +238,40 @@ public class SchematicPrinter {
         float offsetY = 0.0f;
 
         if (solidSides.length > 0) {
-            int metadata = WILDCARD_METADATA;
-
             if (data != null) {
-                ForgeDirection[] validDirections = data.getValidDirections(solidSides, itemDamage);
+                ForgeDirection[] validDirections = data.getValidDirections(solidSides, metadata);
                 if (validDirections.length > 0) {
                     direction = validDirections[0];
                 }
 
-                offsetY = data.getOffsetFromMetadata(itemDamage);
-
-                if (data.maskMetaInHand != -1) {
-                    metadata = data.getMetaInHand(itemDamage);
-                }
+                offsetY = data.getOffsetFromMetadata(metadata);
             } else {
                 direction = solidSides[0];
-
-                if (item.getHasSubtypes()) {
-                    metadata = itemDamage;
-                }
             }
 
-            if (!swapToItem(player.inventory, item, metadata)) {
+            if (!swapToItem(player.inventory, itemStack)) {
                 return false;
             }
         }
 
         if (direction != ForgeDirection.UNKNOWN || !ConfigurationHandler.placeAdjacent) {
             return placeBlock(minecraft, world, player, x, y, z, direction, 0.0f, offsetY, 0.0f);
+        }
+
+        return false;
+    }
+
+    private boolean isBlacklisted(Block block, ItemStack itemStack) {
+        if (block instanceof IFluidBlock || block instanceof BlockLiquid) {
+            return true;
+        }
+
+        if (itemStack.getItem() instanceof ItemBucket) {
+            return true;
+        }
+
+        if (itemStack.getItem() == Items.sign) {
+            return true;
         }
 
         return false;
@@ -331,16 +339,16 @@ public class SchematicPrinter {
         player.sendQueue.addToSendQueue(new C0BPacketEntityAction(player, isSneaking ? 1 : 2));
     }
 
-    private boolean swapToItem(InventoryPlayer inventory, Item item, int itemDamage) {
-        return swapToItem(inventory, item, itemDamage, true);
+    private boolean swapToItem(InventoryPlayer inventory, ItemStack itemStack) {
+        return swapToItem(inventory, itemStack, true);
     }
 
-    private boolean swapToItem(InventoryPlayer inventory, Item item, int itemDamage, boolean swapSlots) {
-        int slot = getInventorySlotWithItem(inventory, item, itemDamage);
+    private boolean swapToItem(InventoryPlayer inventory, ItemStack itemStack, boolean swapSlots) {
+        int slot = getInventorySlotWithItem(inventory, itemStack);
 
         if (this.minecraft.playerController.isInCreativeMode() && (slot < Constants.Inventory.InventoryOffset.HOTBAR || slot >= Constants.Inventory.InventoryOffset.HOTBAR + Constants.Inventory.Size.HOTBAR) && ConfigurationHandler.swapSlotsQueue.size() > 0) {
             inventory.currentItem = getNextSlot();
-            inventory.setInventorySlotContents(inventory.currentItem, new ItemStack(item, 1, itemDamage));
+            inventory.setInventorySlotContents(inventory.currentItem, itemStack.copy());
             this.minecraft.playerController.sendSlotPacket(inventory.getStackInSlot(inventory.currentItem), Constants.Inventory.SlotOffset.HOTBAR + inventory.currentItem);
             return true;
         }
@@ -350,15 +358,15 @@ public class SchematicPrinter {
             return true;
         } else if (swapSlots && slot >= Constants.Inventory.InventoryOffset.INVENTORY && slot < Constants.Inventory.InventoryOffset.INVENTORY + Constants.Inventory.Size.INVENTORY) {
             if (swapSlots(inventory, slot)) {
-                return swapToItem(inventory, item, itemDamage, false);
+                return swapToItem(inventory, itemStack, false);
             }
         }
         return false;
     }
 
-    private int getInventorySlotWithItem(InventoryPlayer inventory, Item item, int itemDamage) {
+    private int getInventorySlotWithItem(final InventoryPlayer inventory, final ItemStack itemStack) {
         for (int i = 0; i < inventory.mainInventory.length; i++) {
-            if (inventory.mainInventory[i] != null && inventory.mainInventory[i].getItem() == item && (itemDamage == WILDCARD_METADATA || inventory.mainInventory[i].getItemDamage() == itemDamage)) {
+            if (inventory.mainInventory[i] != null && inventory.mainInventory[i].isItemEqual(itemStack)) {
                 return i;
             }
         }

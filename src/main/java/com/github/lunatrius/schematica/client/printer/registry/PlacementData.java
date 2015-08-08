@@ -1,4 +1,4 @@
-package com.github.lunatrius.schematica.config;
+package com.github.lunatrius.schematica.client.printer.registry;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -18,8 +18,6 @@ public class PlacementData {
     public int maskOffset = 0x0;
     public float offsetLowY = 0.0f;
     public float offsetHighY = 1.0f;
-    public int maskMetaInHand = -1;
-    public int bitShiftMetaInHand = 0;
     public int maskMeta = 0xF;
     public final Map<ForgeDirection, Integer> mapping = new HashMap<ForgeDirection, Integer>();
 
@@ -40,16 +38,6 @@ public class PlacementData {
         return this;
     }
 
-    public PlacementData setMaskMetaInHand(int maskMetaInHand) {
-        this.maskMetaInHand = maskMetaInHand;
-        return this;
-    }
-
-    public PlacementData setBitShiftMetaInHand(int bitShiftMetaInHand) {
-        this.bitShiftMetaInHand = bitShiftMetaInHand;
-        return this;
-    }
-
     public PlacementData setMaskMeta(int maskMeta) {
         this.maskMeta = maskMeta;
         return this;
@@ -57,20 +45,6 @@ public class PlacementData {
 
     public float getOffsetFromMetadata(int metadata) {
         return (metadata & this.maskOffset) == 0 ? this.offsetLowY : this.offsetHighY;
-    }
-
-    public int getMetaInHand(int metadata) {
-        if (this.maskMetaInHand != -1) {
-            metadata &= this.maskMetaInHand;
-        }
-
-        if (this.bitShiftMetaInHand > 0) {
-            metadata >>= this.bitShiftMetaInHand;
-        } else if (this.bitShiftMetaInHand < 0) {
-            metadata <<= -this.bitShiftMetaInHand;
-        }
-
-        return metadata;
     }
 
     public ForgeDirection[] getValidDirections(ForgeDirection[] solidSides, int metadata) {
