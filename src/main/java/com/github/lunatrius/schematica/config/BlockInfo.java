@@ -19,16 +19,12 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.github.lunatrius.schematica.config.PlacementData.PlacementType;
 
 public class BlockInfo {
-    public static final List<Block> BLOCK_LIST_IGNORE_BLOCK = new ArrayList<Block>();
-    public static final List<Block> BLOCK_LIST_IGNORE_METADATA = new ArrayList<Block>();
     public static final Map<Block, Item> BLOCK_ITEM_MAP = new HashMap<Block, Item>();
     public static final Map<Class, PlacementData> CLASS_PLACEMENT_MAP = new HashMap<Class, PlacementData>();
     public static final Map<Item, PlacementData> ITEM_PLACEMENT_MAP = new HashMap<Item, PlacementData>();
@@ -37,125 +33,6 @@ public class BlockInfo {
 
     public static void setModId(String modId) {
         BlockInfo.modId = modId;
-    }
-
-    public static void populateIgnoredBlocks() {
-        BLOCK_LIST_IGNORE_BLOCK.clear();
-
-        /**
-         * minecraft
-         */
-        addIgnoredBlock(Blocks.piston_head);
-        addIgnoredBlock(Blocks.piston_extension);
-        addIgnoredBlock(Blocks.portal);
-        addIgnoredBlock(Blocks.end_portal);
-    }
-
-    private static boolean addIgnoredBlock(Block block) {
-        if (block == null) {
-            return false;
-        }
-
-        return BLOCK_LIST_IGNORE_BLOCK.add(block);
-    }
-
-    private static boolean addIgnoredBlock(String blockName) {
-        if (!Names.ModId.MINECRAFT.equals(modId) && !Loader.isModLoaded(modId)) {
-            return false;
-        }
-
-        return addIgnoredBlock(GameData.getBlockRegistry().getObject(String.format("%s:%s", modId, blockName)));
-    }
-
-    public static void populateIgnoredBlockMetadata() {
-        BLOCK_LIST_IGNORE_METADATA.clear();
-
-        /**
-         * minecraft
-         */
-        addIgnoredBlockMetadata(Blocks.flowing_water);
-        addIgnoredBlockMetadata(Blocks.water);
-        addIgnoredBlockMetadata(Blocks.flowing_lava);
-        addIgnoredBlockMetadata(Blocks.lava);
-        addIgnoredBlockMetadata(Blocks.dispenser);
-        addIgnoredBlockMetadata(Blocks.bed);
-        addIgnoredBlockMetadata(Blocks.golden_rail);
-        addIgnoredBlockMetadata(Blocks.detector_rail);
-        addIgnoredBlockMetadata(Blocks.sticky_piston);
-        addIgnoredBlockMetadata(Blocks.piston);
-        addIgnoredBlockMetadata(Blocks.torch);
-        addIgnoredBlockMetadata(Blocks.oak_stairs);
-        addIgnoredBlockMetadata(Blocks.chest);
-        addIgnoredBlockMetadata(Blocks.redstone_wire);
-        addIgnoredBlockMetadata(Blocks.wheat);
-        addIgnoredBlockMetadata(Blocks.farmland);
-        addIgnoredBlockMetadata(Blocks.furnace);
-        addIgnoredBlockMetadata(Blocks.lit_furnace);
-        addIgnoredBlockMetadata(Blocks.standing_sign);
-        addIgnoredBlockMetadata(Blocks.wooden_door);
-        addIgnoredBlockMetadata(Blocks.ladder);
-        addIgnoredBlockMetadata(Blocks.rail);
-        addIgnoredBlockMetadata(Blocks.stone_stairs);
-        addIgnoredBlockMetadata(Blocks.wall_sign);
-        addIgnoredBlockMetadata(Blocks.lever);
-        addIgnoredBlockMetadata(Blocks.stone_pressure_plate);
-        addIgnoredBlockMetadata(Blocks.iron_door);
-        addIgnoredBlockMetadata(Blocks.wooden_pressure_plate);
-        addIgnoredBlockMetadata(Blocks.unlit_redstone_torch);
-        addIgnoredBlockMetadata(Blocks.redstone_torch);
-        addIgnoredBlockMetadata(Blocks.stone_button);
-        addIgnoredBlockMetadata(Blocks.cactus);
-        addIgnoredBlockMetadata(Blocks.reeds);
-        addIgnoredBlockMetadata(Blocks.pumpkin);
-        addIgnoredBlockMetadata(Blocks.portal);
-        addIgnoredBlockMetadata(Blocks.lit_pumpkin);
-        addIgnoredBlockMetadata(Blocks.cake);
-        addIgnoredBlockMetadata(Blocks.unpowered_repeater);
-        addIgnoredBlockMetadata(Blocks.powered_repeater);
-        addIgnoredBlockMetadata(Blocks.trapdoor);
-        addIgnoredBlockMetadata(Blocks.vine);
-        addIgnoredBlockMetadata(Blocks.fence_gate);
-        addIgnoredBlockMetadata(Blocks.brick_stairs);
-        addIgnoredBlockMetadata(Blocks.stone_brick_stairs);
-        addIgnoredBlockMetadata(Blocks.waterlily);
-        addIgnoredBlockMetadata(Blocks.nether_brick_stairs);
-        addIgnoredBlockMetadata(Blocks.nether_wart);
-        addIgnoredBlockMetadata(Blocks.end_portal_frame);
-        addIgnoredBlockMetadata(Blocks.redstone_lamp);
-        addIgnoredBlockMetadata(Blocks.lit_redstone_lamp);
-        addIgnoredBlockMetadata(Blocks.sandstone_stairs);
-        addIgnoredBlockMetadata(Blocks.ender_chest);
-        addIgnoredBlockMetadata(Blocks.tripwire_hook);
-        addIgnoredBlockMetadata(Blocks.tripwire);
-        addIgnoredBlockMetadata(Blocks.spruce_stairs);
-        addIgnoredBlockMetadata(Blocks.birch_stairs);
-        addIgnoredBlockMetadata(Blocks.jungle_stairs);
-        addIgnoredBlockMetadata(Blocks.command_block);
-        addIgnoredBlockMetadata(Blocks.flower_pot);
-        addIgnoredBlockMetadata(Blocks.carrots);
-        addIgnoredBlockMetadata(Blocks.potatoes);
-        addIgnoredBlockMetadata(Blocks.wooden_button);
-        addIgnoredBlockMetadata(Blocks.anvil);
-        addIgnoredBlockMetadata(Blocks.trapped_chest);
-        addIgnoredBlockMetadata(Blocks.hopper);
-        addIgnoredBlockMetadata(Blocks.quartz_stairs);
-        addIgnoredBlockMetadata(Blocks.dropper);
-    }
-
-    private static boolean addIgnoredBlockMetadata(Block block) {
-        if (block == null) {
-            return false;
-        }
-
-        return BLOCK_LIST_IGNORE_METADATA.add(block);
-    }
-
-    private static boolean addIgnoredBlockMetadata(String blockName) {
-        if (!Names.ModId.MINECRAFT.equals(modId) && !Loader.isModLoaded(modId)) {
-            return false;
-        }
-
-        return addIgnoredBlockMetadata(GameData.getBlockRegistry().getObject(String.format("%s:%s", modId, blockName)));
     }
 
     public static void populateBlockItemMap() {
@@ -358,8 +235,6 @@ public class BlockInfo {
     }
 
     static {
-        populateIgnoredBlocks();
-        populateIgnoredBlockMetadata();
         populateBlockItemMap();
         populatePlacementMaps();
     }
