@@ -1,14 +1,13 @@
 package com.github.lunatrius.schematica.handler.client;
 
-import com.github.lunatrius.schematica.Schematica;
-import com.github.lunatrius.schematica.client.gui.GuiSchematicControl;
-import com.github.lunatrius.schematica.client.gui.GuiSchematicLoad;
-import com.github.lunatrius.schematica.client.gui.GuiSchematicSave;
+import com.github.lunatrius.schematica.client.gui.control.GuiSchematicControl;
+import com.github.lunatrius.schematica.client.gui.load.GuiSchematicLoad;
+import com.github.lunatrius.schematica.client.gui.save.GuiSchematicSave;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import net.minecraft.block.Block;
@@ -55,7 +54,7 @@ public class InputHandler {
             }
 
             if (KEY_BINDING_LAYER_INC.isPressed()) {
-                final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+                final SchematicWorld schematic = ClientProxy.schematic;
                 if (schematic != null && schematic.isRenderingLayer) {
                     schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer + 1, 0, schematic.getHeight() - 1);
                     RendererSchematicGlobal.INSTANCE.refresh();
@@ -63,7 +62,7 @@ public class InputHandler {
             }
 
             if (KEY_BINDING_LAYER_DEC.isPressed()) {
-                final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+                final SchematicWorld schematic = ClientProxy.schematic;
                 if (schematic != null && schematic.isRenderingLayer) {
                     schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer - 1, 0, schematic.getHeight() - 1);
                     RendererSchematicGlobal.INSTANCE.refresh();
@@ -78,7 +77,7 @@ public class InputHandler {
         final KeyBinding keyPickBlock = this.minecraft.gameSettings.keyBindPickBlock;
         if (keyPickBlock.isPressed()) {
             try {
-                final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+                final SchematicWorld schematic = ClientProxy.schematic;
                 boolean revert = true;
 
                 if (schematic != null && schematic.isRendering) {

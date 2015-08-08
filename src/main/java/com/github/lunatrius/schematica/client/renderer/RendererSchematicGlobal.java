@@ -1,10 +1,9 @@
 package com.github.lunatrius.schematica.client.renderer;
 
 import com.github.lunatrius.core.util.vector.Vector3d;
-import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -38,7 +37,7 @@ public class RendererSchematicGlobal {
             ClientProxy.setPlayerData(player, event.partialTicks);
 
             this.profiler.startSection("schematica");
-            SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+            SchematicWorld schematic = ClientProxy.schematic;
             if ((schematic != null && schematic.isRendering) || ClientProxy.isRenderingGuide) {
                 render(schematic);
             }

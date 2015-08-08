@@ -4,7 +4,6 @@ import com.github.lunatrius.schematica.command.CommandSchematicaDownload;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.PlayerHandler;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
@@ -43,24 +42,6 @@ public class ServerProxy extends CommonProxy {
     @Override
     public boolean loadSchematic(EntityPlayer player, File directory, String filename) {
         return false;
-    }
-
-    @Override
-    public void setActiveSchematic(SchematicWorld world) {
-    }
-
-    @Override
-    public void setActiveSchematic(SchematicWorld world, EntityPlayer player) {
-    }
-
-    @Override
-    public SchematicWorld getActiveSchematic() {
-        return null;
-    }
-
-    @Override
-    public SchematicWorld getActiveSchematic(EntityPlayer player) {
-        return null;
     }
 
     @Override

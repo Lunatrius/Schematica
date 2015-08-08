@@ -1,8 +1,8 @@
-package com.github.lunatrius.schematica.client.gui;
+package com.github.lunatrius.schematica.client.gui.control;
 
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
-import com.github.lunatrius.schematica.Schematica;
-import com.github.lunatrius.schematica.world.SchematicWorld;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
+import com.github.lunatrius.schematica.proxy.ClientProxy;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -23,7 +23,7 @@ public class GuiSchematicMaterials extends GuiScreenBase {
 
     public GuiSchematicMaterials(GuiScreen guiScreen) {
         super(guiScreen);
-        SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+        SchematicWorld schematic = ClientProxy.schematic;
         if (schematic != null) {
             this.blockList = schematic.getBlockList();
         } else {

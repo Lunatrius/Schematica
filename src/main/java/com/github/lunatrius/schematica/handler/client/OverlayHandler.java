@@ -1,9 +1,8 @@
 package com.github.lunatrius.schematica.handler.client;
 
-import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.FMLControlledNamespacedRegistry;
 import cpw.mods.fml.common.registry.GameData;
@@ -19,7 +18,7 @@ public class OverlayHandler {
     @SubscribeEvent
     public void onText(RenderGameOverlayEvent.Text event) {
         if (this.minecraft.gameSettings.showDebugInfo && ConfigurationHandler.showDebugInfo) {
-            final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+            final SchematicWorld schematic = ClientProxy.schematic;
             if (schematic != null && schematic.isRendering) {
                 event.left.add("");
                 event.left.add("[§6Schematica§r] " + schematic.getDebugDimensions());

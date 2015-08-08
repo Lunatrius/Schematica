@@ -1,12 +1,12 @@
 package com.github.lunatrius.schematica.handler.client;
 
-import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
@@ -37,7 +37,7 @@ public class TickHandler {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             this.minecraft.mcProfiler.startSection("schematica");
-            SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+            SchematicWorld schematic = ClientProxy.schematic;
             if (this.minecraft.thePlayer != null && schematic != null && schematic.isRendering) {
                 this.minecraft.mcProfiler.startSection("printer");
                 SchematicPrinter printer = SchematicPrinter.INSTANCE;

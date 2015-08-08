@@ -14,7 +14,6 @@ import com.github.lunatrius.schematica.nbt.NBTConversionException;
 import com.github.lunatrius.schematica.nbt.NBTHelper;
 import com.github.lunatrius.schematica.network.PacketHandler;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.chunk.SchematicContainer;
 import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import com.github.lunatrius.schematica.world.storage.Schematic;
@@ -170,14 +169,6 @@ public abstract class CommonProxy {
     }
 
     public abstract boolean loadSchematic(EntityPlayer player, File directory, String filename);
-
-    public abstract void setActiveSchematic(SchematicWorld world);
-
-    public abstract void setActiveSchematic(SchematicWorld world, EntityPlayer player);
-
-    public abstract SchematicWorld getActiveSchematic();
-
-    public abstract SchematicWorld getActiveSchematic(EntityPlayer player);
 
     public abstract boolean isPlayerQuotaExceeded(EntityPlayer player);
 

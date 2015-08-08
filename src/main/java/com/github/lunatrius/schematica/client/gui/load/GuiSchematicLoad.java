@@ -1,12 +1,12 @@
-package com.github.lunatrius.schematica.client.gui;
+package com.github.lunatrius.schematica.client.gui.load;
 
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
 import com.github.lunatrius.schematica.FileFilterSchematic;
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -157,7 +157,7 @@ public class GuiSchematicLoad extends GuiScreenBase {
             if (selectedIndex >= 0 && selectedIndex < this.schematicFiles.size()) {
                 GuiSchematicEntry schematicEntry = this.schematicFiles.get(selectedIndex);
                 if (Schematica.proxy.loadSchematic(null, this.currentDirectory, schematicEntry.getName())) {
-                    SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+                    SchematicWorld schematic = ClientProxy.schematic;
                     if (schematic != null) {
                         ClientProxy.moveSchematicToPlayer(schematic);
                     }

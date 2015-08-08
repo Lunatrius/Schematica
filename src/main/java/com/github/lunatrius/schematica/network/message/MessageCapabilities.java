@@ -1,7 +1,7 @@
 package com.github.lunatrius.schematica.network.message;
 
-import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.reference.Reference;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;

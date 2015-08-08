@@ -1,4 +1,4 @@
-package com.github.lunatrius.schematica.client.gui;
+package com.github.lunatrius.schematica.client.gui.save;
 
 import com.github.lunatrius.core.client.gui.GuiNumericField;
 import com.github.lunatrius.core.client.gui.GuiScreenBase;

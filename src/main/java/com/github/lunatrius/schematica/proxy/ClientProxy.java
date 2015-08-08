@@ -2,9 +2,11 @@ package com.github.lunatrius.schematica.proxy;
 
 import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.core.util.vector.Vector3i;
-import com.github.lunatrius.schematica.SchematicPrinter;
 import com.github.lunatrius.schematica.api.ISchematic;
+import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
+import com.github.lunatrius.schematica.client.world.SchematicUpdater;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
 import com.github.lunatrius.schematica.handler.client.InputHandler;
@@ -13,8 +15,6 @@ import com.github.lunatrius.schematica.handler.client.RenderTickHandler;
 import com.github.lunatrius.schematica.handler.client.TickHandler;
 import com.github.lunatrius.schematica.handler.client.WorldHandler;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.SchematicUpdater;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import cpw.mods.fml.client.config.GuiConfigEntries;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -40,6 +40,8 @@ public class ClientProxy extends CommonProxy {
     public static final Vector3d playerPosition = new Vector3d();
     public static ForgeDirection orientation = ForgeDirection.UNKNOWN;
     public static int rotationRender = 0;
+
+    public static SchematicWorld schematic = null;
 
     public static final Vector3i pointA = new Vector3i();
     public static final Vector3i pointB = new Vector3i();
@@ -203,7 +205,7 @@ public class ClientProxy extends CommonProxy {
         RendererSchematicGlobal.INSTANCE.destroyRendererSchematicChunks();
 
         WorldHandler.removeWorldAccess(MINECRAFT.theWorld, SchematicUpdater.INSTANCE);
-        setActiveSchematic(null);
+        schematic = null;
 
         playerPosition.set(0, 0, 0);
         orientation = ForgeDirection.UNKNOWN;
@@ -225,32 +227,12 @@ public class ClientProxy extends CommonProxy {
 
         Reference.logger.debug("Loaded {} [w:{},h:{},l:{}]", filename, world.getWidth(), world.getHeight(), world.getLength());
 
-        setActiveSchematic(world);
+        ClientProxy.schematic = world;
         RendererSchematicGlobal.INSTANCE.createRendererSchematicChunks(world);
         SchematicPrinter.INSTANCE.setSchematic(world);
         world.isRendering = true;
 
         return true;
-    }
-
-    @Override
-    public void setActiveSchematic(SchematicWorld world) {
-        this.schematicWorld = world;
-    }
-
-    @Override
-    public void setActiveSchematic(SchematicWorld world, EntityPlayer player) {
-        setActiveSchematic(world);
-    }
-
-    @Override
-    public SchematicWorld getActiveSchematic() {
-        return this.schematicWorld;
-    }
-
-    @Override
-    public SchematicWorld getActiveSchematic(EntityPlayer player) {
-        return getActiveSchematic();
     }
 
     @Override

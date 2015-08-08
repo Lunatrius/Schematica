@@ -1,7 +1,6 @@
 package com.github.lunatrius.schematica.handler.client;
 
-import com.github.lunatrius.schematica.Schematica;
-import com.github.lunatrius.schematica.world.SchematicUpdater;
+import com.github.lunatrius.schematica.client.world.SchematicUpdater;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.world.IWorldAccess;
 import net.minecraft.world.World;

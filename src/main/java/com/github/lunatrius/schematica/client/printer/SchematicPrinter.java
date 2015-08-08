@@ -1,12 +1,12 @@
-package com.github.lunatrius.schematica;
+package com.github.lunatrius.schematica.client.printer;
 
 import com.github.lunatrius.core.util.vector.Vector3i;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.config.PlacementData;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;

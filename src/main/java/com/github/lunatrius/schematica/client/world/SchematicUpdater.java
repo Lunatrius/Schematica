@@ -1,9 +1,9 @@
-package com.github.lunatrius.schematica.world;
+package com.github.lunatrius.schematica.client.world;
 
 import com.github.lunatrius.core.util.vector.Vector3i;
-import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicChunk;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
+import com.github.lunatrius.schematica.proxy.ClientProxy;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
@@ -28,7 +28,7 @@ public class SchematicUpdater implements IWorldAccess {
     }
 
     private void markBlocksForUpdate(final int x0, final int y0, final int z0, final int x1, final int y1, final int z1) {
-        final SchematicWorld schematic = Schematica.proxy.getActiveSchematic();
+        final SchematicWorld schematic = ClientProxy.schematic;
         if (schematic == null) {
             return;
         }

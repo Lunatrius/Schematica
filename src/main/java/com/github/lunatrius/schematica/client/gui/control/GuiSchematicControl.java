@@ -1,14 +1,13 @@
-package com.github.lunatrius.schematica.client.gui;
+package com.github.lunatrius.schematica.client.gui.control;
 
 import com.github.lunatrius.core.client.gui.GuiNumericField;
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
 import com.github.lunatrius.core.util.vector.Vector3i;
-import com.github.lunatrius.schematica.SchematicPrinter;
-import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -51,7 +50,7 @@ public class GuiSchematicControl extends GuiScreenBase {
 
     public GuiSchematicControl(GuiScreen guiScreen) {
         super(guiScreen);
-        this.schematic = Schematica.proxy.getActiveSchematic();
+        this.schematic = ClientProxy.schematic;
         this.printer = SchematicPrinter.INSTANCE;
     }
 

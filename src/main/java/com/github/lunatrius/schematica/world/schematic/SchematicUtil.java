@@ -1,8 +1,8 @@
 package com.github.lunatrius.schematica.world.schematic;
 
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
-import com.github.lunatrius.schematica.world.SchematicWorld;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
