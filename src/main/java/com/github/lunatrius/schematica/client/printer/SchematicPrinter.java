@@ -6,6 +6,7 @@ import com.github.lunatrius.schematica.config.BlockInfo;
 import com.github.lunatrius.schematica.config.PlacementData;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
+import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Reference;
 import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
@@ -31,20 +32,6 @@ import java.util.List;
 
 public class SchematicPrinter {
     public static final int WILDCARD_METADATA = -1;
-    public static final int SIZE_CRAFTING_OUT = 1;
-    public static final int SIZE_CRAFTING_IN = 4;
-    public static final int SIZE_ARMOR = 4;
-    public static final int SIZE_INVENTORY = 3 * 9;
-    public static final int SIZE_HOTBAR = 9;
-
-    public static final int SLOT_OFFSET_CRAFTING_OUT = 0;
-    public static final int SLOT_OFFSET_CRAFTING_IN = SLOT_OFFSET_CRAFTING_OUT + SIZE_CRAFTING_OUT;
-    public static final int SLOT_OFFSET_ARMOR = SLOT_OFFSET_CRAFTING_IN + SIZE_CRAFTING_IN;
-    public static final int SLOT_OFFSET_INVENTORY = SLOT_OFFSET_ARMOR + SIZE_ARMOR;
-    public static final int SLOT_OFFSET_HOTBAR = SLOT_OFFSET_INVENTORY + SIZE_INVENTORY;
-
-    public static final int INV_OFFSET_HOTBAR = 0;
-    public static final int INV_OFFSET_INVENTORY = INV_OFFSET_HOTBAR + 9;
 
     public static final SchematicPrinter INSTANCE = new SchematicPrinter();
 
@@ -351,17 +338,17 @@ public class SchematicPrinter {
     private boolean swapToItem(InventoryPlayer inventory, Item item, int itemDamage, boolean swapSlots) {
         int slot = getInventorySlotWithItem(inventory, item, itemDamage);
 
-        if (this.minecraft.playerController.isInCreativeMode() && (slot < INV_OFFSET_HOTBAR || slot >= INV_OFFSET_HOTBAR + SIZE_HOTBAR) && ConfigurationHandler.swapSlotsQueue.size() > 0) {
+        if (this.minecraft.playerController.isInCreativeMode() && (slot < Constants.Inventory.InventoryOffset.HOTBAR || slot >= Constants.Inventory.InventoryOffset.HOTBAR + Constants.Inventory.Size.HOTBAR) && ConfigurationHandler.swapSlotsQueue.size() > 0) {
             inventory.currentItem = getNextSlot();
             inventory.setInventorySlotContents(inventory.currentItem, new ItemStack(item, 1, itemDamage));
-            this.minecraft.playerController.sendSlotPacket(inventory.getStackInSlot(inventory.currentItem), SLOT_OFFSET_HOTBAR + inventory.currentItem);
+            this.minecraft.playerController.sendSlotPacket(inventory.getStackInSlot(inventory.currentItem), Constants.Inventory.SlotOffset.HOTBAR + inventory.currentItem);
             return true;
         }
 
-        if (slot >= INV_OFFSET_HOTBAR && slot < INV_OFFSET_HOTBAR + SIZE_HOTBAR) {
+        if (slot >= Constants.Inventory.InventoryOffset.HOTBAR && slot < Constants.Inventory.InventoryOffset.HOTBAR + Constants.Inventory.Size.HOTBAR) {
             inventory.currentItem = slot;
             return true;
-        } else if (swapSlots && slot >= INV_OFFSET_INVENTORY && slot < INV_OFFSET_INVENTORY + SIZE_INVENTORY) {
+        } else if (swapSlots && slot >= Constants.Inventory.InventoryOffset.INVENTORY && slot < Constants.Inventory.InventoryOffset.INVENTORY + Constants.Inventory.Size.INVENTORY) {
             if (swapSlots(inventory, slot)) {
                 return swapToItem(inventory, item, itemDamage, false);
             }
@@ -390,7 +377,7 @@ public class SchematicPrinter {
     }
 
     private int getNextSlot() {
-        int slot = ConfigurationHandler.swapSlotsQueue.poll() % SIZE_HOTBAR;
+        int slot = ConfigurationHandler.swapSlotsQueue.poll() % Constants.Inventory.Size.HOTBAR;
         ConfigurationHandler.swapSlotsQueue.offer(slot);
         return slot;
     }

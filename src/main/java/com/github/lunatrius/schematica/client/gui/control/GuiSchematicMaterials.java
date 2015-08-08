@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.client.gui.control;
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
+import com.github.lunatrius.schematica.reference.Names;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -16,8 +17,8 @@ public class GuiSchematicMaterials extends GuiScreenBase {
 
     private GuiButton btnDone = null;
 
-    private final String strMaterialName = I18n.format("schematica.gui.materialname");
-    private final String strMaterialAmount = I18n.format("schematica.gui.materialamount");
+    private final String strMaterialName = I18n.format(Names.Gui.Control.MATERIAL_NAME);
+    private final String strMaterialAmount = I18n.format(Names.Gui.Control.MATERIAL_AMOUNT);
 
     protected final List<ItemStack> blockList;
 
@@ -35,7 +36,7 @@ public class GuiSchematicMaterials extends GuiScreenBase {
     public void initGui() {
         int id = 0;
 
-        this.btnDone = new GuiButton(id++, this.width / 2 + 4, this.height - 30, 150, 20, I18n.format("schematica.gui.done"));
+        this.btnDone = new GuiButton(id++, this.width / 2 + 4, this.height - 30, 150, 20, I18n.format(Names.Gui.DONE));
         this.buttonList.add(this.btnDone);
 
         this.guiSchematicMaterialsSlot = new GuiSchematicMaterialsSlot(this);

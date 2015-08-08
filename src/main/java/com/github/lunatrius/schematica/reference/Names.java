@@ -125,6 +125,51 @@ public final class Names {
         }
     }
 
+    public static final class Gui {
+        public static final class Load {
+            public static final String TITLE = "schematica.gui.title";
+            public static final String FOLDER_INFO = "schematica.gui.folderInfo";
+            public static final String OPEN_FOLDER = "schematica.gui.openFolder";
+            public static final String NO_SCHEMATIC = "schematica.gui.noschematic";
+        }
+
+        public static final class Save {
+            public static final String POINT_RED = "schematica.gui.point.red";
+            public static final String POINT_BLUE = "schematica.gui.point.blue";
+            public static final String SAVE = "schematica.gui.save";
+            public static final String SAVE_SELECTION = "schematica.gui.saveselection";
+        }
+
+        public static final class Control {
+            public static final String MOVE_SCHEMATIC = "schematica.gui.moveschematic";
+            public static final String MATERIALS = "schematica.gui.materials";
+            public static final String PRINTER = "schematica.gui.printer";
+            public static final String OPERATIONS = "schematica.gui.operations";
+
+            public static final String MODE_ALL = "schematica.gui.all";
+            public static final String MODE_LAYERS = "schematica.gui.layers";
+            public static final String HIDE = "schematica.gui.hide";
+            public static final String SHOW = "schematica.gui.show";
+            public static final String MOVE_HERE = "schematica.gui.movehere";
+            public static final String FLIP = "schematica.gui.flip";
+            public static final String ROTATE = "schematica.gui.rotate";
+            public static final String TRANSFORM_PREFIX = "schematica.gui.";
+
+            public static final String MATERIAL_NAME = "schematica.gui.materialname";
+            public static final String MATERIAL_AMOUNT = "schematica.gui.materialamount";
+
+            public static final String SORT_PREFIX = "schematica.gui.material";
+            public static final String DUMP = "schematica.gui.materialdump";
+        }
+
+        public static final String X = "schematica.gui.x";
+        public static final String Y = "schematica.gui.y";
+        public static final String Z = "schematica.gui.z";
+        public static final String ON = "schematica.gui.on";
+        public static final String OFF = "schematica.gui.off";
+        public static final String DONE = "schematica.gui.done";
+    }
+
     public static final class ModId {
         public static final String MINECRAFT = "minecraft";
     }

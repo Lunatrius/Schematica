@@ -7,6 +7,7 @@ import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
+import com.github.lunatrius.schematica.reference.Names;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -34,12 +35,12 @@ public class GuiSchematicSave extends GuiScreenBase {
 
     private String filename = "";
 
-    private final String strSaveSelection = I18n.format("schematica.gui.saveselection");
-    private final String strX = I18n.format("schematica.gui.x");
-    private final String strY = I18n.format("schematica.gui.y");
-    private final String strZ = I18n.format("schematica.gui.z");
-    private final String strOn = I18n.format("schematica.gui.on");
-    private final String strOff = I18n.format("schematica.gui.off");
+    private final String strSaveSelection = I18n.format(Names.Gui.Save.SAVE_SELECTION);
+    private final String strX = I18n.format(Names.Gui.X);
+    private final String strY = I18n.format(Names.Gui.Y);
+    private final String strZ = I18n.format(Names.Gui.Z);
+    private final String strOn = I18n.format(Names.Gui.ON);
+    private final String strOff = I18n.format(Names.Gui.OFF);
 
     public GuiSchematicSave(GuiScreen guiScreen) {
         super(guiScreen);
@@ -54,7 +55,7 @@ public class GuiSchematicSave extends GuiScreenBase {
 
         int id = 0;
 
-        this.btnPointA = new GuiButton(id++, this.centerX - 130, this.centerY - 55, 100, 20, I18n.format("schematica.gui.point.red"));
+        this.btnPointA = new GuiButton(id++, this.centerX - 130, this.centerY - 55, 100, 20, I18n.format(Names.Gui.Save.POINT_RED));
         this.buttonList.add(this.btnPointA);
 
         this.numericAX = new GuiNumericField(this.fontRendererObj, id++, this.centerX - 130, this.centerY - 30);
@@ -66,7 +67,7 @@ public class GuiSchematicSave extends GuiScreenBase {
         this.numericAZ = new GuiNumericField(this.fontRendererObj, id++, this.centerX - 130, this.centerY + 20);
         this.buttonList.add(this.numericAZ);
 
-        this.btnPointB = new GuiButton(id++, this.centerX + 30, this.centerY - 55, 100, 20, I18n.format("schematica.gui.point.blue"));
+        this.btnPointB = new GuiButton(id++, this.centerX + 30, this.centerY - 55, 100, 20, I18n.format(Names.Gui.Save.POINT_BLUE));
         this.buttonList.add(this.btnPointB);
 
         this.numericBX = new GuiNumericField(this.fontRendererObj, id++, this.centerX + 30, this.centerY - 30);
@@ -84,7 +85,7 @@ public class GuiSchematicSave extends GuiScreenBase {
         this.tfFilename = new GuiTextField(this.fontRendererObj, this.width - 155, this.height - 29, 100, 18);
         this.textFields.add(this.tfFilename);
 
-        this.btnSave = new GuiButton(id++, this.width - 50, this.height - 30, 40, 20, I18n.format("schematica.gui.save"));
+        this.btnSave = new GuiButton(id++, this.width - 50, this.height - 30, 40, 20, I18n.format(Names.Gui.Save.SAVE));
         this.btnSave.enabled = ClientProxy.isRenderingGuide;
         this.buttonList.add(this.btnSave);
 

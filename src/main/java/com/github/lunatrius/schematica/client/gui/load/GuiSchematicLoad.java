@@ -6,6 +6,7 @@ import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
+import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.schematic.SchematicUtil;
 import net.minecraft.client.gui.GuiButton;
@@ -31,8 +32,8 @@ public class GuiSchematicLoad extends GuiScreenBase {
     private GuiButton btnOpenDir = null;
     private GuiButton btnDone = null;
 
-    private final String strTitle = I18n.format("schematica.gui.title");
-    private final String strFolderInfo = I18n.format("schematica.gui.folderInfo");
+    private final String strTitle = I18n.format(Names.Gui.Load.TITLE);
+    private final String strFolderInfo = I18n.format(Names.Gui.Load.FOLDER_INFO);
 
     protected File currentDirectory = ConfigurationHandler.schematicDirectory;
     protected final List<GuiSchematicEntry> schematicFiles = new ArrayList<GuiSchematicEntry>();
@@ -45,10 +46,10 @@ public class GuiSchematicLoad extends GuiScreenBase {
     public void initGui() {
         int id = 0;
 
-        this.btnOpenDir = new GuiButton(id++, this.width / 2 - 154, this.height - 36, 150, 20, I18n.format("schematica.gui.openFolder"));
+        this.btnOpenDir = new GuiButton(id++, this.width / 2 - 154, this.height - 36, 150, 20, I18n.format(Names.Gui.Load.OPEN_FOLDER));
         this.buttonList.add(this.btnOpenDir);
 
-        this.btnDone = new GuiButton(id++, this.width / 2 + 4, this.height - 36, 150, 20, I18n.format("schematica.gui.done"));
+        this.btnDone = new GuiButton(id++, this.width / 2 + 4, this.height - 36, 150, 20, I18n.format(Names.Gui.DONE));
         this.buttonList.add(this.btnDone);
 
         this.guiSchematicLoadSlot = new GuiSchematicLoadSlot(this);
@@ -140,7 +141,7 @@ public class GuiSchematicLoad extends GuiScreenBase {
 
         File[] filesSchematics = this.currentDirectory.listFiles(FILE_FILTER_SCHEMATIC);
         if (filesSchematics == null || filesSchematics.length == 0) {
-            this.schematicFiles.add(new GuiSchematicEntry(I18n.format("schematica.gui.noschematic"), Blocks.dirt, 0, false));
+            this.schematicFiles.add(new GuiSchematicEntry(I18n.format(Names.Gui.Load.NO_SCHEMATIC), Blocks.dirt, 0, false));
         } else {
             for (File file : filesSchematics) {
                 name = file.getName();
