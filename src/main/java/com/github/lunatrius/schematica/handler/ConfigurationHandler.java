@@ -45,6 +45,7 @@ public class ConfigurationHandler {
     public static final String SCHEMATIC_DIRECTORY_STR = "schematics";
     public static final File SCHEMATIC_DIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATIC_DIRECTORY_STR);
     public static final String[] EXTRA_AIR_BLOCKS_DEFAULT = { };
+    public static final String SORT_TYPE_DEFAULT = "";
     public static final boolean PRINTER_ENABLED_DEFAULT = true;
     public static final boolean SAVE_ENABLED_DEFAULT = true;
     public static final boolean LOAD_ENABLED_DEFAULT = true;
@@ -68,6 +69,7 @@ public class ConfigurationHandler {
     public static final Queue<Integer> swapSlotsQueue = new ArrayDeque<Integer>();
     public static File schematicDirectory = SCHEMATIC_DIRECTORY_DEFAULT;
     public static String[] extraAirBlocks = EXTRA_AIR_BLOCKS_DEFAULT;
+    public static String sortType = SORT_TYPE_DEFAULT;
     public static boolean printerEnabled = PRINTER_ENABLED_DEFAULT;
     public static boolean saveEnabled = SAVE_ENABLED_DEFAULT;
     public static boolean loadEnabled = LOAD_ENABLED_DEFAULT;
@@ -90,6 +92,7 @@ public class ConfigurationHandler {
     public static Property[] propSwapSlots = new Property[SWAP_SLOTS_DEFAULT.length];
     public static Property propSchematicDirectory = null;
     public static Property propExtraAirBlocks = null;
+    public static Property propSortType = null;
     public static Property propPrinterEnabled = null;
     public static Property propSaveEnabled = null;
     public static Property propLoadEnabled = null;
@@ -104,7 +107,7 @@ public class ConfigurationHandler {
         }
     }
 
-    private static void loadConfiguration() {
+    public static void loadConfiguration() {
         propShowDebugInfo = configuration.get(Names.Config.Category.DEBUG, Names.Config.SHOW_DEBUG_INFO, SHOW_DEBUG_INFO_DEFAULT, Names.Config.SHOW_DEBUG_INFO_DESC);
         propShowDebugInfo.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SHOW_DEBUG_INFO);
         showDebugInfo = propShowDebugInfo.getBoolean(SHOW_DEBUG_INFO_DEFAULT);
@@ -200,6 +203,10 @@ public class ConfigurationHandler {
                 extraAirBlockList.add(block);
             }
         }
+
+        propSortType = configuration.get(Names.Config.Category.GENERAL, Names.Config.SORT_TYPE, SORT_TYPE_DEFAULT, Names.Config.SORT_TYPE_DESC);
+        propSortType.setShowInGui(false);
+        sortType = propSortType.getString();
 
         propPrinterEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.PRINTER_ENABLED, PRINTER_ENABLED_DEFAULT, Names.Config.PRINTER_ENABLED_DESC);
         propPrinterEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PRINTER_ENABLED);

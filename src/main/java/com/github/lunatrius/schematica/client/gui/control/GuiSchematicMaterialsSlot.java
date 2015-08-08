@@ -4,8 +4,8 @@ import com.github.lunatrius.schematica.client.gui.GuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 class GuiSchematicMaterialsSlot extends GuiSlot {
     private final Minecraft minecraft = Minecraft.getMinecraft();
@@ -13,8 +13,6 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
     private final GuiSchematicMaterials guiSchematicMaterials;
 
     protected int selectedIndex = -1;
-
-    private final String strUnknownBlock = I18n.format("schematica.gui.unknownblock");
 
     public GuiSchematicMaterialsSlot(GuiSchematicMaterials par1) {
         super(Minecraft.getMinecraft(), par1.width, par1.height, 16, par1.height - 34, 24);
@@ -46,21 +44,20 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
     }
 
     @Override
-    protected void drawSlot(int index, int x, int y, int par4, Tessellator tessellator, int par6, int par7) {
+    protected void drawSlot(int index, int x, int y, int par4, Tessellator tessellator, int mouseX, int mouseY) {
         ItemStack itemStack = this.guiSchematicMaterials.blockList.get(index);
 
-        String itemName;
+        String itemName = itemStack.getItem().getItemStackDisplayName(itemStack);
         String amount = Integer.toString(itemStack.stackSize);
-
-        if (itemStack.getItem() != null) {
-            itemName = itemStack.getItem().getItemStackDisplayName(itemStack);
-        } else {
-            itemName = this.strUnknownBlock;
-        }
 
         GuiHelper.drawItemStack(this.minecraft.renderEngine, this.minecraft.fontRenderer, x, y, itemStack);
 
         this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, itemName, x + 24, y + 6, 0xFFFFFF);
         this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amount, x + 215 - this.minecraft.fontRenderer.getStringWidth(amount), y + 6, 0xFFFFFF);
+
+        if (mouseX > x && mouseY > y && mouseX <= x + 18 && mouseY <= y + 18) {
+            this.guiSchematicMaterials.renderToolTip(itemStack, mouseX, mouseY);
+            GL11.glDisable(GL11.GL_LIGHTING);
+        }
     }
 }
