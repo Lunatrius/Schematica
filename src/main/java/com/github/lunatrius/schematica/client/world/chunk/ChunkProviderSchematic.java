@@ -10,14 +10,14 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.EmptyChunk;
 import net.minecraft.world.chunk.IChunkProvider;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ChunkProviderSchematic implements IChunkProvider {
     private final SchematicWorld world;
     private final Chunk emptyChunk;
-    private final Map<Long, ChunkSchematic> chunks = new HashMap<Long, ChunkSchematic>();
+    private final Map<Long, ChunkSchematic> chunks = new ConcurrentHashMap<Long, ChunkSchematic>();
 
     public ChunkProviderSchematic(SchematicWorld world) {
         this.world = world;
