@@ -5,7 +5,6 @@ import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
-import com.github.lunatrius.schematica.client.world.SchematicUpdater;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
@@ -204,7 +203,6 @@ public class ClientProxy extends CommonProxy {
 
         RendererSchematicGlobal.INSTANCE.destroyRendererSchematicChunks();
 
-        WorldHandler.removeWorldAccess(MINECRAFT.theWorld, SchematicUpdater.INSTANCE);
         schematic = null;
 
         playerPosition.set(0, 0, 0);

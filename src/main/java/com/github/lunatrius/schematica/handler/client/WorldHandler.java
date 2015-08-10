@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.handler.client;
 
 import com.github.lunatrius.schematica.client.world.SchematicUpdater;
+import com.github.lunatrius.schematica.reference.Reference;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.world.IWorldAccess;
 import net.minecraft.world.World;
@@ -23,12 +24,14 @@ public class WorldHandler {
 
     public static void addWorldAccess(final World world, final IWorldAccess schematic) {
         if (world != null && schematic != null) {
+            Reference.logger.debug("Adding world access to {}", world);
             world.addWorldAccess(schematic);
         }
     }
 
     public static void removeWorldAccess(final World world, final IWorldAccess schematic) {
         if (world != null && schematic != null) {
+            Reference.logger.debug("Removing world access from {}", world);
             world.removeWorldAccess(schematic);
         }
     }
