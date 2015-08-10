@@ -211,9 +211,6 @@ public class ClientProxy extends CommonProxy {
         SchematicPrinter.INSTANCE.setSchematic(null);
 
         schematic = null;
-        if (MINECRAFT.theWorld != null) {
-            MINECRAFT.theWorld.removeWorldAccess(RenderSchematic.INSTANCE);
-        }
 
         playerPosition.set(0, 0, 0);
         orientation = null;
@@ -237,7 +234,6 @@ public class ClientProxy extends CommonProxy {
 
         ClientProxy.schematic = world;
         RenderSchematic.INSTANCE.setWorldAndLoadRenderers(world);
-        MINECRAFT.theWorld.addWorldAccess(RenderSchematic.INSTANCE);
         SchematicPrinter.INSTANCE.setSchematic(world);
         world.isRendering = true;
 
