@@ -9,6 +9,7 @@ import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.util.ItemStackSortType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -34,12 +35,13 @@ public class GuiSchematicMaterials extends GuiScreenBase {
     private final String strMaterialName = I18n.format(Names.Gui.Control.MATERIAL_NAME);
     private final String strMaterialAmount = I18n.format(Names.Gui.Control.MATERIAL_AMOUNT);
 
-    protected final List<ItemStack> blockList;
+    protected final List<BlockList.WrappedItemStack> blockList;
 
     public GuiSchematicMaterials(GuiScreen guiScreen) {
         super(guiScreen);
+        final Minecraft minecraft = Minecraft.getMinecraft();
         final SchematicWorld schematic = ClientProxy.schematic;
-        this.blockList = new BlockList().getList(schematic);
+        this.blockList = new BlockList().getList(minecraft.thePlayer, schematic, minecraft.theWorld);
         this.sortType.sort(this.blockList);
     }
 
@@ -100,16 +102,16 @@ public class GuiSchematicMaterials extends GuiScreenBase {
         super.drawScreen(x, y, partialTicks);
     }
 
-    private void dumpMaterialList(final List<ItemStack> blockList) {
+    private void dumpMaterialList(final List<BlockList.WrappedItemStack> blockList) {
         if (blockList.size() <= 0) {
             return;
         }
 
         int maxLengthName = 0;
         int maxSize = 0;
-        for (final ItemStack itemStack : blockList) {
-            maxLengthName = Math.max(maxLengthName, itemStack.getItem().getItemStackDisplayName(itemStack).length());
-            maxSize = Math.max(maxSize, itemStack.stackSize);
+        for (final BlockList.WrappedItemStack wrappedItemStack : blockList) {
+            maxLengthName = Math.max(maxLengthName, wrappedItemStack.getItemStackDisplayName().length());
+            maxSize = Math.max(maxSize, wrappedItemStack.total);
         }
 
         final int maxLengthSize = String.valueOf(maxSize).length();
@@ -118,10 +120,10 @@ public class GuiSchematicMaterials extends GuiScreenBase {
 
         final StringBuilder stringBuilder = new StringBuilder((maxLengthName + 1 + maxLengthSize) * blockList.size());
         final Formatter formatter = new Formatter(stringBuilder);
-        for (final ItemStack itemStack : blockList) {
-            formatter.format(formatName, itemStack.getItem().getItemStackDisplayName(itemStack));
+        for (final BlockList.WrappedItemStack wrappedItemStack : blockList) {
+            formatter.format(formatName, wrappedItemStack.getItemStackDisplayName());
             stringBuilder.append(" ");
-            formatter.format(formatSize, itemStack.stackSize);
+            formatter.format(formatSize, wrappedItemStack.total);
             stringBuilder.append(System.lineSeparator());
         }
 

@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.client.gui.control;
 
 import com.github.lunatrius.schematica.client.gui.GuiHelper;
+import com.github.lunatrius.schematica.client.util.BlockList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.GlStateManager;
@@ -50,10 +51,11 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 
     @Override
     protected void drawSlot(int index, int x, int y, int par4, int mouseX, int mouseY) {
-        ItemStack itemStack = this.guiSchematicMaterials.blockList.get(index);
+        final BlockList.WrappedItemStack wrappedItemStack = this.guiSchematicMaterials.blockList.get(index);
+        final ItemStack itemStack = wrappedItemStack.itemStack;
 
-        String itemName = itemStack.getItem().getItemStackDisplayName(itemStack);
-        String amount = Integer.toString(itemStack.stackSize);
+        final String itemName = wrappedItemStack.getItemStackDisplayName();
+        final String amount = wrappedItemStack.getFormattedAmount();
 
         GuiHelper.drawItemStack(this.minecraft.renderEngine, this.minecraft.fontRendererObj, x, y, itemStack);
 
