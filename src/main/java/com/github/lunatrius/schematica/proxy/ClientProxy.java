@@ -48,6 +48,7 @@ public class ClientProxy extends CommonProxy {
     public static final MBlockPos pointMin = new MBlockPos();
     public static final MBlockPos pointMax = new MBlockPos();
 
+    public static EnumFacing axisFlip = EnumFacing.UP;
     public static EnumFacing axisRotation = EnumFacing.UP;
 
     public static MovingObjectPosition movingObjectPosition = null;
