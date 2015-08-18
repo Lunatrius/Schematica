@@ -14,9 +14,7 @@ public class WorldHandler {
     public void onLoad(final WorldEvent.Load event) {
         if (event.world.isRemote && !(event.world instanceof SchematicWorld)) {
             RenderSchematic.INSTANCE.setWorldAndLoadRenderers(ClientProxy.schematic);
-            if (ClientProxy.schematic != null) {
-                addWorldAccess(event.world, RenderSchematic.INSTANCE);
-            }
+            addWorldAccess(event.world, RenderSchematic.INSTANCE);
         }
     }
 
