@@ -4,6 +4,7 @@ import com.github.lunatrius.core.client.gui.GuiNumericField;
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
 import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
+import com.github.lunatrius.schematica.client.util.FlipHelper;
 import com.github.lunatrius.schematica.client.util.RotationHelper;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
@@ -34,6 +35,7 @@ public class GuiSchematicControl extends GuiScreenBase {
 
     private GuiButton btnHide = null;
     private GuiButton btnMove = null;
+    private GuiButton btnFlipDirection = null;
     private GuiButton btnFlip = null;
     private GuiButton btnRotateDirection = null;
     private GuiButton btnRotate = null;
@@ -91,7 +93,10 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnMove = new GuiButton(id++, this.width - 90, this.height - 80, 80, 20, I18n.format(Names.Gui.Control.MOVE_HERE));
         this.buttonList.add(this.btnMove);
 
-        this.btnFlip = new GuiButton(id++, this.width - 90, this.height - 55, 80, 20, I18n.format(Names.Gui.Control.FLIP));
+        this.btnFlipDirection = new GuiButton(id++, this.width - 180, this.height - 55, 80, 20, I18n.format(Names.Gui.Control.TRANSFORM_PREFIX + ClientProxy.axisFlip.getName()));
+        this.buttonList.add(this.btnFlipDirection);
+
+        this.btnFlip = new GuiUnicodeGlyphButton(id++, this.width - 90, this.height - 55, 80, 20, " " + I18n.format(Names.Gui.Control.FLIP), "\u2194", 2.0f);
         this.buttonList.add(this.btnFlip);
 
         this.btnRotateDirection = new GuiButton(id++, this.width - 180, this.height - 30, 80, 20, I18n.format(Names.Gui.Control.TRANSFORM_PREFIX + ClientProxy.axisRotation.getName()));
@@ -115,8 +120,8 @@ public class GuiSchematicControl extends GuiScreenBase {
 
         this.btnHide.enabled = this.schematic != null;
         this.btnMove.enabled = this.schematic != null;
+        this.btnFlipDirection.enabled = this.schematic != null;
         this.btnFlip.enabled = this.schematic != null;
-        this.btnFlip.enabled = false;
         this.btnRotateDirection.enabled = this.schematic != null;
         this.btnRotate.enabled = this.schematic != null;
         this.btnMaterials.enabled = this.schematic != null;
@@ -178,9 +183,15 @@ public class GuiSchematicControl extends GuiScreenBase {
                 ClientProxy.moveSchematicToPlayer(this.schematic);
                 RenderSchematic.INSTANCE.refresh();
                 setPoint(this.numericX, this.numericY, this.numericZ, this.schematic.position);
+            } else if (guiButton.id == this.btnFlipDirection.id) {
+                final EnumFacing[] values = EnumFacing.VALUES;
+                ClientProxy.axisFlip = values[((ClientProxy.axisFlip.ordinal() + 2) % values.length)];
+                guiButton.displayString = I18n.format(Names.Gui.Control.TRANSFORM_PREFIX + ClientProxy.axisFlip.getName());
             } else if (guiButton.id == this.btnFlip.id) {
-                // TODO: implement flip logic
-                SchematicPrinter.INSTANCE.refresh();
+                if (FlipHelper.INSTANCE.flip(this.schematic, ClientProxy.axisFlip, isShiftKeyDown())) {
+                    RenderSchematic.INSTANCE.refresh();
+                    SchematicPrinter.INSTANCE.refresh();
+                }
             } else if (guiButton.id == this.btnRotateDirection.id) {
                 final EnumFacing[] values = EnumFacing.VALUES;
                 ClientProxy.axisRotation = values[((ClientProxy.axisRotation.ordinal() + 1) % values.length)];
