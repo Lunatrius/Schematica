@@ -1,56 +1,56 @@
 package com.github.lunatrius.schematica.util;
 
+import com.github.lunatrius.schematica.client.util.BlockList;
 import com.github.lunatrius.schematica.reference.Reference;
-import net.minecraft.item.ItemStack;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 public enum ItemStackSortType {
-    NAME_ASC("name", "\u2191", new Comparator<ItemStack>() {
+    NAME_ASC("name", "\u2191", new Comparator<BlockList.WrappedItemStack>() {
         @Override
-        public int compare(final ItemStack itemStackA, final ItemStack itemStackB) {
-            final String nameA = itemStackA.getItem().getItemStackDisplayName(itemStackA);
-            final String nameB = itemStackB.getItem().getItemStackDisplayName(itemStackB);
+        public int compare(final BlockList.WrappedItemStack wrappedItemStackA, final BlockList.WrappedItemStack wrappedItemStackB) {
+            final String nameA = wrappedItemStackA.getItemStackDisplayName();
+            final String nameB = wrappedItemStackB.getItemStackDisplayName();
 
             return nameA.compareTo(nameB);
         }
     }),
-    NAME_DESC("name", "\u2193", new Comparator<ItemStack>() {
+    NAME_DESC("name", "\u2193", new Comparator<BlockList.WrappedItemStack>() {
         @Override
-        public int compare(final ItemStack itemStackA, final ItemStack itemStackB) {
-            final String nameA = itemStackA.getItem().getItemStackDisplayName(itemStackA);
-            final String nameB = itemStackB.getItem().getItemStackDisplayName(itemStackB);
+        public int compare(final BlockList.WrappedItemStack wrappedItemStackA, final BlockList.WrappedItemStack wrappedItemStackB) {
+            final String nameA = wrappedItemStackA.getItemStackDisplayName();
+            final String nameB = wrappedItemStackB.getItemStackDisplayName();
 
             return nameB.compareTo(nameA);
         }
     }),
-    SIZE_ASC("amount", "\u2191", new Comparator<ItemStack>() {
+    SIZE_ASC("amount", "\u2191", new Comparator<BlockList.WrappedItemStack>() {
         @Override
-        public int compare(final ItemStack itemStackA, final ItemStack itemStackB) {
-            return itemStackA.stackSize - itemStackB.stackSize;
+        public int compare(final BlockList.WrappedItemStack wrappedItemStackA, final BlockList.WrappedItemStack wrappedItemStackB) {
+            return wrappedItemStackA.total - wrappedItemStackB.total;
         }
     }),
-    SIZE_DESC("amount", "\u2193", new Comparator<ItemStack>() {
+    SIZE_DESC("amount", "\u2193", new Comparator<BlockList.WrappedItemStack>() {
         @Override
-        public int compare(final ItemStack itemStackA, final ItemStack itemStackB) {
-            return itemStackB.stackSize - itemStackA.stackSize;
+        public int compare(final BlockList.WrappedItemStack wrappedItemStackA, final BlockList.WrappedItemStack wrappedItemStackB) {
+            return wrappedItemStackB.total - wrappedItemStackA.total;
         }
     });
 
-    private final Comparator<ItemStack> comparator;
+    private final Comparator<BlockList.WrappedItemStack> comparator;
 
     public final String label;
     public final String glyph;
 
-    private ItemStackSortType(final String label, final String glyph, final Comparator<ItemStack> comparator) {
+    private ItemStackSortType(final String label, final String glyph, final Comparator<BlockList.WrappedItemStack> comparator) {
         this.label = label;
         this.glyph = glyph;
         this.comparator = comparator;
     }
 
-    public void sort(final List<ItemStack> blockList) {
+    public void sort(final List<BlockList.WrappedItemStack> blockList) {
         try {
             Collections.sort(blockList, this.comparator);
         } catch (final Exception e) {
@@ -72,4 +72,3 @@ public enum ItemStackSortType {
         return NAME_ASC;
     }
 }
-
