@@ -3,6 +3,8 @@ package com.github.lunatrius.schematica.client.printer;
 import com.github.lunatrius.core.util.BlockPosHelper;
 import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.core.util.vector.Vector3i;
+import com.github.lunatrius.schematica.client.printer.nbtsync.NBTSync;
+import com.github.lunatrius.schematica.client.printer.nbtsync.SyncRegistry;
 import com.github.lunatrius.schematica.client.printer.registry.PlacementData;
 import com.github.lunatrius.schematica.client.printer.registry.PlacementRegistry;
 import com.github.lunatrius.schematica.client.util.BlockStateToItemStack;
@@ -17,7 +19,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C0BPacketEntityAction;
@@ -32,6 +33,7 @@ import net.minecraftforge.fluids.BlockFluidBase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class SchematicPrinter {
@@ -44,6 +46,7 @@ public class SchematicPrinter {
 
     private SchematicWorld schematic = null;
     private byte[][][] timeout = null;
+    private HashMap<BlockPos, Integer> syncBlacklist = new HashMap<BlockPos, Integer>();
 
     public boolean isEnabled() {
         return this.isEnabled;
@@ -82,6 +85,7 @@ public class SchematicPrinter {
         } else {
             this.timeout = null;
         }
+        this.syncBlacklist.clear();
     }
 
     public boolean print() {
@@ -160,6 +164,27 @@ public class SchematicPrinter {
 
         // TODO: compare block states directly?
         if (block == realBlock && metadata == realMetadata) {
+            // TODO: clean up this mess
+            final NBTSync handler = SyncRegistry.INSTANCE.getHandler(realBlock);
+            if (handler != null) {
+                this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
+
+                Integer tries = this.syncBlacklist.get(realPos);
+                if (tries == null) {
+                    tries = 0;
+                } else if (tries >= 10) {
+                    return false;
+                }
+
+                Reference.logger.trace("Trying to sync block at {} {}", realPos, tries);
+                final boolean success = handler.execute(player, this.schematic, pos, world, realPos);
+                if (success) {
+                    this.syncBlacklist.put(realPos, tries + 1);
+                }
+
+                return success;
+            }
+
             return false;
         }
 
@@ -238,7 +263,7 @@ public class SchematicPrinter {
     }
 
     private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final BlockPos pos, final IBlockState blockState, final ItemStack itemStack) {
-        if (itemStack.getItem() instanceof ItemBucket || itemStack.getItem() == Items.sign) {
+        if (itemStack.getItem() instanceof ItemBucket) {
             return false;
         }
 
