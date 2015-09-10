@@ -18,6 +18,7 @@ import net.minecraft.block.BlockQuartz;
 import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockStandingSign;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.properties.IProperty;
@@ -29,6 +30,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -82,6 +84,14 @@ public class PlacementRegistry {
             public boolean isValid(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {
                 final BlockLever.EnumOrientation value = (BlockLever.EnumOrientation) blockState.getValue(BlockLever.FACING);
                 return !value.getFacing().getAxis().isVertical() || BlockLever.EnumOrientation.forFacings(value.getFacing(), player.getHorizontalFacing()) == value;
+            }
+        };
+        final IValidPlayerFacing playerFacingStandingSign = new IValidPlayerFacing() {
+            @Override
+            public boolean isValid(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {
+                final int value = (Integer) blockState.getValue(BlockStandingSign.ROTATION);
+                final int facing = MathHelper.floor_double((player.rotationYaw + 180.0) * 16.0 / 360.0 + 0.5) & 15;
+                return value == facing;
             }
         };
         final IValidPlayerFacing playerFacingIgnore = new IValidPlayerFacing() {
@@ -282,7 +292,9 @@ public class PlacementRegistry {
         addPlacementMapping(Blocks.ladder, new PlacementData(blockFacingOpposite));
         addPlacementMapping(Blocks.lever, new PlacementData(playerFacingLever, blockFacingLever));
         addPlacementMapping(Blocks.quartz_block, new PlacementData(blockFacingQuartz));
+        addPlacementMapping(Blocks.standing_sign, new PlacementData(playerFacingStandingSign));
         addPlacementMapping(Blocks.tripwire_hook, new PlacementData(blockFacingOpposite));
+        addPlacementMapping(Blocks.wall_sign, new PlacementData(blockFacingOpposite));
 
         addPlacementMapping(Items.comparator, new PlacementData(playerFacingEntityOpposite));
         addPlacementMapping(Items.repeater, new PlacementData(playerFacingEntityOpposite));
