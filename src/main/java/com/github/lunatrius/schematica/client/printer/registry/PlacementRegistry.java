@@ -46,6 +46,7 @@ public class PlacementRegistry {
 
     private void populateMappings() {
         this.classPlacementMap.clear();
+        this.blockPlacementMap.clear();
         this.itemPlacementMap.clear();
 
         final IValidPlayerFacing playerFacingEntity = new IValidPlayerFacing() {
