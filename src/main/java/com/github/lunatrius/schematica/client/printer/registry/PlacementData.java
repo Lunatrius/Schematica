@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.printer.registry;
 
+import net.minecraft.block.Block;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class PlacementData {
     public float offsetHighY = 1.0f;
     public int maskMeta = 0xF;
     public final Map<ForgeDirection, Integer> mapping = new HashMap<ForgeDirection, Integer>();
+    private IExtraClick extraClick;
 
     public PlacementData(PlacementType type, int... metadata) {
         this.type = type;
@@ -75,5 +77,18 @@ public class PlacementData {
 
         ForgeDirection[] directions = new ForgeDirection[list.size()];
         return list.toArray(directions);
+    }
+
+    public PlacementData setExtraClick(final IExtraClick extraClick) {
+        this.extraClick = extraClick;
+        return this;
+    }
+
+    public int getExtraClicks(final Block block, final int metadata) {
+        if (this.extraClick != null) {
+            return this.extraClick.getExtraClicks(block, metadata);
+        }
+
+        return 0;
     }
 }

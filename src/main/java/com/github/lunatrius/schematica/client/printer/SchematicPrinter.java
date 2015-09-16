@@ -172,7 +172,7 @@ public class SchematicPrinter {
             return false;
         }
 
-        if (placeBlock(this.minecraft, world, player, wx, wy, wz, block, metadata, itemStack)) {
+        if (placeBlock(world, player, wx, wy, wz, block, metadata, itemStack)) {
             this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
 
             if (!ConfigurationHandler.placeInstantly) {
@@ -222,7 +222,7 @@ public class SchematicPrinter {
         return list.toArray(sides);
     }
 
-    private boolean placeBlock(Minecraft minecraft, World world, EntityPlayer player, int x, int y, int z, Block block, int metadata, ItemStack itemStack) {
+    private boolean placeBlock(World world, EntityPlayer player, int x, int y, int z, Block block, int metadata, ItemStack itemStack) {
         if (isBlacklisted(block, itemStack)) {
             return false;
         }
@@ -236,6 +236,7 @@ public class SchematicPrinter {
         ForgeDirection[] solidSides = getSolidSides(world, x, y, z);
         ForgeDirection direction = ForgeDirection.UNKNOWN;
         float offsetY = 0.0f;
+        int extraClicks = 0;
 
         if (solidSides.length > 0) {
             if (data != null) {
@@ -245,8 +246,10 @@ public class SchematicPrinter {
                 }
 
                 offsetY = data.getOffsetFromMetadata(metadata);
+                extraClicks = data.getExtraClicks(block, metadata);
             } else {
                 direction = solidSides[0];
+                extraClicks = 0;
             }
 
             if (!swapToItem(player.inventory, itemStack)) {
@@ -255,7 +258,7 @@ public class SchematicPrinter {
         }
 
         if (direction != ForgeDirection.UNKNOWN || !ConfigurationHandler.placeAdjacent) {
-            return placeBlock(minecraft, world, player, x, y, z, direction, 0.0f, offsetY, 0.0f);
+            return placeBlock(world, player, x, y, z, direction, 0.0f, offsetY, 0.0f, extraClicks);
         }
 
         return false;
@@ -306,29 +309,40 @@ public class SchematicPrinter {
         return true;
     }
 
-    private boolean placeBlock(Minecraft minecraft, World world, EntityPlayer player, int x, int y, int z, ForgeDirection direction, float offsetX, float offsetY, float offsetZ) {
+    private boolean placeBlock(World world, EntityPlayer player, int x, int y, int z, ForgeDirection direction, float offsetX, float offsetY, float offsetZ, int extraClicks) {
         ItemStack itemStack = player.getCurrentEquippedItem();
         boolean success = false;
+
+        if (!this.minecraft.playerController.isInCreativeMode() && itemStack != null && itemStack.stackSize <= extraClicks) {
+            return false;
+        }
 
         x += direction.offsetX;
         y += direction.offsetY;
         z += direction.offsetZ;
 
         int side = direction.getOpposite().ordinal();
+        final Vec3 hitVec = Vec3.createVectorHelper(x + offsetX, y + offsetY, z + offsetZ);
 
-		/* copypasted from n.m.client.Minecraft to sooth finicky servers */
-        success = !ForgeEventFactory.onPlayerInteract(minecraft.thePlayer, Action.RIGHT_CLICK_BLOCK, x, y, z, side, world).isCanceled();
-        if (success) {
-            // still not assured!
-            success = minecraft.playerController.onPlayerRightClick(player, world, itemStack, x, y, z, side, Vec3.createVectorHelper(x + offsetX, y + offsetY, z + offsetZ));
-            if (success) {
-                // yes, some servers actually care about this.
-                minecraft.thePlayer.swingItem();
-            }
+        success = placeBlock(world, player, itemStack, x, y, z, side, hitVec);
+        for (int i = 0; success && i < extraClicks; i++) {
+            success = placeBlock(world, player, itemStack, x, y, z, side, hitVec);
         }
 
         if (itemStack != null && itemStack.stackSize == 0 && success) {
             player.inventory.mainInventory[player.inventory.currentItem] = null;
+        }
+
+        return success;
+    }
+
+    private boolean placeBlock(World world, EntityPlayer player, ItemStack itemStack, int x, int y, int z, int side, Vec3 hitVec) {
+        boolean success = !ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_BLOCK, x, y, z, side, world).isCanceled();
+        if (success) {
+            success = this.minecraft.playerController.onPlayerRightClick(player, world, itemStack, x, y, z, side, hitVec);
+            if (success) {
+                player.swingItem();
+            }
         }
 
         return success;

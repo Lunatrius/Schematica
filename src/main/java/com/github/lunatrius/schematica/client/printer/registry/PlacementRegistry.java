@@ -10,6 +10,7 @@ import net.minecraft.block.BlockHopper;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.BlockPumpkin;
 import net.minecraft.block.BlockRotatedPillar;
+import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.init.Blocks;
@@ -32,6 +33,13 @@ public class PlacementRegistry {
         this.blockPlacementMap.clear();
         this.itemPlacementMap.clear();
 
+        final IExtraClick extraClickDoubleSlab = new IExtraClick() {
+            @Override
+            public int getExtraClicks(Block block, int metadata) {
+                return ((BlockSlab) block).isOpaqueCube() ? 1 : 0;
+            }
+        };
+
         /**
          * minecraft
          */
@@ -53,7 +61,7 @@ public class PlacementRegistry {
         addPlacementMapping(Blocks.wool, new PlacementData(PlacementData.PlacementType.BLOCK));
         addPlacementMapping(Blocks.yellow_flower, new PlacementData(PlacementData.PlacementType.BLOCK));
         addPlacementMapping(Blocks.red_flower, new PlacementData(PlacementData.PlacementType.BLOCK));
-        addPlacementMapping(Blocks.double_stone_slab, new PlacementData(PlacementData.PlacementType.BLOCK));
+        addPlacementMapping(Blocks.double_stone_slab, new PlacementData(PlacementData.PlacementType.BLOCK).setExtraClick(extraClickDoubleSlab));
         addPlacementMapping(Blocks.stone_slab, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x7));
         addPlacementMapping(Blocks.stained_glass, new PlacementData(PlacementData.PlacementType.BLOCK));
         addPlacementMapping(Blocks.ladder, new PlacementData(PlacementData.PlacementType.BLOCK, -1, -1, 3, 2, 5, 4));
@@ -66,7 +74,7 @@ public class PlacementRegistry {
         addPlacementMapping(Blocks.quartz_block, new PlacementData(PlacementData.PlacementType.BLOCK));
         addPlacementMapping(Blocks.fence_gate, new PlacementData(PlacementData.PlacementType.PLAYER, -1, -1, 2, 0, 1, 3).setMaskMeta(0x3));
         addPlacementMapping(Blocks.double_wooden_slab, new PlacementData(PlacementData.PlacementType.BLOCK));
-        addPlacementMapping(Blocks.wooden_slab, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x7));
+        addPlacementMapping(Blocks.wooden_slab, new PlacementData(PlacementData.PlacementType.BLOCK).setOffset(0x8, 0.0f, 1.0f).setMaskMeta(0x7).setExtraClick(extraClickDoubleSlab));
         addPlacementMapping(Blocks.anvil, new PlacementData(PlacementData.PlacementType.PLAYER, -1, -1, 1, 3, 0, 2).setMaskMeta(0x3));
         addPlacementMapping(Blocks.stained_hardened_clay, new PlacementData(PlacementData.PlacementType.BLOCK));
         addPlacementMapping(Blocks.carpet, new PlacementData(PlacementData.PlacementType.BLOCK));
