@@ -2,9 +2,11 @@ package com.github.lunatrius.schematica.world.schematic;
 
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.api.event.PostSchematicCaptureEvent;
+import com.github.lunatrius.schematica.nbt.NBTHelper;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.io.DataOutputStream;

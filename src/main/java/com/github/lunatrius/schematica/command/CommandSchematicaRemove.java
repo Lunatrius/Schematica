@@ -23,7 +23,7 @@ import java.util.Arrays;
 
 public class CommandSchematicaRemove extends CommandSchematicaBase {
     @Override
-    public String getCommandName() {
+    public String getName() {
         return Names.Command.Remove.NAME;
     }
 
@@ -33,7 +33,7 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] arguments) throws CommandException{
+    public void execute(ICommandSender sender, String[] arguments) throws CommandException{
         if (arguments.length < 1) {
             throw new WrongUsageException(getCommandUsage(sender));
         }
@@ -68,7 +68,7 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
         File schematicDirectory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
         File file = new File(schematicDirectory, filename);
         if (!FileUtils.contains(schematicDirectory, file)) {
-            Reference.logger.error("{} has tried to download the file {}", player.getCommandSenderName(), filename);
+            Reference.logger.error("{} has tried to download the file {}", player.getName(), filename);
             throw new CommandException(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND);
         }
 

@@ -10,9 +10,13 @@ public abstract class CommandSchematicaBase extends CommandBase {
         return 0;
     }
 
-    @Override
     public boolean canCommandSenderUseCommand(ICommandSender sender) {
         // TODO: add logic for the client side when ready
-        return super.canCommandSenderUseCommand(sender) || (sender instanceof EntityPlayerMP && getRequiredPermissionLevel() <= 0);
+        return canCommandSenderUse(sender);
+    }
+
+    @Override
+    public boolean canCommandSenderUse(ICommandSender sender) {
+        return super.canCommandSenderUse(sender) || (sender instanceof EntityPlayerMP && getRequiredPermissionLevel() <= 0);
     }
 }

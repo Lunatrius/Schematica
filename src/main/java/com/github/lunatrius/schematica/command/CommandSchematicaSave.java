@@ -16,7 +16,7 @@ import java.io.File;
 
 public class CommandSchematicaSave extends CommandSchematicaBase {
     @Override
-    public String getCommandName() {
+    public String getName() {
         return Names.Command.Save.NAME;
     }
 
@@ -26,7 +26,7 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] arguments) throws CommandException {
+    public void execute(ICommandSender sender, String[] arguments) throws CommandException {
         if (arguments.length < 7) {
             throw new WrongUsageException(getCommandUsage(sender));
         }

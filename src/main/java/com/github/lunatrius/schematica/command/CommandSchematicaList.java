@@ -24,7 +24,7 @@ public class CommandSchematicaList extends CommandSchematicaBase {
     private static final FileFilterSchematic FILE_FILTER_SCHEMATIC = new FileFilterSchematic(false);
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return Names.Command.List.NAME;
     }
 
@@ -34,7 +34,7 @@ public class CommandSchematicaList extends CommandSchematicaBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] arguments) throws CommandException {
+    public void execute(ICommandSender sender, String[] arguments) throws CommandException {
         if (!(sender instanceof EntityPlayer)) {
             throw new CommandException(Names.Command.Save.Message.PLAYERS_ONLY);
         }

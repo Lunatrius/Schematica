@@ -189,7 +189,10 @@ public class SchematicPrinter {
         }
 
         if (ConfigurationHandler.destroyBlocks && !world.isAirBlock(realPos) && this.minecraft.playerController.isInCreativeMode()) {
-            this.minecraft.playerController.clickBlock(realPos, EnumFacing.DOWN);
+
+            // TODO : YEah this mapping is either B or C... red pill or blue
+            this.minecraft.playerController.func_180511_b(realPos, EnumFacing.DOWN);
+
 
             this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
 
@@ -337,7 +340,7 @@ public class SchematicPrinter {
     private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final ItemStack itemStack, final BlockPos pos, final EnumFacing side, final Vec3 hitVec) {
         boolean success = !ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_BLOCK, world, pos, side).isCanceled();
         if (success) {
-            success = this.minecraft.playerController.onPlayerRightClick(player, world, itemStack, pos, side, hitVec);
+            success = this.minecraft.playerController.func_178890_a(player, world, itemStack, pos, side, hitVec);
             if (success) {
                 player.swingItem();
             }
