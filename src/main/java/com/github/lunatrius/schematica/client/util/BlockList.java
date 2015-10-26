@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica.client.util;
 
 import com.github.lunatrius.core.util.BlockPosHelper;
 import com.github.lunatrius.core.util.MBlockPos;
+import com.github.lunatrius.schematica.block.state.BlockStateHelper;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.block.Block;
@@ -42,8 +43,7 @@ public class BlockList {
             mcPos.set(world.position.add(pos));
 
             final IBlockState mcBlockState = mcWorld.getBlockState(mcPos);
-            final Block mcBlock = mcBlockState.getBlock();
-            final boolean isPlaced = block == mcBlock && block.getMetaFromState(blockState) == mcBlock.getMetaFromState(mcBlockState);
+            final boolean isPlaced = BlockStateHelper.areBlockStatesEqual(blockState, mcBlockState);
 
             ItemStack stack = null;
 

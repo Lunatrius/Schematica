@@ -1,6 +1,7 @@
 package com.github.lunatrius.schematica.block.state;
 
 import com.google.common.collect.ImmutableSet;
+import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumChatFormatting;
@@ -49,5 +50,16 @@ public class BlockStateHelper {
         }
 
         return list;
+    }
+
+    public static boolean areBlockStatesEqual(final IBlockState blockStateA, final IBlockState blockStateB) {
+        if (blockStateA == blockStateB) {
+            return true;
+        }
+
+        final Block blockA = blockStateA.getBlock();
+        final Block blockB = blockStateB.getBlock();
+
+        return blockA == blockB && blockA.getMetaFromState(blockStateA) == blockB.getMetaFromState(blockStateB);
     }
 }
