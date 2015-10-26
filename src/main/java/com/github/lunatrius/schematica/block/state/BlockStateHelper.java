@@ -1,4 +1,4 @@
-package com.github.lunatrius.schematica.util;
+package com.github.lunatrius.schematica.block.state;
 
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.properties.IProperty;

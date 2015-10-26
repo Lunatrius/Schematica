@@ -1,6 +1,6 @@
 package com.github.lunatrius.schematica.client.printer.registry;
 
-import com.github.lunatrius.schematica.util.BlockStateHelper;
+import com.github.lunatrius.schematica.block.state.BlockStateHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockChest;
