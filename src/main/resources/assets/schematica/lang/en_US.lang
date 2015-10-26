@@ -164,5 +164,13 @@ schematica.command.download.started=Started downloading %s...
 schematica.command.download.downloadSucceeded=Successfully downloaded %s.
 schematica.command.download.downloadFail=Download failed.
 
+# commands - replace
+schematica.command.replace.usage=/schematicaReplace <original> <replacement>
+schematica.command.replace.noSchematic=You don't have a schematic loaded.
+schematica.command.replace.success=Replaced %s blocks.
+
 # messages
 schematica.message.togglePrinter=Printer: %s
+schematica.message.invalidBlock="%s" does not exist.
+schematica.message.invalidProperty="%s" is not a valid property.
+schematica.message.invalidPropertyForBlock="%s" is not a valid property for "%s".

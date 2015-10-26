@@ -6,6 +6,7 @@ import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
+import com.github.lunatrius.schematica.command.client.CommandSchematicaReplace;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.handler.client.ChatEventHandler;
 import com.github.lunatrius.schematica.handler.client.GuiHandler;
@@ -22,6 +23,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.config.GuiConfigEntries;
@@ -178,6 +180,8 @@ public class ClientProxy extends CommonProxy {
         FMLCommonHandler.instance().bus().register(TickHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(RenderTickHandler.INSTANCE);
         FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
+
+        ClientCommandHandler.instance.registerCommand(new CommandSchematicaReplace());
 
         MinecraftForge.EVENT_BUS.register(RenderSchematic.INSTANCE);
         MinecraftForge.EVENT_BUS.register(ChatEventHandler.INSTANCE);

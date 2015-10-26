@@ -118,10 +118,24 @@ public final class Names {
 
             public static final String NAME = "schematicaDownload";
         }
+
+        public static final class Replace {
+            public static final class Message {
+                public static final String USAGE = "schematica.command.replace.usage";
+                public static final String NO_SCHEMATIC = "schematica.command.replace.noSchematic";
+                public static final String SUCCESS = "schematica.command.replace.success";
+            }
+
+            public static final String NAME = "schematicaReplace";
+        }
     }
 
     public static final class Messages {
         public static final String TOGGLE_PRINTER = "schematica.message.togglePrinter";
+
+        public static final String INVALID_BLOCK = "schematica.message.invalidBlock";
+        public static final String INVALID_PROPERTY = "schematica.message.invalidProperty";
+        public static final String INVALID_PROPERTY_FOR_BLOCK = "schematica.message.invalidPropertyForBlock";
     }
 
     public static final class Gui {

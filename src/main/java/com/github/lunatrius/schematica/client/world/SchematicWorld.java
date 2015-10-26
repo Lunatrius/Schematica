@@ -1,10 +1,14 @@
 package com.github.lunatrius.schematica.client.world;
 
+import com.github.lunatrius.core.util.BlockPosHelper;
 import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.schematica.api.ISchematic;
+import com.github.lunatrius.schematica.block.state.pattern.BlockStateReplacer;
 import com.github.lunatrius.schematica.client.world.chunk.ChunkProviderSchematic;
 import com.github.lunatrius.schematica.reference.Reference;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.pattern.BlockStateHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
@@ -23,6 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import java.util.Map;
 
 public class SchematicWorld extends WorldClient {
     private static final WorldSettings WORLD_SETTINGS = new WorldSettings(0, WorldSettings.GameType.CREATIVE, false, false, WorldType.FLAT);
@@ -198,6 +203,35 @@ public class SchematicWorld extends WorldClient {
 
     public String getDebugDimensions() {
         return "WHL: " + getWidth() + " / " + getHeight() + " / " + getLength();
+    }
+
+    public int replaceBlock(final BlockStateHelper matcher, final BlockStateReplacer replacer, final Map<IProperty, Comparable> properties) {
+        int count = 0;
+
+        for (final MBlockPos pos : BlockPosHelper.getAllInBox(0, 0, 0, getWidth(), getHeight(), getLength())) {
+            final IBlockState blockState = this.schematic.getBlockState(pos);
+
+            // TODO: add support for tile entities?
+            if (blockState.getBlock().hasTileEntity(blockState)) {
+                continue;
+            }
+
+            if (matcher.matchesState(blockState)) {
+                final IBlockState replacement = replacer.getReplacement(blockState, properties);
+
+                // TODO: add support for tile entities?
+                if (replacement.getBlock().hasTileEntity(replacement)) {
+                    continue;
+                }
+
+                if (this.schematic.setBlockState(pos, replacement)) {
+                    markBlockForUpdate(pos.add(this.position));
+                    count++;
+                }
+            }
+        }
+
+        return count;
     }
 
     public boolean isInside(final BlockPos pos) {
