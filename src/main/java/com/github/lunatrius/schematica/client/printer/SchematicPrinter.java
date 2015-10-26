@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.client.printer;
 import com.github.lunatrius.core.util.BlockPosHelper;
 import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.core.util.vector.Vector3i;
+import com.github.lunatrius.schematica.block.state.BlockStateHelper;
 import com.github.lunatrius.schematica.client.printer.nbtsync.NBTSync;
 import com.github.lunatrius.schematica.client.printer.nbtsync.SyncRegistry;
 import com.github.lunatrius.schematica.client.printer.registry.PlacementData;
@@ -155,15 +156,10 @@ public class SchematicPrinter {
         final BlockPos realPos = new BlockPos(wx, wy, wz);
 
         final IBlockState blockState = this.schematic.getBlockState(pos);
-        final Block block = blockState.getBlock();
-        final int metadata = block.getMetaFromState(blockState);
-
         final IBlockState realBlockState = world.getBlockState(realPos);
         final Block realBlock = realBlockState.getBlock();
-        final int realMetadata = realBlock.getMetaFromState(realBlockState);
 
-        // TODO: compare block states directly?
-        if (block == realBlock && metadata == realMetadata) {
+        if (BlockStateHelper.areBlockStatesEqual(blockState, realBlockState)) {
             // TODO: clean up this mess
             final NBTSync handler = SyncRegistry.INSTANCE.getHandler(realBlock);
             if (handler != null) {
