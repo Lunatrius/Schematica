@@ -48,11 +48,11 @@ public class DownloadHandler {
         if (!transfer.state.isWaiting()) {
             if (++transfer.timeout >= Constants.Network.TIMEOUT) {
                 if (++transfer.retries >= Constants.Network.RETRIES) {
-                    Reference.logger.warn("{}'s download was dropped!", player.getCommandSenderName());
+                    Reference.logger.warn("{}'s download was dropped!", player.getName());
                     return;
                 }
 
-                Reference.logger.warn("{}'s download timed out, retrying (#{})", player.getCommandSenderName(), transfer.retries);
+                Reference.logger.warn("{}'s download timed out, retrying (#{})", player.getName(), transfer.retries);
 
                 sendChunk(player, transfer);
                 transfer.timeout = 0;

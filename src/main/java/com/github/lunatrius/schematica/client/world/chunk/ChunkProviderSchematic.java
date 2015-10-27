@@ -80,7 +80,7 @@ public class ChunkProviderSchematic implements IChunkProvider {
     }
 
     @Override
-    public List getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos) {
+    public List func_177458_a(EnumCreatureType creatureType, BlockPos pos) {
         return null;
     }
 

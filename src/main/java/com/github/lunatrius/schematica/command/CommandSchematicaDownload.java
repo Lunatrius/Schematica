@@ -26,7 +26,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
     private static final FileFilterSchematic FILE_FILTER_SCHEMATIC = new FileFilterSchematic(false);
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return Names.Command.Download.NAME;
     }
 
@@ -51,17 +51,18 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
                 filenames.add(FilenameUtils.removeExtension(file.getName()));
             }
 
-            return getListOfStringsMatchingLastWord(args, filenames);
+            return func_175762_a(args, filenames);
         }
 
         return null;
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+    public void execute(ICommandSender sender, String[] args) throws CommandException {
         if (args.length < 1) {
             throw new WrongUsageException(getCommandUsage(sender));
         }
+
 
         if (!(sender instanceof EntityPlayerMP)) {
             throw new CommandException(Names.Command.Download.Message.PLAYERS_ONLY);
@@ -71,7 +72,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
         final EntityPlayerMP player = (EntityPlayerMP) sender;
         final File directory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
         if (!FileUtils.contains(directory, filename)) {
-            Reference.logger.error("{} has tried to download the file {}", player.getCommandSenderName(), filename);
+            Reference.logger.error("{} has tried to download the file {}", player.getName(), filename);
             throw new CommandException(Names.Command.Download.Message.DOWNLOAD_FAILED);
         }
 
