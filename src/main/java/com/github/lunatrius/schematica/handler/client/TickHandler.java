@@ -7,6 +7,8 @@ import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -36,28 +38,32 @@ public class TickHandler {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            this.minecraft.mcProfiler.startSection("schematica");
-            SchematicWorld schematic = ClientProxy.schematic;
-            if (this.minecraft.thePlayer != null && schematic != null && schematic.isRendering) {
-                this.minecraft.mcProfiler.startSection("printer");
-                SchematicPrinter printer = SchematicPrinter.INSTANCE;
-                if (printer.isEnabled() && printer.isPrinting() && this.ticks-- < 0) {
-                    this.ticks = ConfigurationHandler.placeDelay;
+        if (this.minecraft.isGamePaused() || event.phase != TickEvent.Phase.END) {
+            return;
+        }
 
-                    printer.print();
-                }
+        this.minecraft.mcProfiler.startSection("schematica");
+        final WorldClient world = this.minecraft.theWorld;
+        final EntityPlayerSP player = this.minecraft.thePlayer;
+        final SchematicWorld schematic = ClientProxy.schematic;
+        if (world != null && player != null && schematic != null && schematic.isRendering) {
+            this.minecraft.mcProfiler.startSection("printer");
+            final SchematicPrinter printer = SchematicPrinter.INSTANCE;
+            if (printer.isEnabled() && printer.isPrinting() && this.ticks-- < 0) {
+                this.ticks = ConfigurationHandler.placeDelay;
 
-                this.minecraft.mcProfiler.endSection();
-            }
-
-            if (ClientProxy.isPendingReset) {
-                Schematica.proxy.resetSettings();
-                ClientProxy.isPendingReset = false;
-                Reference.logger.info("Client settings have been reset.");
+                printer.print(world, player);
             }
 
             this.minecraft.mcProfiler.endSection();
         }
+
+        if (ClientProxy.isPendingReset) {
+            Schematica.proxy.resetSettings();
+            ClientProxy.isPendingReset = false;
+            Reference.logger.info("Client settings have been reset.");
+        }
+
+        this.minecraft.mcProfiler.endSection();
     }
 }
