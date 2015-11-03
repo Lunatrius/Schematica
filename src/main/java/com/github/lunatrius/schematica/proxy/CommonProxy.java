@@ -96,6 +96,9 @@ public abstract class CommonProxy {
         this.isLoadEnabled = true;
     }
 
+    public void unloadSchematic() {
+    }
+
     public void copyChunkToSchematic(final ISchematic schematic, final World world, final int chunkX, final int chunkZ, final int minX, final int maxX, final int minY, final int maxY, final int minZ, final int maxZ) {
         final MBlockPos pos = new MBlockPos();
         final MBlockPos localPos = new MBlockPos();
