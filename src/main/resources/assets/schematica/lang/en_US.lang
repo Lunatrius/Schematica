@@ -29,6 +29,7 @@ schematica.gui.moveschematic=Move schematic
 schematica.gui.materials=Materials
 schematica.gui.printer=Printer
 schematica.gui.operations=Operations
+schematica.gui.unload=Unload
 schematica.gui.all=ALL
 schematica.gui.layers=Layers
 schematica.gui.hide=Hide
