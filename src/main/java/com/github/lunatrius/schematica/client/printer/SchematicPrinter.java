@@ -89,10 +89,7 @@ public class SchematicPrinter {
         this.syncBlacklist.clear();
     }
 
-    public boolean print() {
-        final EntityPlayerSP player = this.minecraft.thePlayer;
-        final WorldClient world = this.minecraft.theWorld;
-
+    public boolean print(final WorldClient world, final EntityPlayerSP player) {
         final Vector3i trans = ClientProxy.playerPosition.clone().sub(this.schematic.position.x, this.schematic.position.y, this.schematic.position.z).toVector3i();
         int minX = Math.max(0, trans.x - 3);
         int maxX = Math.min(this.schematic.getWidth() - 1, trans.x + 3);
