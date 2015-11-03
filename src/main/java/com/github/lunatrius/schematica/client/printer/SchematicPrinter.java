@@ -146,7 +146,7 @@ public class SchematicPrinter {
         final int y = pos.getY();
         final int z = pos.getZ();
         if (this.timeout[x][y][z] > 0) {
-            this.timeout[x][y][z] -= ConfigurationHandler.placeDelay;
+            this.timeout[x][y][z]--;
             return false;
         }
 
