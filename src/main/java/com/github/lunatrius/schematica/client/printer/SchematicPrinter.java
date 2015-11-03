@@ -2,7 +2,6 @@ package com.github.lunatrius.schematica.client.printer;
 
 import com.github.lunatrius.core.util.BlockPosHelper;
 import com.github.lunatrius.core.util.MBlockPos;
-import com.github.lunatrius.core.util.vector.Vector3i;
 import com.github.lunatrius.schematica.block.state.BlockStateHelper;
 import com.github.lunatrius.schematica.client.printer.nbtsync.NBTSync;
 import com.github.lunatrius.schematica.client.printer.nbtsync.SyncRegistry;
@@ -90,13 +89,20 @@ public class SchematicPrinter {
     }
 
     public boolean print(final WorldClient world, final EntityPlayerSP player) {
-        final Vector3i trans = ClientProxy.playerPosition.clone().sub(this.schematic.position.x, this.schematic.position.y, this.schematic.position.z).toVector3i();
-        int minX = Math.max(0, trans.x - 3);
-        int maxX = Math.min(this.schematic.getWidth() - 1, trans.x + 3);
-        int minY = Math.max(0, trans.y - 3);
-        int maxY = Math.min(this.schematic.getHeight() - 1, trans.y + 3);
-        int minZ = Math.max(0, trans.z - 3);
-        int maxZ = Math.min(this.schematic.getLength() - 1, trans.z + 3);
+        final double dX = ClientProxy.playerPosition.x - this.schematic.position.x;
+        final double dY = ClientProxy.playerPosition.y - this.schematic.position.y;
+        final double dZ = ClientProxy.playerPosition.z - this.schematic.position.z;
+        final int x = (int) Math.floor(dX);
+        final int y = (int) Math.floor(dY);
+        final int z = (int) Math.floor(dZ);
+        final int range = ConfigurationHandler.placeDistance;
+
+        int minX = Math.max(0, x - range);
+        int maxX = Math.min(this.schematic.getWidth() - 1, x + range);
+        int minY = Math.max(0, y - range);
+        int maxY = Math.min(this.schematic.getHeight() - 1, y + range);
+        int minZ = Math.max(0, z - range);
+        int maxZ = Math.min(this.schematic.getLength() - 1, z + range);
 
         if (minX > maxX || minY > maxY || minZ > maxZ) {
             return false;
@@ -118,7 +124,13 @@ public class SchematicPrinter {
 
         syncSneaking(player, true);
 
+        final double blockReachDistance = this.minecraft.playerController.getBlockReachDistance() - 0.1;
+        final double blockReachDistanceSq = blockReachDistance * blockReachDistance;
         for (final MBlockPos pos : BlockPosHelper.getAllInBoxXZY(minX, minY, minZ, maxX, maxY, maxZ)) {
+            if (pos.distanceSqToCenter(dX, dY, dZ) > blockReachDistanceSq) {
+                continue;
+            }
+
             try {
                 if (placeBlock(world, player, pos)) {
                     return syncSlotAndSneaking(player, slot, isSneaking, true);

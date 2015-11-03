@@ -34,6 +34,8 @@ public final class Names {
         public static final String PLACE_DELAY_DESC = "Delay between placement attempts (in ticks).";
         public static final String TIMEOUT = "timeout";
         public static final String TIMEOUT_DESC = "Timeout before re-trying failed blocks.";
+        public static final String PLACE_DISTANCE = "placeDistance";
+        public static final String PLACE_DISTANCE_DESC = "Maximum placement distance.";
         public static final String PLACE_INSTANTLY = "placeInstantly";
         public static final String PLACE_INSTANTLY_DESC = "Place all blocks that can be placed in one tick.";
         public static final String DESTROY_BLOCKS = "destroyBlocks";
