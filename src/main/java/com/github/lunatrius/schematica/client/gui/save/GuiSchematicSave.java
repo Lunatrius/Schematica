@@ -7,12 +7,14 @@ import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Names;
+import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.BlockPos;
 
+import java.io.File;
 import java.io.IOException;
 
 public class GuiSchematicSave extends GuiScreenBase {
@@ -88,7 +90,7 @@ public class GuiSchematicSave extends GuiScreenBase {
         this.textFields.add(this.tfFilename);
 
         this.btnSave = new GuiButton(id++, this.width - 50, this.height - 30, 40, 20, I18n.format(Names.Gui.Save.SAVE));
-        this.btnSave.enabled = ClientProxy.isRenderingGuide;
+        this.btnSave.enabled = ClientProxy.isRenderingGuide || ClientProxy.schematic != null;
         this.buttonList.add(this.btnSave);
 
         this.tfFilename.setMaxStringLength(1024);
@@ -148,12 +150,16 @@ public class GuiSchematicSave extends GuiScreenBase {
             } else if (guiButton.id == this.btnEnable.id) {
                 ClientProxy.isRenderingGuide = !ClientProxy.isRenderingGuide && Schematica.proxy.isSaveEnabled;
                 this.btnEnable.displayString = ClientProxy.isRenderingGuide ? this.strOn : this.strOff;
-                this.btnSave.enabled = ClientProxy.isRenderingGuide;
+                this.btnSave.enabled = ClientProxy.isRenderingGuide || ClientProxy.schematic != null;
             } else if (guiButton.id == this.btnSave.id) {
                 String path = this.tfFilename.getText() + ".schematic";
-                if (Schematica.proxy.saveSchematic(this.mc.thePlayer, ConfigurationHandler.schematicDirectory, path, this.mc.theWorld, ClientProxy.pointMin, ClientProxy.pointMax)) {
-                    this.filename = "";
-                    this.tfFilename.setText(this.filename);
+                if (ClientProxy.isRenderingGuide) {
+                    if (Schematica.proxy.saveSchematic(this.mc.thePlayer, ConfigurationHandler.schematicDirectory, path, this.mc.theWorld, ClientProxy.pointMin, ClientProxy.pointMax)) {
+                        this.filename = "";
+                        this.tfFilename.setText(this.filename);
+                    }
+                } else {
+                    SchematicFormat.writeToFileAndNotify(new File(ConfigurationHandler.schematicDirectory, path), ClientProxy.schematic.getSchematic(), this.mc.thePlayer);
                 }
             }
         }

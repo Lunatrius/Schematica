@@ -4,7 +4,9 @@ import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.api.event.PostSchematicCaptureEvent;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.io.DataOutputStream;
@@ -71,6 +73,12 @@ public abstract class SchematicFormat {
 
     public static boolean writeToFile(File directory, String filename, ISchematic schematic) {
         return writeToFile(new File(directory, filename), schematic);
+    }
+
+    public static void writeToFileAndNotify(final File file, final ISchematic schematic, final EntityPlayer player) {
+        final boolean success = writeToFile(file, schematic);
+        final String message = success ? Names.Command.Save.Message.SAVE_SUCCESSFUL : Names.Command.Save.Message.SAVE_FAILED;
+        player.addChatMessage(new ChatComponentTranslation(message, file.getName()));
     }
 
     static {

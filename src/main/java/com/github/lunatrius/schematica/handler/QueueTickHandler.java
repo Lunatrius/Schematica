@@ -68,9 +68,7 @@ public class QueueTickHandler {
         if (container.hasNext()) {
             this.queue.offer(container);
         } else {
-            final boolean success = SchematicFormat.writeToFile(container.file, container.schematic);
-            final String message = success ? Names.Command.Save.Message.SAVE_SUCCESSFUL : Names.Command.Save.Message.SAVE_FAILED;
-            container.player.addChatMessage(new ChatComponentTranslation(message, container.file.getName()));
+            SchematicFormat.writeToFileAndNotify(container.file, container.schematic, container.player);
         }
     }
 
