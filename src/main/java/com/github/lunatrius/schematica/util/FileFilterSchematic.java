@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica.util;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Locale;
 
 public class FileFilterSchematic implements FileFilter {
     private final boolean directory;
@@ -16,6 +17,6 @@ public class FileFilterSchematic implements FileFilter {
             return file.isDirectory();
         }
 
-        return file.getName().toLowerCase().endsWith(".schematic");
+        return file.getName().toLowerCase(Locale.ENGLISH).endsWith(".schematic");
     }
 }
