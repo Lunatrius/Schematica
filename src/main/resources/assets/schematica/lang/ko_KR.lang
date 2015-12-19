@@ -28,7 +28,6 @@ schematica.gui.materials=재료
 schematica.gui.materialname=재료
 schematica.gui.materialamount=양
 schematica.gui.printer=프린터
-schematica.gui.unknownblock=알 수 없는 블럭
 
 # gui - config - categories
 schematica.config.category.render=렌더링

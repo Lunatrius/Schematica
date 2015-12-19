@@ -16,6 +16,7 @@ schematica.gui.save=Save
 schematica.gui.moveschematic=Move schematic
 schematica.gui.layers=Layers
 schematica.gui.operations=Operations
+schematica.gui.unload=Unload
 schematica.gui.point.red=Red point
 schematica.gui.point.blue=Blue point
 schematica.gui.saveselection=Save the selection as a schematic

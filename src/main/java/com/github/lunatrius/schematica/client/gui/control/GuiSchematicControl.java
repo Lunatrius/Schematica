@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.client.gui.control;
 import com.github.lunatrius.core.client.gui.GuiNumericField;
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
 import com.github.lunatrius.core.util.vector.Vector3i;
+import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RendererSchematicGlobal;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
@@ -24,6 +25,7 @@ public class GuiSchematicControl extends GuiScreenBase {
     private GuiNumericField numericY = null;
     private GuiNumericField numericZ = null;
 
+    private GuiButton btnUnload = null;
     private GuiButton btnLayerMode = null;
     private GuiNumericField nfLayer = null;
 
@@ -37,6 +39,7 @@ public class GuiSchematicControl extends GuiScreenBase {
 
     private final String strMoveSchematic = I18n.format(Names.Gui.Control.MOVE_SCHEMATIC);
     private final String strOperations = I18n.format(Names.Gui.Control.OPERATIONS);
+    private final String strUnload = I18n.format(Names.Gui.Control.UNLOAD);
     private final String strAll = I18n.format(Names.Gui.Control.MODE_ALL);
     private final String strLayers = I18n.format(Names.Gui.Control.MODE_LAYERS);
     private final String strMaterials = I18n.format(Names.Gui.Control.MATERIALS);
@@ -73,6 +76,9 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.numericZ = new GuiNumericField(this.fontRendererObj, id++, this.centerX - 50, this.centerY + 20, 100, 20);
         this.buttonList.add(this.numericZ);
 
+        this.btnUnload = new GuiButton(id++, this.width - 90, this.height - 200, 80, 20, this.strUnload);
+        this.buttonList.add(this.btnUnload);
+
         this.btnLayerMode = new GuiButton(id++, this.width - 90, this.height - 150 - 25, 80, 20, this.schematic != null && this.schematic.isRenderingLayer ? this.strLayers : this.strAll);
         this.buttonList.add(this.btnLayerMode);
 
@@ -101,6 +107,7 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.numericY.setEnabled(this.schematic != null);
         this.numericZ.setEnabled(this.schematic != null);
 
+        this.btnUnload.enabled = this.schematic != null;
         this.btnLayerMode.enabled = this.schematic != null;
         this.nfLayer.setEnabled(this.schematic != null && this.schematic.isRenderingLayer);
 
@@ -154,6 +161,9 @@ public class GuiSchematicControl extends GuiScreenBase {
             } else if (guiButton.id == this.numericZ.id) {
                 this.schematic.position.z = this.numericZ.getValue();
                 RendererSchematicGlobal.INSTANCE.refresh();
+            } else if (guiButton.id == this.btnUnload.id) {
+                Schematica.proxy.unloadSchematic();
+                this.mc.displayGuiScreen(this.parentScreen);
             } else if (guiButton.id == this.btnLayerMode.id) {
                 this.schematic.isRenderingLayer = !this.schematic.isRenderingLayer;
                 this.btnLayerMode.displayString = this.schematic.isRenderingLayer ? this.strLayers : this.strAll;

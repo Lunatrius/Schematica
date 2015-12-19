@@ -199,11 +199,7 @@ public class ClientProxy extends CommonProxy {
         ChatEventHandler.INSTANCE.chatLines = 0;
 
         SchematicPrinter.INSTANCE.setEnabled(true);
-        SchematicPrinter.INSTANCE.setSchematic(null);
-
-        RendererSchematicGlobal.INSTANCE.destroyRendererSchematicChunks();
-
-        schematic = null;
+        unloadSchematic();
 
         playerPosition.set(0, 0, 0);
         orientation = ForgeDirection.UNKNOWN;
@@ -212,6 +208,13 @@ public class ClientProxy extends CommonProxy {
         pointA.set(0, 0, 0);
         pointB.set(0, 0, 0);
         updatePoints();
+    }
+
+    @Override
+    public void unloadSchematic() {
+        schematic = null;
+        RendererSchematicGlobal.INSTANCE.destroyRendererSchematicChunks();
+        SchematicPrinter.INSTANCE.setSchematic(null);
     }
 
     @Override

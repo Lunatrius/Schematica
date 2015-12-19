@@ -26,7 +26,6 @@ schematica.gui.materials=Materialien
 schematica.gui.materialname=Material
 schematica.gui.materialamount=Menge
 schematica.gui.printer=Drucker
-schematica.gui.unknownblock=Unbekannter Block
 
 # gui - config - categories
 schematica.config.category.render.tooltip=Render Einstellungen
