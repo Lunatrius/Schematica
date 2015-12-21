@@ -1,7 +1,6 @@
 package com.github.lunatrius.schematica.proxy;
 
 import com.github.lunatrius.core.util.MBlockPos;
-import com.github.lunatrius.core.version.VersionChecker;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.command.CommandSchematicaList;
 import com.github.lunatrius.schematica.command.CommandSchematicaRemove;
@@ -25,8 +24,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
@@ -39,24 +39,24 @@ public abstract class CommonProxy {
     public boolean isSaveEnabled = true;
     public boolean isLoadEnabled = true;
 
-    public void preInit(FMLPreInitializationEvent event) {
+    public void preInit(final FMLPreInitializationEvent event) {
         Reference.logger = event.getModLog();
         ConfigurationHandler.init(event.getSuggestedConfigurationFile());
 
-        VersionChecker.registerMod(event.getModMetadata(), Reference.FORGE);
+        FMLInterModComms.sendMessage("LunatriusCore", "checkUpdate", Reference.FORGE);
     }
 
-    public void init(FMLInitializationEvent event) {
+    public void init(final FMLInitializationEvent event) {
         PacketHandler.init();
 
-        FMLCommonHandler.instance().bus().register(QueueTickHandler.INSTANCE);
-        FMLCommonHandler.instance().bus().register(DownloadHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(QueueTickHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(DownloadHandler.INSTANCE);
     }
 
-    public void postInit(FMLPostInitializationEvent event) {
+    public void postInit(final FMLPostInitializationEvent event) {
     }
 
-    public void serverStarting(FMLServerStartingEvent event) {
+    public void serverStarting(final FMLServerStartingEvent event) {
         event.registerServerCommand(new CommandSchematicaSave());
         event.registerServerCommand(new CommandSchematicaList());
         event.registerServerCommand(new CommandSchematicaRemove());
@@ -84,7 +84,7 @@ public abstract class CommonProxy {
 
         try {
             return subDirectory.getCanonicalFile();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
 
@@ -131,13 +131,13 @@ public abstract class CommonProxy {
                                 try {
                                     final TileEntity reloadedTileEntity = NBTHelper.reloadTileEntity(tileEntity, minX, minY, minZ);
                                     schematic.setTileEntity(localPos, reloadedTileEntity);
-                                } catch (NBTConversionException nce) {
+                                } catch (final NBTConversionException nce) {
                                     Reference.logger.error("Error while trying to save tile entity '{}'!", tileEntity, nce);
                                     schematic.setBlockState(localPos, Blocks.bedrock.getDefaultState());
                                 }
                             }
                         }
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         Reference.logger.error("Something went wrong!", e);
                     }
                 }
@@ -150,27 +150,27 @@ public abstract class CommonProxy {
         final int maxZ1 = localMaxZ | (chunkZ << 4);
         final AxisAlignedBB bb = AxisAlignedBB.fromBounds(minX1, minY, minZ1, maxX1 + 1, maxY + 1, maxZ1 + 1);
         final List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, bb);
-        for (Entity entity : entities) {
+        for (final Entity entity : entities) {
             try {
                 final Entity reloadedEntity = NBTHelper.reloadEntity(entity, minX, minY, minZ);
                 schematic.addEntity(reloadedEntity);
-            } catch (NBTConversionException nce) {
+            } catch (final NBTConversionException nce) {
                 Reference.logger.error("Error while trying to save entity '{}'!", entity, nce);
             }
         }
     }
 
-    public boolean saveSchematic(EntityPlayer player, File directory, String filename, World world, BlockPos from, BlockPos to) {
+    public boolean saveSchematic(final EntityPlayer player, final File directory, String filename, final World world, final BlockPos from, final BlockPos to) {
         try {
             String iconName = "";
 
             try {
-                String[] parts = filename.split(";");
+                final String[] parts = filename.split(";");
                 if (parts.length == 2) {
                     iconName = parts[0];
                     filename = parts[1];
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 Reference.logger.error("Failed to parse icon data!", e);
             }
 
@@ -190,7 +190,7 @@ public abstract class CommonProxy {
             QueueTickHandler.INSTANCE.queueSchematic(container);
 
             return true;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Reference.logger.error("Failed to save schematic!", e);
         }
         return false;

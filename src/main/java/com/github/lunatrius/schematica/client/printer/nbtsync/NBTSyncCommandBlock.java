@@ -20,12 +20,12 @@ public class NBTSyncCommandBlock extends NBTSync {
             final CommandBlockLogic commandBlockLogic = ((TileEntityCommandBlock) tileEntity).getCommandBlockLogic();
             final CommandBlockLogic mcCommandBlockLogic = ((TileEntityCommandBlock) mcTileEntity).getCommandBlockLogic();
 
-            if (!commandBlockLogic.getCustomName().equals(mcCommandBlockLogic.getCustomName())) {
+            if (!commandBlockLogic.getCommand().equals(mcCommandBlockLogic.getCommand())) {
                 final PacketBuffer packetBuffer = new PacketBuffer(Unpooled.buffer());
 
                 packetBuffer.writeByte(mcCommandBlockLogic.func_145751_f());
                 mcCommandBlockLogic.func_145757_a(packetBuffer);
-                packetBuffer.writeString(commandBlockLogic.getCustomName());
+                packetBuffer.writeString(commandBlockLogic.getCommand());
                 packetBuffer.writeBoolean(mcCommandBlockLogic.shouldTrackOutput());
 
                 return sendPacket(new C17PacketCustomPayload("MC|AdvCdm", packetBuffer));

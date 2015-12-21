@@ -28,12 +28,12 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getCommandUsage(final ICommandSender sender) {
         return Names.Command.Remove.Message.USAGE;
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] arguments) throws CommandException{
+    public void processCommand(final ICommandSender sender, final String[] arguments) throws CommandException{
         if (arguments.length < 1) {
             throw new WrongUsageException(getCommandUsage(sender));
         }
@@ -49,14 +49,14 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
 
         if (arguments.length > 1) {
             //check if the last parameter is a hash, which constitutes a confirmation.
-            String potentialNameHash = arguments[arguments.length - 1];
+            final String potentialNameHash = arguments[arguments.length - 1];
             if (potentialNameHash.length() == 32) {
                 //We probably have a match.
-                String[] a = Arrays.copyOfRange(arguments, 0, arguments.length - 1);
+                final String[] a = Arrays.copyOfRange(arguments, 0, arguments.length - 1);
                 //The name then should be everything except the last element
                 name = Strings.join(a, " ");
 
-                String hash = Hashing.md5().hashString(name, Charsets.UTF_8).toString();
+                final String hash = Hashing.md5().hashString(name, Charsets.UTF_8).toString();
 
                 if (potentialNameHash.equals(hash)) {
                     delete = true;
@@ -64,11 +64,11 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
             }
         }
 
-        String filename = String.format("%s.schematic", name);
-        File schematicDirectory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
-        File file = new File(schematicDirectory, filename);
+        final String filename = String.format("%s.schematic", name);
+        final File schematicDirectory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
+        final File file = new File(schematicDirectory, filename);
         if (!FileUtils.contains(schematicDirectory, file)) {
-            Reference.logger.error("{} has tried to download the file {}", player.getCommandSenderName(), filename);
+            Reference.logger.error("{} has tried to download the file {}", player.getName(), filename);
             throw new CommandException(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND);
         }
 
@@ -80,8 +80,8 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
                     throw new CommandException(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND);
                 }
             } else {
-                String hash = Hashing.md5().hashString(name, Charsets.UTF_8).toString();
-                String confirmCommand = String.format("/%s %s %s", Names.Command.Remove.NAME, name, hash);
+                final String hash = Hashing.md5().hashString(name, Charsets.UTF_8).toString();
+                final String confirmCommand = String.format("/%s %s %s", Names.Command.Remove.NAME, name, hash);
                 final IChatComponent chatComponent = new ChatComponentTranslation(Names.Command.Remove.Message.ARE_YOU_SURE_START, name)
                         .appendSibling(new ChatComponentText(" ["))
                         .appendSibling(

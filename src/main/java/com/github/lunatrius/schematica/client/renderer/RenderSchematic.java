@@ -55,8 +55,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.util.vector.Vector3f;
 
-import javax.vecmath.Vector3f;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -262,21 +262,21 @@ public class RenderSchematic extends RenderGlobal {
         tessellator.setDelta(ConfigurationHandler.blockDelta);
 
         if (ClientProxy.isRenderingGuide) {
-            tessellator.startQuads();
-            tessellator.drawCuboid(ClientProxy.pointA, GeometryMasks.Quad.ALL, 0xBF0000, 0x3F);
-            tessellator.drawCuboid(ClientProxy.pointB, GeometryMasks.Quad.ALL, 0x0000BF, 0x3F);
+            tessellator.beginQuads();
+            tessellator.drawCuboid(ClientProxy.pointA, GeometryMasks.Quad.ALL, 0x3FBF0000);
+            tessellator.drawCuboid(ClientProxy.pointB, GeometryMasks.Quad.ALL, 0x3F0000BF);
             tessellator.draw();
         }
 
-        tessellator.startLines();
+        tessellator.beginLines();
         if (ClientProxy.isRenderingGuide) {
-            tessellator.drawCuboid(ClientProxy.pointA, GeometryMasks.Line.ALL, 0xBF0000, 0x3F);
-            tessellator.drawCuboid(ClientProxy.pointB, GeometryMasks.Line.ALL, 0x0000BF, 0x3F);
-            tessellator.drawCuboid(ClientProxy.pointMin, ClientProxy.pointMax, GeometryMasks.Line.ALL, 0x00BF00, 0x7F);
+            tessellator.drawCuboid(ClientProxy.pointA, GeometryMasks.Line.ALL, 0x3FBF0000);
+            tessellator.drawCuboid(ClientProxy.pointB, GeometryMasks.Line.ALL, 0x3F0000BF);
+            tessellator.drawCuboid(ClientProxy.pointMin, ClientProxy.pointMax, GeometryMasks.Line.ALL, 0x7F00BF00);
         }
         if (isRenderingSchematic) {
             this.tmp.set(schematic.position.x + schematic.getWidth() - 1, schematic.position.y + schematic.getHeight() - 1, schematic.position.z + schematic.getLength() - 1);
-            tessellator.drawCuboid(schematic.position, this.tmp, GeometryMasks.Line.ALL, 0xBF00BF, 0x7F);
+            tessellator.drawCuboid(schematic.position, this.tmp, GeometryMasks.Line.ALL, 0x7FBF00BF);
         }
         tessellator.draw();
 
@@ -444,7 +444,7 @@ public class RenderSchematic extends RenderGlobal {
         RenderHelper.enableStandardItemLighting();
 
         for (final ContainerLocalRenderInformation renderInfo : this.renderInfos) {
-            for (final TileEntity tileEntity : (List<TileEntity>) renderInfo.renderChunk.getCompiledChunk().getTileEntities()) {
+            for (final TileEntity tileEntity : renderInfo.renderChunk.getCompiledChunk().getTileEntities()) {
                 final AxisAlignedBB renderBB = tileEntity.getRenderBoundingBox();
 
                 this.countTileEntitiesTotal++;
@@ -616,13 +616,13 @@ public class RenderSchematic extends RenderGlobal {
             final RenderChunk renderChunk = renderInfo.renderChunk;
             final RenderOverlay renderOverlay = renderInfo.renderOverlay;
 
-            if (renderChunk.isNeedsUpdate() || renderChunk.isCompileTaskPending() || set.contains(renderChunk)) {
+            if (renderChunk.isNeedsUpdate() || set.contains(renderChunk)) {
                 this.displayListEntitiesDirty = true;
 
                 this.chunksToUpdate.add(renderChunk);
             }
 
-            if (renderOverlay.isNeedsUpdate() || renderOverlay.isCompileTaskPending() || set1.contains(renderOverlay)) {
+            if (renderOverlay.isNeedsUpdate() || set1.contains(renderOverlay)) {
                 this.displayListEntitiesDirty = true;
 
                 this.overlaysToUpdate.add(renderOverlay);
@@ -638,7 +638,7 @@ public class RenderSchematic extends RenderGlobal {
         final VisGraph visgraph = new VisGraph();
         final BlockPos posChunk = new BlockPos(pos.getX() & ~0xF, pos.getY() & ~0xF, pos.getZ() & ~0xF);
 
-        for (final BlockPos.MutableBlockPos mutableBlockPos : (Iterable<BlockPos.MutableBlockPos>) BlockPos.getAllInBoxMutable(posChunk, posChunk.add(15, 15, 15))) {
+        for (final BlockPos.MutableBlockPos mutableBlockPos : BlockPos.getAllInBoxMutable(posChunk, posChunk.add(15, 15, 15))) {
             if (this.world.getBlockState(mutableBlockPos).getBlock().isOpaqueCube()) {
                 visgraph.func_178606_a(mutableBlockPos);
             }
@@ -860,7 +860,7 @@ public class RenderSchematic extends RenderGlobal {
     public void broadcastSound(final int p_180440_1_, final BlockPos pos, final int p_180440_3_) {}
 
     @Override
-    public void playAusSFX(final EntityPlayer player, final int p_180439_2_, final BlockPos pos, final int p_180439_4_) {}
+    public void playAuxSFX(final EntityPlayer player, final int sfxType, final BlockPos blockPosIn, final int p_180439_4_) {}
 
     @Override
     public void sendBlockBreakProgress(final int breakerId, final BlockPos pos, final int progress) {}

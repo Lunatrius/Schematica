@@ -82,14 +82,14 @@ public class PlacementRegistry {
         final IValidPlayerFacing playerFacingLever = new IValidPlayerFacing() {
             @Override
             public boolean isValid(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {
-                final BlockLever.EnumOrientation value = (BlockLever.EnumOrientation) blockState.getValue(BlockLever.FACING);
+                final BlockLever.EnumOrientation value = blockState.getValue(BlockLever.FACING);
                 return !value.getFacing().getAxis().isVertical() || BlockLever.EnumOrientation.forFacings(value.getFacing(), player.getHorizontalFacing()) == value;
             }
         };
         final IValidPlayerFacing playerFacingStandingSign = new IValidPlayerFacing() {
             @Override
             public boolean isValid(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {
-                final int value = (Integer) blockState.getValue(BlockStandingSign.ROTATION);
+                final int value = blockState.getValue(BlockStandingSign.ROTATION);
                 final int facing = MathHelper.floor_double((player.rotationYaw + 180.0) * 16.0 / 360.0 + 0.5) & 15;
                 return value == facing;
             }
@@ -105,7 +105,7 @@ public class PlacementRegistry {
             @Override
             public float getOffset(final IBlockState blockState) {
                 if (!((BlockSlab) blockState.getBlock()).isDouble()) {
-                    final BlockSlab.EnumBlockHalf half = (BlockSlab.EnumBlockHalf) blockState.getValue(BlockSlab.HALF);
+                    final BlockSlab.EnumBlockHalf half = blockState.getValue(BlockSlab.HALF);
                     return half == BlockSlab.EnumBlockHalf.TOP ? 1 : 0;
                 }
 
@@ -115,14 +115,14 @@ public class PlacementRegistry {
         final IOffset offsetStairs = new IOffset() {
             @Override
             public float getOffset(final IBlockState blockState) {
-                final BlockStairs.EnumHalf half = (BlockStairs.EnumHalf) blockState.getValue(BlockStairs.HALF);
+                final BlockStairs.EnumHalf half = blockState.getValue(BlockStairs.HALF);
                 return half == BlockStairs.EnumHalf.TOP ? 1 : 0;
             }
         };
         final IOffset offsetTrapDoor = new IOffset() {
             @Override
             public float getOffset(final IBlockState blockState) {
-                final BlockTrapDoor.DoorHalf half = (BlockTrapDoor.DoorHalf) blockState.getValue(BlockTrapDoor.HALF);
+                final BlockTrapDoor.DoorHalf half = blockState.getValue(BlockTrapDoor.HALF);
                 return half == BlockTrapDoor.DoorHalf.TOP ? 1 : 0;
             }
         };
@@ -132,7 +132,7 @@ public class PlacementRegistry {
             public List<EnumFacing> getValidBlockFacings(final List<EnumFacing> solidSides, final IBlockState blockState) {
                 final List<EnumFacing> list = new ArrayList<EnumFacing>();
 
-                final BlockLog.EnumAxis axis = (BlockLog.EnumAxis) blockState.getValue(BlockLog.LOG_AXIS);
+                final BlockLog.EnumAxis axis = blockState.getValue(BlockLog.LOG_AXIS);
                 for (final EnumFacing side : solidSides) {
                     if (axis != BlockLog.EnumAxis.fromFacingAxis(side.getAxis())) {
                         continue;
@@ -149,7 +149,7 @@ public class PlacementRegistry {
             public List<EnumFacing> getValidBlockFacings(final List<EnumFacing> solidSides, final IBlockState blockState) {
                 final List<EnumFacing> list = new ArrayList<EnumFacing>();
 
-                final EnumFacing.Axis axis = (EnumFacing.Axis) blockState.getValue(BlockRotatedPillar.AXIS);
+                final EnumFacing.Axis axis = blockState.getValue(BlockRotatedPillar.AXIS);
                 for (final EnumFacing side : solidSides) {
                     if (axis != side.getAxis()) {
                         continue;
@@ -163,6 +163,7 @@ public class PlacementRegistry {
         };
         final IValidBlockFacing blockFacingOpposite = new IValidBlockFacing() {
             @Override
+            @SuppressWarnings({ "rawtypes", "unchecked" })
             public List<EnumFacing> getValidBlockFacings(final List<EnumFacing> solidSides, final IBlockState blockState) {
                 final List<EnumFacing> list = new ArrayList<EnumFacing>();
 
@@ -183,6 +184,7 @@ public class PlacementRegistry {
         };
         final IValidBlockFacing blockFacingSame = new IValidBlockFacing() {
             @Override
+            @SuppressWarnings({ "rawtypes", "unchecked" })
             public List<EnumFacing> getValidBlockFacings(final List<EnumFacing> solidSides, final IBlockState blockState) {
                 final List<EnumFacing> list = new ArrayList<EnumFacing>();
 
@@ -206,7 +208,7 @@ public class PlacementRegistry {
             public List<EnumFacing> getValidBlockFacings(final List<EnumFacing> solidSides, final IBlockState blockState) {
                 final List<EnumFacing> list = new ArrayList<EnumFacing>();
 
-                final EnumFacing facing = (EnumFacing) blockState.getValue(BlockHopper.FACING);
+                final EnumFacing facing = blockState.getValue(BlockHopper.FACING);
                 for (final EnumFacing side : solidSides) {
                     if (facing != side) {
                         continue;
@@ -223,7 +225,7 @@ public class PlacementRegistry {
             public List<EnumFacing> getValidBlockFacings(final List<EnumFacing> solidSides, final IBlockState blockState) {
                 final List<EnumFacing> list = new ArrayList<EnumFacing>();
 
-                final BlockLever.EnumOrientation facing = (BlockLever.EnumOrientation) blockState.getValue(BlockLever.FACING);
+                final BlockLever.EnumOrientation facing = blockState.getValue(BlockLever.FACING);
                 for (final EnumFacing side : solidSides) {
                     if (facing.getFacing().getOpposite() != side) {
                         continue;
@@ -240,7 +242,7 @@ public class PlacementRegistry {
             public List<EnumFacing> getValidBlockFacings(final List<EnumFacing> solidSides, final IBlockState blockState) {
                 final List<EnumFacing> list = new ArrayList<EnumFacing>();
 
-                final BlockQuartz.EnumType variant = (BlockQuartz.EnumType) blockState.getValue(BlockQuartz.VARIANT);
+                final BlockQuartz.EnumType variant = blockState.getValue(BlockQuartz.VARIANT);
                 for (final EnumFacing side : solidSides) {
                     if (variant == BlockQuartz.EnumType.LINES_X && side.getAxis() != EnumFacing.Axis.X) {
                         continue;

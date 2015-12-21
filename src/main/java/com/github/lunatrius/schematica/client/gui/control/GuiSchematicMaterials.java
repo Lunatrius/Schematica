@@ -37,7 +37,7 @@ public class GuiSchematicMaterials extends GuiScreenBase {
 
     protected final List<BlockList.WrappedItemStack> blockList;
 
-    public GuiSchematicMaterials(GuiScreen guiScreen) {
+    public GuiSchematicMaterials(final GuiScreen guiScreen) {
         super(guiScreen);
         final Minecraft minecraft = Minecraft.getMinecraft();
         final SchematicWorld schematic = ClientProxy.schematic;
@@ -68,7 +68,7 @@ public class GuiSchematicMaterials extends GuiScreenBase {
     }
 
     @Override
-    protected void actionPerformed(GuiButton guiButton) {
+    protected void actionPerformed(final GuiButton guiButton) {
         if (guiButton.enabled) {
             if (guiButton.id == this.btnSort.id) {
                 this.sortType = this.sortType.next();
@@ -89,12 +89,12 @@ public class GuiSchematicMaterials extends GuiScreenBase {
     }
 
     @Override
-    public void renderToolTip(ItemStack stack, int x, int y) {
+    public void renderToolTip(final ItemStack stack, final int x, final int y) {
         super.renderToolTip(stack, x, y);
     }
 
     @Override
-    public void drawScreen(int x, int y, float partialTicks) {
+    public void drawScreen(final int x, final int y, final float partialTicks) {
         this.guiSchematicMaterialsSlot.drawScreen(x, y, partialTicks);
 
         drawString(this.fontRendererObj, this.strMaterialName, this.width / 2 - 108, 4, 0x00FFFFFF);

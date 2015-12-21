@@ -10,7 +10,7 @@ public class SchematicTransfer {
 
         State() { }
 
-        State(boolean waiting) {
+        State(final boolean waiting) {
             this.waiting = waiting;
         }
 
@@ -34,7 +34,7 @@ public class SchematicTransfer {
     public int baseY = 0;
     public int baseZ = 0;
 
-    public SchematicTransfer(final ISchematic schematic, String name) {
+    public SchematicTransfer(final ISchematic schematic, final String name) {
         this.schematic = schematic;
         this.name = name;
 
@@ -67,7 +67,7 @@ public class SchematicTransfer {
         return true;
     }
 
-    public void setState(State state) {
+    public void setState(final State state) {
         this.state = state;
         this.timeout = 0;
         this.retries = 0;

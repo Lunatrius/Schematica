@@ -32,7 +32,7 @@ public class SchematicContainer {
     public final int chunkCount;
     public int processedChunks;
 
-    public SchematicContainer(ISchematic schematic, EntityPlayer player, World world, File file, int minX, int maxX, int minY, int maxY, int minZ, int maxZ) {
+    public SchematicContainer(final ISchematic schematic, final EntityPlayer player, final World world, final File file, final int minX, final int maxX, final int minY, final int maxY, final int minZ, final int maxZ) {
         this.schematic = schematic;
         this.player = player;
         this.world = world;

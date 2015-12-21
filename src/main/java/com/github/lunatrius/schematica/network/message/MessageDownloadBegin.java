@@ -19,7 +19,7 @@ public class MessageDownloadBegin implements IMessage, IMessageHandler<MessageDo
     public MessageDownloadBegin() {
     }
 
-    public MessageDownloadBegin(ISchematic schematic) {
+    public MessageDownloadBegin(final ISchematic schematic) {
         this.icon = schematic.getIcon();
         this.width = schematic.getWidth();
         this.height = schematic.getHeight();
@@ -27,7 +27,7 @@ public class MessageDownloadBegin implements IMessage, IMessageHandler<MessageDo
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes(final ByteBuf buf) {
         this.icon = ByteBufUtils.readItemStack(buf);
         this.width = buf.readShort();
         this.height = buf.readShort();
@@ -35,7 +35,7 @@ public class MessageDownloadBegin implements IMessage, IMessageHandler<MessageDo
     }
 
     @Override
-    public void toBytes(ByteBuf buf) {
+    public void toBytes(final ByteBuf buf) {
         ByteBufUtils.writeItemStack(buf, this.icon);
         buf.writeShort(this.width);
         buf.writeShort(this.height);
@@ -43,7 +43,7 @@ public class MessageDownloadBegin implements IMessage, IMessageHandler<MessageDo
     }
 
     @Override
-    public IMessage onMessage(MessageDownloadBegin message, MessageContext ctx) {
+    public IMessage onMessage(final MessageDownloadBegin message, final MessageContext ctx) {
         DownloadHandler.INSTANCE.schematic = new Schematic(message.icon, message.width, message.height, message.length);
 
         return new MessageDownloadBeginAck();

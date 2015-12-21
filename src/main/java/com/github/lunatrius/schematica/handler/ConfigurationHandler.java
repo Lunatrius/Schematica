@@ -5,10 +5,12 @@ import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
 
 import java.io.File;
@@ -21,6 +23,7 @@ import java.util.Set;
 
 public class ConfigurationHandler {
     public static final ConfigurationHandler INSTANCE = new ConfigurationHandler();
+    public static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
 
     public static final String VERSION = "1";
 
@@ -46,7 +49,7 @@ public class ConfigurationHandler {
     };
     public static final String SCHEMATIC_DIRECTORY_STR = "schematics";
     public static final File SCHEMATIC_DIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATIC_DIRECTORY_STR);
-    public static final String[] EXTRA_AIR_BLOCKS_DEFAULT = { };
+    public static final String[] EXTRA_AIR_BLOCKS_DEFAULT = {};
     public static final String SORT_TYPE_DEFAULT = "";
     public static final boolean PRINTER_ENABLED_DEFAULT = true;
     public static final boolean SAVE_ENABLED_DEFAULT = true;
@@ -104,7 +107,7 @@ public class ConfigurationHandler {
 
     private static final Set<Block> extraAirBlockList = new HashSet<Block>();
 
-    public static void init(File configFile) {
+    public static void init(final File configFile) {
         if (configuration == null) {
             configuration = new Configuration(configFile, VERSION);
             loadConfiguration();
@@ -220,7 +223,7 @@ public class ConfigurationHandler {
             } else {
                 propSchematicDirectory.set(schematicPath.replace("\\", "/"));
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             Reference.logger.warn("Could not canonize path!", e);
         }
 
@@ -233,8 +236,8 @@ public class ConfigurationHandler {
         sortType = propSortType.getString();
 
         extraAirBlockList.clear();
-        for (String name : extraAirBlocks) {
-            final Block block = GameData.getBlockRegistry().getObject(name);
+        for (final String name : extraAirBlocks) {
+            final Block block = BLOCK_REGISTRY.getObject(new ResourceLocation(name));
             if (block != Blocks.air) {
                 extraAirBlockList.add(block);
             }
@@ -262,7 +265,7 @@ public class ConfigurationHandler {
     private ConfigurationHandler() {}
 
     @SubscribeEvent
-    public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
+    public void onConfigurationChangedEvent(final ConfigChangedEvent.OnConfigChangedEvent event) {
         if (event.modID.equalsIgnoreCase(Reference.MODID)) {
             loadConfiguration();
         }

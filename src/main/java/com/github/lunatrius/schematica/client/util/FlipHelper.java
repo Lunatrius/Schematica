@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.client.util;
 import com.github.lunatrius.core.util.BlockPosHelper;
 import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.schematica.api.ISchematic;
+import com.github.lunatrius.schematica.block.state.BlockStateHelper;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.storage.Schematic;
@@ -20,7 +21,6 @@ import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
 
 import java.util.List;
-import java.util.Set;
 
 public class FlipHelper {
     public static final FlipHelper INSTANCE = new FlipHelper();
@@ -52,7 +52,7 @@ public class FlipHelper {
         return false;
     }
 
-    public Schematic flip(final ISchematic schematic, final EnumFacing axis, boolean forced) throws FlipException {
+    public Schematic flip(final ISchematic schematic, final EnumFacing axis, final boolean forced) throws FlipException {
         final Vec3i dimensionsFlipped = new Vec3i(schematic.getWidth(), schematic.getHeight(), schematic.getLength());
         final Schematic schematicFlipped = new Schematic(schematic.getIcon(), dimensionsFlipped.getX(), dimensionsFlipped.getY(), dimensionsFlipped.getZ());
         final MBlockPos tmp = new MBlockPos();
@@ -91,8 +91,9 @@ public class FlipHelper {
         throw new FlipException("'%s' is not a valid axis!", axis.getName());
     }
 
-    private IBlockState flipBlock(final IBlockState blockState, final EnumFacing axis, boolean forced) throws FlipException {
-        final IProperty propertyFacing = getProperty(blockState, "facing");
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private IBlockState flipBlock(final IBlockState blockState, final EnumFacing axis, final boolean forced) throws FlipException {
+        final IProperty propertyFacing = BlockStateHelper.getProperty(blockState, "facing");
         if (propertyFacing instanceof PropertyDirection) {
             final Comparable value = blockState.getValue(propertyFacing);
             if (value instanceof EnumFacing) {
@@ -118,16 +119,6 @@ public class FlipHelper {
         }
 
         return blockState;
-    }
-
-    private IProperty getProperty(final IBlockState blockState, final String name) {
-        for (final IProperty prop : (Set<IProperty>) blockState.getProperties().keySet()) {
-            if (prop.getName().equals(name)) {
-                return prop;
-            }
-        }
-
-        return null;
     }
 
     private static EnumFacing getFlippedFacing(final EnumFacing axis, final EnumFacing side) {
@@ -157,7 +148,7 @@ public class FlipHelper {
     }
 
     public static class FlipException extends Exception {
-        public FlipException(String message, Object... args) {
+        public FlipException(final String message, final Object... args) {
             super(String.format(message, args));
         }
     }

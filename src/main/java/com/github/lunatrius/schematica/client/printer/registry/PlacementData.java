@@ -97,8 +97,8 @@ public class PlacementData {
     public List<EnumFacing> getValidBlockFacings(final List<EnumFacing> solidSides, final IBlockState blockState) {
         final List<EnumFacing> list = this.validBlockFacing != null ? this.validBlockFacing.getValidBlockFacings(solidSides, blockState) : new ArrayList<EnumFacing>(solidSides);
 
-        for (Iterator<EnumFacing> iterator = list.iterator(); iterator.hasNext(); ) {
-            EnumFacing facing = iterator.next();
+        for (final Iterator<EnumFacing> iterator = list.iterator(); iterator.hasNext(); ) {
+            final EnumFacing facing = iterator.next();
             if (this.offsetY != null) {
                 final float offset = this.offsetY.getOffset(blockState);
                 if (offset < 0.5 && facing == EnumFacing.UP) {

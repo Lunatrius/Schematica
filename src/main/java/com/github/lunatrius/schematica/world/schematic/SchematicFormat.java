@@ -24,7 +24,7 @@ public abstract class SchematicFormat {
 
     public abstract boolean writeToNBT(NBTTagCompound tagCompound, ISchematic schematic);
 
-    public static ISchematic readFromFile(File file) {
+    public static ISchematic readFromFile(final File file) {
         try {
             final NBTTagCompound tagCompound = SchematicUtil.readTagCompoundFromFile(file);
             final String format = tagCompound.getString(Names.NBT.MATERIALS);
@@ -35,27 +35,27 @@ public abstract class SchematicFormat {
             }
 
             return schematicFormat.readFromNBT(tagCompound);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             Reference.logger.error("Failed to read schematic!", ex);
         }
 
         return null;
     }
 
-    public static ISchematic readFromFile(File directory, String filename) {
+    public static ISchematic readFromFile(final File directory, final String filename) {
         return readFromFile(new File(directory, filename));
     }
 
-    public static boolean writeToFile(File file, ISchematic schematic) {
+    public static boolean writeToFile(final File file, final ISchematic schematic) {
         try {
             final PostSchematicCaptureEvent event = new PostSchematicCaptureEvent(schematic);
             MinecraftForge.EVENT_BUS.post(event);
 
-            NBTTagCompound tagCompound = new NBTTagCompound();
+            final NBTTagCompound tagCompound = new NBTTagCompound();
 
             FORMATS.get(FORMAT_DEFAULT).writeToNBT(tagCompound, schematic);
 
-            DataOutputStream dataOutputStream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
+            final DataOutputStream dataOutputStream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 
             try {
                 NBTTagCompound.writeEntry(Names.NBT.ROOT, tagCompound, dataOutputStream);
@@ -64,14 +64,14 @@ public abstract class SchematicFormat {
             }
 
             return true;
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             Reference.logger.error("Failed to write schematic!", ex);
         }
 
         return false;
     }
 
-    public static boolean writeToFile(File directory, String filename, ISchematic schematic) {
+    public static boolean writeToFile(final File directory, final String filename, final ISchematic schematic) {
         return writeToFile(new File(directory, filename), schematic);
     }
 
@@ -82,7 +82,8 @@ public abstract class SchematicFormat {
     }
 
     static {
-        FORMATS.put(Names.NBT.FORMAT_CLASSIC, new SchematicClassic());
+        // TODO?
+        // FORMATS.put(Names.NBT.FORMAT_CLASSIC, new SchematicClassic());
         FORMATS.put(Names.NBT.FORMAT_ALPHA, new SchematicAlpha());
 
         FORMAT_DEFAULT = Names.NBT.FORMAT_ALPHA;

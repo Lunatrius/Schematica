@@ -17,28 +17,28 @@ public class MessageCapabilities implements IMessage, IMessageHandler<MessageCap
         this(false, false, false);
     }
 
-    public MessageCapabilities(boolean isPrinterEnabled, boolean isSaveEnabled, boolean isLoadEnabled) {
+    public MessageCapabilities(final boolean isPrinterEnabled, final boolean isSaveEnabled, final boolean isLoadEnabled) {
         this.isPrinterEnabled = isPrinterEnabled;
         this.isSaveEnabled = isSaveEnabled;
         this.isLoadEnabled = isLoadEnabled;
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes(final ByteBuf buf) {
         this.isPrinterEnabled = buf.readBoolean();
         this.isSaveEnabled = buf.readBoolean();
         this.isLoadEnabled = buf.readBoolean();
     }
 
     @Override
-    public void toBytes(ByteBuf buf) {
+    public void toBytes(final ByteBuf buf) {
         buf.writeBoolean(this.isPrinterEnabled);
         buf.writeBoolean(this.isSaveEnabled);
         buf.writeBoolean(this.isLoadEnabled);
     }
 
     @Override
-    public IMessage onMessage(MessageCapabilities message, MessageContext ctx) {
+    public IMessage onMessage(final MessageCapabilities message, final MessageContext ctx) {
         SchematicPrinter.INSTANCE.setEnabled(message.isPrinterEnabled);
         Schematica.proxy.isSaveEnabled = message.isSaveEnabled;
         Schematica.proxy.isLoadEnabled = message.isLoadEnabled;

@@ -52,7 +52,7 @@ public class SchematicPrinter {
         return this.isEnabled;
     }
 
-    public void setEnabled(boolean isEnabled) {
+    public void setEnabled(final boolean isEnabled) {
         this.isEnabled = isEnabled;
     }
 
@@ -65,7 +65,7 @@ public class SchematicPrinter {
         return this.isPrinting;
     }
 
-    public void setPrinting(boolean isPrinting) {
+    public void setPrinting(final boolean isPrinting) {
         this.isPrinting = isPrinting;
     }
 
@@ -73,7 +73,7 @@ public class SchematicPrinter {
         return this.schematic;
     }
 
-    public void setSchematic(SchematicWorld schematic) {
+    public void setSchematic(final SchematicWorld schematic) {
         this.isPrinting = false;
         this.schematic = schematic;
         refresh();
@@ -97,12 +97,12 @@ public class SchematicPrinter {
         final int z = (int) Math.floor(dZ);
         final int range = ConfigurationHandler.placeDistance;
 
-        int minX = Math.max(0, x - range);
-        int maxX = Math.min(this.schematic.getWidth() - 1, x + range);
+        final int minX = Math.max(0, x - range);
+        final int maxX = Math.min(this.schematic.getWidth() - 1, x + range);
         int minY = Math.max(0, y - range);
         int maxY = Math.min(this.schematic.getHeight() - 1, y + range);
-        int minZ = Math.max(0, z - range);
-        int maxZ = Math.min(this.schematic.getLength() - 1, z + range);
+        final int minZ = Math.max(0, z - range);
+        final int maxZ = Math.min(this.schematic.getLength() - 1, z + range);
 
         if (minX > maxX || minY > maxY || minZ > maxZ) {
             return false;
@@ -135,7 +135,7 @@ public class SchematicPrinter {
                 if (placeBlock(world, player, pos)) {
                     return syncSlotAndSneaking(player, slot, isSneaking, true);
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 Reference.logger.error("Could not place block!", e);
                 return syncSlotAndSneaking(player, slot, isSneaking, false);
             }

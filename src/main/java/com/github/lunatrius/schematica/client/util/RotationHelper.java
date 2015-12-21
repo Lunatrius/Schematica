@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.client.util;
 import com.github.lunatrius.core.util.BlockPosHelper;
 import com.github.lunatrius.core.util.MBlockPos;
 import com.github.lunatrius.schematica.api.ISchematic;
+import com.github.lunatrius.schematica.block.state.BlockStateHelper;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.storage.Schematic;
@@ -22,7 +23,6 @@ import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
 
 import java.util.List;
-import java.util.Set;
 
 public class RotationHelper {
     public static final RotationHelper INSTANCE = new RotationHelper();
@@ -88,7 +88,7 @@ public class RotationHelper {
         }
     }
 
-    public Schematic rotate(final ISchematic schematic, final EnumFacing axis, boolean forced) throws RotationException {
+    public Schematic rotate(final ISchematic schematic, final EnumFacing axis, final boolean forced) throws RotationException {
         final Vec3i dimensionsRotated = rotateDimensions(axis, schematic.getWidth(), schematic.getHeight(), schematic.getLength());
         final Schematic schematicRotated = new Schematic(schematic.getIcon(), dimensionsRotated.getX(), dimensionsRotated.getY(), dimensionsRotated.getZ());
         final MBlockPos tmp = new MBlockPos();
@@ -151,8 +151,9 @@ public class RotationHelper {
         throw new RotationException("'%s' is not a valid axis!", axis.getName());
     }
 
-    private IBlockState rotateBlock(final IBlockState blockState, final EnumFacing axisRotation, boolean forced) throws RotationException {
-        final IProperty propertyFacing = getProperty(blockState, "facing");
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private IBlockState rotateBlock(final IBlockState blockState, final EnumFacing axisRotation, final boolean forced) throws RotationException {
+        final IProperty propertyFacing = BlockStateHelper.getProperty(blockState, "facing");
         if (propertyFacing instanceof PropertyDirection) {
             final Comparable value = blockState.getValue(propertyFacing);
             if (value instanceof EnumFacing) {
@@ -173,7 +174,7 @@ public class RotationHelper {
             Reference.logger.error("'{}': found 'facing' property with unknown type {}", BLOCK_REGISTRY.getNameForObject(blockState.getBlock()), propertyFacing.getClass().getSimpleName());
         }
 
-        final IProperty propertyAxis = getProperty(blockState, "axis");
+        final IProperty propertyAxis = BlockStateHelper.getProperty(blockState, "axis");
         if (propertyAxis instanceof PropertyEnum) {
             if (EnumFacing.Axis.class.isAssignableFrom(propertyAxis.getValueClass())) {
                 final EnumFacing.Axis axis = (EnumFacing.Axis) blockState.getValue(propertyAxis);
@@ -190,7 +191,7 @@ public class RotationHelper {
             Reference.logger.error("'{}': found 'axis' property with unknown type {}", BLOCK_REGISTRY.getNameForObject(blockState.getBlock()), propertyAxis.getClass().getSimpleName());
         }
 
-        final IProperty propertyVariant = getProperty(blockState, "variant");
+        final IProperty propertyVariant = BlockStateHelper.getProperty(blockState, "variant");
         if (propertyVariant instanceof PropertyEnum) {
             if (BlockQuartz.EnumType.class.isAssignableFrom(propertyVariant.getValueClass())) {
                 final BlockQuartz.EnumType type = (BlockQuartz.EnumType) blockState.getValue(propertyVariant);
@@ -204,16 +205,6 @@ public class RotationHelper {
         }
 
         return blockState;
-    }
-
-    private IProperty getProperty(final IBlockState blockState, final String name) {
-        for (final IProperty prop : (Set<IProperty>) blockState.getProperties().keySet()) {
-            if (prop.getName().equals(name)) {
-                return prop;
-            }
-        }
-
-        return null;
     }
 
     private static EnumFacing getRotatedFacing(final EnumFacing source, final EnumFacing side) {
@@ -308,7 +299,7 @@ public class RotationHelper {
     }
 
     public static class RotationException extends Exception {
-        public RotationException(String message, Object... args) {
+        public RotationException(final String message, final Object... args) {
             super(String.format(message, args));
         }
     }

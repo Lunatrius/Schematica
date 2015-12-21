@@ -13,7 +13,7 @@ import net.minecraft.world.storage.WorldInfo;
 public class WorldDummy extends World {
     private static WorldDummy instance;
 
-    protected WorldDummy(ISaveHandler saveHandler, WorldInfo worldInfo, WorldProvider worldProvider, Profiler profiler, boolean client) {
+    protected WorldDummy(final ISaveHandler saveHandler, final WorldInfo worldInfo, final WorldProvider worldProvider, final Profiler profiler, final boolean client) {
         super(saveHandler, worldInfo, worldProvider, profiler, client);
     }
 

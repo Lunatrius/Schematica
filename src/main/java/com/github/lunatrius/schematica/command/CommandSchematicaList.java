@@ -29,12 +29,12 @@ public class CommandSchematicaList extends CommandSchematicaBase {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getCommandUsage(final ICommandSender sender) {
         return Names.Command.List.Message.USAGE;
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] arguments) throws CommandException {
+    public void processCommand(final ICommandSender sender, final String[] arguments) throws CommandException {
         if (!(sender instanceof EntityPlayer)) {
             throw new CommandException(Names.Command.Save.Message.PLAYERS_ONLY);
         }
@@ -47,19 +47,19 @@ public class CommandSchematicaList extends CommandSchematicaBase {
                     page = 0;
                 }
             }
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             throw new WrongUsageException(getCommandUsage(sender));
         }
 
         final EntityPlayer player = (EntityPlayer) sender;
-        int pageSize = 9; //maximum number of lines available without opening chat.
-        int pageStart = page * pageSize;
-        int pageEnd = pageStart + pageSize;
+        final int pageSize = 9; //maximum number of lines available without opening chat.
+        final int pageStart = page * pageSize;
+        final int pageEnd = pageStart + pageSize;
         int currentFile = 0;
 
-        LinkedList<IChatComponent> componentsToSend = new LinkedList<IChatComponent>();
+        final LinkedList<IChatComponent> componentsToSend = new LinkedList<IChatComponent>();
 
-        File schematicDirectory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
+        final File schematicDirectory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
         if (schematicDirectory == null) {
             Reference.logger.warn("Unable to determine the schematic directory for player {}", player);
             throw new CommandException(Names.Command.Save.Message.PLAYER_SCHEMATIC_DIR_UNAVAILABLE);
@@ -73,14 +73,14 @@ public class CommandSchematicaList extends CommandSchematicaBase {
         }
 
         final File[] files = schematicDirectory.listFiles(FILE_FILTER_SCHEMATIC);
-        for (File path : files) {
+        for (final File path : files) {
             if (currentFile >= pageStart && currentFile < pageEnd) {
-                String fileName = FilenameUtils.removeExtension(path.getName());
+                final String fileName = FilenameUtils.removeExtension(path.getName());
 
-                IChatComponent chatComponent = new ChatComponentText(String.format("%2d (%s): %s [", currentFile + 1, FileUtils.humanReadableByteCount(path.length()), fileName));
-                String removeCommand = String.format("/%s %s", Names.Command.Remove.NAME, fileName);
+                final IChatComponent chatComponent = new ChatComponentText(String.format("%2d (%s): %s [", currentFile + 1, FileUtils.humanReadableByteCount(path.length()), fileName));
+                final String removeCommand = String.format("/%s %s", Names.Command.Remove.NAME, fileName);
 
-                IChatComponent removeLink = new ChatComponentTranslation(Names.Command.List.Message.REMOVE)
+                final IChatComponent removeLink = new ChatComponentTranslation(Names.Command.List.Message.REMOVE)
                         .setChatStyle(
                                 new ChatStyle()
                                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, removeCommand))
@@ -89,8 +89,8 @@ public class CommandSchematicaList extends CommandSchematicaBase {
                 chatComponent.appendSibling(removeLink);
                 chatComponent.appendText("][");
 
-                String downloadCommand = String.format("/%s %s", Names.Command.Download.NAME, fileName);
-                IChatComponent downloadLink = new ChatComponentTranslation(Names.Command.List.Message.DOWNLOAD)
+                final String downloadCommand = String.format("/%s %s", Names.Command.Download.NAME, fileName);
+                final IChatComponent downloadLink = new ChatComponentTranslation(Names.Command.List.Message.DOWNLOAD)
                         .setChatStyle(
                                 new ChatStyle()
                                         .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, downloadCommand))
@@ -116,7 +116,7 @@ public class CommandSchematicaList extends CommandSchematicaBase {
 
         sender.addChatMessage(new ChatComponentTranslation(Names.Command.List.Message.PAGE_HEADER, page + 1, totalPages + 1)
                 .setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_GREEN)));
-        for (IChatComponent chatComponent : componentsToSend) {
+        for (final IChatComponent chatComponent : componentsToSend) {
             sender.addChatMessage(chatComponent);
         }
     }

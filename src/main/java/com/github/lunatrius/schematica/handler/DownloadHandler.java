@@ -25,7 +25,7 @@ public class DownloadHandler {
     private DownloadHandler() {}
 
     @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent event) {
+    public void onServerTick(final TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
             return;
         }
@@ -48,11 +48,11 @@ public class DownloadHandler {
         if (!transfer.state.isWaiting()) {
             if (++transfer.timeout >= Constants.Network.TIMEOUT) {
                 if (++transfer.retries >= Constants.Network.RETRIES) {
-                    Reference.logger.warn("{}'s download was dropped!", player.getCommandSenderName());
+                    Reference.logger.warn("{}'s download was dropped!", player.getName());
                     return;
                 }
 
-                Reference.logger.warn("{}'s download timed out, retrying (#{})", player.getCommandSenderName(), transfer.retries);
+                Reference.logger.warn("{}'s download timed out, retrying (#{})", player.getName(), transfer.retries);
 
                 sendChunk(player, transfer);
                 transfer.timeout = 0;
@@ -69,23 +69,23 @@ public class DownloadHandler {
         this.transferMap.put(player, transfer);
     }
 
-    private void sendBegin(EntityPlayerMP player, SchematicTransfer transfer) {
+    private void sendBegin(final EntityPlayerMP player, final SchematicTransfer transfer) {
         transfer.setState(SchematicTransfer.State.BEGIN);
 
-        MessageDownloadBegin message = new MessageDownloadBegin(transfer.schematic);
+        final MessageDownloadBegin message = new MessageDownloadBegin(transfer.schematic);
         PacketHandler.INSTANCE.sendTo(message, player);
     }
 
-    private void sendChunk(EntityPlayerMP player, SchematicTransfer transfer) {
+    private void sendChunk(final EntityPlayerMP player, final SchematicTransfer transfer) {
         transfer.setState(SchematicTransfer.State.CHUNK);
 
         Reference.logger.trace("Sending chunk {},{},{}", transfer.baseX, transfer.baseY, transfer.baseZ);
-        MessageDownloadChunk message = new MessageDownloadChunk(transfer.schematic, transfer.baseX, transfer.baseY, transfer.baseZ);
+        final MessageDownloadChunk message = new MessageDownloadChunk(transfer.schematic, transfer.baseX, transfer.baseY, transfer.baseZ);
         PacketHandler.INSTANCE.sendTo(message, player);
     }
 
-    private void sendEnd(EntityPlayerMP player, SchematicTransfer transfer) {
-        MessageDownloadEnd message = new MessageDownloadEnd(transfer.name);
+    private void sendEnd(final EntityPlayerMP player, final SchematicTransfer transfer) {
+        final MessageDownloadEnd message = new MessageDownloadEnd(transfer.name);
         PacketHandler.INSTANCE.sendTo(message, player);
     }
 }

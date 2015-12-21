@@ -51,7 +51,7 @@ public class InputHandler {
     private InputHandler() {}
 
     @SubscribeEvent
-    public void onKeyInput(InputEvent event) {
+    public void onKeyInput(final InputEvent event) {
         if (this.minecraft.currentScreen == null) {
             if (KEY_BINDING_LOAD.isPressed()) {
                 this.minecraft.displayGuiScreen(new GuiSchematicLoad(this.minecraft.currentScreen));
@@ -130,7 +130,7 @@ public class InputHandler {
                 if (revert) {
                     KeyBinding.onTick(keyPickBlock.getKeyCode());
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 Reference.logger.error("Could not pick block!", e);
             }
         }

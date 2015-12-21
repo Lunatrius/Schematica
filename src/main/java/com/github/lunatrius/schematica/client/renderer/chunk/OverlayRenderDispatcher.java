@@ -14,7 +14,7 @@ import net.minecraft.util.EnumWorldBlockLayer;
 
 public class OverlayRenderDispatcher extends ChunkRenderDispatcher {
     @Override
-    public ListenableFuture uploadChunk(final EnumWorldBlockLayer layer, final WorldRenderer worldRenderer, final RenderChunk renderChunk, final CompiledChunk compiledChunk) {
+    public ListenableFuture<Object> uploadChunk(final EnumWorldBlockLayer layer, final WorldRenderer worldRenderer, final RenderChunk renderChunk, final CompiledChunk compiledChunk) {
         if (Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
             if (OpenGlHelper.useVbo()) {
                 uploadVertexBuffer(worldRenderer, renderChunk.getVertexBufferByLayer(layer.ordinal()));
@@ -25,7 +25,7 @@ public class OverlayRenderDispatcher extends ChunkRenderDispatcher {
             worldRenderer.setTranslation(0.0, 0.0, 0.0);
             return Futures.immediateFuture(null);
         } else {
-            final ListenableFutureTask listenableFutureTask = ListenableFutureTask.create(new Runnable() {
+            final ListenableFutureTask<Object> listenableFutureTask = ListenableFutureTask.create(new Runnable() {
                 @Override
                 public void run() {
                     uploadChunk(layer, worldRenderer, renderChunk, compiledChunk);
