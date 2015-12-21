@@ -20,7 +20,7 @@ public class OverlayHandler {
     private final Minecraft minecraft = Minecraft.getMinecraft();
 
     @SubscribeEvent
-    public void onText(RenderGameOverlayEvent.Text event) {
+    public void onText(final RenderGameOverlayEvent.Text event) {
         if (this.minecraft.gameSettings.showDebugInfo && ConfigurationHandler.showDebugInfo) {
             final SchematicWorld schematic = ClientProxy.schematic;
             if (schematic != null && schematic.isRendering) {

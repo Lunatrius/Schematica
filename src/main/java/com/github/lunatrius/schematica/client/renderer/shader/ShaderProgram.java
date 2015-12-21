@@ -16,7 +16,7 @@ public class ShaderProgram {
 
     private int program;
 
-    public ShaderProgram(String domain, String vertShaderFilename, String fragShaderFilename) {
+    public ShaderProgram(final String domain, final String vertShaderFilename, final String fragShaderFilename) {
         try {
             init(domain, vertShaderFilename, fragShaderFilename);
             if (this.program > 0) {
@@ -24,13 +24,13 @@ public class ShaderProgram {
                 GL20.glUniform1i(GL20.glGetUniformLocation(this.program, "texture"), 0);
                 GL20.glUseProgram(0);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Reference.logger.error("Could not initialize shader program!", e);
             this.program = 0;
         }
     }
 
-    private void init(String domain, String vertShaderFilename, String fragShaderFilename) {
+    private void init(final String domain, final String vertShaderFilename, final String fragShaderFilename) {
         if (!OpenGlHelper.shadersSupported) {
             this.program = 0;
             return;
@@ -38,8 +38,8 @@ public class ShaderProgram {
 
         this.program = GL20.glCreateProgram();
 
-        int vertShader = loadAndCompileShader(domain, vertShaderFilename, GL20.GL_VERTEX_SHADER);
-        int fragShader = loadAndCompileShader(domain, fragShaderFilename, GL20.GL_FRAGMENT_SHADER);
+        final int vertShader = loadAndCompileShader(domain, vertShaderFilename, GL20.GL_VERTEX_SHADER);
+        final int fragShader = loadAndCompileShader(domain, fragShaderFilename, GL20.GL_FRAGMENT_SHADER);
 
         if (vertShader != 0) {
             GL20.glAttachShader(this.program, vertShader);
@@ -67,7 +67,7 @@ public class ShaderProgram {
         }
     }
 
-    private int loadAndCompileShader(String domain, String filename, int shaderType) {
+    private int loadAndCompileShader(final String domain, final String filename, final int shaderType) {
         if (filename == null) {
             return 0;
         }
@@ -79,7 +79,7 @@ public class ShaderProgram {
             return 0;
         }
 
-        String code = loadFile(new ResourceLocation(domain, filename));
+        final String code = loadFile(new ResourceLocation(domain, filename));
         if (code == null) {
             GL20.glDeleteShader(handle);
             return 0;
@@ -97,7 +97,7 @@ public class ShaderProgram {
         return handle;
     }
 
-    private String loadFile(ResourceLocation resourceLocation) {
+    private String loadFile(final ResourceLocation resourceLocation) {
         try {
             final StringBuilder code = new StringBuilder();
             final InputStream inputStream = MINECRAFT.getResourceManager().getResource(resourceLocation).getInputStream();
@@ -111,7 +111,7 @@ public class ShaderProgram {
             reader.close();
 
             return code.toString();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Reference.logger.error("Could not load shader file!", e);
         }
 

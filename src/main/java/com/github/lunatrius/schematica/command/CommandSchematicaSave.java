@@ -21,12 +21,12 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender) {
+    public String getCommandUsage(final ICommandSender sender) {
         return Names.Command.Save.Message.USAGE;
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] arguments) throws CommandException {
+    public void processCommand(final ICommandSender sender, final String[] arguments) throws CommandException {
         if (arguments.length < 7) {
             throw new WrongUsageException(getCommandUsage(sender));
         }
@@ -41,10 +41,10 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
             throw new CommandException(Names.Command.Save.Message.QUOTA_EXCEEDED);
         }
 
-        MBlockPos from = new MBlockPos();
-        MBlockPos to = new MBlockPos();
-        String filename;
-        String name;
+        final MBlockPos from = new MBlockPos();
+        final MBlockPos to = new MBlockPos();
+        final String filename;
+        final String name;
 
         try {
             from.set(parseCoord(arguments[0]), parseCoord(arguments[1]), parseCoord(arguments[2]));
@@ -52,7 +52,7 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
 
             name = arguments[6];
             filename = String.format("%s.schematic", name);
-        } catch (NumberFormatException exception) {
+        } catch (final NumberFormatException exception) {
             throw new WrongUsageException(getCommandUsage(sender));
         }
 
@@ -74,12 +74,12 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
         try {
             Schematica.proxy.saveSchematic(player, schematicDirectory, filename, player.getEntityWorld(), from, to);
             sender.addChatMessage(new ChatComponentTranslation(Names.Command.Save.Message.SAVE_SUCCESSFUL, name));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new CommandException(Names.Command.Save.Message.SAVE_FAILED, name);
         }
     }
 
-    private int parseCoord(String argument) throws NumberInvalidException {
+    private int parseCoord(final String argument) throws NumberInvalidException {
         return parseInt(argument, Constants.World.MINIMUM_COORD, Constants.World.MAXIMUM_COORD);
     }
 }

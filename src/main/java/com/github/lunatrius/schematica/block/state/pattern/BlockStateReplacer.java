@@ -3,11 +3,11 @@ package com.github.lunatrius.schematica.block.state.pattern;
 import com.github.lunatrius.core.exceptions.LocalizedException;
 import com.github.lunatrius.schematica.reference.Names;
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockStateHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
 
@@ -23,6 +23,7 @@ public class BlockStateReplacer {
         this.defaultReplacement = defaultReplacement;
     }
 
+    @SuppressWarnings({ "rawtypes" })
     public IBlockState getReplacement(final IBlockState original, final Map<IProperty, Comparable> properties) {
         IBlockState replacement = this.defaultReplacement;
 
@@ -32,6 +33,7 @@ public class BlockStateReplacer {
         return replacement;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private IBlockState applyProperties(IBlockState blockState, final Map<IProperty, Comparable> properties) {
         for (final Map.Entry<IProperty, Comparable> entry : properties.entrySet()) {
             try {
@@ -47,6 +49,7 @@ public class BlockStateReplacer {
         return new BlockStateReplacer(replacement);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static BlockStateHelper getMatcher(final BlockStateInfo blockStateInfo) {
         final BlockStateHelper matcher = BlockStateHelper.forBlock(blockStateInfo.block);
         for (final Map.Entry<IProperty, Comparable> entry : blockStateInfo.stateData.entrySet()) {
@@ -61,6 +64,7 @@ public class BlockStateReplacer {
         return matcher;
     }
 
+    @SuppressWarnings({ "rawtypes" })
     public static BlockStateInfo fromString(final String input) throws LocalizedException {
         final int start = input.indexOf('[');
         final int end = input.indexOf(']');
@@ -75,15 +79,17 @@ public class BlockStateReplacer {
             stateData = "";
         }
 
-        final Block block = BLOCK_REGISTRY.getRaw(blockName);
-        if (block == null) {
+        final ResourceLocation location = new ResourceLocation(blockName);
+        if (!BLOCK_REGISTRY.containsKey(location)) {
             throw new LocalizedException(Names.Messages.INVALID_BLOCK, blockName);
         }
 
+        final Block block = BLOCK_REGISTRY.getObject(location);
         final Map<IProperty, Comparable> propertyData = parsePropertyData(block.getDefaultState(), stateData, true);
         return new BlockStateInfo(block, propertyData);
     }
 
+    @SuppressWarnings({ "rawtypes" })
     public static Map<IProperty, Comparable> parsePropertyData(final IBlockState blockState, final String stateData, final boolean strict) throws LocalizedException {
         final HashMap<IProperty, Comparable> map = new HashMap<IProperty, Comparable>();
         if (stateData == null || stateData.length() == 0) {
@@ -103,9 +109,9 @@ public class BlockStateReplacer {
         return map;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private static boolean putMatchingProperty(final Map<IProperty, Comparable> map, final IBlockState blockState, final String name, final String value, final boolean strict) throws LocalizedException {
-        final ImmutableSet<IProperty> properties = blockState.getProperties().keySet();
-        for (final IProperty property : properties) {
+        for (final IProperty property : blockState.getPropertyNames()) {
             if (property.getName().equalsIgnoreCase(name)) {
                 final Collection<Comparable> allowedValues = property.getAllowedValues();
                 for (final Comparable allowedValue : allowedValues) {
@@ -124,6 +130,7 @@ public class BlockStateReplacer {
         return false;
     }
 
+    @SuppressWarnings({ "rawtypes" })
     public static class BlockStateInfo {
         public final Block block;
         public final Map<IProperty, Comparable> stateData;

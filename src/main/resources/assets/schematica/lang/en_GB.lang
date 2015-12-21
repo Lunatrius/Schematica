@@ -164,5 +164,7 @@ schematica.command.download.started=Started downloading %s...
 schematica.command.download.downloadSucceeded=Successfully downloaded %s.
 schematica.command.download.downloadFail=Download failed.
 
+# commands - replace
+
 # messages
 schematica.message.togglePrinter=Printer: %s

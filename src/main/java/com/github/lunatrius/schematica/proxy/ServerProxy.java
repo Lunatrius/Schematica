@@ -6,7 +6,7 @@ import com.github.lunatrius.schematica.handler.PlayerHandler;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
@@ -16,14 +16,14 @@ import java.util.UUID;
 
 public class ServerProxy extends CommonProxy {
     @Override
-    public void init(FMLInitializationEvent event) {
+    public void init(final FMLInitializationEvent event) {
         super.init(event);
 
-        FMLCommonHandler.instance().bus().register(PlayerHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(PlayerHandler.INSTANCE);
     }
 
     @Override
-    public void serverStarting(FMLServerStartingEvent event) {
+    public void serverStarting(final FMLServerStartingEvent event) {
         super.serverStarting(event);
         event.registerServerCommand(new CommandSchematicaDownload());
     }
@@ -33,19 +33,19 @@ public class ServerProxy extends CommonProxy {
         final File file = MinecraftServer.getServer().getFile(".");
         try {
             return file.getCanonicalFile();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             Reference.logger.info("Could not canonize path!", e);
         }
         return file;
     }
 
     @Override
-    public boolean loadSchematic(EntityPlayer player, File directory, String filename) {
+    public boolean loadSchematic(final EntityPlayer player, final File directory, final String filename) {
         return false;
     }
 
     @Override
-    public boolean isPlayerQuotaExceeded(EntityPlayer player) {
+    public boolean isPlayerQuotaExceeded(final EntityPlayer player) {
         int spaceUsed = 0;
 
         //Space used by private directory
@@ -58,7 +58,7 @@ public class ServerProxy extends CommonProxy {
         return ((spaceUsed / 1024) > ConfigurationHandler.playerQuotaKilobytes);
     }
 
-    private int getSpaceUsedByDirectory(File directory) {
+    private int getSpaceUsedByDirectory(final File directory) {
         int spaceUsed = 0;
         //If we don't have a player directory yet, then they haven't uploaded any files yet.
         if (directory == null || !directory.exists()) {
@@ -69,21 +69,21 @@ public class ServerProxy extends CommonProxy {
         if (files == null) {
             files = new File[0];
         }
-        for (File path : files) {
+        for (final File path : files) {
             spaceUsed += path.length();
         }
         return spaceUsed;
     }
 
     @Override
-    public File getPlayerSchematicDirectory(EntityPlayer player, boolean privateDirectory) {
+    public File getPlayerSchematicDirectory(final EntityPlayer player, final boolean privateDirectory) {
         final UUID playerId = player.getUniqueID();
         if (playerId == null) {
             Reference.logger.warn("Unable to identify player {}", player.toString());
             return null;
         }
 
-        File playerDir = new File(ConfigurationHandler.schematicDirectory.getAbsolutePath(), playerId.toString());
+        final File playerDir = new File(ConfigurationHandler.schematicDirectory.getAbsolutePath(), playerId.toString());
         if (privateDirectory) {
             return new File(playerDir, "private");
         } else {

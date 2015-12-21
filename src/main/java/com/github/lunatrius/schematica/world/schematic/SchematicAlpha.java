@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
@@ -30,11 +31,11 @@ public class SchematicAlpha extends SchematicFormat {
     private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
 
     @Override
-    public ISchematic readFromNBT(NBTTagCompound tagCompound) {
-        ItemStack icon = SchematicUtil.getIconFromNBT(tagCompound);
+    public ISchematic readFromNBT(final NBTTagCompound tagCompound) {
+        final ItemStack icon = SchematicUtil.getIconFromNBT(tagCompound);
 
-        byte localBlocks[] = tagCompound.getByteArray(Names.NBT.BLOCKS);
-        byte localMetadata[] = tagCompound.getByteArray(Names.NBT.DATA);
+        final byte[] localBlocks = tagCompound.getByteArray(Names.NBT.BLOCKS);
+        final byte[] localMetadata = tagCompound.getByteArray(Names.NBT.DATA);
 
         boolean extra = false;
         byte extraBlocks[] = null;
@@ -52,28 +53,28 @@ public class SchematicAlpha extends SchematicFormat {
             extraBlocks = tagCompound.getByteArray(Names.NBT.ADD_BLOCKS_SCHEMATICA);
         }
 
-        short width = tagCompound.getShort(Names.NBT.WIDTH);
-        short length = tagCompound.getShort(Names.NBT.LENGTH);
-        short height = tagCompound.getShort(Names.NBT.HEIGHT);
+        final short width = tagCompound.getShort(Names.NBT.WIDTH);
+        final short length = tagCompound.getShort(Names.NBT.LENGTH);
+        final short height = tagCompound.getShort(Names.NBT.HEIGHT);
 
         Short id = null;
-        Map<Short, Short> oldToNew = new HashMap<Short, Short>();
+        final Map<Short, Short> oldToNew = new HashMap<Short, Short>();
         if (tagCompound.hasKey(Names.NBT.MAPPING_SCHEMATICA)) {
-            NBTTagCompound mapping = tagCompound.getCompoundTag(Names.NBT.MAPPING_SCHEMATICA);
-            Set<String> names = mapping.getKeySet();
-            for (String name : names) {
-                oldToNew.put(mapping.getShort(name), (short) BLOCK_REGISTRY.getId(name));
+            final NBTTagCompound mapping = tagCompound.getCompoundTag(Names.NBT.MAPPING_SCHEMATICA);
+            final Set<String> names = mapping.getKeySet();
+            for (final String name : names) {
+                oldToNew.put(mapping.getShort(name), (short) BLOCK_REGISTRY.getId(new ResourceLocation(name)));
             }
         }
 
         final MBlockPos pos = new MBlockPos();
-        ISchematic schematic = new Schematic(icon, width, height, length);
+        final ISchematic schematic = new Schematic(icon, width, height, length);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 for (int z = 0; z < length; z++) {
-                    int index = x + (y * length + z) * width;
+                    final int index = x + (y * length + z) * width;
                     int blockID = (localBlocks[index] & 0xFF) | (extra ? ((extraBlocks[index] & 0xFF) << 8) : 0);
-                    int meta = localMetadata[index] & 0xFF;
+                    final int meta = localMetadata[index] & 0xFF;
 
                     if ((id = oldToNew.get((short) blockID)) != null) {
                         blockID = id;
@@ -84,22 +85,22 @@ public class SchematicAlpha extends SchematicFormat {
                     try {
                         final IBlockState blockState = block.getStateFromMeta(meta);
                         schematic.setBlockState(pos, blockState);
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         Reference.logger.error("Could not set block state at {} to {} with metadata {}", pos, BLOCK_REGISTRY.getNameForObject(block), meta, e);
                     }
                 }
             }
         }
 
-        NBTTagList tileEntitiesList = tagCompound.getTagList(Names.NBT.TILE_ENTITIES, Constants.NBT.TAG_COMPOUND);
+        final NBTTagList tileEntitiesList = tagCompound.getTagList(Names.NBT.TILE_ENTITIES, Constants.NBT.TAG_COMPOUND);
 
         for (int i = 0; i < tileEntitiesList.tagCount(); i++) {
             try {
-                TileEntity tileEntity = NBTHelper.readTileEntityFromCompound(tileEntitiesList.getCompoundTagAt(i));
+                final TileEntity tileEntity = NBTHelper.readTileEntityFromCompound(tileEntitiesList.getCompoundTagAt(i));
                 if (tileEntity != null) {
                     schematic.setTileEntity(tileEntity.getPos(), tileEntity);
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 Reference.logger.error("TileEntity failed to load properly!", e);
             }
         }
@@ -108,9 +109,9 @@ public class SchematicAlpha extends SchematicFormat {
     }
 
     @Override
-    public boolean writeToNBT(NBTTagCompound tagCompound, ISchematic schematic) {
-        NBTTagCompound tagCompoundIcon = new NBTTagCompound();
-        ItemStack icon = schematic.getIcon();
+    public boolean writeToNBT(final NBTTagCompound tagCompound, final ISchematic schematic) {
+        final NBTTagCompound tagCompoundIcon = new NBTTagCompound();
+        final ItemStack icon = schematic.getIcon();
         icon.writeToNBT(tagCompoundIcon);
         tagCompound.setTag(Names.NBT.ICON, tagCompoundIcon);
 
@@ -118,15 +119,15 @@ public class SchematicAlpha extends SchematicFormat {
         tagCompound.setShort(Names.NBT.LENGTH, (short) schematic.getLength());
         tagCompound.setShort(Names.NBT.HEIGHT, (short) schematic.getHeight());
 
-        int size = schematic.getWidth() * schematic.getLength() * schematic.getHeight();
-        byte localBlocks[] = new byte[size];
-        byte localMetadata[] = new byte[size];
-        byte extraBlocks[] = new byte[size];
-        byte extraBlocksNibble[] = new byte[(int) Math.ceil(size / 2.0)];
+        final int size = schematic.getWidth() * schematic.getLength() * schematic.getHeight();
+        final byte[] localBlocks = new byte[size];
+        final byte[] localMetadata = new byte[size];
+        final byte[] extraBlocks = new byte[size];
+        final byte[] extraBlocksNibble = new byte[(int) Math.ceil(size / 2.0)];
         boolean extra = false;
 
         final MBlockPos pos = new MBlockPos();
-        Map<String, Short> mappings = new HashMap<String, Short>();
+        final Map<String, Short> mappings = new HashMap<String, Short>();
         for (int x = 0; x < schematic.getWidth(); x++) {
             for (int y = 0; y < schematic.getHeight(); y++) {
                 for (int z = 0; z < schematic.getLength(); z++) {
@@ -140,7 +141,7 @@ public class SchematicAlpha extends SchematicFormat {
                         extra = true;
                     }
 
-                    String name = String.valueOf(BLOCK_REGISTRY.getNameForObject(block));
+                    final String name = String.valueOf(BLOCK_REGISTRY.getNameForObject(block));
                     if (!mappings.containsKey(name)) {
                         mappings.put(name, (short) blockId);
                     }
@@ -149,17 +150,17 @@ public class SchematicAlpha extends SchematicFormat {
         }
 
         int count = 20;
-        NBTTagList tileEntitiesList = new NBTTagList();
-        for (TileEntity tileEntity : schematic.getTileEntities()) {
+        final NBTTagList tileEntitiesList = new NBTTagList();
+        for (final TileEntity tileEntity : schematic.getTileEntities()) {
             try {
-                NBTTagCompound tileEntityTagCompound = NBTHelper.writeTileEntityToCompound(tileEntity);
+                final NBTTagCompound tileEntityTagCompound = NBTHelper.writeTileEntityToCompound(tileEntity);
                 tileEntitiesList.appendTag(tileEntityTagCompound);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 final BlockPos tePos = tileEntity.getPos();
                 final int index = tePos.getX() + (tePos.getY() * schematic.getLength() + tePos.getZ()) * schematic.getWidth();
                 if (--count > 0) {
                     final IBlockState blockState = schematic.getBlockState(tePos);
-                    Block block = blockState.getBlock();
+                    final Block block = blockState.getBlock();
                     Reference.logger.error("Block {}[{}] with TileEntity {} failed to save! Replacing with bedrock...", block, block != null ? BLOCK_REGISTRY.getNameForObject(block) : "?", tileEntity.getClass().getName(), e);
                 }
                 localBlocks[index] = (byte) BLOCK_REGISTRY.getId(Blocks.bedrock);
@@ -178,22 +179,22 @@ public class SchematicAlpha extends SchematicFormat {
 
         final NBTTagList entityList = new NBTTagList();
         final List<Entity> entities = schematic.getEntities();
-        for (Entity entity : entities) {
+        for (final Entity entity : entities) {
             try {
                 final NBTTagCompound entityCompound = NBTHelper.writeEntityToCompound(entity);
                 if (entityCompound != null) {
                     entityList.appendTag(entityCompound);
                 }
-            } catch (Throwable t) {
+            } catch (final Throwable t) {
                 Reference.logger.error("Entity {} failed to save, skipping!", entity, t);
             }
         }
 
-        PreSchematicSaveEvent event = new PreSchematicSaveEvent(schematic, mappings);
+        final PreSchematicSaveEvent event = new PreSchematicSaveEvent(schematic, mappings);
         MinecraftForge.EVENT_BUS.post(event);
 
-        NBTTagCompound nbtMapping = new NBTTagCompound();
-        for (Map.Entry<String, Short> entry : mappings.entrySet()) {
+        final NBTTagCompound nbtMapping = new NBTTagCompound();
+        for (final Map.Entry<String, Short> entry : mappings.entrySet()) {
             nbtMapping.setShort(entry.getKey(), entry.getValue());
         }
 

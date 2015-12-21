@@ -2,7 +2,6 @@ package com.github.lunatrius.schematica.client.renderer.chunk.overlay;
 
 import com.github.lunatrius.core.client.renderer.GeometryMasks;
 import com.github.lunatrius.core.client.renderer.GeometryTessellator;
-import com.github.lunatrius.core.client.renderer.vertex.VertexFormats;
 import com.github.lunatrius.schematica.client.renderer.chunk.CompiledOverlay;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
@@ -17,6 +16,7 @@ import net.minecraft.client.renderer.chunk.ChunkCompileTaskGenerator;
 import net.minecraft.client.renderer.chunk.CompiledChunk;
 import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.client.renderer.chunk.VisGraph;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -29,7 +29,7 @@ public class RenderOverlay extends RenderChunk {
 
     public RenderOverlay(final World world, final RenderGlobal renderGlobal, final BlockPos pos, final int index) {
         super(world, renderGlobal, pos, index);
-        this.vertexBuffer = OpenGlHelper.useVbo() ? new VertexBuffer(VertexFormats.ABSTRACT) : null;
+        this.vertexBuffer = OpenGlHelper.useVbo() ? new VertexBuffer(DefaultVertexFormats.POSITION_COLOR) : null;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class RenderOverlay extends RenderChunk {
 
             GeometryTessellator.setStaticDelta(ConfigurationHandler.blockDelta);
 
-            for (BlockPos pos : (Iterable<BlockPos>) BlockPos.getAllInBox(from, to)) {
+            for (final BlockPos pos : BlockPos.getAllInBox(from, to)) {
                 if (schematic.isRenderingLayer && schematic.renderingLayer != pos.getY() || !schematic.isInside(pos)) {
                     continue;
                 }
@@ -154,7 +154,7 @@ public class RenderOverlay extends RenderChunk {
                         preRenderBlocks(worldRenderer, from);
                     }
 
-                    GeometryTessellator.drawCuboid(worldRenderer, GL11.GL_QUADS, pos, sides, color, 0x3F);
+                    GeometryTessellator.drawCuboid(worldRenderer, pos, sides, 0x3F000000 | color);
                     compiledOverlay.setLayerUsed(layer);
                 }
             }
@@ -169,9 +169,8 @@ public class RenderOverlay extends RenderChunk {
 
     @Override
     public void preRenderBlocks(final WorldRenderer worldRenderer, final BlockPos pos) {
-        super.preRenderBlocks(worldRenderer, pos);
-
-        worldRenderer.setVertexFormat(VertexFormats.ABSTRACT);
+        worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        worldRenderer.setTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
     }
 
     @Override

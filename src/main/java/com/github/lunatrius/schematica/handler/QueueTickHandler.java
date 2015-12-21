@@ -21,7 +21,7 @@ public class QueueTickHandler {
     private QueueTickHandler() {}
 
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
+    public void onClientTick(final TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
             return;
         }
@@ -32,13 +32,13 @@ public class QueueTickHandler {
             if (player != null && player.sendQueue != null && !player.sendQueue.getNetworkManager().isLocalChannel()) {
                 processQueue();
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Reference.logger.error("Something went wrong...", e);
         }
     }
 
     @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent event) {
+    public void onServerTick(final TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.START) {
             return;
         }
@@ -72,7 +72,7 @@ public class QueueTickHandler {
         }
     }
 
-    public void queueSchematic(SchematicContainer container) {
+    public void queueSchematic(final SchematicContainer container) {
         this.queue.offer(container);
     }
 }

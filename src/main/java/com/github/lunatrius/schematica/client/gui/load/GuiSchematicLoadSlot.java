@@ -1,6 +1,6 @@
 package com.github.lunatrius.schematica.client.gui.load;
 
-import com.github.lunatrius.schematica.client.gui.GuiHelper;
+import com.github.lunatrius.core.client.gui.GuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.Tessellator;
@@ -11,8 +11,9 @@ public class GuiSchematicLoadSlot extends GuiSlot {
     private final GuiSchematicLoad guiSchematicLoad;
 
     protected int selectedIndex = -1;
+    private long lastClick = 0;
 
-    public GuiSchematicLoadSlot(GuiSchematicLoad guiSchematicLoad) {
+    public GuiSchematicLoadSlot(final GuiSchematicLoad guiSchematicLoad) {
         super(Minecraft.getMinecraft(), guiSchematicLoad.width, guiSchematicLoad.height, 16, guiSchematicLoad.height - 40, 24);
         this.guiSchematicLoad = guiSchematicLoad;
     }
@@ -23,18 +24,25 @@ public class GuiSchematicLoadSlot extends GuiSlot {
     }
 
     @Override
-    protected void elementClicked(int index, boolean par2, int par3, int par4) {
-        GuiSchematicEntry schematic = this.guiSchematicLoad.schematicFiles.get(index);
+    protected void elementClicked(final int slotIndex, final boolean isDoubleClick, final int mouseX, final int mouseY) {
+        final boolean ignore = Minecraft.getSystemTime() - this.lastClick < 500;
+        this.lastClick = Minecraft.getSystemTime();
+
+        if (ignore) {
+            return;
+        }
+
+        final GuiSchematicEntry schematic = this.guiSchematicLoad.schematicFiles.get(slotIndex);
         if (schematic.isDirectory()) {
             this.guiSchematicLoad.changeDirectory(schematic.getName());
             this.selectedIndex = -1;
         } else {
-            this.selectedIndex = index;
+            this.selectedIndex = slotIndex;
         }
     }
 
     @Override
-    protected boolean isSelected(int index) {
+    protected boolean isSelected(final int index) {
         return index == this.selectedIndex;
     }
 
@@ -43,16 +51,16 @@ public class GuiSchematicLoadSlot extends GuiSlot {
     }
 
     @Override
-    protected void drawContainerBackground(Tessellator tessellator) {
+    protected void drawContainerBackground(final Tessellator tessellator) {
     }
 
     @Override
-    protected void drawSlot(int index, int x, int y, int par4, int mouseX, int mouseY) {
+    protected void drawSlot(final int index, final int x, final int y, final int par4, final int mouseX, final int mouseY) {
         if (index < 0 || index >= this.guiSchematicLoad.schematicFiles.size()) {
             return;
         }
 
-        GuiSchematicEntry schematic = this.guiSchematicLoad.schematicFiles.get(index);
+        final GuiSchematicEntry schematic = this.guiSchematicLoad.schematicFiles.get(index);
         String schematicName = schematic.getName();
 
         if (schematic.isDirectory()) {
@@ -61,7 +69,7 @@ public class GuiSchematicLoadSlot extends GuiSlot {
             schematicName = schematicName.replaceAll("(?i)\\.schematic$", "");
         }
 
-        GuiHelper.drawItemStack(this.minecraft.renderEngine, this.minecraft.fontRendererObj, x, y, schematic.getItemStack());
+        GuiHelper.drawItemStackWithSlot(this.minecraft.renderEngine, schematic.getItemStack(), x, y);
 
         this.guiSchematicLoad.drawString(this.minecraft.fontRendererObj, schematicName, x + 24, y + 6, 0x00FFFFFF);
     }

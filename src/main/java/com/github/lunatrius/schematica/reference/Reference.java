@@ -14,7 +14,7 @@ public class Reference {
     public static final String MINECRAFT = "${mcversion}";
     public static final String PROXY_SERVER = "com.github.lunatrius.schematica.proxy.ServerProxy";
     public static final String PROXY_CLIENT = "com.github.lunatrius.schematica.proxy.ClientProxy";
-    public static final String GUI_FACTORY = "com.github.lunatrius.schematica.client.gui.GuiFactory";
+    public static final String GUI_FACTORY = "com.github.lunatrius.schematica.client.gui.config.GuiFactory";
 
     public static Logger logger = LogManager.getLogger(Reference.MODID);
 }

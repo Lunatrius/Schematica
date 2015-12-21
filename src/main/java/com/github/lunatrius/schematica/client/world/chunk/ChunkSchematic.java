@@ -9,7 +9,7 @@ import net.minecraft.world.chunk.Chunk;
 public class ChunkSchematic extends Chunk {
     private final World world;
 
-    public ChunkSchematic(World world, int x, int z) {
+    public ChunkSchematic(final World world, final int x, final int z) {
         super(world, x, z);
         this.world = world;
     }
@@ -23,17 +23,17 @@ public class ChunkSchematic extends Chunk {
     }
 
     @Override
-    public IBlockState getBlockState(BlockPos pos) {
+    public IBlockState getBlockState(final BlockPos pos) {
         return this.world.getBlockState(pos);
     }
 
     @Override
-    public boolean getAreLevelsEmpty(int startY, int endY) {
+    public boolean getAreLevelsEmpty(final int startY, final int endY) {
         return false;
     }
 
     @Override
-    public TileEntity getTileEntity(BlockPos pos, EnumCreateEntityType createEntityType) {
+    public TileEntity getTileEntity(final BlockPos pos, final EnumCreateEntityType createEntityType) {
         return this.world.getTileEntity(pos);
     }
 }

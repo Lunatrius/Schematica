@@ -9,17 +9,17 @@ public class GuiSchematicEntry {
     private final ItemStack itemStack;
     private final boolean isDirectory;
 
-    public GuiSchematicEntry(String name, ItemStack itemStack, boolean isDirectory) {
+    public GuiSchematicEntry(final String name, final ItemStack itemStack, final boolean isDirectory) {
         this(name, itemStack.getItem(), itemStack.getItemDamage(), isDirectory);
     }
 
-    public GuiSchematicEntry(String name, Item item, int itemDamage, boolean isDirectory) {
+    public GuiSchematicEntry(final String name, final Item item, final int itemDamage, final boolean isDirectory) {
         this.name = name;
         this.isDirectory = isDirectory;
         this.itemStack = new ItemStack(item, 1, itemDamage);
     }
 
-    public GuiSchematicEntry(String name, Block block, int itemDamage, boolean isDirectory) {
+    public GuiSchematicEntry(final String name, final Block block, final int itemDamage, final boolean isDirectory) {
         this.name = name;
         this.isDirectory = isDirectory;
         this.itemStack = new ItemStack(block, 1, itemDamage);

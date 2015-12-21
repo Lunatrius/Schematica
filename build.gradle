@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
         maven {
             name = 'forge'
             url = 'http://files.minecraftforge.net/maven'
@@ -11,12 +12,13 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+        classpath 'com.matthewprenger:CurseGradle:1.0-SNAPSHOT'
     }
 }
 
-apply plugin: 'forge'
-apply plugin: 'curseforge'
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'com.matthewprenger.cursegradle'
 
 ext.build = System.getenv().BUILD_NUMBER ?: 'git'
 ext.modversion = "${project.version_major}.${project.version_minor}.${project.version_micro}.${build}"
@@ -25,13 +27,6 @@ group = 'com.github.lunatrius'
 version = "${project.version_minecraft}-${modversion}"
 
 compileJava.options.encoding = 'UTF-8'
-
-idea {
-    module {
-        downloadSources = true
-        inheritOutputDirs = true
-    }
-}
 
 minecraft {
     version = "${project.version_minecraft}-${project.version_forge}"
@@ -81,7 +76,7 @@ repositories {
 }
 
 dependencies {
-    compile group: group, name: 'LunatriusCore', version: "${project.version_minecraft}-${project.version_lunatriuscore}", classifier: 'dev'
+    deobfCompile group: group, name: 'LunatriusCore', version: "${project.version_minecraft}-${project.version_lunatriuscore}", classifier: 'universal'
 }
 
 def commonManifest = {
@@ -96,18 +91,8 @@ jar {
     manifest commonManifest
 }
 
-task devJar(dependsOn: 'classes', type: Jar) {
-    from sourceSets.main.output
-    from sourceSets.api.output
-    classifier = 'dev'
-    manifest commonManifest
-}
-
-task sourceJar(dependsOn: 'classes', type: Jar) {
-    from sourceSets.main.allSource
+sourceJar {
     from sourceSets.api.allSource
-    classifier = 'sources'
-    manifest commonManifest
 }
 
 task apiJar(dependsOn: 'classes', type: Jar) {
@@ -117,7 +102,6 @@ task apiJar(dependsOn: 'classes', type: Jar) {
 }
 
 artifacts {
-    archives devJar
     archives sourceJar
     archives apiJar
 }
@@ -131,7 +115,7 @@ if (!project.hasProperty('keystore_alias'))
 if (!project.hasProperty('keystore_password'))
     ext.keystore_password = ''
 
-task signJars(dependsOn: ['reobf', 'devJar', 'sourceJar', 'apiJar']) {
+task signJars(dependsOn: ['reobfJar', 'sourceJar', 'apiJar']) {
     inputs.dir jar.destinationDir
     inputs.file keystore_location
     inputs.property 'keystore_alias', keystore_alias
@@ -178,14 +162,21 @@ task release(dependsOn: 'signJars', type: Copy) {
 }
 
 if (project.hasProperty('api_key_curseforge') && project.hasProperty('extra_curseforge_id')) {
-    curse {
-        dependsOn signJars
-        releaseType = project.hasProperty('extra_curseforge_releasetype') ? project.extra_curseforge_releasetype : 'release'
+    tasks.curseforge.dependsOn signJars
+    curseforge {
         apiKey = project.api_key_curseforge
-        projectId = project.extra_curseforge_id
-        changelog = ''
 
-        additionalArtifact devJar, sourceJar, apiJar
-        relatedProject 'lunatriuscore'
+        project {
+            id = project.extra_curseforge_id
+            changelog = ''
+            releaseType = project.hasProperty('extra_curseforge_releasetype') ? project.extra_curseforge_releasetype : 'release'
+
+            addArtifact sourceJar
+            addArtifact apiJar
+
+            relations {
+                requiredLibrary 'lunatriuscore'
+            }
+        }
     }
 }

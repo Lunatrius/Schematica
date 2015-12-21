@@ -23,7 +23,7 @@ public class TickHandler {
     private TickHandler() {}
 
     @SubscribeEvent
-    public void onClientConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+    public void onClientConnect(final FMLNetworkEvent.ClientConnectedToServerEvent event) {
         /* TODO: is this still needed?
         Reference.logger.info("Scheduling client settings reset.");
         ClientProxy.isPendingReset = true;
@@ -31,13 +31,13 @@ public class TickHandler {
     }
 
     @SubscribeEvent
-    public void onClientDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
+    public void onClientDisconnect(final FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         Reference.logger.info("Scheduling client settings reset.");
         ClientProxy.isPendingReset = true;
     }
 
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
+    public void onClientTick(final TickEvent.ClientTickEvent event) {
         if (this.minecraft.isGamePaused() || event.phase != TickEvent.Phase.END) {
             return;
         }

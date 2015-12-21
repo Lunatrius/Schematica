@@ -10,19 +10,19 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class MessageDownloadBeginAck implements IMessage, IMessageHandler<MessageDownloadBeginAck, IMessage> {
     @Override
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes(final ByteBuf buf) {
         // NOOP
     }
 
     @Override
-    public void toBytes(ByteBuf buf) {
+    public void toBytes(final ByteBuf buf) {
         // NOOP
     }
 
     @Override
-    public IMessage onMessage(MessageDownloadBeginAck message, MessageContext ctx) {
-        EntityPlayerMP player = ctx.getServerHandler().playerEntity;
-        SchematicTransfer transfer = DownloadHandler.INSTANCE.transferMap.get(player);
+    public IMessage onMessage(final MessageDownloadBeginAck message, final MessageContext ctx) {
+        final EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+        final SchematicTransfer transfer = DownloadHandler.INSTANCE.transferMap.get(player);
         if (transfer != null) {
             transfer.setState(SchematicTransfer.State.CHUNK_WAIT);
         }

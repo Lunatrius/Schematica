@@ -46,7 +46,7 @@ public class GuiSchematicSave extends GuiScreenBase {
     private final String strOn = I18n.format(Names.Gui.ON);
     private final String strOff = I18n.format(Names.Gui.OFF);
 
-    public GuiSchematicSave(GuiScreen guiScreen) {
+    public GuiSchematicSave(final GuiScreen guiScreen) {
         super(guiScreen);
     }
 
@@ -107,19 +107,19 @@ public class GuiSchematicSave extends GuiScreenBase {
         setPoint(this.numericBX, this.numericBY, this.numericBZ, ClientProxy.pointB);
     }
 
-    private void setMinMax(GuiNumericField numericField) {
+    private void setMinMax(final GuiNumericField numericField) {
         numericField.setMinimum(Constants.World.MINIMUM_COORD);
         numericField.setMaximum(Constants.World.MAXIMUM_COORD);
     }
 
-    private void setPoint(GuiNumericField numX, GuiNumericField numY, GuiNumericField numZ, BlockPos point) {
+    private void setPoint(final GuiNumericField numX, final GuiNumericField numY, final GuiNumericField numZ, final BlockPos point) {
         numX.setValue(point.getX());
         numY.setValue(point.getY());
         numZ.setValue(point.getZ());
     }
 
     @Override
-    protected void actionPerformed(GuiButton guiButton) {
+    protected void actionPerformed(final GuiButton guiButton) {
         if (guiButton.enabled) {
             if (guiButton.id == this.btnPointA.id) {
                 ClientProxy.movePointToPlayer(ClientProxy.pointA);
@@ -152,7 +152,7 @@ public class GuiSchematicSave extends GuiScreenBase {
                 this.btnEnable.displayString = ClientProxy.isRenderingGuide ? this.strOn : this.strOff;
                 this.btnSave.enabled = ClientProxy.isRenderingGuide || ClientProxy.schematic != null;
             } else if (guiButton.id == this.btnSave.id) {
-                String path = this.tfFilename.getText() + ".schematic";
+                final String path = this.tfFilename.getText() + ".schematic";
                 if (ClientProxy.isRenderingGuide) {
                     if (Schematica.proxy.saveSchematic(this.mc.thePlayer, ConfigurationHandler.schematicDirectory, path, this.mc.theWorld, ClientProxy.pointMin, ClientProxy.pointMax)) {
                         this.filename = "";
@@ -166,13 +166,13 @@ public class GuiSchematicSave extends GuiScreenBase {
     }
 
     @Override
-    protected void keyTyped(char character, int code) throws IOException {
+    protected void keyTyped(final char character, final int code) throws IOException {
         super.keyTyped(character, code);
         this.filename = this.tfFilename.getText();
     }
 
     @Override
-    public void drawScreen(int par1, int par2, float par3) {
+    public void drawScreen(final int par1, final int par2, final float par3) {
         // drawDefaultBackground();
 
         drawString(this.fontRendererObj, this.strSaveSelection, this.width - 205, this.height - 45, 0xFFFFFF);

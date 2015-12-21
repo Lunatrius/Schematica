@@ -2,10 +2,14 @@ package com.github.lunatrius.schematica.world.schematic;
 
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
 
 import java.io.File;
@@ -14,46 +18,51 @@ import java.io.IOException;
 
 public final class SchematicUtil {
     public static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.grass);
+    public static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
+    public static final FMLControlledNamespacedRegistry<Item> ITEM_REGISTRY = GameData.getItemRegistry();
 
-    public static NBTTagCompound readTagCompoundFromFile(File file) throws IOException {
+    public static NBTTagCompound readTagCompoundFromFile(final File file) throws IOException {
         try {
             return CompressedStreamTools.readCompressed(new FileInputStream(file));
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             Reference.logger.warn("Failed compressed read, trying normal read...", ex);
             return CompressedStreamTools.read(file);
         }
     }
 
-    public static ItemStack getIconFromName(String iconName) {
-        ItemStack icon;
-        String name = "";
+    public static ItemStack getIconFromName(final String iconName) {
+        ResourceLocation rl = null;
         int damage = 0;
 
-        String[] parts = iconName.split(",");
+        final String[] parts = iconName.split(",");
         if (parts.length >= 1) {
-            name = parts[0];
+            rl = new ResourceLocation(parts[0]);
             if (parts.length >= 2) {
                 try {
                     damage = Integer.parseInt(parts[1]);
-                } catch (NumberFormatException ignored) {
+                } catch (final NumberFormatException ignored) {
                 }
             }
         }
 
-        icon = new ItemStack(GameData.getBlockRegistry().getObject(name), 1, damage);
-        if (icon.getItem() != null) {
-            return icon;
+        if (rl == null) {
+            return DEFAULT_ICON.copy();
         }
 
-        icon = new ItemStack(GameData.getItemRegistry().getObject(name), 1, damage);
-        if (icon.getItem() != null) {
-            return icon;
+        final ItemStack block = new ItemStack(BLOCK_REGISTRY.getObject(rl), 1, damage);
+        if (block.getItem() != null) {
+            return block;
+        }
+
+        final ItemStack item = new ItemStack(ITEM_REGISTRY.getObject(rl), 1, damage);
+        if (item.getItem() != null) {
+            return item;
         }
 
         return DEFAULT_ICON.copy();
     }
 
-    public static ItemStack getIconFromNBT(NBTTagCompound tagCompound) {
+    public static ItemStack getIconFromNBT(final NBTTagCompound tagCompound) {
         ItemStack icon = DEFAULT_ICON.copy();
 
         if (tagCompound != null && tagCompound.hasKey(Names.NBT.ICON)) {
@@ -67,10 +76,10 @@ public final class SchematicUtil {
         return icon;
     }
 
-    public static ItemStack getIconFromFile(File file) {
+    public static ItemStack getIconFromFile(final File file) {
         try {
             return getIconFromNBT(readTagCompoundFromFile(file));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Reference.logger.error("Failed to read schematic icon!", e);
         }
 

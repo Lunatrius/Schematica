@@ -60,7 +60,7 @@ public class GuiSchematicControl extends GuiScreenBase {
     private final String strOn = I18n.format(Names.Gui.ON);
     private final String strOff = I18n.format(Names.Gui.OFF);
 
-    public GuiSchematicControl(GuiScreen guiScreen) {
+    public GuiSchematicControl(final GuiScreen guiScreen) {
         super(guiScreen);
         this.schematic = ClientProxy.schematic;
         this.printer = SchematicPrinter.INSTANCE;
@@ -149,19 +149,19 @@ public class GuiSchematicControl extends GuiScreenBase {
         }
     }
 
-    private void setMinMax(GuiNumericField numericField) {
+    private void setMinMax(final GuiNumericField numericField) {
         numericField.setMinimum(Constants.World.MINIMUM_COORD);
         numericField.setMaximum(Constants.World.MAXIMUM_COORD);
     }
 
-    private void setPoint(GuiNumericField numX, GuiNumericField numY, GuiNumericField numZ, BlockPos point) {
+    private void setPoint(final GuiNumericField numX, final GuiNumericField numY, final GuiNumericField numZ, final BlockPos point) {
         numX.setValue(point.getX());
         numY.setValue(point.getY());
         numZ.setValue(point.getZ());
     }
 
     @Override
-    protected void actionPerformed(GuiButton guiButton) {
+    protected void actionPerformed(final GuiButton guiButton) {
         if (guiButton.enabled) {
             if (this.schematic == null) {
                 return;
@@ -215,7 +215,7 @@ public class GuiSchematicControl extends GuiScreenBase {
             } else if (guiButton.id == this.btnMaterials.id) {
                 this.mc.displayGuiScreen(new GuiSchematicMaterials(this));
             } else if (guiButton.id == this.btnPrint.id && this.printer.isEnabled()) {
-                boolean isPrinting = this.printer.togglePrinting();
+                final boolean isPrinting = this.printer.togglePrinting();
                 this.btnPrint.displayString = isPrinting ? this.strOn : this.strOff;
             }
         }
@@ -235,7 +235,7 @@ public class GuiSchematicControl extends GuiScreenBase {
     }
 
     @Override
-    public void drawScreen(int par1, int par2, float par3) {
+    public void drawScreen(final int par1, final int par2, final float par3) {
         // drawDefaultBackground();
 
         drawCenteredString(this.fontRendererObj, this.strMoveSchematic, this.centerX, this.centerY - 45, 0xFFFFFF);

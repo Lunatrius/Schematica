@@ -28,7 +28,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.config.GuiConfigEntries;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -58,7 +57,7 @@ public class ClientProxy extends CommonProxy {
 
     private static final Minecraft MINECRAFT = Minecraft.getMinecraft();
 
-    public static void setPlayerData(EntityPlayer player, float partialTicks) {
+    public static void setPlayerData(final EntityPlayer player, final float partialTicks) {
         playerPosition.x = player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks;
         playerPosition.y = player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks;
         playerPosition.z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks;
@@ -68,7 +67,7 @@ public class ClientProxy extends CommonProxy {
         rotationRender = MathHelper.floor_double(player.rotationYaw / 90) & 3;
     }
 
-    private static EnumFacing getOrientation(EntityPlayer player) {
+    private static EnumFacing getOrientation(final EntityPlayer player) {
         if (player.rotationPitch > 45) {
             return EnumFacing.DOWN;
         } else if (player.rotationPitch < -45) {
@@ -99,7 +98,7 @@ public class ClientProxy extends CommonProxy {
         pointMax.z = Math.max(pointA.z, pointB.z);
     }
 
-    public static void movePointToPlayer(MBlockPos point) {
+    public static void movePointToPlayer(final MBlockPos point) {
         point.x = (int) Math.floor(playerPosition.x);
         point.y = (int) Math.floor(playerPosition.y);
         point.z = (int) Math.floor(playerPosition.z);
@@ -124,9 +123,9 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
-    public static void moveSchematicToPlayer(SchematicWorld schematic) {
+    public static void moveSchematicToPlayer(final SchematicWorld schematic) {
         if (schematic != null) {
-            MBlockPos position = schematic.position;
+            final MBlockPos position = schematic.position;
             position.x = (int) Math.floor(playerPosition.x);
             position.y = (int) Math.floor(playerPosition.y);
             position.z = (int) Math.floor(playerPosition.z);
@@ -153,7 +152,7 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void preInit(FMLPreInitializationEvent event) {
+    public void preInit(final FMLPreInitializationEvent event) {
         super.preInit(event);
 
         final Property[] sliders = {
@@ -164,35 +163,34 @@ public class ClientProxy extends CommonProxy {
                 ConfigurationHandler.propTimeout,
                 ConfigurationHandler.propPlaceDistance
         };
-        for (Property prop : sliders) {
+        for (final Property prop : sliders) {
             prop.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
         }
 
-        for (KeyBinding keyBinding : InputHandler.KEY_BINDINGS) {
+        for (final KeyBinding keyBinding : InputHandler.KEY_BINDINGS) {
             ClientRegistry.registerKeyBinding(keyBinding);
         }
     }
 
     @Override
-    public void init(FMLInitializationEvent event) {
+    public void init(final FMLInitializationEvent event) {
         super.init(event);
 
-        FMLCommonHandler.instance().bus().register(InputHandler.INSTANCE);
-        FMLCommonHandler.instance().bus().register(TickHandler.INSTANCE);
-        FMLCommonHandler.instance().bus().register(RenderTickHandler.INSTANCE);
-        FMLCommonHandler.instance().bus().register(ConfigurationHandler.INSTANCE);
-
-        ClientCommandHandler.instance.registerCommand(new CommandSchematicaReplace());
-
+        MinecraftForge.EVENT_BUS.register(InputHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(TickHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(RenderTickHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(ConfigurationHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(RenderSchematic.INSTANCE);
         MinecraftForge.EVENT_BUS.register(ChatEventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(GuiHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(new OverlayHandler());
         MinecraftForge.EVENT_BUS.register(new WorldHandler());
+
+        ClientCommandHandler.instance.registerCommand(new CommandSchematicaReplace());
     }
 
     @Override
-    public void postInit(FMLPostInitializationEvent event) {
+    public void postInit(final FMLPostInitializationEvent event) {
         super.postInit(event);
 
         resetSettings();
@@ -203,7 +201,7 @@ public class ClientProxy extends CommonProxy {
         final File file = MINECRAFT.mcDataDir;
         try {
             return file.getCanonicalFile();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             Reference.logger.debug("Could not canonize path!", e);
         }
         return file;
@@ -235,13 +233,13 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public boolean loadSchematic(EntityPlayer player, File directory, String filename) {
-        ISchematic schematic = SchematicFormat.readFromFile(directory, filename);
+    public boolean loadSchematic(final EntityPlayer player, final File directory, final String filename) {
+        final ISchematic schematic = SchematicFormat.readFromFile(directory, filename);
         if (schematic == null) {
             return false;
         }
 
-        SchematicWorld world = new SchematicWorld(schematic);
+        final SchematicWorld world = new SchematicWorld(schematic);
 
         Reference.logger.debug("Loaded {} [w:{},h:{},l:{}]", filename, world.getWidth(), world.getHeight(), world.getLength());
 
@@ -254,12 +252,12 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public boolean isPlayerQuotaExceeded(EntityPlayer player) {
+    public boolean isPlayerQuotaExceeded(final EntityPlayer player) {
         return false;
     }
 
     @Override
-    public File getPlayerSchematicDirectory(EntityPlayer player, boolean privateDirectory) {
+    public File getPlayerSchematicDirectory(final EntityPlayer player, final boolean privateDirectory) {
         return ConfigurationHandler.schematicDirectory;
     }
 }

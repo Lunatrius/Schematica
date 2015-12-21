@@ -31,7 +31,7 @@ public class CommandSchematicaReplace extends CommandSchematicaBase {
     }
 
     @Override
-    public List addTabCompletionOptions(final ICommandSender sender, final String[] args, final BlockPos pos) {
+    public List<String> addTabCompletionOptions(final ICommandSender sender, final String[] args, final BlockPos pos) {
         if (args.length < 3) {
             return getListOfStringsMatchingLastWord(args, BLOCK_REGISTRY.getKeys());
         }

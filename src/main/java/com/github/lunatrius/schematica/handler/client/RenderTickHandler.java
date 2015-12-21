@@ -17,7 +17,7 @@ public class RenderTickHandler {
     private RenderTickHandler() {}
 
     @SubscribeEvent
-    public void onRenderTick(TickEvent.RenderTickEvent event) {
+    public void onRenderTick(final TickEvent.RenderTickEvent event) {
         final SchematicWorld schematic = ClientProxy.schematic;
 
         ClientProxy.movingObjectPosition = schematic != null ? rayTrace(schematic, 1.0f) : null;

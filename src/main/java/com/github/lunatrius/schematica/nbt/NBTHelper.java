@@ -36,7 +36,7 @@ public class NBTHelper {
 
     public static NBTTagCompound writeTileEntitiesToCompound(final List<TileEntity> tileEntities, final NBTTagCompound compound) {
         final NBTTagList tagList = new NBTTagList();
-        for (TileEntity tileEntity : tileEntities) {
+        for (final TileEntity tileEntity : tileEntities) {
             final NBTTagCompound tileEntityCompound = writeTileEntityToCompound(tileEntity);
             tagList.appendTag(tileEntityCompound);
         }
@@ -77,7 +77,7 @@ public class NBTHelper {
 
     public static NBTTagCompound writeEntitiesToCompound(final List<Entity> entities, final NBTTagCompound compound) {
         final NBTTagList tagList = new NBTTagList();
-        for (Entity entity : entities) {
+        for (final Entity entity : entities) {
             final NBTTagCompound entityCompound = new NBTTagCompound();
             entity.writeToNBT(entityCompound);
             tagList.appendTag(entityCompound);
@@ -88,32 +88,32 @@ public class NBTHelper {
         return compound;
     }
 
-    public static TileEntity reloadTileEntity(TileEntity tileEntity) throws NBTConversionException {
+    public static TileEntity reloadTileEntity(final TileEntity tileEntity) throws NBTConversionException {
         return reloadTileEntity(tileEntity, 0, 0, 0);
     }
 
-    public static TileEntity reloadTileEntity(TileEntity tileEntity, int offsetX, int offsetY, int offsetZ) throws NBTConversionException {
+    public static TileEntity reloadTileEntity(TileEntity tileEntity, final int offsetX, final int offsetY, final int offsetZ) throws NBTConversionException {
         if (tileEntity == null) {
             return null;
         }
 
         try {
-            NBTTagCompound tileEntityCompound = writeTileEntityToCompound(tileEntity);
+            final NBTTagCompound tileEntityCompound = writeTileEntityToCompound(tileEntity);
             tileEntity = readTileEntityFromCompound(tileEntityCompound);
             final BlockPos pos = tileEntity.getPos();
             tileEntity.setPos(pos.add(-offsetX, -offsetY, -offsetZ));
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             throw new NBTConversionException(tileEntity, t);
         }
 
         return tileEntity;
     }
 
-    public static Entity reloadEntity(Entity entity) throws NBTConversionException {
+    public static Entity reloadEntity(final Entity entity) throws NBTConversionException {
         return reloadEntity(entity, 0, 0, 0);
     }
 
-    public static Entity reloadEntity(Entity entity, int offsetX, int offsetY, int offsetZ) throws NBTConversionException {
+    public static Entity reloadEntity(Entity entity, final int offsetX, final int offsetY, final int offsetZ) throws NBTConversionException {
         if (entity == null) {
             return null;
         }
@@ -129,7 +129,7 @@ public class NBTHelper {
                     entity.posZ -= offsetZ;
                 }
             }
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             throw new NBTConversionException(entity, t);
         }
 

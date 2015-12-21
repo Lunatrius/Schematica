@@ -15,10 +15,10 @@ public class ChatEventHandler {
     private ChatEventHandler() {}
 
     @SubscribeEvent
-    public void onClientChatReceivedEvent(ClientChatReceivedEvent event) {
+    public void onClientChatReceivedEvent(final ClientChatReceivedEvent event) {
         if (this.chatLines < 20) {
             this.chatLines++;
-            String message = event.message.getFormattedText();
+            final String message = event.message.getFormattedText();
             Reference.logger.debug("Message #{}: {}", this.chatLines, message);
             if (message.contains(Names.SBC.DISABLE_PRINTER)) {
                 Reference.logger.info("Printer is disabled on this server.");

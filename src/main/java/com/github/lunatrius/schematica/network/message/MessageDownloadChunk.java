@@ -36,7 +36,7 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
     public MessageDownloadChunk() {
     }
 
-    public MessageDownloadChunk(ISchematic schematic, int baseX, int baseY, int baseZ) {
+    public MessageDownloadChunk(final ISchematic schematic, final int baseX, final int baseY, final int baseZ) {
         this.baseX = baseX;
         this.baseY = baseY;
         this.baseZ = baseZ;
@@ -70,9 +70,9 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
         for (int x = 0; x < Constants.SchematicChunk.WIDTH; x++) {
             for (int y = 0; y < Constants.SchematicChunk.HEIGHT; y++) {
                 for (int z = 0; z < Constants.SchematicChunk.LENGTH; z++) {
-                    short id = this.blocks[x][y][z];
-                    byte meta = this.metadata[x][y][z];
-                    Block block = BLOCK_REGISTRY.getObjectById(id);
+                    final short id = this.blocks[x][y][z];
+                    final byte meta = this.metadata[x][y][z];
+                    final Block block = BLOCK_REGISTRY.getObjectById(id);
 
                     pos.set(this.baseX + x, this.baseY + y, this.baseZ + z);
 
@@ -81,13 +81,13 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
             }
         }
 
-        for (TileEntity tileEntity : this.tileEntities) {
+        for (final TileEntity tileEntity : this.tileEntities) {
             schematic.setTileEntity(tileEntity.getPos(), tileEntity);
         }
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes(final ByteBuf buf) {
         this.baseX = buf.readShort();
         this.baseY = buf.readShort();
         this.baseZ = buf.readShort();
@@ -114,7 +114,7 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
     }
 
     @Override
-    public void toBytes(ByteBuf buf) {
+    public void toBytes(final ByteBuf buf) {
         buf.writeShort(this.baseX);
         buf.writeShort(this.baseY);
         buf.writeShort(this.baseZ);
@@ -136,7 +136,7 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
     }
 
     @Override
-    public IMessage onMessage(MessageDownloadChunk message, MessageContext ctx) {
+    public IMessage onMessage(final MessageDownloadChunk message, final MessageContext ctx) {
         message.copyToSchematic(DownloadHandler.INSTANCE.schematic);
 
         return new MessageDownloadChunkAck(message.baseX, message.baseY, message.baseZ);
