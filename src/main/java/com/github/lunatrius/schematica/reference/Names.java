@@ -223,10 +223,4 @@ public final class Names {
         public static final String ENTITIES = "Entities";
         public static final String EXTENDED_METADATA = "ExtendedMetadata";
     }
-
-    public static final class SBC {
-        public static final String DISABLE_PRINTER = "\u00a70\u00a72\u00a70\u00a70\u00a7e\u00a7f";
-        public static final String DISABLE_SAVE = "\u00a70\u00a72\u00a71\u00a70\u00a7e\u00a7f";
-        public static final String DISABLE_LOAD = "\u00a70\u00a72\u00a71\u00a71\u00a7e\u00a7f";
-    }
 }
