@@ -99,6 +99,10 @@ public class NBTHelper {
         try {
             NBTTagCompound tileEntityCompound = writeTileEntityToCompound(tileEntity);
             tileEntity = readTileEntityFromCompound(tileEntityCompound);
+            if (tileEntity == null) {
+                return null;
+            }
+
             tileEntity.xCoord -= offsetX;
             tileEntity.yCoord -= offsetY;
             tileEntity.zCoord -= offsetZ;

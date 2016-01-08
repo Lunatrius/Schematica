@@ -8,8 +8,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
+import scala.Option;
 import scala.collection.Iterable;
 import scala.collection.JavaConversions;
+import scala.collection.mutable.Map;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -20,6 +22,8 @@ public class ForgeMultipart {
     private static boolean enabled = false;
     private static boolean client = false;
 
+    private static Map<String, Object> instancesTypeMap;
+    private static Method methodMaterialID;
     private static Method methodCreatePart;
     private static Method methodLoad;
     private static Method methodOnPartChanged;
@@ -36,10 +40,21 @@ public class ForgeMultipart {
             try {
                 final ClassLoader classLoader = ForgeMultipart.class.getClassLoader();
 
-                final Class<? super Object> classMultiPartRegistry = ReflectionHelper.getClass(classLoader, "codechicken.multipart.MultiPartRegistry");
-                methodCreatePart = ReflectionHelper.findMethod(classMultiPartRegistry, null, new String[] {
-                        "createPart"
-                }, String.class, boolean.class);
+                final Class<? super Object> classMultiPartRegistry$ = ReflectionHelper.getClass(classLoader, "codechicken.multipart.MultiPartRegistry$");
+                final Field fieldMultiPartRegistry$module$ = ReflectionHelper.findField(classMultiPartRegistry$, "MODULE$");
+                final Field field$typeMap = ReflectionHelper.findField(classMultiPartRegistry$, "codechicken$multipart$MultiPartRegistry$$typeMap");
+                final Object instanceMultiPartRegistry$module$ = fieldMultiPartRegistry$module$.get(classMultiPartRegistry$);
+                instancesTypeMap = (Map<String, Object>) field$typeMap.get(instanceMultiPartRegistry$module$);
+
+                final Class<? super Object> classMicroMaterialRegistry = ReflectionHelper.getClass(classLoader, "codechicken.microblock.MicroMaterialRegistry");
+                methodMaterialID = ReflectionHelper.findMethod(classMicroMaterialRegistry, null, new String[] {
+                        "materialID"
+                }, String.class);
+
+                final Class<? super Object> classMicroblockClass = ReflectionHelper.getClass(classLoader, "codechicken.microblock.MicroblockClass");
+                methodCreatePart = ReflectionHelper.findMethod(classMicroblockClass, null, new String[] {
+                        "create"
+                }, boolean.class, int.class);
 
                 final Class<? super Object> classTMultiPart = ReflectionHelper.getClass(classLoader, "codechicken.multipart.TMultiPart");
                 methodLoad = ReflectionHelper.findMethod(classTMultiPart, null, new String[] {
@@ -101,8 +116,9 @@ public class ForgeMultipart {
         for (int i = 0; i < partList.tagCount(); i++) {
             final NBTTagCompound partTag = partList.getCompoundTagAt(i);
             final String partID = partTag.getString("id");
+            final Integer materialID = materialID(partTag.getString("material"));
 
-            final Object part = createPart(partID, client);
+            final Object part = createPart(partID, client, materialID);
             if (part != null) {
                 load(part, partTag);
                 parts.add(part);
@@ -139,8 +155,18 @@ public class ForgeMultipart {
         return null;
     }
 
-    private static Object createPart(final String partID, final boolean client) throws ReflectiveOperationException {
-        return methodCreatePart.invoke(null, partID, client);
+    private static int materialID(final String material) throws ReflectiveOperationException {
+        return (Integer) methodMaterialID.invoke(null, material);
+    }
+
+    private static Object createPart(final String partID, final boolean client, final int materialID) throws ReflectiveOperationException {
+        final Option<Object> option = instancesTypeMap.get(partID);
+        if (option.isEmpty()) {
+            Reference.logger.trace("Invalid type (found: {})", option);
+            return null;
+        }
+
+        return methodCreatePart.invoke(option.get(), client, materialID);
     }
 
     private static Object load(final Object part, final NBTTagCompound partTag) throws ReflectiveOperationException {
