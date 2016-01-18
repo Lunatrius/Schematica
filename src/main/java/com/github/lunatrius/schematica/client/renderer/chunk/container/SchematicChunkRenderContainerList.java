@@ -12,7 +12,7 @@ public class SchematicChunkRenderContainerList extends SchematicChunkRenderConta
     @Override
     public void renderChunkLayer(final EnumWorldBlockLayer layer) {
         if (this.initialized) {
-            for (final RenderChunk renderchunk : (Iterable<RenderChunk>) this.renderChunks) {
+            for (final RenderChunk renderchunk : this.renderChunks) {
                 final ListedRenderChunk listedRenderChunk = (ListedRenderChunk) renderchunk;
                 GlStateManager.pushMatrix();
                 preRenderChunk(renderchunk);
