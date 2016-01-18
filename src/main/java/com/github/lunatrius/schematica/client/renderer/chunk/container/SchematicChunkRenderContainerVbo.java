@@ -15,16 +15,10 @@ import java.util.List;
 public class SchematicChunkRenderContainerVbo extends SchematicChunkRenderContainer {
     @Override
     public void renderChunkLayer(final EnumWorldBlockLayer layer) {
-        GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-        OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
-        GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-        OpenGlHelper.setClientActiveTexture(OpenGlHelper.lightmapTexUnit);
-        GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
-        OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
-        GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+        preRenderChunk();
 
         if (this.initialized) {
-            for (final RenderChunk renderChunk : (Iterable<RenderChunk>) this.renderChunks) {
+            for (final RenderChunk renderChunk : this.renderChunks) {
                 final VertexBuffer vertexbuffer = renderChunk.getVertexBufferByLayer(layer.ordinal());
                 GlStateManager.pushMatrix();
                 preRenderChunk(renderChunk);
@@ -40,6 +34,20 @@ public class SchematicChunkRenderContainerVbo extends SchematicChunkRenderContai
             this.renderChunks.clear();
         }
 
+        postRenderChunk();
+    }
+
+    private void preRenderChunk() {
+        GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+        OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
+        GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+        OpenGlHelper.setClientActiveTexture(OpenGlHelper.lightmapTexUnit);
+        GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+        OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
+        GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+    }
+
+    private void postRenderChunk() {
         final List<VertexFormatElement> elements = DefaultVertexFormats.BLOCK.getElements();
 
         for (final VertexFormatElement element : elements) {
@@ -77,8 +85,7 @@ public class SchematicChunkRenderContainerVbo extends SchematicChunkRenderContai
     @Override
     public void renderOverlay() {
         if (this.initialized) {
-            GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
-            GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+            preRenderOverlay();
 
             for (final RenderOverlay renderOverlay : this.renderOverlays) {
                 final VertexBuffer vertexBuffer = renderOverlay.getVertexBufferByLayer(EnumWorldBlockLayer.TRANSLUCENT.ordinal());
@@ -95,9 +102,18 @@ public class SchematicChunkRenderContainerVbo extends SchematicChunkRenderContai
             GlStateManager.resetColor();
             this.renderOverlays.clear();
 
-            GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
-            GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+            postRenderOverlay();
         }
+    }
+
+    private void preRenderOverlay() {
+        GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+        GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+    }
+
+    private void postRenderOverlay() {
+        GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
+        GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
     }
 
     private void setupArrayPointersOverlay() {
