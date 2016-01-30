@@ -100,8 +100,9 @@ public class RenderOverlay extends RenderChunk {
                 if (!isMcAirBlock) {
                     if (isSchAirBlock && ConfigurationHandler.highlightAir) {
                         render = true;
-                        sides = GeometryMasks.Quad.ALL;
                         color = 0xBF00BF;
+
+                        sides = getSides(mcBlock, mcWorld, mcPos, sides);
                     }
                 }
 
@@ -122,29 +123,7 @@ public class RenderOverlay extends RenderChunk {
                     }
 
                     if (render) {
-                        if (schBlock.shouldSideBeRendered(schematic, pos.offset(EnumFacing.DOWN), EnumFacing.DOWN)) {
-                            sides |= GeometryMasks.Quad.DOWN;
-                        }
-
-                        if (schBlock.shouldSideBeRendered(schematic, pos.offset(EnumFacing.UP), EnumFacing.UP)) {
-                            sides |= GeometryMasks.Quad.UP;
-                        }
-
-                        if (schBlock.shouldSideBeRendered(schematic, pos.offset(EnumFacing.NORTH), EnumFacing.NORTH)) {
-                            sides |= GeometryMasks.Quad.NORTH;
-                        }
-
-                        if (schBlock.shouldSideBeRendered(schematic, pos.offset(EnumFacing.SOUTH), EnumFacing.SOUTH)) {
-                            sides |= GeometryMasks.Quad.SOUTH;
-                        }
-
-                        if (schBlock.shouldSideBeRendered(schematic, pos.offset(EnumFacing.WEST), EnumFacing.WEST)) {
-                            sides |= GeometryMasks.Quad.WEST;
-                        }
-
-                        if (schBlock.shouldSideBeRendered(schematic, pos.offset(EnumFacing.EAST), EnumFacing.EAST)) {
-                            sides |= GeometryMasks.Quad.EAST;
-                        }
+                        sides = getSides(schBlock, schematic, pos, sides);
                     }
                 }
 
@@ -165,6 +144,34 @@ public class RenderOverlay extends RenderChunk {
         }
 
         compiledOverlay.setVisibility(visgraph.computeVisibility());
+    }
+
+    private int getSides(final Block block, final World world, final BlockPos pos, int sides) {
+        if (block.shouldSideBeRendered(world, pos.offset(EnumFacing.DOWN), EnumFacing.DOWN)) {
+            sides |= GeometryMasks.Quad.DOWN;
+        }
+
+        if (block.shouldSideBeRendered(world, pos.offset(EnumFacing.UP), EnumFacing.UP)) {
+            sides |= GeometryMasks.Quad.UP;
+        }
+
+        if (block.shouldSideBeRendered(world, pos.offset(EnumFacing.NORTH), EnumFacing.NORTH)) {
+            sides |= GeometryMasks.Quad.NORTH;
+        }
+
+        if (block.shouldSideBeRendered(world, pos.offset(EnumFacing.SOUTH), EnumFacing.SOUTH)) {
+            sides |= GeometryMasks.Quad.SOUTH;
+        }
+
+        if (block.shouldSideBeRendered(world, pos.offset(EnumFacing.WEST), EnumFacing.WEST)) {
+            sides |= GeometryMasks.Quad.WEST;
+        }
+
+        if (block.shouldSideBeRendered(world, pos.offset(EnumFacing.EAST), EnumFacing.EAST)) {
+            sides |= GeometryMasks.Quad.EAST;
+        }
+
+        return sides;
     }
 
     @Override
