@@ -1,30 +1,30 @@
 package com.github.lunatrius.schematica.client.renderer.chunk;
 
 import net.minecraft.client.renderer.chunk.CompiledChunk;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.BlockRenderLayer;
 
 public class CompiledOverlay extends CompiledChunk {
     @Override
-    public void setLayerStarted(final EnumWorldBlockLayer layer) {
-        if (layer == EnumWorldBlockLayer.TRANSLUCENT) {
+    public void setLayerStarted(final BlockRenderLayer layer) {
+        if (layer == BlockRenderLayer.TRANSLUCENT) {
             super.setLayerStarted(layer);
         }
     }
 
     @Override
-    public void setLayerUsed(final EnumWorldBlockLayer layer) {
-        if (layer == EnumWorldBlockLayer.TRANSLUCENT) {
+    public void setLayerUsed(final BlockRenderLayer layer) {
+        if (layer == BlockRenderLayer.TRANSLUCENT) {
             super.setLayerUsed(layer);
         }
     }
 
     @Override
-    public boolean isLayerStarted(final EnumWorldBlockLayer layer) {
-        return layer == EnumWorldBlockLayer.TRANSLUCENT && super.isLayerStarted(layer);
+    public boolean isLayerStarted(final BlockRenderLayer layer) {
+        return layer == BlockRenderLayer.TRANSLUCENT && super.isLayerStarted(layer);
     }
 
     @Override
-    public boolean isLayerEmpty(final EnumWorldBlockLayer layer) {
-        return layer == EnumWorldBlockLayer.TRANSLUCENT && super.isLayerEmpty(layer);
+    public boolean isLayerEmpty(final BlockRenderLayer layer) {
+        return layer == BlockRenderLayer.TRANSLUCENT && super.isLayerEmpty(layer);
     }
 }

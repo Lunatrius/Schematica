@@ -14,8 +14,9 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -36,7 +37,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
     }
 
     @Override
-    public List<String> addTabCompletionOptions(final ICommandSender sender, final String[] args, final BlockPos pos) {
+    public List<String> getTabCompletionOptions(final MinecraftServer server, final ICommandSender sender, final String[] args, final BlockPos pos) {
         if (!(sender instanceof EntityPlayer)) {
             return null;
         }
@@ -58,7 +59,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
     }
 
     @Override
-    public void processCommand(final ICommandSender sender, final String[] args) throws CommandException {
+    public void execute(final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
         if (args.length < 1) {
             throw new WrongUsageException(getCommandUsage(sender));
         }
@@ -79,7 +80,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
 
         if (schematic != null) {
             DownloadHandler.INSTANCE.transferMap.put(player, new SchematicTransfer(schematic, filename));
-            sender.addChatMessage(new ChatComponentTranslation(Names.Command.Download.Message.DOWNLOAD_STARTED, filename));
+            sender.addChatMessage(new TextComponentTranslation(Names.Command.Download.Message.DOWNLOAD_STARTED, filename));
         } else {
             throw new CommandException(Names.Command.Download.Message.DOWNLOAD_FAILED);
         }

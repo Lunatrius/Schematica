@@ -6,7 +6,7 @@ import com.google.common.base.Predicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.state.pattern.BlockStateHelper;
+import net.minecraft.block.state.pattern.BlockStateMatcher;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
 import net.minecraftforge.fml.common.registry.GameData;
@@ -34,8 +34,8 @@ public class BlockStateReplacer {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private IBlockState applyProperties(IBlockState blockState, final Map<IProperty, Comparable> properties) {
-        for (final Map.Entry<IProperty, Comparable> entry : properties.entrySet()) {
+    private <K extends IProperty, V extends Comparable> IBlockState applyProperties(IBlockState blockState, final Map<K, V> properties) {
+        for (final Map.Entry<K, V> entry : properties.entrySet()) {
             try {
                 blockState = blockState.withProperty(entry.getKey(), entry.getValue());
             } catch (final IllegalArgumentException ignored) {
@@ -50,8 +50,8 @@ public class BlockStateReplacer {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static BlockStateHelper getMatcher(final BlockStateInfo blockStateInfo) {
-        final BlockStateHelper matcher = BlockStateHelper.forBlock(blockStateInfo.block);
+    public static BlockStateMatcher getMatcher(final BlockStateInfo blockStateInfo) {
+        final BlockStateMatcher matcher = BlockStateMatcher.forBlock(blockStateInfo.block);
         for (final Map.Entry<IProperty, Comparable> entry : blockStateInfo.stateData.entrySet()) {
             matcher.where(entry.getKey(), new Predicate<Comparable>() {
                 @Override

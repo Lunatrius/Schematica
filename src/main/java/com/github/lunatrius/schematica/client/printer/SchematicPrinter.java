@@ -1,7 +1,7 @@
 package com.github.lunatrius.schematica.client.printer;
 
-import com.github.lunatrius.core.util.BlockPosHelper;
-import com.github.lunatrius.core.util.MBlockPos;
+import com.github.lunatrius.core.util.math.BlockPosHelper;
+import com.github.lunatrius.core.util.math.MBlockPos;
 import com.github.lunatrius.schematica.block.state.BlockStateHelper;
 import com.github.lunatrius.schematica.client.printer.nbtsync.NBTSync;
 import com.github.lunatrius.schematica.client.printer.nbtsync.SyncRegistry;
@@ -19,13 +19,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C0BPacketEntityAction;
-import net.minecraft.util.BlockPos;
+import net.minecraft.network.play.client.CPacketEntityAction;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
@@ -209,7 +212,7 @@ public class SchematicPrinter {
             return false;
         }
 
-        final ItemStack itemStack = BlockStateToItemStack.getItemStack(blockState, new MovingObjectPosition(player), this.schematic, pos);
+        final ItemStack itemStack = BlockStateToItemStack.getItemStack(blockState, new RayTraceResult(player), this.schematic, pos, player);
         if (itemStack == null || itemStack.getItem() == null) {
             Reference.logger.debug("{} is missing a mapping!", blockState);
             return false;
@@ -236,7 +239,7 @@ public class SchematicPrinter {
             return false;
         }
 
-        if (block.isAir(world, offset)) {
+        if (block.isAir(blockState, world, offset)) {
             return false;
         }
 
@@ -316,7 +319,8 @@ public class SchematicPrinter {
     }
 
     private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final BlockPos pos, final EnumFacing direction, final float offsetX, final float offsetY, final float offsetZ, final int extraClicks) {
-        final ItemStack itemStack = player.getCurrentEquippedItem();
+        final EnumHand hand = EnumHand.MAIN_HAND;
+        final ItemStack itemStack = player.getHeldItem(hand);
         boolean success = false;
 
         if (!this.minecraft.playerController.isInCreativeMode() && itemStack != null && itemStack.stackSize <= extraClicks) {
@@ -325,11 +329,11 @@ public class SchematicPrinter {
 
         final BlockPos offset = pos.offset(direction);
         final EnumFacing side = direction.getOpposite();
-        final Vec3 hitVec = new Vec3(offset.getX() + offsetX, offset.getY() + offsetY, offset.getZ() + offsetZ);
+        final Vec3d hitVec = new Vec3d(offset.getX() + offsetX, offset.getY() + offsetY, offset.getZ() + offsetZ);
 
-        success = placeBlock(world, player, itemStack, offset, side, hitVec);
+        success = placeBlock(world, player, itemStack, offset, side, hitVec, hand);
         for (int i = 0; success && i < extraClicks; i++) {
-            success = placeBlock(world, player, itemStack, offset, side, hitVec);
+            success = placeBlock(world, player, itemStack, offset, side, hitVec, hand);
         }
 
         if (itemStack != null && itemStack.stackSize == 0 && success) {
@@ -339,21 +343,23 @@ public class SchematicPrinter {
         return success;
     }
 
-    private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final ItemStack itemStack, final BlockPos pos, final EnumFacing side, final Vec3 hitVec) {
-        boolean success = !ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_BLOCK, world, pos, side).isCanceled();
-        if (success) {
-            success = this.minecraft.playerController.onPlayerRightClick(player, world, itemStack, pos, side, hitVec);
-            if (success) {
-                player.swingItem();
-            }
+    private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final ItemStack itemStack, final BlockPos pos, final EnumFacing side, final Vec3d hitVec, final EnumHand hand) {
+        if (ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_BLOCK, world, pos, side, hitVec).isCanceled()) {
+            return false;
         }
 
-        return success;
+        final EnumActionResult result = this.minecraft.playerController.processRightClickBlock(player, world, itemStack, pos, side, hitVec, hand);
+        if ((result != EnumActionResult.SUCCESS)) {
+            return false;
+        }
+
+        player.swingArm(hand);
+        return true;
     }
 
     private void syncSneaking(final EntityPlayerSP player, final boolean isSneaking) {
         player.setSneaking(isSneaking);
-        player.sendQueue.addToSendQueue(new C0BPacketEntityAction(player, isSneaking ? C0BPacketEntityAction.Action.START_SNEAKING : C0BPacketEntityAction.Action.STOP_SNEAKING));
+        player.sendQueue.addToSendQueue(new CPacketEntityAction(player, isSneaking ? CPacketEntityAction.Action.START_SNEAKING : CPacketEntityAction.Action.STOP_SNEAKING));
     }
 
     private boolean swapToItem(final InventoryPlayer inventory, final ItemStack itemStack) {
@@ -409,6 +415,6 @@ public class SchematicPrinter {
     }
 
     private boolean swapSlots(final int from, final int to) {
-        return this.minecraft.playerController.windowClick(this.minecraft.thePlayer.inventoryContainer.windowId, from, to, 2, this.minecraft.thePlayer) == null;
+        return this.minecraft.playerController.windowClick(this.minecraft.thePlayer.inventoryContainer.windowId, from, to, ClickType.SWAP, this.minecraft.thePlayer) == null;
     }
 }

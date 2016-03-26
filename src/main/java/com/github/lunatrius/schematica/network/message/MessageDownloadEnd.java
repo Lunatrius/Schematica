@@ -6,7 +6,7 @@ import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -40,7 +40,7 @@ public class MessageDownloadEnd implements IMessage, IMessageHandler<MessageDown
         final boolean success = SchematicFormat.writeToFile(directory, message.name, DownloadHandler.INSTANCE.schematic);
 
         if (success) {
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentTranslation(Names.Command.Download.Message.DOWNLOAD_SUCCEEDED, message.name));
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentTranslation(Names.Command.Download.Message.DOWNLOAD_SUCCEEDED, message.name));
         }
 
         DownloadHandler.INSTANCE.schematic = null;

@@ -7,14 +7,14 @@ import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.BlockRenderLayer;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
 
 public class SchematicChunkRenderContainerVbo extends SchematicChunkRenderContainer {
     @Override
-    public void renderChunkLayer(final EnumWorldBlockLayer layer) {
+    public void renderChunkLayer(final BlockRenderLayer layer) {
         preRenderChunk();
 
         if (this.initialized) {
@@ -88,7 +88,7 @@ public class SchematicChunkRenderContainerVbo extends SchematicChunkRenderContai
             preRenderOverlay();
 
             for (final RenderOverlay renderOverlay : this.renderOverlays) {
-                final VertexBuffer vertexBuffer = renderOverlay.getVertexBufferByLayer(EnumWorldBlockLayer.TRANSLUCENT.ordinal());
+                final VertexBuffer vertexBuffer = renderOverlay.getVertexBufferByLayer(BlockRenderLayer.TRANSLUCENT.ordinal());
                 GlStateManager.pushMatrix();
                 preRenderChunk(renderOverlay);
                 renderOverlay.multModelviewMatrix();

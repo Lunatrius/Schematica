@@ -12,9 +12,12 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.UUID;
 
 public class ServerProxy extends CommonProxy {
+    private WeakReference<MinecraftServer> serverWeakReference = null;
+
     @Override
     public void init(final FMLInitializationEvent event) {
         super.init(event);
@@ -26,11 +29,13 @@ public class ServerProxy extends CommonProxy {
     public void serverStarting(final FMLServerStartingEvent event) {
         super.serverStarting(event);
         event.registerServerCommand(new CommandSchematicaDownload());
+        this.serverWeakReference = new WeakReference<MinecraftServer>(event.getServer());
     }
 
     @Override
     public File getDataDirectory() {
-        final File file = MinecraftServer.getServer().getFile(".");
+        final MinecraftServer server = this.serverWeakReference.get();
+        final File file = server != null ? server.getFile(".") : new File(".");
         try {
             return file.getCanonicalFile();
         } catch (final IOException e) {

@@ -11,12 +11,11 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 
 import java.io.File;
 import java.util.Arrays;
@@ -33,8 +32,8 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
     }
 
     @Override
-    public void processCommand(final ICommandSender sender, final String[] arguments) throws CommandException{
-        if (arguments.length < 1) {
+    public void execute(final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
+        if (args.length < 1) {
             throw new WrongUsageException(getCommandUsage(sender));
         }
 
@@ -45,14 +44,14 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
         final EntityPlayer player = (EntityPlayer) sender;
 
         boolean delete = false;
-        String name = Strings.join(arguments, " ");
+        String name = Strings.join(args, " ");
 
-        if (arguments.length > 1) {
+        if (args.length > 1) {
             //check if the last parameter is a hash, which constitutes a confirmation.
-            final String potentialNameHash = arguments[arguments.length - 1];
+            final String potentialNameHash = args[args.length - 1];
             if (potentialNameHash.length() == 32) {
                 //We probably have a match.
-                final String[] a = Arrays.copyOfRange(arguments, 0, arguments.length - 1);
+                final String[] a = Arrays.copyOfRange(args, 0, args.length - 1);
                 //The name then should be everything except the last element
                 name = Strings.join(a, " ");
 
@@ -75,27 +74,17 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
         if (file.exists()) {
             if (delete) {
                 if (file.delete()) {
-                    sender.addChatMessage(new ChatComponentTranslation(Names.Command.Remove.Message.SCHEMATIC_REMOVED, name));
+                    sender.addChatMessage(new TextComponentTranslation(Names.Command.Remove.Message.SCHEMATIC_REMOVED, name));
                 } else {
                     throw new CommandException(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND);
                 }
             } else {
                 final String hash = Hashing.md5().hashString(name, Charsets.UTF_8).toString();
                 final String confirmCommand = String.format("/%s %s %s", Names.Command.Remove.NAME, name, hash);
-                final IChatComponent chatComponent = new ChatComponentTranslation(Names.Command.Remove.Message.ARE_YOU_SURE_START, name)
-                        .appendSibling(new ChatComponentText(" ["))
-                        .appendSibling(
-                                //Confirmation link
-                                new ChatComponentTranslation(Names.Command.Remove.Message.YES)
-                                        .setChatStyle(
-                                                new ChatStyle()
-                                                        .setColor(EnumChatFormatting.RED)
-                                                        .setChatClickEvent(
-                                                                new ClickEvent(ClickEvent.Action.RUN_COMMAND, confirmCommand)
-                                                        )
-                                        )
-                        )
-                        .appendSibling(new ChatComponentText("]"));
+                final ITextComponent chatComponent = new TextComponentTranslation(Names.Command.Remove.Message.ARE_YOU_SURE_START, name);
+                chatComponent.appendSibling(new TextComponentString(" ["));
+                chatComponent.appendSibling(withStyle(new TextComponentTranslation(Names.Command.Remove.Message.YES), TextFormatting.RED, confirmCommand));
+                chatComponent.appendSibling(new TextComponentString("]"));
 
                 sender.addChatMessage(chatComponent);
             }
