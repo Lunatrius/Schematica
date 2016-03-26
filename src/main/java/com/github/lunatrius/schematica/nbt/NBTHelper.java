@@ -7,7 +7,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
@@ -143,7 +143,8 @@ public class NBTHelper {
     }
 
     public static TileEntity readTileEntityFromCompound(final NBTTagCompound tileEntityCompound) {
-        return TileEntity.createAndLoadEntity(tileEntityCompound);
+        // FIXME: the server is currently not used, but might be in the future...
+        return TileEntity.createTileEntity(null, tileEntityCompound);
     }
 
     public static NBTTagCompound writeEntityToCompound(final Entity entity) {

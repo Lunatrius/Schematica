@@ -1,22 +1,23 @@
 package com.github.lunatrius.schematica.client.world;
 
-import com.github.lunatrius.core.util.BlockPosHelper;
-import com.github.lunatrius.core.util.MBlockPos;
+import com.github.lunatrius.core.util.math.BlockPosHelper;
+import com.github.lunatrius.core.util.math.MBlockPos;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.block.state.pattern.BlockStateReplacer;
 import com.github.lunatrius.schematica.client.world.chunk.ChunkProviderSchematic;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.state.pattern.BlockStateHelper;
+import net.minecraft.block.state.pattern.BlockStateMatcher;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.WorldSettings;
@@ -99,7 +100,7 @@ public class SchematicWorld extends WorldClient {
 
     @Override
     public boolean isBlockNormalCube(final BlockPos pos, final boolean _default) {
-        return getBlockState(pos).getBlock().isNormalCube(this, pos);
+        return getBlockState(pos).isNormalCube();
     }
 
     @Override
@@ -112,18 +113,14 @@ public class SchematicWorld extends WorldClient {
     public void setSpawnPoint(final BlockPos pos) {}
 
     @Override
-    protected int getRenderDistanceChunks() {
-        return 0;
-    }
-
-    @Override
     public boolean isAirBlock(final BlockPos pos) {
-        return getBlockState(pos).getBlock().isAir(this, pos);
+        final IBlockState blockState = getBlockState(pos);
+        return blockState.getBlock().isAir(blockState, this, pos);
     }
 
     @Override
     public BiomeGenBase getBiomeGenForCoords(final BlockPos pos) {
-        return BiomeGenBase.jungle;
+        return Biomes.jungle;
     }
 
     public int getWidth() {
@@ -147,7 +144,8 @@ public class SchematicWorld extends WorldClient {
 
     @Override
     protected IChunkProvider createChunkProvider() {
-        return new ChunkProviderSchematic(this);
+        this.chunkProvider = new ChunkProviderSchematic(this);
+        return this.chunkProvider;
     }
 
     @Override
@@ -162,7 +160,7 @@ public class SchematicWorld extends WorldClient {
 
     @Override
     public boolean isSideSolid(final BlockPos pos, final EnumFacing side, final boolean _default) {
-        return getBlockState(pos).getBlock().isSideSolid(this, pos, side);
+        return getBlockState(pos).isSideSolid(this, pos, side);
     }
 
     public void setSchematic(final ISchematic schematic) {
@@ -206,7 +204,7 @@ public class SchematicWorld extends WorldClient {
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public int replaceBlock(final BlockStateHelper matcher, final BlockStateReplacer replacer, final Map<IProperty, Comparable> properties) {
+    public int replaceBlock(final BlockStateMatcher matcher, final BlockStateReplacer replacer, final Map<IProperty, Comparable> properties) {
         int count = 0;
 
         for (final MBlockPos pos : BlockPosHelper.getAllInBox(0, 0, 0, getWidth(), getHeight(), getLength())) {
@@ -226,7 +224,7 @@ public class SchematicWorld extends WorldClient {
                 }
 
                 if (this.schematic.setBlockState(pos, replacement)) {
-                    markBlockForUpdate(pos.add(this.position));
+                    notifyBlockUpdate(pos.add(this.position), blockState, replacement, 3);
                     count++;
                 }
             }

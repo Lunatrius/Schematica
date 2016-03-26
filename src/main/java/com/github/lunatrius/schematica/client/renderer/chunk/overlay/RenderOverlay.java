@@ -11,16 +11,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RegionRenderCache;
 import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.chunk.ChunkCompileTaskGenerator;
 import net.minecraft.client.renderer.chunk.CompiledChunk;
 import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.client.renderer.chunk.VisGraph;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
@@ -69,8 +68,8 @@ public class RenderOverlay extends RenderChunk {
 
             final World mcWorld = Minecraft.getMinecraft().theWorld;
 
-            final EnumWorldBlockLayer layer = EnumWorldBlockLayer.TRANSLUCENT;
-            final WorldRenderer worldRenderer = generator.getRegionRenderCacheBuilder().getWorldRendererByLayer(layer);
+            final BlockRenderLayer layer = BlockRenderLayer.TRANSLUCENT;
+            final net.minecraft.client.renderer.VertexBuffer buffer = generator.getRegionRenderCacheBuilder().getWorldRendererByLayer(layer);
 
             GeometryTessellator.setStaticDelta(ConfigurationHandler.blockDelta);
 
@@ -86,8 +85,8 @@ public class RenderOverlay extends RenderChunk {
                 final IBlockState schBlockState = schematic.getBlockState(pos);
                 final Block schBlock = schBlockState.getBlock();
 
-                if (schBlock.isOpaqueCube()) {
-                    visgraph.func_178606_a(pos);
+                if (schBlock.isOpaqueCube(schBlockState)) {
+                    visgraph.setOpaqueCube(pos);
                 }
 
                 final BlockPos mcPos = pos.add(schematic.position);
@@ -102,7 +101,7 @@ public class RenderOverlay extends RenderChunk {
                         render = true;
                         color = 0xBF00BF;
 
-                        sides = getSides(mcBlock, mcWorld, mcPos, sides);
+                        sides = getSides(mcBlockState, mcBlock, mcWorld, mcPos, sides);
                     }
                 }
 
@@ -123,51 +122,51 @@ public class RenderOverlay extends RenderChunk {
                     }
 
                     if (render) {
-                        sides = getSides(schBlock, schematic, pos, sides);
+                        sides = getSides(schBlockState, schBlock, schematic, pos, sides);
                     }
                 }
 
                 if (render && sides != 0) {
                     if (!compiledOverlay.isLayerStarted(layer)) {
                         compiledOverlay.setLayerStarted(layer);
-                        preRenderBlocks(worldRenderer, from);
+                        preRenderBlocks(buffer, from);
                     }
 
-                    GeometryTessellator.drawCuboid(worldRenderer, pos, sides, 0x3F000000 | color);
+                    GeometryTessellator.drawCuboid(buffer, pos, sides, 0x3F000000 | color);
                     compiledOverlay.setLayerUsed(layer);
                 }
             }
 
             if (compiledOverlay.isLayerStarted(layer)) {
-                postRenderBlocks(layer, x, y, z, worldRenderer, compiledOverlay);
+                postRenderBlocks(layer, x, y, z, buffer, compiledOverlay);
             }
         }
 
         compiledOverlay.setVisibility(visgraph.computeVisibility());
     }
 
-    private int getSides(final Block block, final World world, final BlockPos pos, int sides) {
-        if (block.shouldSideBeRendered(world, pos.offset(EnumFacing.DOWN), EnumFacing.DOWN)) {
+    private int getSides(final IBlockState blockState, final Block block, final World world, final BlockPos pos, int sides) {
+        if (block.shouldSideBeRendered(blockState, world, pos.offset(EnumFacing.DOWN), EnumFacing.DOWN)) {
             sides |= GeometryMasks.Quad.DOWN;
         }
 
-        if (block.shouldSideBeRendered(world, pos.offset(EnumFacing.UP), EnumFacing.UP)) {
+        if (block.shouldSideBeRendered(blockState, world, pos.offset(EnumFacing.UP), EnumFacing.UP)) {
             sides |= GeometryMasks.Quad.UP;
         }
 
-        if (block.shouldSideBeRendered(world, pos.offset(EnumFacing.NORTH), EnumFacing.NORTH)) {
+        if (block.shouldSideBeRendered(blockState, world, pos.offset(EnumFacing.NORTH), EnumFacing.NORTH)) {
             sides |= GeometryMasks.Quad.NORTH;
         }
 
-        if (block.shouldSideBeRendered(world, pos.offset(EnumFacing.SOUTH), EnumFacing.SOUTH)) {
+        if (block.shouldSideBeRendered(blockState, world, pos.offset(EnumFacing.SOUTH), EnumFacing.SOUTH)) {
             sides |= GeometryMasks.Quad.SOUTH;
         }
 
-        if (block.shouldSideBeRendered(world, pos.offset(EnumFacing.WEST), EnumFacing.WEST)) {
+        if (block.shouldSideBeRendered(blockState, world, pos.offset(EnumFacing.WEST), EnumFacing.WEST)) {
             sides |= GeometryMasks.Quad.WEST;
         }
 
-        if (block.shouldSideBeRendered(world, pos.offset(EnumFacing.EAST), EnumFacing.EAST)) {
+        if (block.shouldSideBeRendered(blockState, world, pos.offset(EnumFacing.EAST), EnumFacing.EAST)) {
             sides |= GeometryMasks.Quad.EAST;
         }
 
@@ -175,9 +174,9 @@ public class RenderOverlay extends RenderChunk {
     }
 
     @Override
-    public void preRenderBlocks(final WorldRenderer worldRenderer, final BlockPos pos) {
-        worldRenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-        worldRenderer.setTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
+    public void preRenderBlocks(final net.minecraft.client.renderer.VertexBuffer buffer, final BlockPos pos) {
+        buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+        buffer.setTranslation(-pos.getX(), -pos.getY(), -pos.getZ());
     }
 
     @Override

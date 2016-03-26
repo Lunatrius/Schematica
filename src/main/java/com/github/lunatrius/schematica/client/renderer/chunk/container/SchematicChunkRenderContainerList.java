@@ -5,17 +5,17 @@ import com.github.lunatrius.schematica.client.renderer.chunk.overlay.RenderOverl
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.chunk.ListedRenderChunk;
 import net.minecraft.client.renderer.chunk.RenderChunk;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.BlockRenderLayer;
 import org.lwjgl.opengl.GL11;
 
 public class SchematicChunkRenderContainerList extends SchematicChunkRenderContainer {
     @Override
-    public void renderChunkLayer(final EnumWorldBlockLayer layer) {
+    public void renderChunkLayer(final BlockRenderLayer layer) {
         if (this.initialized) {
-            for (final RenderChunk renderchunk : this.renderChunks) {
-                final ListedRenderChunk listedRenderChunk = (ListedRenderChunk) renderchunk;
+            for (final RenderChunk renderChunk : this.renderChunks) {
+                final ListedRenderChunk listedRenderChunk = (ListedRenderChunk) renderChunk;
                 GlStateManager.pushMatrix();
-                preRenderChunk(renderchunk);
+                preRenderChunk(renderChunk);
                 GL11.glCallList(listedRenderChunk.getDisplayList(layer, listedRenderChunk.getCompiledChunk()));
                 GlStateManager.popMatrix();
             }
@@ -32,7 +32,7 @@ public class SchematicChunkRenderContainerList extends SchematicChunkRenderConta
                 final RenderOverlayList renderOverlayList = (RenderOverlayList) renderOverlay;
                 GlStateManager.pushMatrix();
                 preRenderChunk(renderOverlay);
-                GL11.glCallList(renderOverlayList.getDisplayList(EnumWorldBlockLayer.TRANSLUCENT, renderOverlayList.getCompiledChunk()));
+                GL11.glCallList(renderOverlayList.getDisplayList(BlockRenderLayer.TRANSLUCENT, renderOverlayList.getCompiledChunk()));
                 GlStateManager.popMatrix();
             }
         }

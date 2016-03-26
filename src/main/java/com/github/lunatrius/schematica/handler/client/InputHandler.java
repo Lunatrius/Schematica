@@ -13,9 +13,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -100,7 +100,7 @@ public class InputHandler {
             if (KEY_BINDING_PRINTER_TOGGLE.isPressed()) {
                 if (ClientProxy.schematic != null) {
                     final boolean printing = SchematicPrinter.INSTANCE.togglePrinting();
-                    this.minecraft.thePlayer.addChatComponentMessage(new ChatComponentTranslation(Names.Messages.TOGGLE_PRINTER, I18n.format(printing ? Names.Gui.ON : Names.Gui.OFF)));
+                    this.minecraft.thePlayer.addChatComponentMessage(new TextComponentTranslation(Names.Messages.TOGGLE_PRINTER, I18n.format(printing ? Names.Gui.ON : Names.Gui.OFF)));
                 }
             }
 
@@ -124,7 +124,7 @@ public class InputHandler {
                 boolean revert = true;
 
                 if (schematic != null && schematic.isRendering) {
-                    revert = pickBlock(schematic, ClientProxy.movingObjectPosition);
+                    revert = pickBlock(schematic, ClientProxy.objectMouseOver);
                 }
 
                 if (revert) {
@@ -136,19 +136,19 @@ public class InputHandler {
         }
     }
 
-    private boolean pickBlock(final SchematicWorld schematic, final MovingObjectPosition objectMouseOver) {
+    private boolean pickBlock(final SchematicWorld schematic, final RayTraceResult objectMouseOver) {
         boolean revert = false;
 
         // Minecraft.func_147112_ai
         if (objectMouseOver != null) {
             final EntityPlayerSP player = this.minecraft.thePlayer;
 
-            if (objectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.MISS) {
+            if (objectMouseOver.typeOfHit == RayTraceResult.Type.MISS) {
                 revert = true;
             }
 
-            final MovingObjectPosition mcObjectMouseOver = this.minecraft.objectMouseOver;
-            if (mcObjectMouseOver != null && mcObjectMouseOver.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+            final RayTraceResult mcObjectMouseOver = this.minecraft.objectMouseOver;
+            if (mcObjectMouseOver != null && mcObjectMouseOver.typeOfHit == RayTraceResult.Type.BLOCK) {
                 if (mcObjectMouseOver.getBlockPos().subtract(schematic.position).equals(objectMouseOver.getBlockPos())) {
                     return true;
                 }

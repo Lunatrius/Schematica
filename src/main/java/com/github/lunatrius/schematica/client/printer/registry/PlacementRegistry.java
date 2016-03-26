@@ -28,9 +28,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -54,28 +54,28 @@ public class PlacementRegistry {
         final IValidPlayerFacing playerFacingEntity = new IValidPlayerFacing() {
             @Override
             public boolean isValid(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {
-                final EnumFacing facing = BlockStateHelper.getPropertyValue(blockState, "facing");
+                final EnumFacing facing = BlockStateHelper.<EnumFacing>getPropertyValue(blockState, "facing");
                 return facing == player.getHorizontalFacing();
             }
         };
         final IValidPlayerFacing playerFacingEntityOpposite = new IValidPlayerFacing() {
             @Override
             public boolean isValid(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {
-                final EnumFacing facing = BlockStateHelper.getPropertyValue(blockState, "facing");
+                final EnumFacing facing = BlockStateHelper.<EnumFacing>getPropertyValue(blockState, "facing");
                 return facing == player.getHorizontalFacing().getOpposite();
             }
         };
         final IValidPlayerFacing playerFacingPiston = new IValidPlayerFacing() {
             @Override
             public boolean isValid(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {
-                final EnumFacing facing = BlockStateHelper.getPropertyValue(blockState, "facing");
-                return facing == BlockPistonBase.getFacingFromEntity(world, pos, player);
+                final EnumFacing facing = BlockStateHelper.<EnumFacing>getPropertyValue(blockState, "facing");
+                return facing == BlockPistonBase.getFacingFromEntity(pos, player);
             }
         };
         final IValidPlayerFacing playerFacingRotateY = new IValidPlayerFacing() {
             @Override
             public boolean isValid(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {
-                final EnumFacing facing = BlockStateHelper.getPropertyValue(blockState, "facing");
+                final EnumFacing facing = BlockStateHelper.<EnumFacing>getPropertyValue(blockState, "facing");
                 return facing == player.getHorizontalFacing().rotateY();
             }
         };

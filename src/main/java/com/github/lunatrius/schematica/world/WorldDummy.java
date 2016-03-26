@@ -23,8 +23,8 @@ public class WorldDummy extends World {
     }
 
     @Override
-    protected int getRenderDistanceChunks() {
-        return 0;
+    protected boolean isChunkLoaded(final int x, final int z, final boolean allowEmpty) {
+        return false;
     }
 
     public static WorldDummy instance() {

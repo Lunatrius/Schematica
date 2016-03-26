@@ -1,7 +1,7 @@
 package com.github.lunatrius.schematica.client.util;
 
-import com.github.lunatrius.core.util.BlockPosHelper;
-import com.github.lunatrius.core.util.MBlockPos;
+import com.github.lunatrius.core.util.math.BlockPosHelper;
+import com.github.lunatrius.core.util.math.MBlockPos;
 import com.github.lunatrius.schematica.block.state.BlockStateHelper;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.reference.Reference;
@@ -10,8 +10,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ public class BlockList {
             return blockList;
         }
 
-        final MovingObjectPosition movingObjectPosition = new MovingObjectPosition(player);
+        final RayTraceResult rtr = new RayTraceResult(player);
         final MBlockPos mcPos = new MBlockPos();
 
         for (final MBlockPos pos : BlockPosHelper.getAllInBox(BlockPos.ORIGIN, new BlockPos(world.getWidth() - 1, world.getHeight() - 1, world.getLength() - 1))) {
@@ -48,7 +48,7 @@ public class BlockList {
             ItemStack stack = null;
 
             try {
-                stack = block.getPickBlock(movingObjectPosition, world, pos, player);
+                stack = block.getPickBlock(blockState, rtr, world, pos, player);
             } catch (final Exception e) {
                 Reference.logger.debug("Could not get the pick block for: {}", blockState, e);
             }

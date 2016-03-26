@@ -1,6 +1,6 @@
 package com.github.lunatrius.schematica.proxy;
 
-import com.github.lunatrius.core.util.MBlockPos;
+import com.github.lunatrius.core.util.math.MBlockPos;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.command.CommandSchematicaList;
 import com.github.lunatrius.schematica.command.CommandSchematicaRemove;
@@ -21,8 +21,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -148,7 +148,7 @@ public abstract class CommonProxy {
         final int minZ1 = localMinZ | (chunkZ << 4);
         final int maxX1 = localMaxX | (chunkX << 4);
         final int maxZ1 = localMaxZ | (chunkZ << 4);
-        final AxisAlignedBB bb = AxisAlignedBB.fromBounds(minX1, minY, minZ1, maxX1 + 1, maxY + 1, maxZ1 + 1);
+        final AxisAlignedBB bb = new AxisAlignedBB(minX1, minY, minZ1, maxX1 + 1, maxY + 1, maxZ1 + 1);
         final List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, bb);
         for (final Entity entity : entities) {
             try {

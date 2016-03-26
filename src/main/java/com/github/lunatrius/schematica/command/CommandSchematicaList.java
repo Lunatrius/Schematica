@@ -9,12 +9,11 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.event.ClickEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -34,15 +33,15 @@ public class CommandSchematicaList extends CommandSchematicaBase {
     }
 
     @Override
-    public void processCommand(final ICommandSender sender, final String[] arguments) throws CommandException {
+    public void execute(final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
         if (!(sender instanceof EntityPlayer)) {
             throw new CommandException(Names.Command.Save.Message.PLAYERS_ONLY);
         }
 
         int page = 0;
         try {
-            if (arguments.length > 0) {
-                page = Integer.parseInt(arguments[0]) - 1;
+            if (args.length > 0) {
+                page = Integer.parseInt(args[0]) - 1;
                 if (page < 0) {
                     page = 0;
                 }
@@ -57,7 +56,7 @@ public class CommandSchematicaList extends CommandSchematicaBase {
         final int pageEnd = pageStart + pageSize;
         int currentFile = 0;
 
-        final LinkedList<IChatComponent> componentsToSend = new LinkedList<IChatComponent>();
+        final LinkedList<ITextComponent> componentsToSend = new LinkedList<ITextComponent>();
 
         final File schematicDirectory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
         if (schematicDirectory == null) {
@@ -77,25 +76,15 @@ public class CommandSchematicaList extends CommandSchematicaBase {
             if (currentFile >= pageStart && currentFile < pageEnd) {
                 final String fileName = FilenameUtils.removeExtension(path.getName());
 
-                final IChatComponent chatComponent = new ChatComponentText(String.format("%2d (%s): %s [", currentFile + 1, FileUtils.humanReadableByteCount(path.length()), fileName));
-                final String removeCommand = String.format("/%s %s", Names.Command.Remove.NAME, fileName);
+                final ITextComponent chatComponent = new TextComponentString(String.format("%2d (%s): %s [", currentFile + 1, FileUtils.humanReadableByteCount(path.length()), fileName));
 
-                final IChatComponent removeLink = new ChatComponentTranslation(Names.Command.List.Message.REMOVE)
-                        .setChatStyle(
-                                new ChatStyle()
-                                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, removeCommand))
-                                        .setColor(EnumChatFormatting.RED)
-                        );
+                final String removeCommand = String.format("/%s %s", Names.Command.Remove.NAME, fileName);
+                final ITextComponent removeLink = withStyle(new TextComponentTranslation(Names.Command.List.Message.REMOVE), TextFormatting.RED, removeCommand);
                 chatComponent.appendSibling(removeLink);
                 chatComponent.appendText("][");
 
                 final String downloadCommand = String.format("/%s %s", Names.Command.Download.NAME, fileName);
-                final IChatComponent downloadLink = new ChatComponentTranslation(Names.Command.List.Message.DOWNLOAD)
-                        .setChatStyle(
-                                new ChatStyle()
-                                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, downloadCommand))
-                                        .setColor(EnumChatFormatting.GREEN)
-                        );
+                final ITextComponent downloadLink = withStyle(new TextComponentTranslation(Names.Command.List.Message.DOWNLOAD), TextFormatting.GREEN, downloadCommand);
                 chatComponent.appendSibling(downloadLink);
                 chatComponent.appendText("]");
 
@@ -105,7 +94,7 @@ public class CommandSchematicaList extends CommandSchematicaBase {
         }
 
         if (currentFile == 0) {
-            sender.addChatMessage(new ChatComponentTranslation(Names.Command.List.Message.NO_SCHEMATICS));
+            sender.addChatMessage(new TextComponentTranslation(Names.Command.List.Message.NO_SCHEMATICS));
             return;
         }
 
@@ -114,9 +103,8 @@ public class CommandSchematicaList extends CommandSchematicaBase {
             throw new CommandException(Names.Command.List.Message.NO_SUCH_PAGE);
         }
 
-        sender.addChatMessage(new ChatComponentTranslation(Names.Command.List.Message.PAGE_HEADER, page + 1, totalPages + 1)
-                .setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_GREEN)));
-        for (final IChatComponent chatComponent : componentsToSend) {
+        sender.addChatMessage(withStyle(new TextComponentTranslation(Names.Command.List.Message.PAGE_HEADER, page + 1, totalPages + 1), TextFormatting.DARK_GREEN, null));
+        for (final ITextComponent chatComponent : componentsToSend) {
             sender.addChatMessage(chatComponent);
         }
     }

@@ -3,7 +3,7 @@ package com.github.lunatrius.schematica.block.state;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,15 +34,15 @@ public class BlockStateHelper {
     public static List<String> getFormattedProperties(final IBlockState blockState) {
         final List<String> list = new ArrayList<String>();
 
-        for (final Map.Entry<IProperty, Comparable> entry : blockState.getProperties().entrySet()) {
+        for (final Map.Entry<IProperty<?>, Comparable<?>> entry : blockState.getProperties().entrySet()) {
             final IProperty key = entry.getKey();
             final Comparable value = entry.getValue();
 
             String formattedValue = value.toString();
             if (Boolean.TRUE.equals(value)) {
-                formattedValue = EnumChatFormatting.GREEN + formattedValue + EnumChatFormatting.RESET;
+                formattedValue = TextFormatting.GREEN + formattedValue + TextFormatting.RESET;
             } else if (Boolean.FALSE.equals(value)) {
-                formattedValue = EnumChatFormatting.RED + formattedValue + EnumChatFormatting.RESET;
+                formattedValue = TextFormatting.RED + formattedValue + TextFormatting.RESET;
             }
 
             list.add(key.getName() + ": " + formattedValue);

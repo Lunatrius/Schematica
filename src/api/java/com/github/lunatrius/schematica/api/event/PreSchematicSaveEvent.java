@@ -25,11 +25,11 @@ public class PreSchematicSaveEvent extends Event {
     public final NBTTagCompound extendedMetadata;
 
     @Deprecated
-    public PreSchematicSaveEvent(Map<String, Short> mappings) {
+    public PreSchematicSaveEvent(final Map<String, Short> mappings) {
         this(null, mappings);
     }
 
-    public PreSchematicSaveEvent(ISchematic schematic, Map<String, Short> mappings) {
+    public PreSchematicSaveEvent(final ISchematic schematic, final Map<String, Short> mappings) {
         this.schematic = schematic;
         this.mappings = mappings;
         this.extendedMetadata = new NBTTagCompound();
@@ -47,7 +47,7 @@ public class PreSchematicSaveEvent extends Event {
      * @return true if a mapping was replaced.
      * @throws DuplicateMappingException
      */
-    public boolean replaceMapping(String oldName, String newName) throws DuplicateMappingException {
+    public boolean replaceMapping(final String oldName, final String newName) throws DuplicateMappingException {
         if (this.mappings.containsKey(newName)) {
             throw new DuplicateMappingException(
                     String.format(
@@ -57,7 +57,7 @@ public class PreSchematicSaveEvent extends Event {
             );
         }
 
-        Short id = this.mappings.get(oldName);
+        final Short id = this.mappings.get(oldName);
         if (id != null) {
             this.mappings.remove(oldName);
             this.mappings.put(newName, id);

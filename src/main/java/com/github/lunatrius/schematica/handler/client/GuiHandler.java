@@ -11,8 +11,8 @@ public class GuiHandler {
     @SubscribeEvent
     public void onGuiOpen(final GuiOpenEvent event) {
         if (SchematicPrinter.INSTANCE.isPrinting()) {
-            if (event.gui instanceof GuiEditSign) {
-                event.gui = null;
+            if (event.getGui() instanceof GuiEditSign) {
+                event.setGui(null);
             }
         }
     }
