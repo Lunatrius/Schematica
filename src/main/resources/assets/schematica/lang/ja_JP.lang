@@ -1,0 +1,158 @@
+# gui - general
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
+schematica.gui.on=有効
+schematica.gui.off=無効
+schematica.gui.done=完了
+
+# gui - general - load
+schematica.gui.title=schematicを選択
+schematica.gui.folderInfo=(schematicファイルをここに配置)
+schematica.gui.openFolder=フォルダを開く
+schematica.gui.noschematic=-- schematicがありません --
+
+# gui - general - save
+schematica.gui.point.red=赤座標
+schematica.gui.point.blue=青座標
+schematica.gui.save=保存
+schematica.gui.saveselection=選択範囲の保存
+
+# gui - general - control
+schematica.gui.moveschematic=位置指定
+schematica.gui.materials=建材
+schematica.gui.printer=プリントモード
+schematica.gui.operations=操作
+schematica.gui.unload=アンロード
+schematica.gui.all=全表示
+schematica.gui.layers=レイヤー
+schematica.gui.hide=非表示
+schematica.gui.show=表示
+schematica.gui.movehere=ここに移動
+schematica.gui.flip=反転
+schematica.gui.rotate=回転
+schematica.gui.materialname=建材
+schematica.gui.materialamount=量
+schematica.gui.materialavailable=準備完了
+schematica.gui.materialmissing=必要数
+schematica.gui.materialdump=ファイルに書き出し
+
+# gui - config - categories
+schematica.config.category.debug=デバッグ用設定
+schematica.config.category.debug.tooltip=デバッグ/開発用の設定です\nよくわからない方は触らないでください
+schematica.config.category.render=描画設定
+schematica.config.category.render.tooltip=描画関連の設定です
+schematica.config.category.printer=プリントモード設定
+schematica.config.category.printer.tooltip=自動設置機能の設定です
+schematica.config.category.printer.swapslots=ホットバースロット
+schematica.config.category.printer.swapslots.tooltip=自動設置に使用してよいスロットを指定します
+schematica.config.category.general=一般設定
+schematica.config.category.general.tooltip=一般的な設定です
+schematica.config.category.server=サーバー用設定
+schematica.config.category.server.tooltip=サーバーサイドの設定です
+
+# gui - config - debug
+schematica.config.showDebugInfo=デバッグ情報の表示
+schematica.config.showDebugInfo.tooltip=デバッグ画面(F3)で情報を表示します
+
+# gui - config - render
+schematica.config.alphaEnabled=透明
+schematica.config.alphaEnabled.tooltip=半透明テクスチャを有効にします
+schematica.config.alpha=透明度
+schematica.config.alpha.tooltip=描画の際の透明度を指定します (1.0 = 不透明, 0.5 = 半透明, 0.0 = 透明)
+schematica.config.highlight=ブロックのハイライト
+schematica.config.highlight.tooltip=別のブロックであるべきブロックを強調表示します
+schematica.config.highlightAir=空気のハイライト
+schematica.config.highlightAir.tooltip=空気であるべきブロックを強調表示します
+schematica.config.blockDelta=ブロック拡大率
+schematica.config.blockDelta.tooltip=ハイライトの際のブロックの拡張率を指定します (ハイライトにちらつきを感じた場合に増やしてください).
+
+# gui - config - printer
+schematica.config.placeDelay=設置遅延
+schematica.config.placeDelay.tooltip=設置と設置の間に何tick遅延するかを指定します
+schematica.config.timeout=タイムアウト
+schematica.config.timeout.tooltip=何回設置に失敗したらあきらめるかを指定します
+schematica.config.placeInstantly=同時設置
+schematica.config.placeInstantly.tooltip=1tickで置くことのできるすべてのブロックを設置します
+schematica.config.destroyBlocks=ブロック破壊
+schematica.config.destroyBlocks.tooltip=クリエイティブモードにおいて、ブロックの破壊をします
+schematica.config.destroyInstantly=同時破壊
+schematica.config.destroyInstantly.tooltip=1tickで壊すのできるすべてのブロックを破壊します
+schematica.config.placeAdjacent=隣接設置
+schematica.config.placeAdjacent.tooltip=隣にブロックがある場合のみ設置します
+
+# gui - config - printer - swap slots
+schematica.config.swapSlot0=第1スロットの使用
+schematica.config.swapSlot0.tooltip=プリントモードでホットバー1番目のスロットの使用を許可します
+schematica.config.swapSlot1=第2スロットの使用
+schematica.config.swapSlot1.tooltip=プリントモードでホットバー2番目のスロットの使用を許可します
+schematica.config.swapSlot2=第3スロットの使用
+schematica.config.swapSlot2.tooltip=プリントモードでホットバー3番目のスロットの使用を許可します
+schematica.config.swapSlot3=第4スロットの使用
+schematica.config.swapSlot3.tooltip=プリントモードでホットバー4番目のスロットの使用を許可します
+schematica.config.swapSlot4=第5スロットの使用
+schematica.config.swapSlot4.tooltip=プリントモードでホットバー5番目のスロットの使用を許可します
+schematica.config.swapSlot5=第6スロットの使用
+schematica.config.swapSlot5.tooltip=プリントモードでホットバー6番目のスロットの使用を許可します
+schematica.config.swapSlot6=第7スロットの使用
+schematica.config.swapSlot6.tooltip=プリントモードでホットバー7番目のスロットの使用を許可します
+schematica.config.swapSlot7=第8スロットの使用
+schematica.config.swapSlot7.tooltip=プリントモードでホットバー8番目のスロットの使用を許可します
+schematica.config.swapSlot8=第9スロットの使用
+schematica.config.swapSlot8.tooltip=プリントモードでホットバー9番目のスロットの使用を許可します
+
+# gui - config - general
+schematica.config.schematicDirectory=Schematicフォルダ
+schematica.config.schematicDirectory.tooltip=Schematicの保存場所を指定します
+schematica.config.extraAirBlocks=特殊な空気ブロック
+schematica.config.extraAirBlocks.tooltip=空気ブロックとして扱うブロックを指定します
+
+# gui - config - server
+schematica.config.printerEnabled=プリントモードの可否
+schematica.config.printerEnabled.tooltip=プレイヤーがプリントモードを使うことを許可します
+schematica.config.saveEnabled=保存の可否
+schematica.config.saveEnabled.tooltip=プレイヤーがschematicを保存することを許可します
+schematica.config.loadEnabled=読み込みの可否
+schematica.config.loadEnabled.tooltip=プレイヤーがschematicを読み込むことを許可します
+
+# keys
+schematica.key.category=Schematica
+schematica.key.load=読み込み画面
+schematica.key.save=保存画面
+schematica.key.control=操作画面
+schematica.key.layerInc=次のレイヤーへ
+schematica.key.layerDec=前のレイヤーへ
+
+# commands - save
+schematica.command.save.usage=/schematicaSave <X開始点> <Y開始点> <Z開始点> <X終了点> <Y終了点> <Z終了点> <名前>
+schematica.command.save.playersOnly=このコマンドはプレイヤーだけが使えます
+schematica.command.save.started=「%2$s」へ%1$dチャンクのデータを保存中...
+schematica.command.save.saveSucceeded=「%s」の保存が完了しました
+schematica.command.save.saveFailed=「%s」の保存中に問題が発生しました
+schematica.command.save.quotaExceeded=サーバーに保存できる容量を超えてしまったので /schematicaList と /schematicaRemove を使っていくつかのschematicを消去してください
+schematica.command.save.playerSchematicDirUnavailable=サーバー側で問題が発生してしまい、保存することができませんでした。サーバー管理者に連絡してください。
+
+# commands - list
+schematica.command.list.usage=/schematicaList [ページ]
+schematica.command.list.notAvailable=schematicリストの受信中に問題が発生しました
+schematica.command.list.remove=削除
+schematica.command.list.download=ダウンロード
+schematica.command.list.header=--- %2$dページ中%1$dページ ---
+schematica.command.list.noSuchPage=指定のページは存在しません
+schematica.command.list.noSchematics=ご利用可能なschematicファイルがありません
+
+# commands - remove
+schematica.command.remove.usage=/schematicaRemove <名前>
+schematica.command.remove.schematicRemoved=Schematic「%s」は消去されました
+schematica.command.remove.schematicNotFound=Schematic「"%s"」は見つかりませんでした
+schematica.command.remove.areYouSure=本当に消去してよろしいですか？
+
+# commands - download
+schematica.command.download.usage=/schematicaDownload <名前>
+schematica.command.download.started=「%s」をダウンロード中...
+schematica.command.download.downloadSucceeded=「%s」のダウンロードが完了しました
+schematica.command.download.downloadFail=ダウンロード失敗
+
+# commands - replace
+
+# messages

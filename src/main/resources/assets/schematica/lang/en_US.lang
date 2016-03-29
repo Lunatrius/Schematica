@@ -39,6 +39,8 @@ schematica.gui.flip=Flip
 schematica.gui.rotate=Rotate
 schematica.gui.materialname=Material
 schematica.gui.materialamount=Amount
+schematica.gui.materialavailable=Available
+schematica.gui.materialmissing=Missing
 schematica.gui.materialdump=Save to file
 
 # gui - config - categories

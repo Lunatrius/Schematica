@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.util;
 
+import com.github.lunatrius.core.entity.EntityHelper;
 import com.github.lunatrius.core.util.math.BlockPosHelper;
 import com.github.lunatrius.core.util.math.MBlockPos;
 import com.github.lunatrius.schematica.block.state.BlockStateHelper;
@@ -65,6 +66,14 @@ public class BlockList {
             wrappedItemStack.total++;
         }
 
+        for (WrappedItemStack wrappedItemStack : blockList) {
+            if (player.capabilities.isCreativeMode) {
+                wrappedItemStack.inventory = -1;
+            } else {
+                wrappedItemStack.inventory = EntityHelper.getItemCountInInventory(player.inventory, wrappedItemStack.itemStack.getItem(), wrappedItemStack.itemStack.getItemDamage());
+            }
+        }
+
         return blockList;
     }
 
@@ -84,6 +93,7 @@ public class BlockList {
         public ItemStack itemStack;
         public int placed;
         public int total;
+        public int inventory;
 
         public WrappedItemStack(final ItemStack itemStack) {
             this(itemStack, 0, 0);
@@ -101,7 +111,27 @@ public class BlockList {
 
         public String getFormattedAmount() {
             final char color = this.placed < this.total ? 'c' : 'a';
-            return String.format("\u00a7%c%d\u00a7r/%d", color, this.placed, this.total);
+            return String.format("\u00a7%c%s\u00a7r/%s", color, getFormattedStackAmount(itemStack, this.placed), getFormattedStackAmount(itemStack, this.total));
+        }
+
+        public String getFormattedAmountMissing(final String strAvailable, final String strMissing) {
+            final int need = this.total - (this.inventory + this.placed);
+            if (this.inventory != -1 && need > 0) {
+                return String.format("\u00a7c%s: %s", strMissing, getFormattedStackAmount(itemStack, need));
+            } else {
+                return String.format("\u00a7a%s", strAvailable);
+            }
+        }
+
+        private static String getFormattedStackAmount(final ItemStack itemStack, final int amount) {
+            final int stackSize = itemStack.getMaxStackSize();
+            if (true /* amount < stackSize */) {
+                return String.format("%d", amount);
+            } else {
+                final int amountStack = amount / stackSize;
+                final int amountRemainder = amount % stackSize;
+                return String.format("%d(%d:%d)", amount, amountStack, amountRemainder);
+            }
         }
     }
 }
