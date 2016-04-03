@@ -160,6 +160,8 @@ public final class Names {
 
             public static final String MATERIAL_NAME = "schematica.gui.materialname";
             public static final String MATERIAL_AMOUNT = "schematica.gui.materialamount";
+            public static final String MATERIAL_REQUIRED = "schematica.gui.materialrequired";
+            public static final String MATERIAL_AVAILABLE = "schematica.gui.materialavailable";
 
             public static final String SORT_PREFIX = "schematica.gui.material";
             public static final String DUMP = "schematica.gui.materialdump";

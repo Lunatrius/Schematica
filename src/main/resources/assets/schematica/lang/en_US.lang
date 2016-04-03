@@ -28,6 +28,8 @@ schematica.gui.z=Z:
 schematica.gui.materials=Materials
 schematica.gui.materialname=Material
 schematica.gui.materialamount=Amount
+schematica.gui.materialrequired=Required
+schematica.gui.materialavailable=Available
 schematica.gui.materialdump=Save to file
 schematica.gui.printer=Printer
 
