@@ -133,7 +133,7 @@ public abstract class CommonProxy {
                                     schematic.setTileEntity(localPos, reloadedTileEntity);
                                 } catch (final NBTConversionException nce) {
                                     Reference.logger.error("Error while trying to save tile entity '{}'!", tileEntity, nce);
-                                    schematic.setBlockState(localPos, Blocks.bedrock.getDefaultState());
+                                    schematic.setBlockState(localPos, Blocks.BEDROCK.getDefaultState());
                                 }
                             }
                         }

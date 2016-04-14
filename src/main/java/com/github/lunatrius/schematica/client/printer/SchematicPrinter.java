@@ -30,8 +30,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import net.minecraftforge.fluids.BlockFluidBase;
 
 import java.util.ArrayList;
@@ -344,9 +342,12 @@ public class SchematicPrinter {
     }
 
     private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final ItemStack itemStack, final BlockPos pos, final EnumFacing side, final Vec3d hitVec, final EnumHand hand) {
+        // FIXME: where did this event go?
+        /*
         if (ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_BLOCK, world, pos, side, hitVec).isCanceled()) {
             return false;
         }
+        */
 
         final EnumActionResult result = this.minecraft.playerController.processRightClickBlock(player, world, itemStack, pos, side, hitVec, hand);
         if ((result != EnumActionResult.SUCCESS)) {

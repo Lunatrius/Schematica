@@ -23,8 +23,8 @@ public class SyncRegistry {
     }
 
     static {
-        INSTANCE.register(Blocks.command_block, new NBTSyncCommandBlock());
-        INSTANCE.register(Blocks.standing_sign, new NBTSyncSign());
-        INSTANCE.register(Blocks.wall_sign, new NBTSyncSign());
+        INSTANCE.register(Blocks.COMMAND_BLOCK, new NBTSyncCommandBlock());
+        INSTANCE.register(Blocks.STANDING_SIGN, new NBTSyncSign());
+        INSTANCE.register(Blocks.WALL_SIGN, new NBTSyncSign());
     }
 }

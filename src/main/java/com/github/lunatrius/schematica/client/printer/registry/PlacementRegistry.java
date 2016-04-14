@@ -288,27 +288,27 @@ public class PlacementRegistry {
         addPlacementMapping(BlockTorch.class, new PlacementData(blockFacingOpposite));
         addPlacementMapping(BlockTrapDoor.class, new PlacementData(blockFacingOpposite).setOffsetY(offsetTrapDoor));
 
-        addPlacementMapping(Blocks.anvil, new PlacementData(playerFacingRotateY));
-        addPlacementMapping(Blocks.cocoa, new PlacementData(blockFacingSame));
-        addPlacementMapping(Blocks.end_portal_frame, new PlacementData(playerFacingEntityOpposite));
-        addPlacementMapping(Blocks.ladder, new PlacementData(blockFacingOpposite));
-        addPlacementMapping(Blocks.lever, new PlacementData(playerFacingLever, blockFacingLever));
-        addPlacementMapping(Blocks.quartz_block, new PlacementData(blockFacingQuartz));
-        addPlacementMapping(Blocks.standing_sign, new PlacementData(playerFacingStandingSign));
-        addPlacementMapping(Blocks.tripwire_hook, new PlacementData(blockFacingOpposite));
-        addPlacementMapping(Blocks.wall_sign, new PlacementData(blockFacingOpposite));
+        addPlacementMapping(Blocks.ANVIL, new PlacementData(playerFacingRotateY));
+        addPlacementMapping(Blocks.COCOA, new PlacementData(blockFacingSame));
+        addPlacementMapping(Blocks.END_PORTAL_FRAME, new PlacementData(playerFacingEntityOpposite));
+        addPlacementMapping(Blocks.LADDER, new PlacementData(blockFacingOpposite));
+        addPlacementMapping(Blocks.LEVER, new PlacementData(playerFacingLever, blockFacingLever));
+        addPlacementMapping(Blocks.QUARTZ_BLOCK, new PlacementData(blockFacingQuartz));
+        addPlacementMapping(Blocks.STANDING_SIGN, new PlacementData(playerFacingStandingSign));
+        addPlacementMapping(Blocks.TRIPWIRE_HOOK, new PlacementData(blockFacingOpposite));
+        addPlacementMapping(Blocks.WALL_SIGN, new PlacementData(blockFacingOpposite));
 
-        addPlacementMapping(Items.comparator, new PlacementData(playerFacingEntityOpposite));
-        addPlacementMapping(Items.repeater, new PlacementData(playerFacingEntityOpposite));
+        addPlacementMapping(Items.COMPARATOR, new PlacementData(playerFacingEntityOpposite));
+        addPlacementMapping(Items.REPEATER, new PlacementData(playerFacingEntityOpposite));
 
-        addPlacementMapping(Blocks.bed, new PlacementData(playerFacingIgnore));
-        addPlacementMapping(Blocks.end_portal, new PlacementData(playerFacingIgnore));
-        addPlacementMapping(Blocks.piston_extension, new PlacementData(playerFacingIgnore));
-        addPlacementMapping(Blocks.piston_head, new PlacementData(playerFacingIgnore));
-        addPlacementMapping(Blocks.portal, new PlacementData(playerFacingIgnore));
-        addPlacementMapping(Blocks.skull, new PlacementData(playerFacingIgnore));
-        addPlacementMapping(Blocks.standing_banner, new PlacementData(playerFacingIgnore));
-        addPlacementMapping(Blocks.wall_banner, new PlacementData(playerFacingIgnore));
+        addPlacementMapping(Blocks.BED, new PlacementData(playerFacingIgnore));
+        addPlacementMapping(Blocks.END_PORTAL, new PlacementData(playerFacingIgnore));
+        addPlacementMapping(Blocks.PISTON_EXTENSION, new PlacementData(playerFacingIgnore));
+        addPlacementMapping(Blocks.PISTON_HEAD, new PlacementData(playerFacingIgnore));
+        addPlacementMapping(Blocks.PORTAL, new PlacementData(playerFacingIgnore));
+        addPlacementMapping(Blocks.SKULL, new PlacementData(playerFacingIgnore));
+        addPlacementMapping(Blocks.STANDING_BANNER, new PlacementData(playerFacingIgnore));
+        addPlacementMapping(Blocks.WALL_BANNER, new PlacementData(playerFacingIgnore));
     }
 
     private PlacementData addPlacementMapping(final Class<? extends Block> clazz, final PlacementData data) {
