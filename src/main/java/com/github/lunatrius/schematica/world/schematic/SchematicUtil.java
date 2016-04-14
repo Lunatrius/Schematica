@@ -17,7 +17,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public final class SchematicUtil {
-    public static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.grass);
+    public static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.GRASS);
     public static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
     public static final FMLControlledNamespacedRegistry<Item> ITEM_REGISTRY = GameData.getItemRegistry();
 

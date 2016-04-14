@@ -128,7 +128,7 @@ public class GuiSchematicLoad extends GuiScreenBase {
 
         try {
             if (!this.currentDirectory.getCanonicalPath().equals(ConfigurationHandler.schematicDirectory.getCanonicalPath())) {
-                this.schematicFiles.add(new GuiSchematicEntry("..", Items.lava_bucket, 0, true));
+                this.schematicFiles.add(new GuiSchematicEntry("..", Items.LAVA_BUCKET, 0, true));
             }
         } catch (final IOException e) {
             Reference.logger.error("Failed to add GuiSchematicEntry!", e);
@@ -146,7 +146,7 @@ public class GuiSchematicLoad extends GuiScreenBase {
                 name = file.getName();
 
                 final File[] files = file.listFiles();
-                item = (files == null || files.length == 0) ? Items.bucket : Items.water_bucket;
+                item = (files == null || files.length == 0) ? Items.BUCKET : Items.WATER_BUCKET;
 
                 this.schematicFiles.add(new GuiSchematicEntry(name, item, 0, file.isDirectory()));
             }
@@ -154,7 +154,7 @@ public class GuiSchematicLoad extends GuiScreenBase {
 
         final File[] filesSchematics = this.currentDirectory.listFiles(FILE_FILTER_SCHEMATIC);
         if (filesSchematics == null || filesSchematics.length == 0) {
-            this.schematicFiles.add(new GuiSchematicEntry(this.strNoSchematic, Blocks.dirt, 0, false));
+            this.schematicFiles.add(new GuiSchematicEntry(this.strNoSchematic, Blocks.DIRT, 0, false));
         } else {
             for (final File file : filesSchematics) {
                 name = file.getName();

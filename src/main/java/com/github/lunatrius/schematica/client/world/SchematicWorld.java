@@ -56,7 +56,7 @@ public class SchematicWorld extends WorldClient {
     @Override
     public IBlockState getBlockState(final BlockPos pos) {
         if (this.isRenderingLayer && this.renderingLayer != pos.getY()) {
-            return Blocks.air.getDefaultState();
+            return Blocks.AIR.getDefaultState();
         }
 
         return this.schematic.getBlockState(pos);
@@ -120,7 +120,7 @@ public class SchematicWorld extends WorldClient {
 
     @Override
     public BiomeGenBase getBiomeGenForCoords(final BlockPos pos) {
-        return Biomes.jungle;
+        return Biomes.JUNGLE;
     }
 
     public int getWidth() {

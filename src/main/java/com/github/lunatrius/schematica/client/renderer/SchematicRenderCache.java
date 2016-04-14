@@ -22,7 +22,7 @@ public class SchematicRenderCache extends RegionRenderCache {
         final World world = this.minecraft.theWorld;
 
         if (!world.isAirBlock(realPos) && !ConfigurationHandler.isExtraAirBlock(world.getBlockState(realPos).getBlock())) {
-            return Blocks.air.getDefaultState();
+            return Blocks.AIR.getDefaultState();
         }
 
         return super.getBlockState(pos);

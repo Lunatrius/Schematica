@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Schematic implements ISchematic {
-    private static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.grass);
+    private static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.GRASS);
     private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
 
     private ItemStack icon;
@@ -42,7 +42,7 @@ public class Schematic implements ISchematic {
     @Override
     public IBlockState getBlockState(final BlockPos pos) {
         if (!isValid(pos)) {
-            return Blocks.air.getDefaultState();
+            return Blocks.AIR.getDefaultState();
         }
 
         final int x = pos.getX();

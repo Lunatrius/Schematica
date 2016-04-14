@@ -36,7 +36,7 @@ public class BlockList {
             final IBlockState blockState = world.getBlockState(pos);
             final Block block = blockState.getBlock();
 
-            if (block == Blocks.air || world.isAirBlock(pos)) {
+            if (block == Blocks.AIR || world.isAirBlock(pos)) {
                 continue;
             }
 

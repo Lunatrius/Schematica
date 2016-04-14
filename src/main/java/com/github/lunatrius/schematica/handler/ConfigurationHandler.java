@@ -238,7 +238,7 @@ public class ConfigurationHandler {
         extraAirBlockList.clear();
         for (final String name : extraAirBlocks) {
             final Block block = BLOCK_REGISTRY.getObject(new ResourceLocation(name));
-            if (block != Blocks.air) {
+            if (block != Blocks.AIR) {
                 extraAirBlockList.add(block);
             }
         }
