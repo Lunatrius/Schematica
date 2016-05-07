@@ -403,11 +403,11 @@ public class RenderSchematic extends RenderGlobal {
     public void loadRenderers() {
         if (this.world != null) {
             if (this.renderDispatcher == null) {
-                this.renderDispatcher = new ChunkRenderDispatcher();
+                this.renderDispatcher = new ChunkRenderDispatcher(5);
             }
 
             if (this.renderDispatcherOverlay == null) {
-                this.renderDispatcherOverlay = new OverlayRenderDispatcher();
+                this.renderDispatcherOverlay = new OverlayRenderDispatcher(5);
             }
 
             this.displayListEntitiesDirty = true;
