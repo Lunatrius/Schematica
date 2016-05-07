@@ -12,6 +12,14 @@ import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.util.BlockRenderLayer;
 
 public class OverlayRenderDispatcher extends ChunkRenderDispatcher {
+    public OverlayRenderDispatcher() {
+        super();
+    }
+
+    public OverlayRenderDispatcher(int countRenderBuilders) {
+        super(countRenderBuilders);
+    }
+
     @Override
     public ListenableFuture<Object> uploadChunk(final BlockRenderLayer layer, final VertexBuffer buffer, final RenderChunk renderChunk, final CompiledChunk compiledChunk, final double distanceSq) {
         if (!Minecraft.getMinecraft().isCallingFromMinecraftThread() || OpenGlHelper.useVbo()) {
