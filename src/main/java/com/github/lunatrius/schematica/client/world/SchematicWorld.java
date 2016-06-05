@@ -22,7 +22,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -119,7 +119,7 @@ public class SchematicWorld extends WorldClient {
     }
 
     @Override
-    public BiomeGenBase getBiomeGenForCoords(final BlockPos pos) {
+    public Biome getBiome(final BlockPos pos) {
         return Biomes.JUNGLE;
     }
 

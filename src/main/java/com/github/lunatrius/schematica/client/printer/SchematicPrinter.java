@@ -360,7 +360,7 @@ public class SchematicPrinter {
 
     private void syncSneaking(final EntityPlayerSP player, final boolean isSneaking) {
         player.setSneaking(isSneaking);
-        player.sendQueue.addToSendQueue(new CPacketEntityAction(player, isSneaking ? CPacketEntityAction.Action.START_SNEAKING : CPacketEntityAction.Action.STOP_SNEAKING));
+        player.connection.sendPacket(new CPacketEntityAction(player, isSneaking ? CPacketEntityAction.Action.START_SNEAKING : CPacketEntityAction.Action.STOP_SNEAKING));
     }
 
     private boolean swapToItem(final InventoryPlayer inventory, final ItemStack itemStack) {

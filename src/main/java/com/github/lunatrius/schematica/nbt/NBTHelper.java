@@ -143,8 +143,7 @@ public class NBTHelper {
     }
 
     public static TileEntity readTileEntityFromCompound(final NBTTagCompound tileEntityCompound) {
-        // FIXME: the server is currently not used, but might be in the future...
-        return TileEntity.createTileEntity(null, tileEntityCompound);
+        return TileEntity.create(tileEntityCompound);
     }
 
     public static NBTTagCompound writeEntityToCompound(final Entity entity) {

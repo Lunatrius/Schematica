@@ -1,7 +1,7 @@
 package com.github.lunatrius.schematica.client.world.chunk;
 
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.EmptyChunk;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -34,7 +34,7 @@ public class ChunkProviderSchematic implements IChunkProvider {
             return this.emptyChunk;
         }
 
-        final long key = ChunkCoordIntPair.chunkXZ2Int(x, z);
+        final long key = ChunkPos.chunkXZ2Int(x, z);
 
         ChunkSchematic chunk = this.chunks.get(key);
         if (chunk == null) {

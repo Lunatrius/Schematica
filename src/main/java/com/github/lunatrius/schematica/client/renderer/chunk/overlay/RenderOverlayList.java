@@ -11,7 +11,7 @@ public class RenderOverlayList extends RenderOverlay {
     private final int displayList = GLAllocation.generateDisplayLists(1);
 
     public RenderOverlayList(final World world, final RenderGlobal renderGlobal, final BlockPos pos, final int index) {
-        super(world, renderGlobal, pos, index);
+        super(world, renderGlobal, index);
     }
 
     public int getDisplayList(final BlockRenderLayer layer, final CompiledChunk compiledChunk) {
