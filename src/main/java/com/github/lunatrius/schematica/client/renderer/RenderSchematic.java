@@ -136,13 +136,13 @@ public class RenderSchematic extends RenderGlobal {
         this.renderContainer = new SchematicChunkRenderContainerVbo();
         this.renderChunkFactory = new ISchematicRenderChunkFactory() {
             @Override
-            public RenderChunk makeRenderChunk(final World world, final RenderGlobal renderGlobal, final BlockPos pos, final int index) {
-                return new SchematicRenderChunkVbo(world, renderGlobal, pos, index);
+            public RenderChunk create(final World world, final RenderGlobal renderGlobal, final int index) {
+                return new SchematicRenderChunkVbo(world, renderGlobal, index);
             }
 
             @Override
-            public RenderOverlay makeRenderOverlay(final World world, final RenderGlobal renderGlobal, final BlockPos pos, final int index) {
-                return new RenderOverlay(world, renderGlobal, pos, index);
+            public RenderOverlay makeRenderOverlay(final World world, final RenderGlobal renderGlobal, final int index) {
+                return new RenderOverlay(world, renderGlobal, index);
             }
         };
     }
@@ -151,13 +151,13 @@ public class RenderSchematic extends RenderGlobal {
         this.renderContainer = new SchematicChunkRenderContainerList();
         this.renderChunkFactory = new ISchematicRenderChunkFactory() {
             @Override
-            public RenderChunk makeRenderChunk(final World world, final RenderGlobal renderGlobal, final BlockPos pos, final int index) {
-                return new SchematicRenderChunkList(world, renderGlobal, pos, index);
+            public RenderChunk create(final World world, final RenderGlobal renderGlobal, final int index) {
+                return new SchematicRenderChunkList(world, renderGlobal, null, index);
             }
 
             @Override
-            public RenderOverlay makeRenderOverlay(final World world, final RenderGlobal renderGlobal, final BlockPos pos, final int index) {
-                return new RenderOverlayList(world, renderGlobal, pos, index);
+            public RenderOverlay makeRenderOverlay(final World world, final RenderGlobal renderGlobal, final int index) {
+                return new RenderOverlayList(world, renderGlobal, null, index);
             }
         };
     }
@@ -916,7 +916,7 @@ public class RenderSchematic extends RenderGlobal {
     public void broadcastSound(final int soundID, final BlockPos pos, final int data) {}
 
     @Override
-    public void playAuxSFX(final EntityPlayer player, final int sfxType, final BlockPos pos, final int data) {}
+    public void playEvent(final EntityPlayer player, final int type, final BlockPos pos, final int data) {}
 
     @Override
     public void sendBlockBreakProgress(final int breakerId, final BlockPos pos, final int progress) {}

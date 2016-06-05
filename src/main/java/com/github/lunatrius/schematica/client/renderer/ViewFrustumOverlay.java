@@ -28,8 +28,7 @@ public class ViewFrustumOverlay extends ViewFrustum {
             for (int y = 0; y < this.countChunksY; y++) {
                 for (int z = 0; z < this.countChunksZ; z++) {
                     final int index = (z * this.countChunksY + y) * this.countChunksX + x;
-                    final BlockPos pos = new BlockPos(x * 16, y * 16, z * 16);
-                    this.renderOverlays[index] = renderChunkFactory.makeRenderOverlay(this.world, this.renderGlobal, pos, count++);
+                    this.renderOverlays[index] = renderChunkFactory.makeRenderOverlay(this.world, this.renderGlobal, count++);
                 }
             }
         }
@@ -64,7 +63,7 @@ public class ViewFrustumOverlay extends ViewFrustum {
                     final BlockPos blockpos = new BlockPos(x, y, z);
 
                     if (!blockpos.equals(renderOverlay.getPosition())) {
-                        renderOverlay.setPosition(blockpos);
+                        renderOverlay.setOrigin(x, y, z);
                     }
                 }
             }

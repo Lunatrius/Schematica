@@ -4,12 +4,12 @@ import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RegionRenderCache;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.World;
 
-public class SchematicRenderCache extends RegionRenderCache {
+public class SchematicRenderCache extends ChunkCache {
     private final Minecraft minecraft = Minecraft.getMinecraft();
 
     public SchematicRenderCache(final World world, final BlockPos from, final BlockPos to, final int subtract) {

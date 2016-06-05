@@ -9,7 +9,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RegionRenderCache;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.chunk.ChunkCompileTaskGenerator;
 import net.minecraft.client.renderer.chunk.CompiledChunk;
@@ -20,14 +19,15 @@ import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 public class RenderOverlay extends RenderChunk {
     private final VertexBuffer vertexBuffer;
 
-    public RenderOverlay(final World world, final RenderGlobal renderGlobal, final BlockPos pos, final int index) {
-        super(world, renderGlobal, pos, index);
+    public RenderOverlay(final World world, final RenderGlobal renderGlobal, final int index) {
+        super(world, renderGlobal, index);
         this.vertexBuffer = OpenGlHelper.useVbo() ? new VertexBuffer(DefaultVertexFormats.POSITION_COLOR) : null;
     }
 
@@ -42,7 +42,7 @@ public class RenderOverlay extends RenderChunk {
         final BlockPos from = getPosition();
         final BlockPos to = from.add(15, 15, 15);
         generator.getLock().lock();
-        RegionRenderCache regionRenderCache;
+        ChunkCache chunkCache;
         final SchematicWorld schematic = (SchematicWorld) this.world;
 
         try {
@@ -55,7 +55,7 @@ public class RenderOverlay extends RenderChunk {
                 return;
             }
 
-            regionRenderCache = new RegionRenderCache(this.world, from.add(-1, -1, -1), to.add(1, 1, 1), 1);
+            chunkCache = new ChunkCache(this.world, from.add(-1, -1, -1), to.add(1, 1, 1), 1);
             generator.setCompiledChunk(compiledOverlay);
         } finally {
             generator.getLock().unlock();
@@ -63,7 +63,7 @@ public class RenderOverlay extends RenderChunk {
 
         final VisGraph visgraph = new VisGraph();
 
-        if (!regionRenderCache.extendedLevelsInChunkCache()) {
+        if (!chunkCache.extendedLevelsInChunkCache()) {
             ++renderChunksUpdated;
 
             final World mcWorld = Minecraft.getMinecraft().theWorld;
@@ -146,27 +146,27 @@ public class RenderOverlay extends RenderChunk {
     }
 
     private int getSides(final IBlockState blockState, final Block block, final World world, final BlockPos pos, int sides) {
-        if (block.shouldSideBeRendered(blockState, world, pos.offset(EnumFacing.DOWN), EnumFacing.DOWN)) {
+        if (block.shouldSideBeRendered(blockState, world, pos, EnumFacing.DOWN)) {
             sides |= GeometryMasks.Quad.DOWN;
         }
 
-        if (block.shouldSideBeRendered(blockState, world, pos.offset(EnumFacing.UP), EnumFacing.UP)) {
+        if (block.shouldSideBeRendered(blockState, world, pos, EnumFacing.UP)) {
             sides |= GeometryMasks.Quad.UP;
         }
 
-        if (block.shouldSideBeRendered(blockState, world, pos.offset(EnumFacing.NORTH), EnumFacing.NORTH)) {
+        if (block.shouldSideBeRendered(blockState, world, pos, EnumFacing.NORTH)) {
             sides |= GeometryMasks.Quad.NORTH;
         }
 
-        if (block.shouldSideBeRendered(blockState, world, pos.offset(EnumFacing.SOUTH), EnumFacing.SOUTH)) {
+        if (block.shouldSideBeRendered(blockState, world, pos, EnumFacing.SOUTH)) {
             sides |= GeometryMasks.Quad.SOUTH;
         }
 
-        if (block.shouldSideBeRendered(blockState, world, pos.offset(EnumFacing.WEST), EnumFacing.WEST)) {
+        if (block.shouldSideBeRendered(blockState, world, pos, EnumFacing.WEST)) {
             sides |= GeometryMasks.Quad.WEST;
         }
 
-        if (block.shouldSideBeRendered(blockState, world, pos.offset(EnumFacing.EAST), EnumFacing.EAST)) {
+        if (block.shouldSideBeRendered(blockState, world, pos, EnumFacing.EAST)) {
             sides |= GeometryMasks.Quad.EAST;
         }
 

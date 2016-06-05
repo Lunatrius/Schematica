@@ -14,12 +14,12 @@ public abstract class NBTSync {
     public abstract boolean execute(final EntityPlayer player, final World schematic, final BlockPos pos, final World mcWorld, final BlockPos mcPos);
 
     public final <T extends INetHandler> boolean sendPacket(final Packet<T> packet) {
-        final NetHandlerPlayClient netHandler = this.minecraft.getNetHandler();
-        if (netHandler == null) {
+        final NetHandlerPlayClient connection = this.minecraft.getConnection();
+        if (connection == null) {
             return false;
         }
 
-        netHandler.addToSendQueue(packet);
+        connection.sendPacket(packet);
         return true;
     }
 }

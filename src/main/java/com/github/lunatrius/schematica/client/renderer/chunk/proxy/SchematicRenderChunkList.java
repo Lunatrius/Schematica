@@ -2,13 +2,13 @@ package com.github.lunatrius.schematica.client.renderer.chunk.proxy;
 
 import com.github.lunatrius.schematica.client.renderer.SchematicRenderCache;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
-import net.minecraft.client.renderer.RegionRenderCache;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.chunk.ChunkCompileTaskGenerator;
 import net.minecraft.client.renderer.chunk.CompiledChunk;
 import net.minecraft.client.renderer.chunk.ListedRenderChunk;
 import net.minecraft.client.renderer.chunk.SetVisibility;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SchematicRenderChunkList extends ListedRenderChunk {
     public SchematicRenderChunkList(final World world, final RenderGlobal renderGlobal, final BlockPos pos, final int index) {
-        super(world, renderGlobal, pos, index);
+        super(world, renderGlobal, index);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class SchematicRenderChunkList extends ListedRenderChunk {
     }
 
     @Override
-    protected RegionRenderCache createRegionRenderCache(final World world, final BlockPos from, final BlockPos to, final int subtract) {
+    protected ChunkCache createRegionRenderCache(final World world, final BlockPos from, final BlockPos to, final int subtract) {
         return new SchematicRenderCache(world, from, to, subtract);
     }
 }
