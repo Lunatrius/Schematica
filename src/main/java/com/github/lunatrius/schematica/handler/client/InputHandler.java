@@ -8,7 +8,6 @@ import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Names;
-import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.resources.I18n;
@@ -16,6 +15,8 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -33,6 +34,7 @@ public class InputHandler {
     private static final KeyBinding KEY_BINDING_RENDER_TOGGLE = new KeyBinding(Names.Keys.RENDER_TOGGLE, Keyboard.KEY_NONE, Names.Keys.CATEGORY);
     private static final KeyBinding KEY_BINDING_PRINTER_TOGGLE = new KeyBinding(Names.Keys.PRINTER_TOGGLE, Keyboard.KEY_NONE, Names.Keys.CATEGORY);
     private static final KeyBinding KEY_BINDING_MOVE_HERE = new KeyBinding(Names.Keys.MOVE_HERE, Keyboard.KEY_NONE, Names.Keys.CATEGORY);
+    private static final KeyBinding KEY_BINDING_PICK_BLOCK = new KeyBinding(Names.Keys.PICK_BLOCK, KeyConflictContext.IN_GAME, KeyModifier.SHIFT, -98, Names.Keys.CATEGORY);
 
     public static final KeyBinding[] KEY_BINDINGS = new KeyBinding[] {
             KEY_BINDING_LOAD,
@@ -43,7 +45,8 @@ public class InputHandler {
             KEY_BINDING_LAYER_TOGGLE,
             KEY_BINDING_RENDER_TOGGLE,
             KEY_BINDING_PRINTER_TOGGLE,
-            KEY_BINDING_MOVE_HERE
+            KEY_BINDING_MOVE_HERE,
+            KEY_BINDING_PICK_BLOCK
     };
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
@@ -112,58 +115,36 @@ public class InputHandler {
                 }
             }
 
-            handlePickBlock();
-        }
-    }
-
-    private void handlePickBlock() {
-        final KeyBinding keyPickBlock = this.minecraft.gameSettings.keyBindPickBlock;
-        if (keyPickBlock.isPressed()) {
-            try {
+            if (KEY_BINDING_PICK_BLOCK.isPressed()) {
                 final SchematicWorld schematic = ClientProxy.schematic;
-                boolean revert = true;
-
                 if (schematic != null && schematic.isRendering) {
-                    revert = pickBlock(schematic, ClientProxy.objectMouseOver);
+                    pickBlock(schematic, ClientProxy.objectMouseOver);
                 }
-
-                if (revert) {
-                    KeyBinding.onTick(keyPickBlock.getKeyCode());
-                }
-            } catch (final Exception e) {
-                Reference.logger.error("Could not pick block!", e);
             }
         }
     }
 
     private boolean pickBlock(final SchematicWorld schematic, final RayTraceResult objectMouseOver) {
-        boolean revert = false;
-
         // Minecraft.func_147112_ai
-        if (objectMouseOver != null) {
-            final EntityPlayerSP player = this.minecraft.thePlayer;
-
-            if (objectMouseOver.typeOfHit == RayTraceResult.Type.MISS) {
-                revert = true;
-            }
-
-            final RayTraceResult mcObjectMouseOver = this.minecraft.objectMouseOver;
-            if (mcObjectMouseOver != null && mcObjectMouseOver.typeOfHit == RayTraceResult.Type.BLOCK) {
-                if (mcObjectMouseOver.getBlockPos().subtract(schematic.position).equals(objectMouseOver.getBlockPos())) {
-                    return true;
-                }
-            }
-
-            if (!ForgeHooks.onPickBlock(objectMouseOver, player, schematic)) {
-                return revert;
-            }
-
-            if (player.capabilities.isCreativeMode) {
-                final int slot = player.inventoryContainer.inventorySlots.size() - 9 + player.inventory.currentItem;
-                this.minecraft.playerController.sendSlotPacket(player.inventory.getStackInSlot(player.inventory.currentItem), slot);
-            }
+        if (objectMouseOver == null) {
+            return false;
         }
 
-        return revert;
+        if (objectMouseOver.typeOfHit == RayTraceResult.Type.MISS) {
+            return false;
+        }
+
+        final EntityPlayerSP player = this.minecraft.thePlayer;
+        if (!ForgeHooks.onPickBlock(objectMouseOver, player, schematic)) {
+            return true;
+        }
+
+        if (player.capabilities.isCreativeMode) {
+            final int slot = player.inventoryContainer.inventorySlots.size() - 10 + player.inventory.currentItem;
+            this.minecraft.playerController.sendSlotPacket(player.inventory.getStackInSlot(player.inventory.currentItem), slot);
+            return true;
+        }
+
+        return false;
     }
 }
