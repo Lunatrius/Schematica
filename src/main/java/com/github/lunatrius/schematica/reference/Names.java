@@ -203,6 +203,7 @@ public final class Names {
         public static final String RENDER_TOGGLE = "schematica.key.renderToggle";
         public static final String PRINTER_TOGGLE = "schematica.key.printerToggle";
         public static final String MOVE_HERE = "schematica.key.moveHere";
+        public static final String PICK_BLOCK = "key.pickItem";
     }
 
     public static final class NBT {
