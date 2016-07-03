@@ -143,7 +143,8 @@ public class NBTHelper {
     }
 
     public static TileEntity readTileEntityFromCompound(final NBTTagCompound tileEntityCompound) {
-        return TileEntity.create(tileEntityCompound);
+        // TODO: world should NOT be null...
+        return TileEntity.create(null, tileEntityCompound);
     }
 
     public static NBTTagCompound writeEntityToCompound(final Entity entity) {

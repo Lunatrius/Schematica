@@ -20,6 +20,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraft.world.GameType;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
@@ -31,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 public class SchematicWorld extends WorldClient {
-    private static final WorldSettings WORLD_SETTINGS = new WorldSettings(0, WorldSettings.GameType.CREATIVE, false, false, WorldType.FLAT);
+    private static final WorldSettings WORLD_SETTINGS = new WorldSettings(0, GameType.CREATIVE, false, false, WorldType.FLAT);
 
     private ISchematic schematic;
 
@@ -134,12 +135,6 @@ public class SchematicWorld extends WorldClient {
     @Override
     public int getHeight() {
         return this.schematic.getHeight();
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public boolean extendedLevelsInChunkCache() {
-        return false;
     }
 
     @Override
