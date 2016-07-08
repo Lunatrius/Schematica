@@ -34,12 +34,12 @@ public class ServerProxy extends CommonProxy {
 
     @Override
     public File getDataDirectory() {
-        final MinecraftServer server = this.serverWeakReference.get();
+        final MinecraftServer server = this.serverWeakReference != null ? this.serverWeakReference.get() : null;
         final File file = server != null ? server.getFile(".") : new File(".");
         try {
             return file.getCanonicalFile();
         } catch (final IOException e) {
-            Reference.logger.info("Could not canonize path!", e);
+            Reference.logger.warn("Could not canonize path!", e);
         }
         return file;
     }
