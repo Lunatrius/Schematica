@@ -1,6 +1,8 @@
 package com.github.lunatrius.schematica.client.world.chunk;
 
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
+import com.google.common.base.Objects;
+import net.minecraft.client.multiplayer.ChunkProviderClient;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.EmptyChunk;
@@ -9,12 +11,14 @@ import net.minecraft.world.chunk.IChunkProvider;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ChunkProviderSchematic implements IChunkProvider {
+// FIXME: `extends ChunkProviderClient` is required for the `WorldClient.getChunkProvider` method to work properly
+public class ChunkProviderSchematic extends ChunkProviderClient implements IChunkProvider {
     private final SchematicWorld world;
     private final Chunk emptyChunk;
     private final Map<Long, ChunkSchematic> chunks = new ConcurrentHashMap<Long, ChunkSchematic>();
 
     public ChunkProviderSchematic(final SchematicWorld world) {
+        super(world);
         this.world = world;
         this.emptyChunk = new EmptyChunk(world, 0, 0) {
             @Override
@@ -58,5 +62,17 @@ public class ChunkProviderSchematic implements IChunkProvider {
     @Override
     public String makeString() {
         return "SchematicChunkCache";
+    }
+
+    // ChunkProviderClient
+    @Override
+    public Chunk loadChunk(int x, int z) {
+        return Objects.firstNonNull(getLoadedChunk(x, z), this.emptyChunk);
+    }
+
+    // ChunkProviderClient
+    @Override
+    public void unloadChunk(int x, int z) {
+        // NOOP: schematic chunks are part of the schematic world and are never unloaded separately
     }
 }
