@@ -349,7 +349,9 @@ public class SchematicPrinter {
         }
         */
 
-        final EnumActionResult result = this.minecraft.playerController.processRightClickBlock(player, world, itemStack, pos, side, hitVec, hand);
+        // FIXME: when an adjacent block is not required the blocks should be placed 1 block away from the actual position (because air is replaceable)
+        final BlockPos actualPos = ConfigurationHandler.placeAdjacent ? pos : pos.offset(side);
+        final EnumActionResult result = this.minecraft.playerController.processRightClickBlock(player, world, itemStack, actualPos, side, hitVec, hand);
         if ((result != EnumActionResult.SUCCESS)) {
             return false;
         }
