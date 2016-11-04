@@ -57,6 +57,7 @@ public class BlockList {
                     }
                     wrappedItemStack.total++;
                  }
+            }
                       
             try {
                 stack = block.getPickBlock(blockState, rtr, world, pos, player);
