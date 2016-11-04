@@ -332,6 +332,7 @@ public class SchematicPrinter {
         success = placeBlock(world, player, itemStack, offset, side, hitVec, hand);
         for (int i = 0; success && i < extraClicks; i++) {
             success = placeBlock(world, player, itemStack, offset, side, hitVec, hand);
+            Thread.sleep(50);
         }
 
         if (itemStack != null && itemStack.stackSize == 0 && success) {
