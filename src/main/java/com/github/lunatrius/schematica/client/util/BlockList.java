@@ -49,7 +49,7 @@ public class BlockList {
             ItemStack stack = null;
             
             if (block instanceof BlockSlab) {
-                if (block.isDouble()) {
+                if (block.getIdFromBlock(block) == 43 || block.getIdFromBlock(block) == 125 || block.getIdFromBlock(block) == 181 || block.getIdFromBlock(block) == 204) {
                     stack = block.getPickBlock(blockState, rtr, world, pos, player);
                     final WrappedItemStack wrappedItemStack = findOrCreateWrappedItemStackFor(blockList, stack);
                     if (isPlaced) {
