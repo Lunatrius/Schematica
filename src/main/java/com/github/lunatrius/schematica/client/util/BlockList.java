@@ -47,16 +47,6 @@ public class BlockList {
             final boolean isPlaced = BlockStateHelper.areBlockStatesEqual(blockState, mcBlockState);
 
             ItemStack stack = null;
-            
-            if (block instanceof BlockSlab) {
-                if (block.isDouble()) {
-                    stack = block.getPickBlock(blockState, rtr, world, pos, player);
-                    final WrappedItemStack wrappedItemStack = findOrCreateWrappedItemStackFor(blockList, stack);
-                    if (isPlaced) {
-                        wrappedItemStack.placed++;
-                    }
-                    wrappedItemStack.total++;
-                 }
                       
             try {
                 stack = block.getPickBlock(blockState, rtr, world, pos, player);
