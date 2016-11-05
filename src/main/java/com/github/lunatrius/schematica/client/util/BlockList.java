@@ -7,6 +7,7 @@ import com.github.lunatrius.schematica.block.state.BlockStateHelper;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -59,11 +60,20 @@ public class BlockList {
                 continue;
             }
 
+            int count = 1;
+
+            // TODO: this has to be generalized for all blocks; just a temporary "fix"
+            if (block instanceof BlockSlab) {
+                if (((BlockSlab) block).isDouble()) {
+                    count = 2;
+                }
+            }
+
             final WrappedItemStack wrappedItemStack = findOrCreateWrappedItemStackFor(blockList, stack);
             if (isPlaced) {
-                wrappedItemStack.placed++;
+                wrappedItemStack.placed += count;
             }
-            wrappedItemStack.total++;
+            wrappedItemStack.total += count;
         }
 
         for (WrappedItemStack wrappedItemStack : blockList) {
