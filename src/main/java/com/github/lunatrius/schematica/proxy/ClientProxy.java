@@ -64,7 +64,7 @@ public class ClientProxy extends CommonProxy {
 
         orientation = getOrientation(player);
 
-        rotationRender = MathHelper.floor_double(player.rotationYaw / 90) & 3;
+        rotationRender = MathHelper.floor(player.rotationYaw / 90) & 3;
     }
 
     private static EnumFacing getOrientation(final EntityPlayer player) {
@@ -73,7 +73,7 @@ public class ClientProxy extends CommonProxy {
         } else if (player.rotationPitch < -45) {
             return EnumFacing.UP;
         } else {
-            switch (MathHelper.floor_double(player.rotationYaw / 90.0 + 0.5) & 3) {
+            switch (MathHelper.floor(player.rotationYaw / 90.0 + 0.5) & 3) {
             case 0:
                 return EnumFacing.SOUTH;
             case 1:

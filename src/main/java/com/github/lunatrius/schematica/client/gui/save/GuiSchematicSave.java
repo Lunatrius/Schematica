@@ -154,12 +154,12 @@ public class GuiSchematicSave extends GuiScreenBase {
             } else if (guiButton.id == this.btnSave.id) {
                 final String path = this.tfFilename.getText() + ".schematic";
                 if (ClientProxy.isRenderingGuide) {
-                    if (Schematica.proxy.saveSchematic(this.mc.thePlayer, ConfigurationHandler.schematicDirectory, path, this.mc.theWorld, ClientProxy.pointMin, ClientProxy.pointMax)) {
+                    if (Schematica.proxy.saveSchematic(this.mc.player, ConfigurationHandler.schematicDirectory, path, this.mc.world, ClientProxy.pointMin, ClientProxy.pointMax)) {
                         this.filename = "";
                         this.tfFilename.setText(this.filename);
                     }
                 } else {
-                    SchematicFormat.writeToFileAndNotify(new File(ConfigurationHandler.schematicDirectory, path), ClientProxy.schematic.getSchematic(), this.mc.thePlayer);
+                    SchematicFormat.writeToFileAndNotify(new File(ConfigurationHandler.schematicDirectory, path), ClientProxy.schematic.getSchematic(), this.mc.player);
                 }
             }
         }

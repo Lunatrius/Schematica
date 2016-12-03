@@ -47,8 +47,8 @@ public class ViewFrustumOverlay extends ViewFrustum {
     public void updateChunkPositions(final double viewEntityX, final double viewEntityZ) {
         super.updateChunkPositions(viewEntityX, viewEntityZ);
 
-        final int xx = MathHelper.floor_double(viewEntityX) - 8;
-        final int zz = MathHelper.floor_double(viewEntityZ) - 8;
+        final int xx = MathHelper.floor(viewEntityX) - 8;
+        final int zz = MathHelper.floor(viewEntityZ) - 8;
         final int yy = this.countChunksX * 16;
 
         for (int chunkX = 0; chunkX < this.countChunksX; chunkX++) {
@@ -85,12 +85,12 @@ public class ViewFrustumOverlay extends ViewFrustum {
     public void markBlocksForUpdate(final int fromX, final int fromY, final int fromZ, final int toX, final int toY, final int toZ, final boolean needsUpdate) {
         super.markBlocksForUpdate(fromX, fromY, fromZ, toX, toY, toZ, needsUpdate);
 
-        final int x0 = MathHelper.bucketInt(fromX, 16);
-        final int y0 = MathHelper.bucketInt(fromY, 16);
-        final int z0 = MathHelper.bucketInt(fromZ, 16);
-        final int x1 = MathHelper.bucketInt(toX, 16);
-        final int y1 = MathHelper.bucketInt(toY, 16);
-        final int z1 = MathHelper.bucketInt(toZ, 16);
+        final int x0 = MathHelper.intFloorDiv(fromX, 16);
+        final int y0 = MathHelper.intFloorDiv(fromY, 16);
+        final int z0 = MathHelper.intFloorDiv(fromZ, 16);
+        final int x1 = MathHelper.intFloorDiv(toX, 16);
+        final int y1 = MathHelper.intFloorDiv(toY, 16);
+        final int z1 = MathHelper.intFloorDiv(toZ, 16);
 
         for (int xi = x0; xi <= x1; ++xi) {
             int x = xi % this.countChunksX;
@@ -122,9 +122,9 @@ public class ViewFrustumOverlay extends ViewFrustum {
     }
 
     public RenderOverlay getRenderOverlay(final BlockPos pos) {
-        int x = MathHelper.bucketInt(pos.getX(), 16);
-        final int y = MathHelper.bucketInt(pos.getY(), 16);
-        int z = MathHelper.bucketInt(pos.getZ(), 16);
+        int x = MathHelper.intFloorDiv(pos.getX(), 16);
+        final int y = MathHelper.intFloorDiv(pos.getY(), 16);
+        int z = MathHelper.intFloorDiv(pos.getZ(), 16);
 
         if (y >= 0 && y < this.countChunksY) {
             x %= this.countChunksX;

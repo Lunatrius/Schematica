@@ -64,7 +64,7 @@ public final class Names {
         public static final String PLAYER_QUOTA_KILOBYTES = "playerQuotaKilobytes";
         public static final String PLAYER_QUOTA_KILOBYTES_DESC = "Amount of storage provided per-player for schematics on the server.";
 
-        public static final String LANG_PREFIX = Reference.MODID_LOWER + ".config";
+        public static final String LANG_PREFIX = Reference.MODID + ".config";
     }
 
     public static final class Command {

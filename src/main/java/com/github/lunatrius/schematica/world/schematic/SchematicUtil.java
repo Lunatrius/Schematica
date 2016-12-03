@@ -66,7 +66,7 @@ public final class SchematicUtil {
         ItemStack icon = DEFAULT_ICON.copy();
 
         if (tagCompound != null && tagCompound.hasKey(Names.NBT.ICON)) {
-            icon.readFromNBT(tagCompound.getCompoundTag(Names.NBT.ICON));
+            icon.deserializeNBT(tagCompound.getCompoundTag(Names.NBT.ICON));
 
             if (icon.getItem() == null) {
                 icon = DEFAULT_ICON.copy();

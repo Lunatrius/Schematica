@@ -69,7 +69,7 @@ public class PlacementRegistry {
             @Override
             public boolean isValid(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {
                 final EnumFacing facing = BlockStateHelper.<EnumFacing>getPropertyValue(blockState, "facing");
-                return facing == BlockPistonBase.getFacingFromEntity(pos, player);
+                return facing == EnumFacing.getDirectionFromEntityLiving(pos, player);
             }
         };
         final IValidPlayerFacing playerFacingRotateY = new IValidPlayerFacing() {
@@ -90,7 +90,7 @@ public class PlacementRegistry {
             @Override
             public boolean isValid(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {
                 final int value = blockState.getValue(BlockStandingSign.ROTATION);
-                final int facing = MathHelper.floor_double((player.rotationYaw + 180.0) * 16.0 / 360.0 + 0.5) & 15;
+                final int facing = MathHelper.floor((player.rotationYaw + 180.0) * 16.0 / 360.0 + 0.5) & 15;
                 return value == facing;
             }
         };

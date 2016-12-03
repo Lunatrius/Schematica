@@ -43,8 +43,8 @@ public class TickHandler {
         }
 
         this.minecraft.mcProfiler.startSection("schematica");
-        final WorldClient world = this.minecraft.theWorld;
-        final EntityPlayerSP player = this.minecraft.thePlayer;
+        final WorldClient world = this.minecraft.world;
+        final EntityPlayerSP player = this.minecraft.player;
         final SchematicWorld schematic = ClientProxy.schematic;
         if (world != null && player != null && schematic != null && schematic.isRendering) {
             this.minecraft.mcProfiler.startSection("printer");

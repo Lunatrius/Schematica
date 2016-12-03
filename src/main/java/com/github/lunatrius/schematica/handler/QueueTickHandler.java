@@ -28,7 +28,7 @@ public class QueueTickHandler {
 
         // TODO: find a better way... maybe?
         try {
-            final EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+            final EntityPlayerSP player = Minecraft.getMinecraft().player;
             if (player != null && player.connection != null && !player.connection.getNetworkManager().isLocalChannel()) {
                 processQueue();
             }
@@ -59,7 +59,7 @@ public class QueueTickHandler {
         if (container.hasNext()) {
             if (container.isFirst()) {
                 final TextComponentTranslation component = new TextComponentTranslation(Names.Command.Save.Message.SAVE_STARTED, container.chunkCount, container.file.getName());
-                container.player.addChatMessage(component);
+                container.player.sendMessage(component);
             }
 
             container.next();

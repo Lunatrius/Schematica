@@ -41,7 +41,7 @@ public class GuiSchematicMaterials extends GuiScreenBase {
         super(guiScreen);
         final Minecraft minecraft = Minecraft.getMinecraft();
         final SchematicWorld schematic = ClientProxy.schematic;
-        this.blockList = new BlockList().getList(minecraft.thePlayer, schematic, minecraft.theWorld);
+        this.blockList = new BlockList().getList(minecraft.player, schematic, minecraft.world);
         this.sortType.sort(this.blockList);
     }
 

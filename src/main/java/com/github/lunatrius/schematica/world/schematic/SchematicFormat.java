@@ -78,7 +78,7 @@ public abstract class SchematicFormat {
     public static void writeToFileAndNotify(final File file, final ISchematic schematic, final EntityPlayer player) {
         final boolean success = writeToFile(file, schematic);
         final String message = success ? Names.Command.Save.Message.SAVE_SUCCESSFUL : Names.Command.Save.Message.SAVE_FAILED;
-        player.addChatMessage(new TextComponentTranslation(message, file.getName()));
+        player.sendMessage(new TextComponentTranslation(message, file.getName()));
     }
 
     static {

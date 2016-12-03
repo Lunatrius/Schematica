@@ -2,7 +2,7 @@
 	"modListVersion": 2,
 	"modList": [
 		{
-			"modid": "Schematica",
+			"modid": "schematica",
 			"name": "Schematica",
 			"description": "Import and export Minecraft schematic files in Minecraft!",
 			"mcversion": "${mcversion}",

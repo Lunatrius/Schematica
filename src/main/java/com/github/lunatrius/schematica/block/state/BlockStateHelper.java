@@ -12,7 +12,7 @@ import java.util.Map;
 public class BlockStateHelper {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static <T extends Comparable<T>> IProperty<T> getProperty(final IBlockState blockState, final String name) {
-        for (final IProperty prop : blockState.getPropertyNames()) {
+        for (final IProperty prop : blockState.getPropertyKeys()) {
             if (prop.getName().equals(name)) {
                 return prop;
             }

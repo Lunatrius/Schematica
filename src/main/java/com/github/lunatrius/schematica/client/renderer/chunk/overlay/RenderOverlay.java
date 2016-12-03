@@ -66,7 +66,7 @@ public class RenderOverlay extends RenderChunk {
         if (!chunkCache.extendedLevelsInChunkCache()) {
             ++renderChunksUpdated;
 
-            final World mcWorld = Minecraft.getMinecraft().theWorld;
+            final World mcWorld = Minecraft.getMinecraft().world;
 
             final BlockRenderLayer layer = BlockRenderLayer.TRANSLUCENT;
             final net.minecraft.client.renderer.VertexBuffer buffer = generator.getRegionRenderCacheBuilder().getWorldRendererByLayer(layer);

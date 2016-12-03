@@ -111,7 +111,7 @@ public class BlockStateReplacer {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private static boolean putMatchingProperty(final Map<IProperty, Comparable> map, final IBlockState blockState, final String name, final String value, final boolean strict) throws LocalizedException {
-        for (final IProperty property : blockState.getPropertyNames()) {
+        for (final IProperty property : blockState.getPropertyKeys()) {
             if (property.getName().equalsIgnoreCase(name)) {
                 final Collection<Comparable> allowedValues = property.getAllowedValues();
                 for (final Comparable allowedValue : allowedValues) {
