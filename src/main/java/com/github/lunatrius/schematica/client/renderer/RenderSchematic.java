@@ -196,7 +196,7 @@ public class RenderSchematic extends RenderGlobal {
         this.frustumUpdatePosChunkX = Integer.MIN_VALUE;
         this.frustumUpdatePosChunkY = Integer.MIN_VALUE;
         this.frustumUpdatePosChunkZ = Integer.MIN_VALUE;
-        this.renderManager.set(world);
+        this.renderManager.setWorld(world);
         this.world = world;
 
         if (world != null) {
@@ -229,7 +229,7 @@ public class RenderSchematic extends RenderGlobal {
 
     @SubscribeEvent
     public void onRenderWorldLast(final RenderWorldLastEvent event) {
-        final EntityPlayerSP player = this.mc.thePlayer;
+        final EntityPlayerSP player = this.mc.player;
         if (player != null) {
             this.profiler.startSection("schematica");
             ClientProxy.setPlayerData(player, event.getPartialTicks());
@@ -450,7 +450,7 @@ public class RenderSchematic extends RenderGlobal {
         final int entityPass = 0;
 
         this.profiler.startSection("prepare");
-        TileEntityRendererDispatcher.instance.func_190056_a(this.world, this.mc.getTextureManager(), this.mc.fontRendererObj, renderViewEntity, this.mc.objectMouseOver, partialTicks);
+        TileEntityRendererDispatcher.instance.prepare(this.world, this.mc.getTextureManager(), this.mc.fontRendererObj, renderViewEntity, this.mc.objectMouseOver, partialTicks);
         this.renderManager.cacheActiveRenderInfo(this.world, this.mc.fontRendererObj, renderViewEntity, this.mc.pointedEntity, this.mc.gameSettings, partialTicks);
 
         this.countEntitiesTotal = 0;
@@ -487,7 +487,7 @@ public class RenderSchematic extends RenderGlobal {
                     continue;
                 }
 
-                if (!this.mc.theWorld.isAirBlock(tileEntity.getPos().add(this.world.position))) {
+                if (!this.mc.world.isAirBlock(tileEntity.getPos().add(this.world.position))) {
                     continue;
                 }
 
@@ -547,9 +547,9 @@ public class RenderSchematic extends RenderGlobal {
         final double deltaY = posY - this.frustumUpdatePosY;
         final double deltaZ = posZ - this.frustumUpdatePosZ;
 
-        final int chunkCoordX = MathHelper.floor_double(posX) >> 4;
-        final int chunkCoordY = MathHelper.floor_double(posY) >> 4;
-        final int chunkCoordZ = MathHelper.floor_double(posZ) >> 4;
+        final int chunkCoordX = MathHelper.floor(posX) >> 4;
+        final int chunkCoordY = MathHelper.floor(posY) >> 4;
+        final int chunkCoordZ = MathHelper.floor(posZ) >> 4;
 
         if (this.frustumUpdatePosChunkX != chunkCoordX || this.frustumUpdatePosChunkY != chunkCoordY || this.frustumUpdatePosChunkZ != chunkCoordZ || deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ > 16.0) {
             this.frustumUpdatePosX = posX;
@@ -693,7 +693,7 @@ public class RenderSchematic extends RenderGlobal {
 
     private RenderChunk getNeighborRenderChunk(final BlockPos posEye, final RenderChunk renderChunkBase, final EnumFacing side) {
         final BlockPos offset = renderChunkBase.getBlockPosOffset16(side);
-        if (MathHelper.abs_int(posEye.getX() - offset.getX()) > this.renderDistanceChunks * 16) {
+        if (MathHelper.abs(posEye.getX() - offset.getX()) > this.renderDistanceChunks * 16) {
             return null;
         }
 
@@ -701,7 +701,7 @@ public class RenderSchematic extends RenderGlobal {
             return null;
         }
 
-        if (MathHelper.abs_int(posEye.getZ() - offset.getZ()) > this.renderDistanceChunks * 16) {
+        if (MathHelper.abs(posEye.getZ() - offset.getZ()) > this.renderDistanceChunks * 16) {
             return null;
         }
 
@@ -710,7 +710,7 @@ public class RenderSchematic extends RenderGlobal {
 
     private RenderOverlay getNeighborRenderOverlay(final BlockPos posEye, final RenderChunk renderChunkBase, final EnumFacing side) {
         final BlockPos offset = renderChunkBase.getBlockPosOffset16(side);
-        if (MathHelper.abs_int(posEye.getX() - offset.getX()) > this.renderDistanceChunks * 16) {
+        if (MathHelper.abs(posEye.getX() - offset.getX()) > this.renderDistanceChunks * 16) {
             return null;
         }
 
@@ -718,7 +718,7 @@ public class RenderSchematic extends RenderGlobal {
             return null;
         }
 
-        if (MathHelper.abs_int(posEye.getZ() - offset.getZ()) > this.renderDistanceChunks * 16) {
+        if (MathHelper.abs(posEye.getZ() - offset.getZ()) > this.renderDistanceChunks * 16) {
             return null;
         }
 

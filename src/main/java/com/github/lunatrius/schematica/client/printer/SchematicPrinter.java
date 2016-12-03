@@ -321,7 +321,7 @@ public class SchematicPrinter {
         final ItemStack itemStack = player.getHeldItem(hand);
         boolean success = false;
 
-        if (!this.minecraft.playerController.isInCreativeMode() && itemStack != null && itemStack.stackSize <= extraClicks) {
+        if (!this.minecraft.playerController.isInCreativeMode() && itemStack != null && itemStack.getCount() <= extraClicks) {
             return false;
         }
 
@@ -334,8 +334,8 @@ public class SchematicPrinter {
             success = placeBlock(world, player, itemStack, offset, side, hitVec, hand);
         }
 
-        if (itemStack != null && itemStack.stackSize == 0 && success) {
-            player.inventory.mainInventory[player.inventory.currentItem] = null;
+        if (itemStack != null && itemStack.getCount() == 0 && success) {
+            player.inventory.mainInventory.set(player.inventory.currentItem, ItemStack.EMPTY);
         }
 
         return success;
@@ -351,7 +351,7 @@ public class SchematicPrinter {
 
         // FIXME: when an adjacent block is not required the blocks should be placed 1 block away from the actual position (because air is replaceable)
         final BlockPos actualPos = ConfigurationHandler.placeAdjacent ? pos : pos.offset(side);
-        final EnumActionResult result = this.minecraft.playerController.processRightClickBlock(player, world, itemStack, actualPos, side, hitVec, hand);
+        final EnumActionResult result = this.minecraft.playerController.processRightClickBlock(player, world, actualPos, side, hitVec, hand);
         if ((result != EnumActionResult.SUCCESS)) {
             return false;
         }
@@ -392,8 +392,8 @@ public class SchematicPrinter {
     }
 
     private int getInventorySlotWithItem(final InventoryPlayer inventory, final ItemStack itemStack) {
-        for (int i = 0; i < inventory.mainInventory.length; i++) {
-            if (inventory.mainInventory[i] != null && inventory.mainInventory[i].isItemEqual(itemStack)) {
+        for (int i = 0; i < inventory.mainInventory.size(); i++) {
+            if (inventory.mainInventory.get(i).isItemEqual(itemStack)) {
                 return i;
             }
         }
@@ -418,6 +418,6 @@ public class SchematicPrinter {
     }
 
     private boolean swapSlots(final int from, final int to) {
-        return this.minecraft.playerController.windowClick(this.minecraft.thePlayer.inventoryContainer.windowId, from, to, ClickType.SWAP, this.minecraft.thePlayer) == null;
+        return this.minecraft.playerController.windowClick(this.minecraft.player.inventoryContainer.windowId, from, to, ClickType.SWAP, this.minecraft.player) == ItemStack.EMPTY;
     }
 }

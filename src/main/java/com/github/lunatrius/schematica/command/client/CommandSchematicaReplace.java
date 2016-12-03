@@ -22,17 +22,17 @@ public class CommandSchematicaReplace extends CommandSchematicaBase {
     private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return Names.Command.Replace.NAME;
     }
 
     @Override
-    public String getCommandUsage(final ICommandSender sender) {
+    public String getUsage(final ICommandSender sender) {
         return Names.Command.Replace.Message.USAGE;
     }
 
     @Override
-    public List<String> getTabCompletionOptions(final MinecraftServer server, final ICommandSender sender, final String[] args, final BlockPos pos) {
+    public List<String> getTabCompletions(final MinecraftServer server, final ICommandSender sender, final String[] args, final BlockPos pos) {
         if (args.length < 3) {
             return getListOfStringsMatchingLastWord(args, BLOCK_REGISTRY.getKeys());
         }
@@ -60,7 +60,7 @@ public class CommandSchematicaReplace extends CommandSchematicaBase {
 
             final int count = schematic.replaceBlock(matcher, replacer, replacementInfo.stateData);
 
-            sender.addChatMessage(new TextComponentTranslation(Names.Command.Replace.Message.SUCCESS, count));
+            sender.sendMessage(new TextComponentTranslation(Names.Command.Replace.Message.SUCCESS, count));
         } catch (final Exception e) {
             Reference.logger.error("Something went wrong!", e);
             throw new CommandException(e.getMessage());

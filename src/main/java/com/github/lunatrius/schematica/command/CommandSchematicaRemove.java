@@ -22,19 +22,19 @@ import java.util.Arrays;
 
 public class CommandSchematicaRemove extends CommandSchematicaBase {
     @Override
-    public String getCommandName() {
+    public String getName() {
         return Names.Command.Remove.NAME;
     }
 
     @Override
-    public String getCommandUsage(final ICommandSender sender) {
+    public String getUsage(final ICommandSender sender) {
         return Names.Command.Remove.Message.USAGE;
     }
 
     @Override
     public void execute(final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
         if (args.length < 1) {
-            throw new WrongUsageException(getCommandUsage(sender));
+            throw new WrongUsageException(getUsage(sender));
         }
 
         if (!(sender instanceof EntityPlayer)) {
@@ -74,7 +74,7 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
         if (file.exists()) {
             if (delete) {
                 if (file.delete()) {
-                    sender.addChatMessage(new TextComponentTranslation(Names.Command.Remove.Message.SCHEMATIC_REMOVED, name));
+                    sender.sendMessage(new TextComponentTranslation(Names.Command.Remove.Message.SCHEMATIC_REMOVED, name));
                 } else {
                     throw new CommandException(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND);
                 }
@@ -86,7 +86,7 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
                 chatComponent.appendSibling(withStyle(new TextComponentTranslation(Names.Command.Remove.Message.YES), TextFormatting.RED, confirmCommand));
                 chatComponent.appendSibling(new TextComponentString("]"));
 
-                sender.addChatMessage(chatComponent);
+                sender.sendMessage(chatComponent);
             }
         } else {
             throw new CommandException(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND);

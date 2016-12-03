@@ -23,12 +23,12 @@ public class CommandSchematicaList extends CommandSchematicaBase {
     private static final FileFilterSchematic FILE_FILTER_SCHEMATIC = new FileFilterSchematic(false);
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return Names.Command.List.NAME;
     }
 
     @Override
-    public String getCommandUsage(final ICommandSender sender) {
+    public String getUsage(final ICommandSender sender) {
         return Names.Command.List.Message.USAGE;
     }
 
@@ -47,7 +47,7 @@ public class CommandSchematicaList extends CommandSchematicaBase {
                 }
             }
         } catch (final NumberFormatException e) {
-            throw new WrongUsageException(getCommandUsage(sender));
+            throw new WrongUsageException(getUsage(sender));
         }
 
         final EntityPlayer player = (EntityPlayer) sender;
@@ -94,7 +94,7 @@ public class CommandSchematicaList extends CommandSchematicaBase {
         }
 
         if (currentFile == 0) {
-            sender.addChatMessage(new TextComponentTranslation(Names.Command.List.Message.NO_SCHEMATICS));
+            sender.sendMessage(new TextComponentTranslation(Names.Command.List.Message.NO_SCHEMATICS));
             return;
         }
 
@@ -103,9 +103,9 @@ public class CommandSchematicaList extends CommandSchematicaBase {
             throw new CommandException(Names.Command.List.Message.NO_SUCH_PAGE);
         }
 
-        sender.addChatMessage(withStyle(new TextComponentTranslation(Names.Command.List.Message.PAGE_HEADER, page + 1, totalPages + 1), TextFormatting.DARK_GREEN, null));
+        sender.sendMessage(withStyle(new TextComponentTranslation(Names.Command.List.Message.PAGE_HEADER, page + 1, totalPages + 1), TextFormatting.DARK_GREEN, null));
         for (final ITextComponent chatComponent : componentsToSend) {
-            sender.addChatMessage(chatComponent);
+            sender.sendMessage(chatComponent);
         }
     }
 }

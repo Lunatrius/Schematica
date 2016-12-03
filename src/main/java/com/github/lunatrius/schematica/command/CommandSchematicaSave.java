@@ -17,19 +17,19 @@ import java.io.File;
 
 public class CommandSchematicaSave extends CommandSchematicaBase {
     @Override
-    public String getCommandName() {
+    public String getName() {
         return Names.Command.Save.NAME;
     }
 
     @Override
-    public String getCommandUsage(final ICommandSender sender) {
+    public String getUsage(final ICommandSender sender) {
         return Names.Command.Save.Message.USAGE;
     }
 
     @Override
     public void execute(final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
         if (args.length < 7) {
-            throw new WrongUsageException(getCommandUsage(sender));
+            throw new WrongUsageException(getUsage(sender));
         }
 
         if (!(sender instanceof EntityPlayer)) {
@@ -54,7 +54,7 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
             name = args[6];
             filename = String.format("%s.schematic", name);
         } catch (final NumberFormatException exception) {
-            throw new WrongUsageException(getCommandUsage(sender));
+            throw new WrongUsageException(getUsage(sender));
         }
 
         Reference.logger.debug("Saving schematic from {} to {} to {}", from, to, filename);
@@ -74,7 +74,7 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
 
         try {
             Schematica.proxy.saveSchematic(player, schematicDirectory, filename, player.getEntityWorld(), from, to);
-            sender.addChatMessage(new TextComponentTranslation(Names.Command.Save.Message.SAVE_SUCCESSFUL, name));
+            sender.sendMessage(new TextComponentTranslation(Names.Command.Save.Message.SAVE_SUCCESSFUL, name));
         } catch (final Exception e) {
             throw new CommandException(Names.Command.Save.Message.SAVE_FAILED, name);
         }

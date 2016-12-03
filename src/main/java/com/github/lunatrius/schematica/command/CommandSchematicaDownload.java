@@ -27,17 +27,17 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
     private static final FileFilterSchematic FILE_FILTER_SCHEMATIC = new FileFilterSchematic(false);
 
     @Override
-    public String getCommandName() {
+    public String getName() {
         return Names.Command.Download.NAME;
     }
 
     @Override
-    public String getCommandUsage(final ICommandSender sender) {
+    public String getUsage(final ICommandSender sender) {
         return Names.Command.Download.Message.USAGE;
     }
 
     @Override
-    public List<String> getTabCompletionOptions(final MinecraftServer server, final ICommandSender sender, final String[] args, final BlockPos pos) {
+    public List<String> getTabCompletions(final MinecraftServer server, final ICommandSender sender, final String[] args, final BlockPos pos) {
         if (!(sender instanceof EntityPlayer)) {
             return null;
         }
@@ -61,7 +61,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
     @Override
     public void execute(final MinecraftServer server, final ICommandSender sender, final String[] args) throws CommandException {
         if (args.length < 1) {
-            throw new WrongUsageException(getCommandUsage(sender));
+            throw new WrongUsageException(getUsage(sender));
         }
 
         if (!(sender instanceof EntityPlayerMP)) {
@@ -80,7 +80,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
 
         if (schematic != null) {
             DownloadHandler.INSTANCE.transferMap.put(player, new SchematicTransfer(schematic, filename));
-            sender.addChatMessage(new TextComponentTranslation(Names.Command.Download.Message.DOWNLOAD_STARTED, filename));
+            sender.sendMessage(new TextComponentTranslation(Names.Command.Download.Message.DOWNLOAD_STARTED, filename));
         } else {
             throw new CommandException(Names.Command.Download.Message.DOWNLOAD_FAILED);
         }

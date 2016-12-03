@@ -38,7 +38,7 @@ public class ChunkProviderSchematic extends ChunkProviderClient implements IChun
             return this.emptyChunk;
         }
 
-        final long key = ChunkPos.chunkXZ2Int(x, z);
+        final long key = ChunkPos.asLong(x, z);
 
         ChunkSchematic chunk = this.chunks.get(key);
         if (chunk == null) {
@@ -54,10 +54,7 @@ public class ChunkProviderSchematic extends ChunkProviderClient implements IChun
         return getLoadedChunk(x, z);
     }
 
-    @Override
-    public boolean unloadQueuedChunks() {
-        return false;
-    }
+
 
     @Override
     public String makeString() {

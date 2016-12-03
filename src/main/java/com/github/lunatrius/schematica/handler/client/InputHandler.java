@@ -71,7 +71,7 @@ public class InputHandler {
             if (KEY_BINDING_LAYER_INC.isPressed()) {
                 final SchematicWorld schematic = ClientProxy.schematic;
                 if (schematic != null && schematic.isRenderingLayer) {
-                    schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer + 1, 0, schematic.getHeight() - 1);
+                    schematic.renderingLayer = MathHelper.clamp(schematic.renderingLayer + 1, 0, schematic.getHeight() - 1);
                     RenderSchematic.INSTANCE.refresh();
                 }
             }
@@ -79,7 +79,7 @@ public class InputHandler {
             if (KEY_BINDING_LAYER_DEC.isPressed()) {
                 final SchematicWorld schematic = ClientProxy.schematic;
                 if (schematic != null && schematic.isRenderingLayer) {
-                    schematic.renderingLayer = MathHelper.clamp_int(schematic.renderingLayer - 1, 0, schematic.getHeight() - 1);
+                    schematic.renderingLayer = MathHelper.clamp(schematic.renderingLayer - 1, 0, schematic.getHeight() - 1);
                     RenderSchematic.INSTANCE.refresh();
                 }
             }
@@ -103,7 +103,7 @@ public class InputHandler {
             if (KEY_BINDING_PRINTER_TOGGLE.isPressed()) {
                 if (ClientProxy.schematic != null) {
                     final boolean printing = SchematicPrinter.INSTANCE.togglePrinting();
-                    this.minecraft.thePlayer.addChatComponentMessage(new TextComponentTranslation(Names.Messages.TOGGLE_PRINTER, I18n.format(printing ? Names.Gui.ON : Names.Gui.OFF)));
+                    this.minecraft.player.sendMessage(new TextComponentTranslation(Names.Messages.TOGGLE_PRINTER, I18n.format(printing ? Names.Gui.ON : Names.Gui.OFF)));
                 }
             }
 
@@ -134,7 +134,7 @@ public class InputHandler {
             return false;
         }
 
-        final EntityPlayerSP player = this.minecraft.thePlayer;
+        final EntityPlayerSP player = this.minecraft.player;
         if (!ForgeHooks.onPickBlock(objectMouseOver, player, schematic)) {
             return true;
         }

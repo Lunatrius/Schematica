@@ -167,7 +167,7 @@ public class SchematicWorld extends WorldClient {
     }
 
     public void initializeTileEntity(final TileEntity tileEntity) {
-        tileEntity.setWorldObj(this);
+        tileEntity.setWorld(this);
         tileEntity.getBlockType();
         try {
             tileEntity.invalidate();
