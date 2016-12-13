@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.FluidActionResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,10 @@ public class BlockList {
             
              if (block instanceof IFluidBlock || block instanceof BlockLiquid) {
             	final IFluidHandler fluid = FluidUtil.getFluidHandler(world, pos, null);
-            	stack = FluidUtil.tryFillContainer(new ItemStack(Items.BUCKET), fluid, 1000, null, false);
+            	final FluidActionResult result = FluidUtil.tryFillContainer(new ItemStack(Items.BUCKET), fluid, 1000, null, false);
+                if (result) {
+                    stack = result.getResult()
+                }
             }
 
             if (stack == null || stack.getItem() == null) {
