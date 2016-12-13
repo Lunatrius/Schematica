@@ -64,7 +64,7 @@ public class BlockList {
              if (block instanceof IFluidBlock || block instanceof BlockLiquid) {
             	final IFluidHandler fluid = FluidUtil.getFluidHandler(world, pos, null);
             	final FluidActionResult result = FluidUtil.tryFillContainer(new ItemStack(Items.BUCKET), fluid, 1000, null, false);
-                if (result) {
+                if (result.isSuccess()) {
                     stack = result.getResult();
                 }
             }
