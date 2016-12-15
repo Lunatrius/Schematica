@@ -7,14 +7,20 @@ import com.github.lunatrius.schematica.block.state.BlockStateHelper;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.FluidActionResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +59,16 @@ public class BlockList {
                 stack = block.getPickBlock(blockState, rtr, world, pos, player);
             } catch (final Exception e) {
                 Reference.logger.debug("Could not get the pick block for: {}", blockState, e);
+            }
+            
+             if (block instanceof IFluidBlock || block instanceof BlockLiquid) {
+            	final IFluidHandler fluid = FluidUtil.getFluidHandler(world, pos, null);
+            	final FluidActionResult result = FluidUtil.tryFillContainer(new ItemStack(Items.BUCKET), fluid, 1000, null, false);
+                if (result.isSuccess()) {
+                    if (!result.getResult().isEmpty()) {
+                        stack = result.getResult();
+                    }
+                }
             }
 
             if (stack == null || stack.getItem() == null) {
