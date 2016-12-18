@@ -194,7 +194,7 @@ public class SchematicPrinter {
             return false;
         }
 
-        if (ConfigurationHandler.destroyBlocks && !world.isAirBlock(realPos) && this.minecraft.playerController.isInCreativeMode()) {
+        if (ConfigurationHandler.destroyBlocks && !world.isAirBlock(realPos) && this.minecraft.playerController.isInCreativeMode() && PlacementRegistry.INSTANCE.getPlacementData(blockState, itemStack).getExtraClicks(blockState) == 0) {
             this.minecraft.playerController.clickBlock(realPos, EnumFacing.DOWN);
 
             this.timeout[x][y][z] = (byte) ConfigurationHandler.timeout;
@@ -332,6 +332,7 @@ public class SchematicPrinter {
         success = placeBlock(world, player, itemStack, offset, side, hitVec, hand);
         for (int i = 0; success && i < extraClicks; i++) {
             success = placeBlock(world, player, itemStack, offset, side, hitVec, hand);
+            Thread.sleep(50);
         }
 
         if (itemStack != null && itemStack.getCount() == 0 && success) {

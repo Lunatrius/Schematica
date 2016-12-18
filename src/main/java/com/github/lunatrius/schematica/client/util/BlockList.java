@@ -54,7 +54,7 @@ public class BlockList {
             final boolean isPlaced = BlockStateHelper.areBlockStatesEqual(blockState, mcBlockState);
 
             ItemStack stack = null;
-
+                      
             try {
                 stack = block.getPickBlock(blockState, rtr, world, pos, player);
             } catch (final Exception e) {
