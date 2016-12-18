@@ -52,11 +52,11 @@ public class BlockList {
             try {
                 stack = block.getPickBlock(blockState, rtr, world, pos, player);
             } catch (final Exception e) {
-                Reference.logger.debug("Could not get the pick block for: {}", blockState, e);
+                Reference.logger.warn("Could not get the pick block for: {}", blockState, e);
             }
 
-            if (stack == null || stack.getItem() == null) {
-                Reference.logger.debug("Could not find the item for: {}", blockState);
+            if (stack == null || stack.getItem() == ItemStack.EMPTY.getItem()) {
+                Reference.logger.warn("Could not find the item for: {}", blockState);
                 continue;
             }
 
