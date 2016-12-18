@@ -214,19 +214,6 @@ public class ConfigurationHandler {
         propSchematicDirectory.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SCHEMATIC_DIRECTORY);
         schematicDirectory = new File(propSchematicDirectory.getString());
 
-        try {
-            schematicDirectory = schematicDirectory.getCanonicalFile();
-            final String schematicPath = schematicDirectory.getAbsolutePath();
-            final String dataPath = Schematica.proxy.getDataDirectory().getAbsolutePath();
-            if (schematicPath.contains(dataPath)) {
-                propSchematicDirectory.set(schematicPath.substring(dataPath.length()).replace("\\", "/").replaceAll("^/+", ""));
-            } else {
-                propSchematicDirectory.set(schematicPath.replace("\\", "/"));
-            }
-        } catch (final IOException e) {
-            Reference.logger.warn("Could not canonize path!", e);
-        }
-
         propExtraAirBlocks = configuration.get(Names.Config.Category.GENERAL, Names.Config.EXTRA_AIR_BLOCKS, EXTRA_AIR_BLOCKS_DEFAULT, Names.Config.EXTRA_AIR_BLOCKS_DESC);
         propExtraAirBlocks.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.EXTRA_AIR_BLOCKS);
         extraAirBlocks = propExtraAirBlocks.getStringList();
@@ -235,6 +222,34 @@ public class ConfigurationHandler {
         propSortType.setShowInGui(false);
         sortType = propSortType.getString();
 
+        normalizeSchematicPath();
+        populateExtraAirBlocks();
+    }
+
+    private static void normalizeSchematicPath() {
+        try {
+            schematicDirectory = schematicDirectory.getCanonicalFile();
+            final String schematicPath = schematicDirectory.getAbsolutePath();
+            final String dataPath = Schematica.proxy.getDataDirectory().getAbsolutePath();
+            final String newSchematicPath = mergePaths(schematicPath, dataPath);
+            propSchematicDirectory.set(newSchematicPath);
+            Reference.logger.debug("Schematic path: {}", schematicPath);
+            Reference.logger.debug("Data path: {}", dataPath);
+            Reference.logger.debug("New schematic path: {}", newSchematicPath);
+        } catch (final IOException e) {
+            Reference.logger.warn("Could not canonize path!", e);
+        }
+    }
+
+    private static String mergePaths(final String schematicPath, final String dataPath) {
+        if (schematicPath.startsWith(dataPath)) {
+            return schematicPath.substring(dataPath.length()).replace("\\", "/").replaceAll("^/+", "");
+        }
+
+        return schematicPath.replace("\\", "/");
+    }
+
+    private static void populateExtraAirBlocks() {
         extraAirBlockList.clear();
         for (final String name : extraAirBlocks) {
             final Block block = BLOCK_REGISTRY.getObject(new ResourceLocation(name));
