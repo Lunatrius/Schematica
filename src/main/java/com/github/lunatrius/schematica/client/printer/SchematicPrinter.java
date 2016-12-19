@@ -211,7 +211,7 @@ public class SchematicPrinter {
         }
 
         final ItemStack itemStack = BlockStateToItemStack.getItemStack(blockState, new RayTraceResult(player), this.schematic, pos, player);
-        if (itemStack == null || itemStack.getItem() == null) {
+        if (itemStack.isEmpty()) {
             Reference.logger.debug("{} is missing a mapping!", blockState);
             return false;
         }
@@ -321,7 +321,7 @@ public class SchematicPrinter {
         final ItemStack itemStack = player.getHeldItem(hand);
         boolean success = false;
 
-        if (!this.minecraft.playerController.isInCreativeMode() && itemStack != null && itemStack.getCount() <= extraClicks) {
+        if (!this.minecraft.playerController.isInCreativeMode() && !itemStack.isEmpty() && itemStack.getCount() <= extraClicks) {
             return false;
         }
 
@@ -334,7 +334,7 @@ public class SchematicPrinter {
             success = placeBlock(world, player, itemStack, offset, side, hitVec, hand);
         }
 
-        if (itemStack != null && itemStack.getCount() == 0 && success) {
+        if (itemStack.getCount() == 0 && success) {
             player.inventory.mainInventory.set(player.inventory.currentItem, ItemStack.EMPTY);
         }
 

@@ -50,12 +50,12 @@ public final class SchematicUtil {
         }
 
         final ItemStack block = new ItemStack(BLOCK_REGISTRY.getObject(rl), 1, damage);
-        if (block.getItem() != null) {
+        if (!block.isEmpty()) {
             return block;
         }
 
         final ItemStack item = new ItemStack(ITEM_REGISTRY.getObject(rl), 1, damage);
-        if (item.getItem() != null) {
+        if (!item.isEmpty()) {
             return item;
         }
 
@@ -68,7 +68,7 @@ public final class SchematicUtil {
         if (tagCompound != null && tagCompound.hasKey(Names.NBT.ICON)) {
             icon.deserializeNBT(tagCompound.getCompoundTag(Names.NBT.ICON));
 
-            if (icon.getItem() == null) {
+            if (icon.isEmpty()) {
                 icon = DEFAULT_ICON.copy();
             }
         }

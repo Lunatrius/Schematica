@@ -53,7 +53,7 @@ public class BlockList {
             final IBlockState mcBlockState = mcWorld.getBlockState(mcPos);
             final boolean isPlaced = BlockStateHelper.areBlockStatesEqual(blockState, mcBlockState);
 
-            ItemStack stack = null;
+            ItemStack stack = ItemStack.EMPTY;
 
             try {
                 stack = block.getPickBlock(blockState, rtr, world, pos, player);
@@ -72,7 +72,7 @@ public class BlockList {
                 }
             }
 
-            if (stack == null || stack.getItem() == ItemStack.EMPTY.getItem()) {
+            if (stack.isEmpty()) {
                 Reference.logger.warn("Could not find the item for: {}", blockState);
                 continue;
             }
