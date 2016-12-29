@@ -47,7 +47,7 @@ public class ConfigurationHandler {
     public static final boolean[] SWAP_SLOTS_DEFAULT = new boolean[] {
             false, false, false, false, false, true, true, true, true
     };
-    public static final String SCHEMATIC_DIRECTORY_STR = "schematics";
+    public static final String SCHEMATIC_DIRECTORY_STR = "./schematics";
     public static final File SCHEMATIC_DIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATIC_DIRECTORY_STR);
     public static final String[] EXTRA_AIR_BLOCKS_DEFAULT = {};
     public static final String SORT_TYPE_DEFAULT = "";
@@ -212,7 +212,7 @@ public class ConfigurationHandler {
     private static void loadConfigurationGeneral() {
         propSchematicDirectory = configuration.get(Names.Config.Category.GENERAL, Names.Config.SCHEMATIC_DIRECTORY, SCHEMATIC_DIRECTORY_STR, Names.Config.SCHEMATIC_DIRECTORY_DESC);
         propSchematicDirectory.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SCHEMATIC_DIRECTORY);
-        schematicDirectory = new File(propSchematicDirectory.getString());
+        schematicDirectory = getSchematicDirectoryFile(propSchematicDirectory.getString());
 
         propExtraAirBlocks = configuration.get(Names.Config.Category.GENERAL, Names.Config.EXTRA_AIR_BLOCKS, EXTRA_AIR_BLOCKS_DEFAULT, Names.Config.EXTRA_AIR_BLOCKS_DESC);
         propExtraAirBlocks.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.EXTRA_AIR_BLOCKS);
@@ -224,6 +224,14 @@ public class ConfigurationHandler {
 
         normalizeSchematicPath();
         populateExtraAirBlocks();
+    }
+
+    private static File getSchematicDirectoryFile(String path) {
+        if (path.startsWith(".")) {
+            return Schematica.proxy.getDirectory(path);
+        }
+
+        return new File(path);
     }
 
     private static void normalizeSchematicPath() {
@@ -242,11 +250,14 @@ public class ConfigurationHandler {
     }
 
     private static String mergePaths(final String schematicPath, final String dataPath) {
+        final String newPath;
         if (schematicPath.startsWith(dataPath)) {
-            return schematicPath.substring(dataPath.length()).replace("\\", "/").replaceAll("^/+", "");
+            newPath = "." + schematicPath.substring(dataPath.length());
+        } else {
+            newPath = schematicPath;
         }
 
-        return schematicPath.replace("\\", "/");
+        return newPath.replace("\\", "/");
     }
 
     private static void populateExtraAirBlocks() {
