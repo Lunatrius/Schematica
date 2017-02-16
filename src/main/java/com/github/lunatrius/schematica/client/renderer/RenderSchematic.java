@@ -904,6 +904,9 @@ public class RenderSchematic extends RenderGlobal {
     public void spawnParticle(final int particleID, final boolean ignoreRange, final double x, final double y, final double z, final double xOffset, final double yOffset, final double zOffset, final int... parameters) {}
 
     @Override
+    public void spawnParticle(final int particleID, final boolean ignoreRange, final boolean minParticles, final double x, final double y, final double z, final double xOffset, final double yOffset, final double zOffset, final int... parameters) {}
+
+    @Override
     public void onEntityAdded(final Entity entity) {}
 
     @Override
