@@ -83,14 +83,14 @@ public class GuiSchematicSave extends GuiScreenBase {
         this.numericBZ = new GuiNumericField(this.fontRendererObj, id++, this.centerX + 30, this.centerY + 20);
         this.buttonList.add(this.numericBZ);
 
-        this.btnEnable = new GuiButton(id++, this.width - 210, this.height - 30, 50, 20, ClientProxy.isRenderingGuide ? this.strOn : this.strOff);
+        this.btnEnable = new GuiButton(id++, this.width - 210, this.height - 30, 50, 20, ClientProxy.isRenderingGuide && Schematica.proxy.isSaveEnabled ? this.strOn : this.strOff);
         this.buttonList.add(this.btnEnable);
 
         this.tfFilename = new GuiTextField(id++, this.fontRendererObj, this.width - 155, this.height - 29, 100, 18);
         this.textFields.add(this.tfFilename);
 
         this.btnSave = new GuiButton(id++, this.width - 50, this.height - 30, 40, 20, I18n.format(Names.Gui.Save.SAVE));
-        this.btnSave.enabled = ClientProxy.isRenderingGuide || ClientProxy.schematic != null;
+        this.btnSave.enabled = ClientProxy.isRenderingGuide && Schematica.proxy.isSaveEnabled || ClientProxy.schematic != null;
         this.buttonList.add(this.btnSave);
 
         this.tfFilename.setMaxStringLength(1024);

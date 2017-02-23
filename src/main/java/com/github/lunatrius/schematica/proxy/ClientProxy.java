@@ -21,7 +21,6 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
-
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
@@ -212,6 +211,8 @@ public class ClientProxy extends CommonProxy {
 
         SchematicPrinter.INSTANCE.setEnabled(true);
         unloadSchematic();
+
+        isRenderingGuide = false;
 
         playerPosition.set(0, 0, 0);
         orientation = null;
