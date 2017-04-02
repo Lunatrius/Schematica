@@ -6,12 +6,14 @@ import net.minecraft.block.BlockButton;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockEndRod;
 import net.minecraft.block.BlockEnderChest;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockHopper;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockObserver;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.BlockPumpkin;
 import net.minecraft.block.BlockQuartz;
@@ -70,6 +72,13 @@ public class PlacementRegistry {
             public boolean isValid(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {
                 final EnumFacing facing = BlockStateHelper.<EnumFacing>getPropertyValue(blockState, "facing");
                 return facing == EnumFacing.getDirectionFromEntityLiving(pos, player);
+            }
+        };
+        final IValidPlayerFacing playerFacingObserver = new IValidPlayerFacing() {
+            @Override
+            public boolean isValid(final IBlockState blockState, final EntityPlayer player, final BlockPos pos, final World world) {
+                final EnumFacing facing = BlockStateHelper.<EnumFacing>getPropertyValue(blockState, "facing");
+                return facing == EnumFacing.getDirectionFromEntityLiving(pos, player).getOpposite();
             }
         };
         final IValidPlayerFacing playerFacingRotateY = new IValidPlayerFacing() {
@@ -277,9 +286,11 @@ public class PlacementRegistry {
         addPlacementMapping(BlockDispenser.class, new PlacementData(playerFacingPiston));
         addPlacementMapping(BlockDoor.class, new PlacementData(playerFacingEntity));
         addPlacementMapping(BlockEnderChest.class, new PlacementData(playerFacingEntityOpposite));
+        addPlacementMapping(BlockEndRod.class, new PlacementData(blockFacingOpposite));
         addPlacementMapping(BlockFenceGate.class, new PlacementData(playerFacingEntity));
         addPlacementMapping(BlockFurnace.class, new PlacementData(playerFacingEntityOpposite));
         addPlacementMapping(BlockHopper.class, new PlacementData(blockFacingHopper));
+        addPlacementMapping(BlockObserver.class, new PlacementData(playerFacingObserver));
         addPlacementMapping(BlockPistonBase.class, new PlacementData(playerFacingPiston));
         addPlacementMapping(BlockPumpkin.class, new PlacementData(playerFacingEntityOpposite));
         addPlacementMapping(BlockRotatedPillar.class, new PlacementData(blockFacingPillar));
@@ -289,11 +300,13 @@ public class PlacementRegistry {
         addPlacementMapping(BlockTrapDoor.class, new PlacementData(blockFacingOpposite).setOffsetY(offsetTrapDoor));
 
         addPlacementMapping(Blocks.ANVIL, new PlacementData(playerFacingRotateY));
+        addPlacementMapping(Blocks.CHAIN_COMMAND_BLOCK, new PlacementData(playerFacingEntityOpposite));
         addPlacementMapping(Blocks.COCOA, new PlacementData(blockFacingSame));
         addPlacementMapping(Blocks.END_PORTAL_FRAME, new PlacementData(playerFacingEntityOpposite));
         addPlacementMapping(Blocks.LADDER, new PlacementData(blockFacingOpposite));
         addPlacementMapping(Blocks.LEVER, new PlacementData(playerFacingLever, blockFacingLever));
         addPlacementMapping(Blocks.QUARTZ_BLOCK, new PlacementData(blockFacingQuartz));
+        addPlacementMapping(Blocks.REPEATING_COMMAND_BLOCK, new PlacementData(playerFacingEntityOpposite));
         addPlacementMapping(Blocks.STANDING_SIGN, new PlacementData(playerFacingStandingSign));
         addPlacementMapping(Blocks.TRIPWIRE_HOOK, new PlacementData(blockFacingOpposite));
         addPlacementMapping(Blocks.WALL_SIGN, new PlacementData(blockFacingOpposite));
