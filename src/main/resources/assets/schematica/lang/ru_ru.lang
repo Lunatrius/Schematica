@@ -2,63 +2,181 @@
 schematica.gui.x=X:
 schematica.gui.y=Y:
 schematica.gui.z=Z:
+schematica.gui.on=Вкл
+schematica.gui.off=Выкл
 schematica.gui.done=Готово
+schematica.gui.down=Низ
+schematica.gui.up=Верх
+schematica.gui.north=Север
+schematica.gui.south=Юг
+schematica.gui.west=Запад
+schematica.gui.east=Восток
 
 # gui - general - load
-schematica.gui.title=Выберите файл схемы
-schematica.gui.folderInfo=(Место хранения схем)
-schematica.gui.openFolder=Открыть папку со схемами
+schematica.gui.title=Выбор схемы
+schematica.gui.folderInfo=(Поместите сюда схемы)
+schematica.gui.openFolder=Папка со схемами
 schematica.gui.noschematic=-- Нет схем --
 
 # gui - general - save
 schematica.gui.point.red=Красная точка
 schematica.gui.point.blue=Синяя точка
 schematica.gui.save=Сохранить
-schematica.gui.saveselection=Сохранить схему выделенной области 
+schematica.gui.saveselection=Сохранение схемы
 
 # gui - general - control
 schematica.gui.moveschematic=Передвинуть схему
 schematica.gui.materials=Материалы
 schematica.gui.printer=Принтер
 schematica.gui.operations=Операции
-schematica.gui.all=ВСЕ
-schematica.gui.layers=Слои
-schematica.gui.hide=Спрятать
+schematica.gui.unload=Выгрузить
+schematica.gui.all=Все слои
+schematica.gui.layers=Один слой
+schematica.gui.hide=Скрыть
 schematica.gui.show=Показать
 schematica.gui.movehere=Передвинуть сюда
 schematica.gui.flip=Отразить
 schematica.gui.rotate=Повернуть
 schematica.gui.materialname=Материал
 schematica.gui.materialamount=Количество
+schematica.gui.materialavailable=Доступен
+schematica.gui.materialmissing=Отсутствует
+schematica.gui.materialdump=Сохранить в файл
 
 # gui - config - categories
+schematica.config.category.debug=Отладка
+schematica.config.category.debug.tooltip=Настройки разработчика.\nНе трогайте, если не знаете, что делать.
+schematica.config.category.render=Отображение
+schematica.config.category.render.tooltip=Настройки отображения.
+schematica.config.category.printer=Принтер
+schematica.config.category.printer.tooltip=Настройки принтера.
+schematica.config.category.printer.swapslots=Слоты быстрого доступа
+schematica.config.category.printer.swapslots.tooltip=Использование принтером занятых слотов.
+schematica.config.category.general=Общие
+schematica.config.category.general.tooltip=Общие настройки.
+schematica.config.category.server=Сервер
+schematica.config.category.server.tooltip=Настройки сервера.
 
 # gui - config - debug
+#schematica.config.dumpBlockList=Dump Block List
+#schematica.config.dumpBlockList.tooltip=Dump all block states on startup.
+schematica.config.showDebugInfo=Информация отладки
+schematica.config.showDebugInfo.tooltip=Отображает дополнительную информацию на экране отладки (F3).
 
 # gui - config - render
+schematica.config.alphaEnabled=Прозрачность
+schematica.config.alphaEnabled.tooltip=Делает текстуры прозрачными.
+schematica.config.alpha=Прозрачность
+schematica.config.alpha.tooltip=Значение, используемое при отображении схемы (1.0 = непрозрачная, 0.5 = полупрозрачная, 0.0 = прозрачная).
+schematica.config.highlight=Выделение блоков
+schematica.config.highlight.tooltip=Выделение неверно поставленных и необходимых для постройки блоков.
+schematica.config.highlightAir=Выделение воздуха
+schematica.config.highlightAir.tooltip=Выделение блоков, которые должны быть воздухом.
+#schematica.config.blockDelta=Block Delta
+#schematica.config.blockDelta.tooltip=Delta value used for highlighting (if you experience z-fighting increase this).
+schematica.config.renderDistance=Дальность прорисовки
+schematica.config.renderDistance.tooltip=Дальность прорисовки схемы.
 
 # gui - config - printer
+schematica.config.placeDelay=Задержка размещения
+schematica.config.placeDelay.tooltip=Задержка между попытками размещения блока (в тактах).
+#schematica.config.timeout=Timeout
+#schematica.config.timeout.tooltip=Timeout before re-trying failed blocks.
+schematica.config.placeDistance=Дальность размещения
+schematica.config.placeDistance.tooltip=Максимальная дальность размещения блоков.
+schematica.config.placeInstantly=Мгновенное размещение
+schematica.config.placeInstantly.tooltip=Размещение всех блоков, которые возможно поставить.
+schematica.config.destroyBlocks=Разрушение блоков
+schematica.config.destroyBlocks.tooltip=Принтер может разрушать блоки (только для творческого режима).
+schematica.config.destroyInstantly=Мгновенное разрушение
+schematica.config.destroyInstantly.tooltip=Разрушение всех блоков, которые возможно разрушить.
+schematica.config.placeAdjacent=Соседнее размещение
+schematica.config.placeAdjacent.tooltip=Блоки размещаются только при наличии других блоков около них.
 
 # gui - config - printer - swap slots
+schematica.config.swapSlot0=Слот 1
+schematica.config.swapSlot0.tooltip=Позволяет принтеру использовать слот 1.
+schematica.config.swapSlot1=Слот 2
+schematica.config.swapSlot1.tooltip=Позволяет принтеру использовать слот 2.
+schematica.config.swapSlot2=Слот 3
+schematica.config.swapSlot2.tooltip=Позволяет принтеру использовать слот 3.
+schematica.config.swapSlot3=Слот 4
+schematica.config.swapSlot3.tooltip=Позволяет принтеру использовать слот 4.
+schematica.config.swapSlot4=Слот 5
+schematica.config.swapSlot4.tooltip=Позволяет принтеру использовать слот 5.
+schematica.config.swapSlot5=Слот 6
+schematica.config.swapSlot5.tooltip=Позволяет принтеру использовать слот 6.
+schematica.config.swapSlot6=Слот 7
+schematica.config.swapSlot6.tooltip=Позволяет принтеру использовать слот 7.
+schematica.config.swapSlot7=Слот 8
+schematica.config.swapSlot7.tooltip=Позволяет принтеру использовать слот 8.
+schematica.config.swapSlot8=Слот 9
+schematica.config.swapSlot8.tooltip=Позволяет принтеру использовать слот 9.
 
 # gui - config - general
+schematica.config.schematicDirectory=Папка схем
+schematica.config.schematicDirectory.tooltip=Папка, в которой хранятся схемы.
+schematica.config.extraAirBlocks=Блоки воздуха
+schematica.config.extraAirBlocks.tooltip=Данные блоки отображаются в схемах как воздух.
 
 # gui - config - server
+schematica.config.printerEnabled=Принтер
+schematica.config.printerEnabled.tooltip=Позволяет игрокам использовать принтер.
+schematica.config.saveEnabled=Сохранение
+schematica.config.saveEnabled.tooltip=Позволяет игрокам сохранять схемы.
+schematica.config.loadEnabled=Загрузка
+schematica.config.loadEnabled.tooltip=Позволяет игрокам загружать схемы.
 
 # keys
 schematica.key.category=Schematica
 schematica.key.load=Загрузить схему
 schematica.key.save=Сохранить схему
-schematica.key.control=Манипулирование схемой
+schematica.key.control=Управление схемой
+schematica.key.layerInc=Следующий слой
+schematica.key.layerDec=Предыдущий слой
+schematica.key.layerToggle=Все/один слой
+schematica.key.renderToggle=Отображение
+schematica.key.printerToggle=Принтер
+schematica.key.moveHere=Передвинуть сюда
+schematica.key.pickBlock=Выбор блока в схеме
 
 # commands - save
+schematica.command.save.usage=/schematicaSave <началоX> <началоY> <началоZ> <конецX> <конецY> <конецZ> <название>
+schematica.command.save.playersOnly=Только игроки могут использовать данную команду.
+schematica.command.save.started=Сохранение %d чанка(-ов) в файл %s...
+schematica.command.save.saveSucceeded=Схема %s сохранена.
+schematica.command.save.saveFailed=Произошла ошибка при сохранении файла %s.
+schematica.command.save.quotaExceeded=Превышена квота сервера. Используйте /schematicaList и /schematicaRemove, чтобы удалить старые схемы.
+schematica.command.save.playerSchematicDirUnavailable=Произошла ошибка на сервере, из-за которой неудалось сохранить схему. Свяжитесь с администратором сервера.
 
 # commands - list
+schematica.command.list.usage=/schematicaList [страница]
+schematica.command.list.notAvailable=Произошла ошибка при получении списка схем.
+schematica.command.list.remove=Удалить
+schematica.command.list.download=Загрузить
+schematica.command.list.header=--- Схемы, страница %d из %d ---
+schematica.command.list.noSuchPage=Данной страницы не существует.
+schematica.command.list.noSchematics=Нет доступных схем.
 
 # commands - remove
+schematica.command.remove.usage=/schematicaRemove <название>
+schematica.command.remove.schematicRemoved=Схема «%s» удалена.
+schematica.command.remove.schematicNotFound=Схема «%s» не найдена.
+schematica.command.remove.areYouSure=Уверены?
 
 # commands - download
+schematica.command.download.usage=/schematicaDownload <название>
+schematica.command.download.started=Загрузка файла «%s»...
+schematica.command.download.downloadSucceeded=Схема «%s» успешно загружена.
+schematica.command.download.downloadFail=Произошла ошибка во время загрузки.
 
 # commands - replace
+schematica.command.replace.usage=/schematicaReplace <оригинал> <замена>
+schematica.command.replace.noSchematic=Нет загруженных схем.
+schematica.command.replace.success=%s блоков заменено.
 
 # messages
+schematica.message.togglePrinter=Принтер: %s
+schematica.message.invalidBlock=Блок «%s» не существует.
+schematica.message.invalidProperty=Свойтво «%s» не существует.
+schematica.message.invalidPropertyForBlock=Свойтво «%s» не существует у блока «%s».
