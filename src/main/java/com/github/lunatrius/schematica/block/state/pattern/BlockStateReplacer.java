@@ -58,6 +58,9 @@ public class BlockStateReplacer {
                 public boolean apply(final Comparable input) {
                     return input != null && input.equals(entry.getValue());
                 }
+                public boolean test(final Comparable input) {
+                    return false;
+                }
             });
         }
 
