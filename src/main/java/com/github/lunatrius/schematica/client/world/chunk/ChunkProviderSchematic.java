@@ -2,7 +2,6 @@ package com.github.lunatrius.schematica.client.world.chunk;
 
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import net.minecraft.client.multiplayer.ChunkProviderClient;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;

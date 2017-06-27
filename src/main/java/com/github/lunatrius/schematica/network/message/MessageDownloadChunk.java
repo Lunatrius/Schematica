@@ -15,14 +15,11 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
-import net.minecraftforge.fml.common.registry.GameData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDownloadChunk, IMessage> {
-    public static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
 
     public int baseX;
     public int baseY;
@@ -53,7 +50,7 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
                     pos.set(baseX + x, baseY + y, baseZ + z);
                     final IBlockState blockState = schematic.getBlockState(pos);
                     final Block block = blockState.getBlock();
-                    final int id = BLOCK_REGISTRY.getId(block);
+                    final int id = Block.REGISTRY.getIDForObject(block);
                     this.blocks[x][y][z] = (short) id;
                     this.metadata[x][y][z] = (byte) block.getMetaFromState(blockState);
                     final TileEntity tileEntity = schematic.getTileEntity(pos);
@@ -72,7 +69,7 @@ public class MessageDownloadChunk implements IMessage, IMessageHandler<MessageDo
                 for (int z = 0; z < Constants.SchematicChunk.LENGTH; z++) {
                     final short id = this.blocks[x][y][z];
                     final byte meta = this.metadata[x][y][z];
-                    final Block block = BLOCK_REGISTRY.getObjectById(id);
+                    final Block block = Block.REGISTRY.getObjectById(id);
 
                     pos.set(this.baseX + x, this.baseY + y, this.baseZ + z);
 

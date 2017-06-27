@@ -8,15 +8,12 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockStateMatcher;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
-import net.minecraftforge.fml.common.registry.GameData;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BlockStateReplacer {
-    private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
     private final IBlockState defaultReplacement;
 
     private BlockStateReplacer(final IBlockState defaultReplacement) {
@@ -83,11 +80,11 @@ public class BlockStateReplacer {
         }
 
         final ResourceLocation location = new ResourceLocation(blockName);
-        if (!BLOCK_REGISTRY.containsKey(location)) {
+        if (Block.REGISTRY.containsKey(location)) {
             throw new LocalizedException(Names.Messages.INVALID_BLOCK, blockName);
         }
 
-        final Block block = BLOCK_REGISTRY.getObject(location);
+        final Block block = Block.REGISTRY.getObject(location);
         final Map<IProperty, Comparable> propertyData = parsePropertyData(block.getDefaultState(), stateData, true);
         return new BlockStateInfo(block, propertyData);
     }
@@ -127,7 +124,7 @@ public class BlockStateReplacer {
         }
 
         if (strict) {
-            throw new LocalizedException(Names.Messages.INVALID_PROPERTY_FOR_BLOCK, name + "=" + value, BLOCK_REGISTRY.getNameForObject(blockState.getBlock()));
+            throw new LocalizedException(Names.Messages.INVALID_PROPERTY_FOR_BLOCK, name + "=" + value, Block.REGISTRY.getNameForObject(blockState.getBlock()));
         }
 
         return false;

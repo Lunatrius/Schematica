@@ -13,13 +13,10 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
-import net.minecraftforge.fml.common.registry.GameData;
 
 import java.util.List;
 
 public class CommandSchematicaReplace extends CommandSchematicaBase {
-    private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
 
     @Override
     public String getName() {
@@ -34,7 +31,7 @@ public class CommandSchematicaReplace extends CommandSchematicaBase {
     @Override
     public List<String> getTabCompletions(final MinecraftServer server, final ICommandSender sender, final String[] args, final BlockPos pos) {
         if (args.length < 3) {
-            return getListOfStringsMatchingLastWord(args, BLOCK_REGISTRY.getKeys());
+            return getListOfStringsMatchingLastWord(args, Block.REGISTRY.getKeys());
         }
 
         return null;
