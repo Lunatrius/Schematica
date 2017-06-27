@@ -55,7 +55,7 @@ public class GuiSchematicLoadSlot extends GuiSlot {
     }
 
     @Override
-    protected void drawSlot(final int index, final int x, final int y, final int par4, final int mouseX, final int mouseY) {
+    protected void drawSlot(final int index, final int x, final int y, final int par4, final int mouseX, final int mouseY, final float arg6) {
         if (index < 0 || index >= this.guiSchematicLoad.schematicFiles.size()) {
             return;
         }
@@ -71,6 +71,6 @@ public class GuiSchematicLoadSlot extends GuiSlot {
 
         GuiHelper.drawItemStackWithSlot(this.minecraft.renderEngine, schematic.getItemStack(), x, y);
 
-        this.guiSchematicLoad.drawString(this.minecraft.fontRendererObj, schematicName, x + 24, y + 6, 0x00FFFFFF);
+        this.guiSchematicLoad.drawString(this.minecraft.fontRenderer, schematicName, x + 24, y + 6, 0x00FFFFFF);
     }
 }

@@ -75,13 +75,13 @@ public class GuiSchematicControl extends GuiScreenBase {
 
         int id = 0;
 
-        this.numericX = new GuiNumericField(this.fontRendererObj, id++, this.centerX - 50, this.centerY - 30, 100, 20);
+        this.numericX = new GuiNumericField(this.fontRenderer, id++, this.centerX - 50, this.centerY - 30, 100, 20);
         this.buttonList.add(this.numericX);
 
-        this.numericY = new GuiNumericField(this.fontRendererObj, id++, this.centerX - 50, this.centerY - 5, 100, 20);
+        this.numericY = new GuiNumericField(this.fontRenderer, id++, this.centerX - 50, this.centerY - 5, 100, 20);
         this.buttonList.add(this.numericY);
 
-        this.numericZ = new GuiNumericField(this.fontRendererObj, id++, this.centerX - 50, this.centerY + 20, 100, 20);
+        this.numericZ = new GuiNumericField(this.fontRenderer, id++, this.centerX - 50, this.centerY + 20, 100, 20);
         this.buttonList.add(this.numericZ);
 
         this.btnUnload = new GuiButton(id++, this.width - 90, this.height - 200, 80, 20, this.strUnload);
@@ -90,7 +90,7 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnLayerMode = new GuiButton(id++, this.width - 90, this.height - 150 - 25, 80, 20, this.schematic != null && this.schematic.isRenderingLayer ? this.strLayers : this.strAll);
         this.buttonList.add(this.btnLayerMode);
 
-        this.nfLayer = new GuiNumericField(this.fontRendererObj, id++, this.width - 90, this.height - 150, 80, 20);
+        this.nfLayer = new GuiNumericField(this.fontRenderer, id++, this.width - 90, this.height - 150, 80, 20);
         this.buttonList.add(this.nfLayer);
 
         this.btnHide = new GuiButton(id++, this.width - 90, this.height - 105, 80, 20, this.schematic != null && this.schematic.isRendering ? this.strHide : this.strShow);
@@ -238,15 +238,15 @@ public class GuiSchematicControl extends GuiScreenBase {
     public void drawScreen(final int par1, final int par2, final float par3) {
         // drawDefaultBackground();
 
-        drawCenteredString(this.fontRendererObj, this.strMoveSchematic, this.centerX, this.centerY - 45, 0xFFFFFF);
-        drawCenteredString(this.fontRendererObj, this.strMaterials, 50, this.height - 85, 0xFFFFFF);
-        drawCenteredString(this.fontRendererObj, this.strPrinter, 50, this.height - 45, 0xFFFFFF);
-        drawCenteredString(this.fontRendererObj, this.strLayers, this.width - 50, this.height - 165, 0xFFFFFF);
-        drawCenteredString(this.fontRendererObj, this.strOperations, this.width - 50, this.height - 120, 0xFFFFFF);
+        drawCenteredString(this.fontRenderer, this.strMoveSchematic, this.centerX, this.centerY - 45, 0xFFFFFF);
+        drawCenteredString(this.fontRenderer, this.strMaterials, 50, this.height - 85, 0xFFFFFF);
+        drawCenteredString(this.fontRenderer, this.strPrinter, 50, this.height - 45, 0xFFFFFF);
+        drawCenteredString(this.fontRenderer, this.strLayers, this.width - 50, this.height - 165, 0xFFFFFF);
+        drawCenteredString(this.fontRenderer, this.strOperations, this.width - 50, this.height - 120, 0xFFFFFF);
 
-        drawString(this.fontRendererObj, this.strX, this.centerX - 65, this.centerY - 24, 0xFFFFFF);
-        drawString(this.fontRendererObj, this.strY, this.centerX - 65, this.centerY + 1, 0xFFFFFF);
-        drawString(this.fontRendererObj, this.strZ, this.centerX - 65, this.centerY + 26, 0xFFFFFF);
+        drawString(this.fontRenderer, this.strX, this.centerX - 65, this.centerY - 24, 0xFFFFFF);
+        drawString(this.fontRenderer, this.strY, this.centerX - 65, this.centerY + 1, 0xFFFFFF);
+        drawString(this.fontRenderer, this.strZ, this.centerX - 65, this.centerY + 26, 0xFFFFFF);
 
         super.drawScreen(par1, par2, par3);
     }

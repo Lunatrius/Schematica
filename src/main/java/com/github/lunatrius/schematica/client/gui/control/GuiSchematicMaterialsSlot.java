@@ -55,7 +55,7 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
     }
 
     @Override
-    protected void drawSlot(final int index, final int x, final int y, final int par4, final int mouseX, final int mouseY) {
+    protected void drawSlot(final int index, final int x, final int y, final int par4, final int mouseX, final int mouseY, final float par6) {
         final BlockList.WrappedItemStack wrappedItemStack = this.guiSchematicMaterials.blockList.get(index);
         final ItemStack itemStack = wrappedItemStack.itemStack;
 
@@ -65,9 +65,9 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 
         GuiHelper.drawItemStackWithSlot(this.minecraft.renderEngine, itemStack, x, y);
 
-        this.guiSchematicMaterials.drawString(this.minecraft.fontRendererObj, itemName, x + 24, y + 6, 0xFFFFFF);
-        this.guiSchematicMaterials.drawString(this.minecraft.fontRendererObj, amount, x + 215 - this.minecraft.fontRendererObj.getStringWidth(amount), y + 1, 0xFFFFFF);
-        this.guiSchematicMaterials.drawString(this.minecraft.fontRendererObj, amountMissing, x + 215 - this.minecraft.fontRendererObj.getStringWidth(amountMissing), y + 11, 0xFFFFFF);
+        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, itemName, x + 24, y + 6, 0xFFFFFF);
+        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amount, x + 215 - this.minecraft.fontRenderer.getStringWidth(amount), y + 1, 0xFFFFFF);
+        this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amountMissing, x + 215 - this.minecraft.fontRenderer.getStringWidth(amountMissing), y + 11, 0xFFFFFF);
 
         if (mouseX > x && mouseY > y && mouseX <= x + 18 && mouseY <= y + 18) {
             this.guiSchematicMaterials.renderToolTip(itemStack, mouseX, mouseY);

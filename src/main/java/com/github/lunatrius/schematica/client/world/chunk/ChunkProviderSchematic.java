@@ -1,7 +1,7 @@
 package com.github.lunatrius.schematica.client.world.chunk;
 
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 import net.minecraft.client.multiplayer.ChunkProviderClient;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
@@ -64,7 +64,7 @@ public class ChunkProviderSchematic extends ChunkProviderClient implements IChun
     // ChunkProviderClient
     @Override
     public Chunk loadChunk(int x, int z) {
-        return Objects.firstNonNull(getLoadedChunk(x, z), this.emptyChunk);
+        return MoreObjects.firstNonNull(getLoadedChunk(x, z), this.emptyChunk);
     }
 
     // ChunkProviderClient
