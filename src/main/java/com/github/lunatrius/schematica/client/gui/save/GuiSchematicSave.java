@@ -197,4 +197,10 @@ public class GuiSchematicSave extends GuiScreenBase {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
+
+    // We don't want to pause the game when saving schematics in single-player
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
+    }
 }
