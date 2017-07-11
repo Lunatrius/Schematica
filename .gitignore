@@ -11,6 +11,8 @@
 /.classpath
 /.project
 /bin
+Schematica_Client.launch
+Schematica_Server.launch
 
 ## intellij
 /out
