@@ -20,9 +20,9 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
 
     protected int selectedIndex = -1;
 
-    public GuiSchematicMaterialsSlot(final GuiSchematicMaterials par1) {
-        super(Minecraft.getMinecraft(), par1.width, par1.height, 16, par1.height - 34, 24);
-        this.guiSchematicMaterials = par1;
+    public GuiSchematicMaterialsSlot(final GuiSchematicMaterials parent) {
+        super(Minecraft.getMinecraft(), parent.width, parent.height, 16, parent.height - 34, 24);
+        this.guiSchematicMaterials = parent;
         this.selectedIndex = -1;
     }
 

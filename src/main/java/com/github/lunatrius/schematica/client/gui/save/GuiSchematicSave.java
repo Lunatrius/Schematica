@@ -172,7 +172,7 @@ public class GuiSchematicSave extends GuiScreenBase {
     }
 
     @Override
-    public void drawScreen(final int par1, final int par2, final float par3) {
+    public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
         // drawDefaultBackground();
 
         drawString(this.fontRendererObj, this.strSaveSelection, this.width - 205, this.height - 45, 0xFFFFFF);
@@ -195,6 +195,12 @@ public class GuiSchematicSave extends GuiScreenBase {
         drawString(this.fontRendererObj, this.strZ, this.centerX + 15, this.centerY + 26, 0xFFFFFF);
         drawString(this.fontRendererObj, Integer.toString(ClientProxy.pointB.z), this.centerX + 135, this.centerY + 26, 0xFFFFFF);
 
-        super.drawScreen(par1, par2, par3);
+        super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+
+    // We don't want to pause the game when saving schematics in single-player
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
     }
 }
