@@ -235,7 +235,7 @@ public class GuiSchematicControl extends GuiScreenBase {
     }
 
     @Override
-    public void drawScreen(final int par1, final int par2, final float par3) {
+    public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
         // drawDefaultBackground();
 
         drawCenteredString(this.fontRendererObj, this.strMoveSchematic, this.centerX, this.centerY - 45, 0xFFFFFF);
@@ -248,6 +248,6 @@ public class GuiSchematicControl extends GuiScreenBase {
         drawString(this.fontRendererObj, this.strY, this.centerX - 65, this.centerY + 1, 0xFFFFFF);
         drawString(this.fontRendererObj, this.strZ, this.centerX - 65, this.centerY + 26, 0xFFFFFF);
 
-        super.drawScreen(par1, par2, par3);
+        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 }
