@@ -8,6 +8,8 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 public interface ISchematic {
     /**
      * Gets a block state at a given location within the schematic. Requesting a block state outside of those bounds
@@ -114,4 +116,19 @@ public interface ISchematic {
      * @return the schematic height
      */
     int getHeight();
+
+    /**
+     * Gets the author of the schematic, or an empty String if unknown.
+     *
+     * @return The author of the schematic.
+     */
+    @Nonnull
+    String getAuthor();
+
+    /**
+     * Sets the author of the schematic.
+     *
+     * @param author The new author of the schematic.
+     */
+    void setAuthor(@Nonnull String author);
 }
