@@ -10,6 +10,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.gen.structure.template.Template;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.nbt.NBTHelper;
+import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.storage.Schematic;
 
@@ -98,5 +99,15 @@ public class SchematicStructure extends SchematicFormat {
 
         template.writeToNBT(tagCompound);
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return Names.Formats.STRUCTURE;
+    }
+
+    @Override
+    public String getExtension() {
+        return Names.Extensions.STRUCTURE;
     }
 }

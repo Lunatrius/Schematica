@@ -73,7 +73,7 @@ public class CommandSchematicaSave extends CommandSchematicaBase {
         }
 
         try {
-            Schematica.proxy.saveSchematic(player, schematicDirectory, filename, player.getEntityWorld(), from, to);
+            Schematica.proxy.saveSchematic(player, schematicDirectory, filename, player.getEntityWorld(), null /*TODO*/, from, to);
             sender.sendMessage(new TextComponentTranslation(Names.Command.Save.Message.SAVE_SUCCESSFUL, name));
         } catch (final Exception e) {
             throw new CommandException(Names.Command.Save.Message.SAVE_FAILED, name);

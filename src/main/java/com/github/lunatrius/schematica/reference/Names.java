@@ -153,6 +153,7 @@ public final class Names {
             public static final String POINT_BLUE = "schematica.gui.point.blue";
             public static final String SAVE = "schematica.gui.save";
             public static final String SAVE_SELECTION = "schematica.gui.saveselection";
+            public static final String FORMAT = "schematica.gui.format";
         }
 
         public static final class Control {
@@ -226,5 +227,16 @@ public final class Names {
         public static final String TILE_ENTITIES = "TileEntities";
         public static final String ENTITIES = "Entities";
         public static final String EXTENDED_METADATA = "ExtendedMetadata";
+    }
+
+    public static final class Formats {
+        public static final String CLASSIC = "schematica.format.classic";
+        public static final String ALPHA = "schematica.format.alpha";
+        public static final String STRUCTURE = "schematica.format.structure";
+    }
+
+    public static final class Extensions {
+        public static final String SCHEMATIC = ".schematic";
+        public static final String STRUCTURE = ".nbt";
     }
 }

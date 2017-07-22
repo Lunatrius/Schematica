@@ -4,6 +4,7 @@ import com.github.lunatrius.core.client.gui.GuiHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.Tessellator;
+import org.apache.commons.io.FilenameUtils;
 
 public class GuiSchematicLoadSlot extends GuiSlot {
     private final Minecraft minecraft = Minecraft.getMinecraft();
@@ -66,7 +67,7 @@ public class GuiSchematicLoadSlot extends GuiSlot {
         if (schematic.isDirectory()) {
             schematicName += "/";
         } else {
-            schematicName = schematicName.replaceAll("(?i)\\.schematic$", "");
+            schematicName = FilenameUtils.getBaseName(schematicName);
         }
 
         GuiHelper.drawItemStackWithSlot(this.minecraft.renderEngine, schematic.getItemStack(), x, y);

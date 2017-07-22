@@ -35,6 +35,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 public abstract class CommonProxy {
     public boolean isSaveEnabled = true;
     public boolean isLoadEnabled = true;
@@ -160,7 +162,7 @@ public abstract class CommonProxy {
         }
     }
 
-    public boolean saveSchematic(final EntityPlayer player, final File directory, String filename, final World world, final BlockPos from, final BlockPos to) {
+    public boolean saveSchematic(final EntityPlayer player, final File directory, String filename, final World world, @Nullable final String format, final BlockPos from, final BlockPos to) {
         try {
             String iconName = "";
 
@@ -186,7 +188,7 @@ public abstract class CommonProxy {
             final short length = (short) (Math.abs(maxZ - minZ) + 1);
 
             final ISchematic schematic = new Schematic(SchematicUtil.getIconFromName(iconName), width, height, length, player.getName());
-            final SchematicContainer container = new SchematicContainer(schematic, player, world, new File(directory, filename), minX, maxX, minY, maxY, minZ, maxZ);
+            final SchematicContainer container = new SchematicContainer(schematic, player, world, new File(directory, filename), format, minX, maxX, minY, maxY, minZ, maxZ);
             QueueTickHandler.INSTANCE.queueSchematic(container);
 
             return true;
