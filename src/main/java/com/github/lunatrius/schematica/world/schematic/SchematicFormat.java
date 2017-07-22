@@ -27,11 +27,16 @@ public abstract class SchematicFormat {
     public static ISchematic readFromFile(final File file) {
         try {
             final NBTTagCompound tagCompound = SchematicUtil.readTagCompoundFromFile(file);
-            final String format = tagCompound.getString(Names.NBT.MATERIALS);
-            final SchematicFormat schematicFormat = FORMATS.get(format);
+            final SchematicFormat schematicFormat;
+            if (tagCompound.hasKey(Names.NBT.MATERIALS)) {
+                final String format = tagCompound.getString(Names.NBT.MATERIALS);
+                schematicFormat = FORMATS.get(format);
 
-            if (schematicFormat == null) {
-                throw new UnsupportedFormatException(format);
+                if (schematicFormat == null) {
+                    throw new UnsupportedFormatException(format);
+                }
+            } else {
+                schematicFormat = FORMATS.get(Names.NBT.FORMAT_STRUCTURE);
             }
 
             return schematicFormat.readFromNBT(tagCompound);
@@ -85,7 +90,8 @@ public abstract class SchematicFormat {
         // TODO?
         // FORMATS.put(Names.NBT.FORMAT_CLASSIC, new SchematicClassic());
         FORMATS.put(Names.NBT.FORMAT_ALPHA, new SchematicAlpha());
+        FORMATS.put(Names.NBT.FORMAT_STRUCTURE, new SchematicStructure());
 
-        FORMAT_DEFAULT = Names.NBT.FORMAT_ALPHA;
+        FORMAT_DEFAULT = Names.NBT.FORMAT_STRUCTURE;
     }
 }

@@ -212,6 +212,7 @@ public final class Names {
         public static final String MATERIALS = "Materials";
         public static final String FORMAT_CLASSIC = "Classic";
         public static final String FORMAT_ALPHA = "Alpha";
+        public static final String FORMAT_STRUCTURE = "Structure";
 
         public static final String ICON = "Icon";
         public static final String BLOCKS = "Blocks";
