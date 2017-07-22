@@ -8,11 +8,15 @@ import net.minecraft.world.World;
 
 import java.io.File;
 
+import javax.annotation.Nullable;
+
 public class SchematicContainer {
     public final ISchematic schematic;
     public final EntityPlayer player;
     public final World world;
     public final File file;
+    @Nullable
+    public final String format;
 
     public final int minX;
     public final int maxX;
@@ -32,11 +36,12 @@ public class SchematicContainer {
     public final int chunkCount;
     public int processedChunks;
 
-    public SchematicContainer(final ISchematic schematic, final EntityPlayer player, final World world, final File file, final int minX, final int maxX, final int minY, final int maxY, final int minZ, final int maxZ) {
+    public SchematicContainer(final ISchematic schematic, final EntityPlayer player, final World world, final File file, @Nullable final String format, final int minX, final int maxX, final int minY, final int maxY, final int minZ, final int maxZ) {
         this.schematic = schematic;
         this.player = player;
         this.world = world;
         this.file = file;
+        this.format = format;
 
         this.minX = minX;
         this.maxX = maxX;

@@ -23,6 +23,7 @@ schematica.gui.point.red=Red point
 schematica.gui.point.blue=Blue point
 schematica.gui.save=Save
 schematica.gui.saveselection=Save the selection as a schematic
+schematica.gui.format=Format: %s
 
 # gui - general - control
 schematica.gui.moveschematic=Move schematic
@@ -180,3 +181,8 @@ schematica.message.togglePrinter=Printer: %s
 schematica.message.invalidBlock="%s" does not exist.
 schematica.message.invalidProperty="%s" is not a valid property.
 schematica.message.invalidPropertyForBlock="%s" is not a valid property for "%s".
+
+# schematic formats
+schematica.format.classic=Classic
+schematica.format.alpha=Alpha (standard)
+schematica.format.structure=Structure block

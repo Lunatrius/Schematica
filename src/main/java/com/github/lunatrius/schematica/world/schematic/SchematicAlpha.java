@@ -210,4 +210,14 @@ public class SchematicAlpha extends SchematicFormat {
 
         return true;
     }
+
+    @Override
+    public String getName() {
+        return Names.Formats.ALPHA;
+    }
+
+    @Override
+    public String getExtension() {
+        return Names.Extensions.SCHEMATIC;
+    }
 }

@@ -68,7 +68,7 @@ public class QueueTickHandler {
         if (container.hasNext()) {
             this.queue.offer(container);
         } else {
-            SchematicFormat.writeToFileAndNotify(container.file, container.schematic, container.player);
+            SchematicFormat.writeToFileAndNotify(container.file, container.format, container.schematic, container.player);
         }
     }
 
