@@ -23,12 +23,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher;
 import net.minecraft.client.renderer.chunk.CompiledChunk;
 import net.minecraft.client.renderer.chunk.RenderChunk;
@@ -450,8 +450,8 @@ public class RenderSchematic extends RenderGlobal {
         final int entityPass = 0;
 
         this.profiler.startSection("prepare");
-        TileEntityRendererDispatcher.instance.prepare(this.world, this.mc.getTextureManager(), this.mc.fontRendererObj, renderViewEntity, this.mc.objectMouseOver, partialTicks);
-        this.renderManager.cacheActiveRenderInfo(this.world, this.mc.fontRendererObj, renderViewEntity, this.mc.pointedEntity, this.mc.gameSettings, partialTicks);
+        TileEntityRendererDispatcher.instance.prepare(this.world, this.mc.getTextureManager(), this.mc.fontRenderer, renderViewEntity, this.mc.objectMouseOver, partialTicks);
+        this.renderManager.cacheActiveRenderInfo(this.world, this.mc.fontRenderer, renderViewEntity, this.mc.pointedEntity, this.mc.gameSettings, partialTicks);
 
         this.countEntitiesTotal = 0;
         this.countEntitiesRendered = 0;
@@ -491,7 +491,7 @@ public class RenderSchematic extends RenderGlobal {
                     continue;
                 }
 
-                TileEntityRendererDispatcher.instance.renderTileEntity(tileEntity, partialTicks, -1);
+                TileEntityRendererDispatcher.instance.render(tileEntity, partialTicks, -1);
                 this.countTileEntitiesRendered++;
             }
         }
@@ -660,13 +660,13 @@ public class RenderSchematic extends RenderGlobal {
             final RenderChunk renderChunk = renderInfo.renderChunk;
             final RenderOverlay renderOverlay = renderInfo.renderOverlay;
 
-            if (renderChunk.isNeedsUpdate() || set.contains(renderChunk)) {
+            if (renderChunk.needsUpdate() || set.contains(renderChunk)) {
                 this.displayListEntitiesDirty = true;
 
                 this.chunksToUpdate.add(renderChunk);
             }
 
-            if (renderOverlay.isNeedsUpdate() || set1.contains(renderOverlay)) {
+            if (renderOverlay.needsUpdate() || set1.contains(renderOverlay)) {
                 this.displayListEntitiesDirty = true;
 
                 this.overlaysToUpdate.add(renderOverlay);
@@ -808,7 +808,7 @@ public class RenderSchematic extends RenderGlobal {
     }
 
     @Override
-    public void renderClouds(final float partialTicks, final int pass) {
+    public void renderClouds(final float partialTicks, final int pass, final double x, final double y, final double z) {
     }
 
     @Override
@@ -859,7 +859,7 @@ public class RenderSchematic extends RenderGlobal {
     public void renderWorldBorder(final Entity entity, final float partialTicks) {}
 
     @Override
-    public void drawBlockDamageTexture(final Tessellator tessellator, final VertexBuffer buffer, final Entity entity, final float partialTicks) {}
+    public void drawBlockDamageTexture(final Tessellator tessellator, final BufferBuilder buffer, final Entity entity, final float partialTicks) {}
 
     @Override
     public void drawSelectionBox(final EntityPlayer player, final RayTraceResult rayTraceResult, final int execute, final float partialTicks) {}

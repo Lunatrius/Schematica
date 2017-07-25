@@ -13,13 +13,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
-import net.minecraftforge.fml.common.registry.GameData;
 
 import java.util.ArrayList;
 
 public class OverlayHandler {
-    private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
     private final Minecraft minecraft = Minecraft.getMinecraft();
 
     private static final String SCHEMATICA_PREFIX = "[" + TextFormatting.GOLD + "Schematica" + TextFormatting.RESET + "] ";
@@ -44,7 +41,7 @@ public class OverlayHandler {
                     final IBlockState blockState = schematic.getBlockState(pos);
 
                     right.add("");
-                    right.add(String.valueOf(BLOCK_REGISTRY.getNameForObject(blockState.getBlock())) + SCHEMATICA_SUFFIX);
+                    right.add(String.valueOf(Block.REGISTRY.getNameForObject(blockState.getBlock())) + SCHEMATICA_SUFFIX);
 
                     for (final String formattedProperty : BlockStateHelper.getFormattedProperties(blockState)) {
                         right.add(formattedProperty + SCHEMATICA_SUFFIX);

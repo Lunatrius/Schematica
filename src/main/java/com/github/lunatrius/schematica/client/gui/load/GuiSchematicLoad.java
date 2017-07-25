@@ -97,8 +97,8 @@ public class GuiSchematicLoad extends GuiScreenBase {
     public void drawScreen(final int x, final int y, final float partialTicks) {
         this.guiSchematicLoadSlot.drawScreen(x, y, partialTicks);
 
-        drawCenteredString(this.fontRendererObj, this.strTitle, this.width / 2, 4, 0x00FFFFFF);
-        drawCenteredString(this.fontRendererObj, this.strFolderInfo, this.width / 2 - 78, this.height - 12, 0x00808080);
+        drawCenteredString(this.fontRenderer, this.strTitle, this.width / 2, 4, 0x00FFFFFF);
+        drawCenteredString(this.fontRenderer, this.strFolderInfo, this.width / 2 - 78, this.height - 12, 0x00808080);
 
         super.drawScreen(x, y, partialTicks);
     }

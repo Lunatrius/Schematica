@@ -28,7 +28,7 @@ public class ChunkSchematic extends Chunk {
     }
 
     @Override
-    public boolean getAreLevelsEmpty(final int startY, final int endY) {
+    public boolean isEmptyBetween(final int startY, final int endY) {
         return false;
     }
 

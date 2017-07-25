@@ -10,8 +10,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
-import net.minecraftforge.fml.common.registry.GameData;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +21,6 @@ import java.util.Set;
 
 public class ConfigurationHandler {
     public static final ConfigurationHandler INSTANCE = new ConfigurationHandler();
-    public static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
 
     public static final String VERSION = "1";
 
@@ -263,7 +260,7 @@ public class ConfigurationHandler {
     private static void populateExtraAirBlocks() {
         extraAirBlockList.clear();
         for (final String name : extraAirBlocks) {
-            final Block block = BLOCK_REGISTRY.getObject(new ResourceLocation(name));
+            final Block block = Block.REGISTRY.getObject(new ResourceLocation(name));
             if (block != Blocks.AIR) {
                 extraAirBlockList.add(block);
             }

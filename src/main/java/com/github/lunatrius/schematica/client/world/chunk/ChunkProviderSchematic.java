@@ -1,7 +1,8 @@
 package com.github.lunatrius.schematica.client.world.chunk;
 
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.multiplayer.ChunkProviderClient;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 // FIXME: `extends ChunkProviderClient` is required for the `WorldClient.getChunkProvider` method to work properly
+@MethodsReturnNonnullByDefault
 public class ChunkProviderSchematic extends ChunkProviderClient implements IChunkProvider {
     private final SchematicWorld world;
     private final Chunk emptyChunk;
@@ -54,8 +56,6 @@ public class ChunkProviderSchematic extends ChunkProviderClient implements IChun
         return getLoadedChunk(x, z);
     }
 
-
-
     @Override
     public String makeString() {
         return "SchematicChunkCache";
@@ -64,7 +64,7 @@ public class ChunkProviderSchematic extends ChunkProviderClient implements IChun
     // ChunkProviderClient
     @Override
     public Chunk loadChunk(int x, int z) {
-        return Objects.firstNonNull(getLoadedChunk(x, z), this.emptyChunk);
+        return MoreObjects.firstNonNull(getLoadedChunk(x, z), this.emptyChunk);
     }
 
     // ChunkProviderClient

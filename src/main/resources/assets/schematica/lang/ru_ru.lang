@@ -58,8 +58,6 @@ schematica.config.category.server=Сервер
 schematica.config.category.server.tooltip=Настройки сервера.
 
 # gui - config - debug
-#schematica.config.dumpBlockList=Dump Block List
-#schematica.config.dumpBlockList.tooltip=Dump all block states on startup.
 schematica.config.showDebugInfo=Информация отладки
 schematica.config.showDebugInfo.tooltip=Отображает дополнительную информацию на экране отладки (F3).
 
@@ -72,16 +70,12 @@ schematica.config.highlight=Выделение блоков
 schematica.config.highlight.tooltip=Выделение неверно поставленных и необходимых для постройки блоков.
 schematica.config.highlightAir=Выделение воздуха
 schematica.config.highlightAir.tooltip=Выделение блоков, которые должны быть воздухом.
-#schematica.config.blockDelta=Block Delta
-#schematica.config.blockDelta.tooltip=Delta value used for highlighting (if you experience z-fighting increase this).
 schematica.config.renderDistance=Дальность прорисовки
 schematica.config.renderDistance.tooltip=Дальность прорисовки схемы.
 
 # gui - config - printer
 schematica.config.placeDelay=Задержка размещения
 schematica.config.placeDelay.tooltip=Задержка между попытками размещения блока (в тактах).
-#schematica.config.timeout=Timeout
-#schematica.config.timeout.tooltip=Timeout before re-trying failed blocks.
 schematica.config.placeDistance=Дальность размещения
 schematica.config.placeDistance.tooltip=Максимальная дальность размещения блоков.
 schematica.config.placeInstantly=Мгновенное размещение
