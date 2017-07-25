@@ -142,13 +142,14 @@ schematica.key.moveHere=Move here
 schematica.key.pickBlock=Pick Block
 
 # commands - save
-schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name>
+schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name> [format]
 schematica.command.save.playersOnly=This command can only be used by players.
 schematica.command.save.started=Started saving %d chunks into %s.
 schematica.command.save.saveSucceeded=Successfully saved %s.
 schematica.command.save.saveFailed=There was a problem saving the schematic %s.
 schematica.command.save.quotaExceeded=You have exceeded your quota on the server. Please use /schematicaList and /schematicaRemove to remove some old schematics.
 schematica.command.save.playerSchematicDirUnavailable=There was a problem on the server and your schematic was not saved. Please contact the server administrator.
+schematica.command.save.unknownFormat=Unknown format "%s".
 
 # commands - list
 schematica.command.list.usage=/schematicaList [page]
@@ -186,3 +187,4 @@ schematica.message.invalidPropertyForBlock="%s" is not a valid property for "%s"
 schematica.format.classic=Classic
 schematica.format.alpha=Alpha (standard)
 schematica.format.structure=Structure block
+schematica.format.invalid=Invalid

@@ -135,23 +135,32 @@ public abstract class SchematicFormat {
     /**
      * Gets a schematic format name translation key for the given format ID.
      *
-     * Returns null if no such format exists, and logs a warning.
+     * If an invalid format is chosen, logs a warning and returns a key stating
+     * that it's invalid.
+     *
+     * @param format The format.
      */
-    public static String getFormatName(final String id) {
-        if (!FORMATS.containsKey(id)) {
-            Reference.logger.warn("No format for schematic with id {}; returning null", new UnsupportedFormatException(id).fillInStackTrace(), id);
-            return null;
+    public static String getFormatName(final String format) {
+        if (!FORMATS.containsKey(format)) {
+            Reference.logger.warn("No format with id {}; returning invalid for name", format, new UnsupportedFormatException(format).fillInStackTrace());
+            return Names.Formats.INVALID;
         }
-        return FORMATS.get(id).getName();
+        return FORMATS.get(format).getName();
     }
 
     /**
      * Gets the extension used by the given format.
      *
-     * @param format The format (or null to use {@link #FORMAT_DEFAULT the default}).  
+     * If the format is invalid, returns the default format's extension.
+     *
+     * @param format The format (or null to use {@link #FORMAT_DEFAULT the default}).
      */
     public static String getExtension(@Nullable String format) {
         if (format == null) {
+            format = FORMAT_DEFAULT;
+        }
+        if (!FORMATS.containsKey(format)) {
+            Reference.logger.warn("No format with id {}; returning default extension", format, new UnsupportedFormatException(format).fillInStackTrace());
             format = FORMAT_DEFAULT;
         }
         return FORMATS.get(format).getExtension();

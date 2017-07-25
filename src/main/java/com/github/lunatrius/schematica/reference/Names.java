@@ -77,6 +77,7 @@ public final class Names {
                 public static final String SAVE_FAILED = "schematica.command.save.saveFailed";
                 public static final String QUOTA_EXCEEDED = "schematica.command.save.quotaExceeded";
                 public static final String PLAYER_SCHEMATIC_DIR_UNAVAILABLE = "schematica.command.save.playerSchematicDirUnavailable";
+                public static final String UNKNOWN_FORMAT = "schematica.command.save.unknownFormat";
             }
 
             public static final String NAME = "schematicaSave";
@@ -233,6 +234,7 @@ public final class Names {
         public static final String CLASSIC = "schematica.format.classic";
         public static final String ALPHA = "schematica.format.alpha";
         public static final String STRUCTURE = "schematica.format.structure";
+        public static final String INVALID = "schematica.format.invalid";
     }
 
     public static final class Extensions {
