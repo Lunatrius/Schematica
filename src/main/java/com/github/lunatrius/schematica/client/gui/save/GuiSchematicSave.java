@@ -64,7 +64,6 @@ public class GuiSchematicSave extends GuiScreenBase {
 
     @Override
     public void initGui() {
-        SchematicFormat.FORMAT_DEFAULT = Names.NBT.FORMAT_ALPHA;
         this.centerX = this.width / 2;
         this.centerY = this.height / 2;
 
