@@ -6,6 +6,7 @@ import com.github.lunatrius.schematica.command.CommandSchematicaBase;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.pattern.BlockStateMatcher;
 import net.minecraft.command.CommandException;
@@ -13,14 +14,15 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
-import net.minecraftforge.fml.common.registry.GameData;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collections;
 import java.util.List;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class CommandSchematicaReplace extends CommandSchematicaBase {
-    private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
-
     @Override
     public String getName() {
         return Names.Command.Replace.NAME;
@@ -32,12 +34,12 @@ public class CommandSchematicaReplace extends CommandSchematicaBase {
     }
 
     @Override
-    public List<String> getTabCompletions(final MinecraftServer server, final ICommandSender sender, final String[] args, final BlockPos pos) {
+    public List<String> getTabCompletions(final MinecraftServer server, final ICommandSender sender, final String[] args, @Nullable final BlockPos pos) {
         if (args.length < 3) {
-            return getListOfStringsMatchingLastWord(args, BLOCK_REGISTRY.getKeys());
+            return getListOfStringsMatchingLastWord(args, Block.REGISTRY.getKeys());
         }
 
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

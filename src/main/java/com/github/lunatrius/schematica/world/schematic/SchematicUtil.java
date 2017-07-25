@@ -9,8 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
-import net.minecraftforge.fml.common.registry.GameData;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,8 +16,6 @@ import java.io.IOException;
 
 public final class SchematicUtil {
     public static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.GRASS);
-    public static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
-    public static final FMLControlledNamespacedRegistry<Item> ITEM_REGISTRY = GameData.getItemRegistry();
 
     public static NBTTagCompound readTagCompoundFromFile(final File file) throws IOException {
         try {
@@ -49,12 +45,12 @@ public final class SchematicUtil {
             return DEFAULT_ICON.copy();
         }
 
-        final ItemStack block = new ItemStack(BLOCK_REGISTRY.getObject(rl), 1, damage);
+        final ItemStack block = new ItemStack(Block.REGISTRY.getObject(rl), 1, damage);
         if (!block.isEmpty()) {
             return block;
         }
 
-        final ItemStack item = new ItemStack(ITEM_REGISTRY.getObject(rl), 1, damage);
+        final ItemStack item = new ItemStack(Item.REGISTRY.getObject(rl), 1, damage);
         if (!item.isEmpty()) {
             return item;
         }

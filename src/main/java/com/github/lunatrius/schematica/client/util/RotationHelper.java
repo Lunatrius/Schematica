@@ -19,15 +19,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import net.minecraftforge.fml.common.registry.FMLControlledNamespacedRegistry;
-import net.minecraftforge.fml.common.registry.GameData;
 
 import java.util.List;
 
 public class RotationHelper {
     public static final RotationHelper INSTANCE = new RotationHelper();
 
-    private static final FMLControlledNamespacedRegistry<Block> BLOCK_REGISTRY = GameData.getBlockRegistry();
     private static final EnumFacing[][] FACINGS = new EnumFacing[EnumFacing.VALUES.length][];
     private static final EnumFacing.Axis[][] AXISES = new EnumFacing.Axis[EnumFacing.Axis.values().length][];
     private static final BlockLog.EnumAxis[][] AXISES_LOG = new BlockLog.EnumAxis[EnumFacing.Axis.values().length][];
@@ -171,7 +168,7 @@ public class RotationHelper {
                 }
             }
         } else if (propertyFacing != null) {
-            Reference.logger.error("'{}': found 'facing' property with unknown type {}", BLOCK_REGISTRY.getNameForObject(blockState.getBlock()), propertyFacing.getClass().getSimpleName());
+            Reference.logger.error("'{}': found 'facing' property with unknown type {}", Block.REGISTRY.getNameForObject(blockState.getBlock()), propertyFacing.getClass().getSimpleName());
         }
 
         final IProperty propertyAxis = BlockStateHelper.getProperty(blockState, "axis");
@@ -188,7 +185,7 @@ public class RotationHelper {
                 return blockState.withProperty(propertyAxis, axisRotated);
             }
         } else if (propertyAxis != null) {
-            Reference.logger.error("'{}': found 'axis' property with unknown type {}", BLOCK_REGISTRY.getNameForObject(blockState.getBlock()), propertyAxis.getClass().getSimpleName());
+            Reference.logger.error("'{}': found 'axis' property with unknown type {}", Block.REGISTRY.getNameForObject(blockState.getBlock()), propertyAxis.getClass().getSimpleName());
         }
 
         final IProperty propertyVariant = BlockStateHelper.getProperty(blockState, "variant");
@@ -201,7 +198,7 @@ public class RotationHelper {
         }
 
         if (!forced && (propertyFacing != null || propertyAxis != null)) {
-            throw new RotationException("'%s' cannot be rotated around '%s'", BLOCK_REGISTRY.getNameForObject(blockState.getBlock()), axisRotation);
+            throw new RotationException("'%s' cannot be rotated around '%s'", Block.REGISTRY.getNameForObject(blockState.getBlock()), axisRotation);
         }
 
         return blockState;

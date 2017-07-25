@@ -3,6 +3,10 @@ buildscript {
         mavenCentral()
         jcenter()
         maven {
+            name = 'gradle plugins'
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
             name = 'forge'
             url = 'http://files.minecraftforge.net/maven'
         }
@@ -12,8 +16,8 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-        classpath 'com.matthewprenger:CurseGradle:1.0-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.0.9'
     }
 }
 
@@ -26,7 +30,15 @@ ext.modversion = "${project.version_major}.${project.version_minor}.${project.ve
 group = 'com.github.lunatrius'
 version = "${project.version_minecraft}-${modversion}"
 
-compileJava.options.encoding = 'UTF-8'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+compileJava {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+
+    options.encoding = 'UTF-8'
+}
 
 minecraft {
     version = "${project.version_minecraft}-${project.version_forge}"
