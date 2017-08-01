@@ -18,13 +18,29 @@ import net.minecraft.client.renderer.chunk.VisGraph;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkCache;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
 public class RenderOverlay extends RenderChunk {
+    private static enum BlockType {
+        /** Purple - a block that is present in the world but not the schematic */
+        EXTRA_BLOCK(0xBF00BF),
+        /** Red - a mismatch between the block in the world and the schematic */
+        WRONG_BLOCK(0xFF0000),
+        /** Orange - a mismatch between the metadata for the block in the world and the schematic */
+        WRONG_META(0xBF5F00),
+        /** Blue - a block that is present in the schematic but not in the world */
+        MISSING_BLOCK(0x00BFFF);
+
+        public final int color;
+
+        private BlockType(int color) {
+            this.color = color;
+        }
+    }
+
     private final VertexBuffer vertexBuffer;
 
     public RenderOverlay(final World world, final RenderGlobal renderGlobal, final int index) {
@@ -42,6 +58,8 @@ public class RenderOverlay extends RenderChunk {
         final CompiledOverlay compiledOverlay = new CompiledOverlay();
         final BlockPos from = getPosition();
         final BlockPos to = from.add(15, 15, 15);
+        final BlockPos fromEx = from.add(-1, -1, -1);
+        final BlockPos toEx = to.add(1, 1, 1);
         generator.getLock().lock();
         ChunkCache chunkCache;
         final SchematicWorld schematic = (SchematicWorld) this.world;
@@ -56,7 +74,7 @@ public class RenderOverlay extends RenderChunk {
                 return;
             }
 
-            chunkCache = new ChunkCache(this.world, from.add(-1, -1, -1), to.add(1, 1, 1), 1);
+            chunkCache = new ChunkCache(this.world, fromEx, toEx, 1);
             generator.setCompiledChunk(compiledOverlay);
         } finally {
             generator.getLock().unlock();
@@ -74,14 +92,21 @@ public class RenderOverlay extends RenderChunk {
 
             GeometryTessellator.setStaticDelta(ConfigurationHandler.blockDelta);
 
-            for (final BlockPos pos : BlockPos.getAllInBox(from, to)) {
+            // Elements in this array may be null, indicating that nothing should be rendered (or out of bounds)
+            // 18 elements to provide padding on both sides (this padding is not rendered).
+            final BlockType[][][] types = new BlockType[18][18][18];
+
+            // Build the type array (including the padding)
+            BlockPos.MutableBlockPos mcPos = new BlockPos.MutableBlockPos();
+            for (final BlockPos.MutableBlockPos pos : BlockPos.getAllInBoxMutable(fromEx, toEx)) {
                 if (schematic.isRenderingLayer && schematic.renderingLayer != pos.getY() || !schematic.isInside(pos)) {
                     continue;
                 }
 
-                boolean render = false;
-                int sides = 0;
-                int color = 0;
+                // Indices in types
+                int secX = pos.getX() - fromEx.getX();
+                int secY = pos.getY() - fromEx.getY();
+                int secZ = pos.getZ() - fromEx.getZ();
 
                 final IBlockState schBlockState = schematic.getBlockState(pos);
                 final Block schBlock = schBlockState.getBlock();
@@ -90,50 +115,44 @@ public class RenderOverlay extends RenderChunk {
                     visgraph.setOpaqueCube(pos);
                 }
 
-                final BlockPos mcPos = pos.add(schematic.position);
+                mcPos.setPos(pos.getX() + schematic.position.getX(), pos.getY() + schematic.position.getY(), pos.getZ() + schematic.position.getZ());
                 final IBlockState mcBlockState = mcWorld.getBlockState(mcPos);
                 final Block mcBlock = mcBlockState.getBlock();
 
                 final boolean isSchAirBlock = schematic.isAirBlock(pos);
                 final boolean isMcAirBlock = mcWorld.isAirBlock(mcPos) || ConfigurationHandler.isExtraAirBlock(mcBlock);
 
-                if (!isMcAirBlock) {
-                    if (isSchAirBlock && ConfigurationHandler.highlightAir) {
-                        render = true;
-                        color = 0xBF00BF;
-
-                        sides = getSides(mcBlockState, mcBlock, mcWorld, mcPos, sides);
-                    }
-                }
-
-                if (!render) {
-                    if (ConfigurationHandler.highlight) {
-                        if (!isMcAirBlock) {
-                            if (schBlock != mcBlock) {
-                                render = true;
-                                color = 0xFF0000;
-                            } else if (schBlock.getMetaFromState(schBlockState) != mcBlock.getMetaFromState(mcBlockState)) {
-                                render = true;
-                                color = 0xBF5F00;
-                            }
-                        } else if (!isSchAirBlock) {
-                            render = true;
-                            color = 0x00BFFF;
+                if (ConfigurationHandler.highlightAir && !isMcAirBlock && isSchAirBlock) {
+                    types[secX][secY][secZ] = BlockType.EXTRA_BLOCK;
+                } else if (ConfigurationHandler.highlight) {
+                    if (!isMcAirBlock) {
+                        if (schBlock != mcBlock) {
+                            types[secX][secY][secZ] = BlockType.WRONG_BLOCK;
+                        } else if (schBlock.getMetaFromState(schBlockState) != mcBlock.getMetaFromState(mcBlockState)) {
+                            types[secX][secY][secZ] = BlockType.WRONG_META;
                         }
-                    }
-
-                    if (render) {
-                        sides = getSides(schBlockState, schBlock, schematic, pos, sides);
+                    } else if (!isSchAirBlock) {
+                        types[secX][secY][secZ] = BlockType.MISSING_BLOCK;
                     }
                 }
+            }
 
-                if (render && sides != 0) {
+            // Draw the type array (but not the padding)
+            for (final BlockPos.MutableBlockPos pos : BlockPos.getAllInBoxMutable(from, to)) {
+                int secX = pos.getX() - fromEx.getX();
+                int secY = pos.getY() - fromEx.getY();
+                int secZ = pos.getZ() - fromEx.getZ();
+
+                BlockType type = types[secX][secY][secZ];
+
+                if (type != null) {
                     if (!compiledOverlay.isLayerStarted(layer)) {
                         compiledOverlay.setLayerStarted(layer);
                         preRenderBlocks(buffer, from);
                     }
 
-                    GeometryTessellator.drawCuboid(buffer, pos, sides, 0x3F000000 | color);
+                    int sides = getSides(types, secX, secY, secZ);
+                    GeometryTessellator.drawCuboid(buffer, pos, sides, 0x3F000000 | type.color);
                     compiledOverlay.setLayerUsed(layer);
                 }
             }
@@ -146,28 +165,43 @@ public class RenderOverlay extends RenderChunk {
         compiledOverlay.setVisibility(visgraph.computeVisibility());
     }
 
-    private int getSides(final IBlockState blockState, final Block block, final World world, final BlockPos pos, int sides) {
-        if (block.shouldSideBeRendered(blockState, world, pos, EnumFacing.DOWN)) {
+    private int getSides(final BlockType[][][] types, final int x, final int y, final int z) {
+        // The padding cannot be rendered (it lacks neighbors)
+        if (!(x > 0 && x < 17)) {
+            throw new IndexOutOfBoundsException("x cannot be in padding: " + x);
+        }
+        if (!(y > 0 && y < 17)) {
+            throw new IndexOutOfBoundsException("y cannot be in padding: " + y);
+        }
+        if (!(z > 0 && z < 17)) {
+            throw new IndexOutOfBoundsException("z cannot be in padding: " + z);
+        }
+
+        int sides = 0;
+
+        final BlockType type = types[x][y][z];
+
+        if (types[x][y - 1][z] != type) {
             sides |= GeometryMasks.Quad.DOWN;
         }
 
-        if (block.shouldSideBeRendered(blockState, world, pos, EnumFacing.UP)) {
+        if (types[x][y + 1][z] != type) {
             sides |= GeometryMasks.Quad.UP;
         }
 
-        if (block.shouldSideBeRendered(blockState, world, pos, EnumFacing.NORTH)) {
+        if (types[x][y][z - 1] != type) {
             sides |= GeometryMasks.Quad.NORTH;
         }
 
-        if (block.shouldSideBeRendered(blockState, world, pos, EnumFacing.SOUTH)) {
+        if (types[x][y][z + 1] != type) {
             sides |= GeometryMasks.Quad.SOUTH;
         }
 
-        if (block.shouldSideBeRendered(blockState, world, pos, EnumFacing.WEST)) {
+        if (types[x - 1][y][z] != type) {
             sides |= GeometryMasks.Quad.WEST;
         }
 
-        if (block.shouldSideBeRendered(blockState, world, pos, EnumFacing.EAST)) {
+        if (types[x + 1][y][z] != type) {
             sides |= GeometryMasks.Quad.EAST;
         }
 
