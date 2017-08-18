@@ -6,7 +6,6 @@ import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
-import joptsimple.internal.Strings;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -44,7 +43,7 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
         final EntityPlayer player = (EntityPlayer) sender;
 
         boolean delete = false;
-        String name = Strings.join(args, " ");
+        String name = String.join(" ", args);
 
         if (args.length > 1) {
             //check if the last parameter is a hash, which constitutes a confirmation.
@@ -53,7 +52,7 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
                 //We probably have a match.
                 final String[] a = Arrays.copyOfRange(args, 0, args.length - 1);
                 //The name then should be everything except the last element
-                name = Strings.join(a, " ");
+                name = String.join(" ", a);
 
                 final String hash = Hashing.md5().hashString(name, Charsets.UTF_8).toString();
 
@@ -63,11 +62,10 @@ public class CommandSchematicaRemove extends CommandSchematicaBase {
             }
         }
 
-        final String filename = String.format("%s.schematic", name);
         final File schematicDirectory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
-        final File file = new File(schematicDirectory, filename);
+        final File file = new File(schematicDirectory, name);
         if (!FileUtils.contains(schematicDirectory, file)) {
-            Reference.logger.error("{} has tried to download the file {}", player.getName(), filename);
+            Reference.logger.error("{} has tried to download the file {}", player.getName(), name);
             throw new CommandException(Names.Command.Remove.Message.SCHEMATIC_NOT_FOUND);
         }
 
