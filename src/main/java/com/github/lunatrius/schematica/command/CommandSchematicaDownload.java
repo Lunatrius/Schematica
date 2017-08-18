@@ -17,7 +17,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
-import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
             final List<String> filenames = new ArrayList<String>();
 
             for (final File file : files) {
-                filenames.add(FilenameUtils.removeExtension(file.getName()));
+                filenames.add(file.getName());
             }
 
             return getListOfStringsMatchingLastWord(args, filenames);
@@ -68,7 +67,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
             throw new CommandException(Names.Command.Download.Message.PLAYERS_ONLY);
         }
 
-        final String filename = args[0] + ".schematic";
+        final String filename = String.join(" ", args);
         final EntityPlayerMP player = (EntityPlayerMP) sender;
         final File directory = Schematica.proxy.getPlayerSchematicDirectory(player, true);
         if (!FileUtils.contains(directory, filename)) {
