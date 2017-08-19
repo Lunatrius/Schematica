@@ -1,5 +1,8 @@
 package com.github.lunatrius.schematica.util;
 
+import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Locale;
@@ -17,6 +20,12 @@ public class FileFilterSchematic implements FileFilter {
             return file.isDirectory();
         }
 
-        return file.getName().toLowerCase(Locale.ENGLISH).endsWith(".schematic");
+        String extension = "." + FilenameUtils.getExtension(file.getName().toLowerCase(Locale.ROOT));
+        for (SchematicFormat format : SchematicFormat.FORMATS.values()) {
+            if (format.getExtension().equals(extension)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

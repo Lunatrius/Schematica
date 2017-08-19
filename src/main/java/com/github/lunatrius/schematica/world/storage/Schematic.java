@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 public class Schematic implements ISchematic {
     private static final ItemStack DEFAULT_ICON = new ItemStack(Blocks.GRASS);
 
@@ -25,8 +27,17 @@ public class Schematic implements ISchematic {
     private final int width;
     private final int height;
     private final int length;
+    private String author;
 
     public Schematic(final ItemStack icon, final int width, final int height, final int length) {
+        this(icon, width, height, length, "");
+    }
+
+    public Schematic(final ItemStack icon, final int width, final int height, final int length, @Nonnull final String author) {
+        if (author == null) {
+            throw new IllegalArgumentException("Author cannot be null");
+        }
+
         this.icon = icon;
         this.blocks = new short[width][height][length];
         this.metadata = new byte[width][height][length];
@@ -34,6 +45,8 @@ public class Schematic implements ISchematic {
         this.width = width;
         this.height = height;
         this.length = length;
+
+        this.author = author;
     }
 
     @Override
@@ -183,5 +196,19 @@ public class Schematic implements ISchematic {
         final int z = pos.getZ();
 
         return !(x < 0 || y < 0 || z < 0 || x >= this.width || y >= this.height || z >= this.length);
+    }
+
+    @Override
+    @Nonnull
+    public String getAuthor() {
+        return this.author;
+    }
+
+    @Override
+    public void setAuthor(@Nonnull final String author) {
+        if (author == null) {
+            throw new IllegalArgumentException("Author cannot be null");
+        }
+        this.author = author;
     }
 }

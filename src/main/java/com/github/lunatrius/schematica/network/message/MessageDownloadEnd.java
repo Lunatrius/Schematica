@@ -37,7 +37,7 @@ public class MessageDownloadEnd implements IMessage, IMessageHandler<MessageDown
     @Override
     public IMessage onMessage(final MessageDownloadEnd message, final MessageContext ctx) {
         final File directory = Schematica.proxy.getPlayerSchematicDirectory(null, true);
-        final boolean success = SchematicFormat.writeToFile(directory, message.name, DownloadHandler.INSTANCE.schematic);
+        final boolean success = SchematicFormat.writeToFile(directory, message.name, null, DownloadHandler.INSTANCE.schematic);
 
         if (success) {
             Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation(Names.Command.Download.Message.DOWNLOAD_SUCCEEDED, message.name));
