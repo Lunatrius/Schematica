@@ -74,9 +74,9 @@ public class CommandSchematicaList extends CommandSchematicaBase {
         final File[] files = schematicDirectory.listFiles(FILE_FILTER_SCHEMATIC);
         for (final File path : files) {
             if (currentFile >= pageStart && currentFile < pageEnd) {
-                final String fileName = FilenameUtils.removeExtension(path.getName());
+                final String fileName = path.getName();
 
-                final ITextComponent chatComponent = new TextComponentString(String.format("%2d (%s): %s [", currentFile + 1, FileUtils.humanReadableByteCount(path.length()), fileName));
+                final ITextComponent chatComponent = new TextComponentString(String.format("%2d (%s): %s [", currentFile + 1, FileUtils.humanReadableByteCount(path.length()), FilenameUtils.removeExtension(fileName)));
 
                 final String removeCommand = String.format("/%s %s", Names.Command.Remove.NAME, fileName);
                 final ITextComponent removeLink = withStyle(new TextComponentTranslation(Names.Command.List.Message.REMOVE), TextFormatting.RED, removeCommand);

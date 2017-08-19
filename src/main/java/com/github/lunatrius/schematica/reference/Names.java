@@ -77,6 +77,7 @@ public final class Names {
                 public static final String SAVE_FAILED = "schematica.command.save.saveFailed";
                 public static final String QUOTA_EXCEEDED = "schematica.command.save.quotaExceeded";
                 public static final String PLAYER_SCHEMATIC_DIR_UNAVAILABLE = "schematica.command.save.playerSchematicDirUnavailable";
+                public static final String UNKNOWN_FORMAT = "schematica.command.save.unknownFormat";
             }
 
             public static final String NAME = "schematicaSave";
@@ -153,6 +154,7 @@ public final class Names {
             public static final String POINT_BLUE = "schematica.gui.point.blue";
             public static final String SAVE = "schematica.gui.save";
             public static final String SAVE_SELECTION = "schematica.gui.saveselection";
+            public static final String FORMAT = "schematica.gui.format";
         }
 
         public static final class Control {
@@ -212,6 +214,7 @@ public final class Names {
         public static final String MATERIALS = "Materials";
         public static final String FORMAT_CLASSIC = "Classic";
         public static final String FORMAT_ALPHA = "Alpha";
+        public static final String FORMAT_STRUCTURE = "Structure";
 
         public static final String ICON = "Icon";
         public static final String BLOCKS = "Blocks";
@@ -225,5 +228,17 @@ public final class Names {
         public static final String TILE_ENTITIES = "TileEntities";
         public static final String ENTITIES = "Entities";
         public static final String EXTENDED_METADATA = "ExtendedMetadata";
+    }
+
+    public static final class Formats {
+        public static final String CLASSIC = "schematica.format.classic";
+        public static final String ALPHA = "schematica.format.alpha";
+        public static final String STRUCTURE = "schematica.format.structure";
+        public static final String INVALID = "schematica.format.invalid";
+    }
+
+    public static final class Extensions {
+        public static final String SCHEMATIC = ".schematic";
+        public static final String STRUCTURE = ".nbt";
     }
 }
