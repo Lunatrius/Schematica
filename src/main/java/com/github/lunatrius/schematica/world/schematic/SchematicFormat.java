@@ -67,7 +67,7 @@ public abstract class SchematicFormat {
     /**
      * Writes the given schematic.
      *
-     * @param directory The file to write to
+     * @param file The file to write to
      * @param format The format to use, or null for {@linkplain #FORMAT_DEFAULT the default}
      * @param schematic The schematic to write
      * @return True if successful

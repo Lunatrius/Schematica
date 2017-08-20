@@ -19,6 +19,7 @@ import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -60,6 +61,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Vector3f;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
@@ -68,6 +71,8 @@ import java.util.List;
 import java.util.Set;
 
 @SideOnly(Side.CLIENT)
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class RenderSchematic extends RenderGlobal {
     public static final RenderSchematic INSTANCE = new RenderSchematic(Minecraft.getMinecraft());
 
@@ -177,7 +182,7 @@ public class RenderSchematic extends RenderGlobal {
     }
 
     @Override
-    public void setWorldAndLoadRenderers(final WorldClient worldClient) {
+    public void setWorldAndLoadRenderers(@Nullable final WorldClient worldClient) {
         if (worldClient instanceof SchematicWorld) {
             setWorldAndLoadRenderers((SchematicWorld) worldClient);
         } else {
@@ -185,7 +190,7 @@ public class RenderSchematic extends RenderGlobal {
         }
     }
 
-    public void setWorldAndLoadRenderers(final SchematicWorld world) {
+    public void setWorldAndLoadRenderers(@Nullable final SchematicWorld world) {
         if (this.world != null) {
             this.world.removeEventListener(this);
         }
