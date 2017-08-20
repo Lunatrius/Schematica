@@ -6,6 +6,7 @@ import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -16,9 +17,12 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.Arrays;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class CommandSchematicaRemove extends CommandSchematicaBase {
     @Override
     public String getName() {

@@ -9,6 +9,7 @@ import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.util.FileFilterSchematic;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -18,10 +19,14 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class CommandSchematicaDownload extends CommandSchematicaBase {
     private static final FileFilterSchematic FILE_FILTER_SCHEMATIC = new FileFilterSchematic(false);
 
@@ -38,7 +43,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
     @Override
     public List<String> getTabCompletions(final MinecraftServer server, final ICommandSender sender, final String[] args, final BlockPos pos) {
         if (!(sender instanceof EntityPlayer)) {
-            return null;
+            return Collections.emptyList();
         }
 
         final File directory = Schematica.proxy.getPlayerSchematicDirectory((EntityPlayer) sender, true);
@@ -54,7 +59,7 @@ public class CommandSchematicaDownload extends CommandSchematicaBase {
             return getListOfStringsMatchingLastWord(args, filenames);
         }
 
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

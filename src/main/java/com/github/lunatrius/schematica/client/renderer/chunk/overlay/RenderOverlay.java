@@ -111,7 +111,7 @@ public class RenderOverlay extends RenderChunk {
                 final IBlockState schBlockState = schematic.getBlockState(pos);
                 final Block schBlock = schBlockState.getBlock();
 
-                if (schBlock.isOpaqueCube(schBlockState)) {
+                if (schBlockState.isOpaqueCube()) {
                     visgraph.setOpaqueCube(pos);
                 }
 

@@ -5,6 +5,7 @@ import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.util.FileFilterSchematic;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -16,9 +17,12 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.io.FilenameUtils;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.util.LinkedList;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class CommandSchematicaList extends CommandSchematicaBase {
     private static final FileFilterSchematic FILE_FILTER_SCHEMATIC = new FileFilterSchematic(false);
 

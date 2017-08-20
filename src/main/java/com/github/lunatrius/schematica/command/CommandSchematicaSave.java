@@ -6,6 +6,7 @@ import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
@@ -14,8 +15,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class CommandSchematicaSave extends CommandSchematicaBase {
     @Override
     public String getName() {

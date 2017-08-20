@@ -138,13 +138,13 @@ public class BlockList {
 
         public String getFormattedAmount() {
             final char color = this.placed < this.total ? 'c' : 'a';
-            return String.format("\u00a7%c%s\u00a7r/%s", color, getFormattedStackAmount(itemStack, this.placed), getFormattedStackAmount(itemStack, this.total));
+            return String.format("\u00a7%c%s\u00a7r/%s", color, getFormattedStackAmount(this.itemStack, this.placed), getFormattedStackAmount(itemStack, this.total));
         }
 
         public String getFormattedAmountMissing(final String strAvailable, final String strMissing) {
             final int need = this.total - (this.inventory + this.placed);
             if (this.inventory != -1 && need > 0) {
-                return String.format("\u00a7c%s: %s", strMissing, getFormattedStackAmount(itemStack, need));
+                return String.format("\u00a7c%s: %s", strMissing, getFormattedStackAmount(this.itemStack, need));
             } else {
                 return String.format("\u00a7a%s", strAvailable);
             }

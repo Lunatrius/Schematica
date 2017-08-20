@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.command;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -9,6 +10,11 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public abstract class CommandSchematicaBase extends CommandBase {
     @Override
     public int getRequiredPermissionLevel() {
@@ -21,7 +27,7 @@ public abstract class CommandSchematicaBase extends CommandBase {
         return super.checkPermission(server, sender) || (sender instanceof EntityPlayerMP && getRequiredPermissionLevel() <= 0);
     }
 
-    protected <T extends ITextComponent> T withStyle(final T component, final TextFormatting formatting, final String command) {
+    protected <T extends ITextComponent> T withStyle(final T component, final TextFormatting formatting, @Nullable final String command) {
         final Style style = new Style();
         style.setColor(formatting);
 

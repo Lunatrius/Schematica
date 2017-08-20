@@ -20,6 +20,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Formatter;
 import java.util.List;
 
@@ -129,11 +130,8 @@ public class GuiSchematicMaterials extends GuiScreenBase {
 
         final File dumps = Schematica.proxy.getDirectory("dumps");
         try {
-            final FileOutputStream outputStream = new FileOutputStream(new File(dumps, Reference.MODID + "-materials.txt"));
-            try {
-                IOUtils.write(stringBuilder.toString(), outputStream);
-            } finally {
-                outputStream.close();
+            try (FileOutputStream outputStream = new FileOutputStream(new File(dumps, Reference.MODID + "-materials.txt"))) {
+                IOUtils.write(stringBuilder.toString(), outputStream, Charset.forName("utf-8"));
             }
         } catch (final Exception e) {
             Reference.logger.error("Could not dump the material list!", e);
