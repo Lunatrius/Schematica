@@ -23,6 +23,7 @@ schematica.gui.point.red=Красная точка
 schematica.gui.point.blue=Синяя точка
 schematica.gui.save=Сохранить
 schematica.gui.saveselection=Сохранение схемы
+schematica.gui.format=Формат: %s
 
 # gui - general - control
 schematica.gui.moveschematic=Передвинуть схему
@@ -111,7 +112,7 @@ schematica.config.swapSlot8.tooltip=Позволяет принтеру испо
 schematica.config.schematicDirectory=Папка схем
 schematica.config.schematicDirectory.tooltip=Папка, в которой хранятся схемы.
 schematica.config.extraAirBlocks=Блоки воздуха
-schematica.config.extraAirBlocks.tooltip=Данные блоки отображаются в схемах как воздух.
+schematica.config.extraAirBlocks.tooltip=Заданные блоки отображаются в схемах в качестве воздуха.
 
 # gui - config - server
 schematica.config.printerEnabled=Принтер
@@ -135,13 +136,14 @@ schematica.key.moveHere=Передвинуть сюда
 schematica.key.pickBlock=Выбор блока в схеме
 
 # commands - save
-schematica.command.save.usage=/schematicaSave <началоX> <началоY> <началоZ> <конецX> <конецY> <конецZ> <название>
+schematica.command.save.usage=/schematicaSave <началоX> <началоY> <началоZ> <конецX> <конецY> <конецZ> <название> [формат]
 schematica.command.save.playersOnly=Только игроки могут использовать данную команду.
-schematica.command.save.started=Сохранение %d чанка(-ов) в файл %s...
-schematica.command.save.saveSucceeded=Схема %s сохранена.
-schematica.command.save.saveFailed=Произошла ошибка при сохранении файла %s.
+schematica.command.save.started=Сохранение %d чанка(-ов) в файл «%s»...
+schematica.command.save.saveSucceeded=Схема «%s» сохранена.
+schematica.command.save.saveFailed=Произошла ошибка при сохранении файла «%s».
 schematica.command.save.quotaExceeded=Превышена квота сервера. Используйте /schematicaList и /schematicaRemove, чтобы удалить старые схемы.
 schematica.command.save.playerSchematicDirUnavailable=Произошла ошибка на сервере, из-за которой неудалось сохранить схему. Свяжитесь с администратором сервера.
+schematica.command.save.unknownFormat=Формат неизвестен: «%s»
 
 # commands - list
 schematica.command.list.usage=/schematicaList [страница]
@@ -174,3 +176,8 @@ schematica.message.togglePrinter=Принтер: %s
 schematica.message.invalidBlock=Блок «%s» не существует.
 schematica.message.invalidProperty=Свойтво «%s» не существует.
 schematica.message.invalidPropertyForBlock=Свойтво «%s» не существует у блока «%s».
+
+# schematic formats
+schematica.format.classic=Classic
+schematica.format.alpha=Стандартный
+schematica.format.structure=Блок-конструктор
