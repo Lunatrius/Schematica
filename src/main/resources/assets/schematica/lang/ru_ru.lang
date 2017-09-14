@@ -181,3 +181,4 @@ schematica.message.invalidPropertyForBlock=Свойтво «%s» не сущес
 schematica.format.classic=Classic
 schematica.format.alpha=Стандартный
 schematica.format.structure=Блок-конструктор
+schematica.format.invalid=Неизвестный
