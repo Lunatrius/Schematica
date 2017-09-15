@@ -26,7 +26,7 @@ schematica.gui.saveselection=Сохранение схемы
 schematica.gui.format=Формат: %s
 
 # gui - general - control
-schematica.gui.moveschematic=Передвинуть схему
+schematica.gui.moveschematic=Перемещение схемы
 schematica.gui.materials=Материалы
 schematica.gui.printer=Принтер
 schematica.gui.operations=Операции
@@ -35,7 +35,7 @@ schematica.gui.all=Все слои
 schematica.gui.layers=Один слой
 schematica.gui.hide=Скрыть
 schematica.gui.show=Показать
-schematica.gui.movehere=Передвинуть сюда
+schematica.gui.movehere=Сместить сюда
 schematica.gui.flip=Отразить
 schematica.gui.rotate=Повернуть
 schematica.gui.materialname=Материал
