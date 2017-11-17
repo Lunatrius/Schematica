@@ -166,6 +166,7 @@ public final class Names {
             public static final String UNLOAD = "schematica.gui.unload";
             public static final String MODE_ALL = "schematica.gui.all";
             public static final String MODE_LAYERS = "schematica.gui.layers";
+            public static final String MODE_BELOW = "schematica.gui.below";
             public static final String HIDE = "schematica.gui.hide";
             public static final String SHOW = "schematica.gui.show";
             public static final String MOVE_HERE = "schematica.gui.movehere";
