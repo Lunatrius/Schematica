@@ -37,7 +37,7 @@ public class BlockList {
         final MBlockPos mcPos = new MBlockPos();
 
         for (final MBlockPos pos : BlockPosHelper.getAllInBox(BlockPos.ORIGIN, new BlockPos(world.getWidth() - 1, world.getHeight() - 1, world.getLength() - 1))) {
-            if (world.isRenderingLayer && pos.getY() != world.renderingLayer) {
+            if (!world.layerMode.shouldUseLayer(world, pos.getY())) {
                 continue;
             }
 

@@ -8,6 +8,7 @@ import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
 import com.github.lunatrius.schematica.client.util.FlipHelper;
 import com.github.lunatrius.schematica.client.util.RotationHelper;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
+import com.github.lunatrius.schematica.client.world.SchematicWorld.LayerMode;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Names;
@@ -48,8 +49,6 @@ public class GuiSchematicControl extends GuiScreenBase {
     private final String strMoveSchematic = I18n.format(Names.Gui.Control.MOVE_SCHEMATIC);
     private final String strOperations = I18n.format(Names.Gui.Control.OPERATIONS);
     private final String strUnload = I18n.format(Names.Gui.Control.UNLOAD);
-    private final String strAll = I18n.format(Names.Gui.Control.MODE_ALL);
-    private final String strLayers = I18n.format(Names.Gui.Control.MODE_LAYERS);
     private final String strMaterials = I18n.format(Names.Gui.Control.MATERIALS);
     private final String strPrinter = I18n.format(Names.Gui.Control.PRINTER);
     private final String strHide = I18n.format(Names.Gui.Control.HIDE);
@@ -87,7 +86,7 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnUnload = new GuiButton(id++, this.width - 90, this.height - 200, 80, 20, this.strUnload);
         this.buttonList.add(this.btnUnload);
 
-        this.btnLayerMode = new GuiButton(id++, this.width - 90, this.height - 150 - 25, 80, 20, this.schematic != null && this.schematic.isRenderingLayer ? this.strLayers : this.strAll);
+        this.btnLayerMode = new GuiButton(id++, this.width - 90, this.height - 150 - 25, 80, 20, I18n.format((this.schematic != null ? this.schematic.layerMode : LayerMode.ALL).name));
         this.buttonList.add(this.btnLayerMode);
 
         this.nfLayer = new GuiNumericField(this.fontRenderer, id++, this.width - 90, this.height - 150, 80, 20);
@@ -123,7 +122,7 @@ public class GuiSchematicControl extends GuiScreenBase {
 
         this.btnUnload.enabled = this.schematic != null;
         this.btnLayerMode.enabled = this.schematic != null;
-        this.nfLayer.setEnabled(this.schematic != null && this.schematic.isRenderingLayer);
+        this.nfLayer.setEnabled(this.schematic != null && this.schematic.layerMode != LayerMode.ALL);
 
         this.btnHide.enabled = this.schematic != null;
         this.btnMove.enabled = this.schematic != null;
@@ -180,9 +179,9 @@ public class GuiSchematicControl extends GuiScreenBase {
                 Schematica.proxy.unloadSchematic();
                 this.mc.displayGuiScreen(this.parentScreen);
             } else if (guiButton.id == this.btnLayerMode.id) {
-                this.schematic.isRenderingLayer = !this.schematic.isRenderingLayer;
-                this.btnLayerMode.displayString = this.schematic.isRenderingLayer ? this.strLayers : this.strAll;
-                this.nfLayer.setEnabled(this.schematic.isRenderingLayer);
+                this.schematic.layerMode = LayerMode.next(this.schematic.layerMode);
+                this.btnLayerMode.displayString = I18n.format(this.schematic.layerMode.name);
+                this.nfLayer.setEnabled(this.schematic.layerMode != LayerMode.ALL);
                 RenderSchematic.INSTANCE.refresh();
             } else if (guiButton.id == this.nfLayer.id) {
                 this.schematic.renderingLayer = this.nfLayer.getValue();
@@ -241,7 +240,6 @@ public class GuiSchematicControl extends GuiScreenBase {
         drawCenteredString(this.fontRenderer, this.strMoveSchematic, this.centerX, this.centerY - 45, 0xFFFFFF);
         drawCenteredString(this.fontRenderer, this.strMaterials, 50, this.height - 85, 0xFFFFFF);
         drawCenteredString(this.fontRenderer, this.strPrinter, 50, this.height - 45, 0xFFFFFF);
-        drawCenteredString(this.fontRenderer, this.strLayers, this.width - 50, this.height - 165, 0xFFFFFF);
         drawCenteredString(this.fontRenderer, this.strOperations, this.width - 50, this.height - 120, 0xFFFFFF);
 
         drawString(this.fontRenderer, this.strX, this.centerX - 65, this.centerY - 24, 0xFFFFFF);

@@ -99,7 +99,7 @@ public class RenderOverlay extends RenderChunk {
             // Build the type array (including the padding)
             BlockPos.MutableBlockPos mcPos = new BlockPos.MutableBlockPos();
             for (final BlockPos.MutableBlockPos pos : BlockPos.getAllInBoxMutable(fromEx, toEx)) {
-                if (schematic.isRenderingLayer && schematic.renderingLayer != pos.getY() || !schematic.isInside(pos)) {
+                if (!schematic.isInside(pos) || !schematic.layerMode.shouldUseLayer(schematic, pos.getY())) {
                     continue;
                 }
 
