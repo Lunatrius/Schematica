@@ -6,6 +6,7 @@ import com.github.lunatrius.schematica.client.gui.save.GuiSchematicSave;
 import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
+import com.github.lunatrius.schematica.client.world.SchematicWorld.LayerMode;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Names;
 import net.minecraft.client.Minecraft;
@@ -70,7 +71,7 @@ public class InputHandler {
 
             if (KEY_BINDING_LAYER_INC.isPressed()) {
                 final SchematicWorld schematic = ClientProxy.schematic;
-                if (schematic != null && schematic.isRenderingLayer) {
+                if (schematic.layerMode != LayerMode.ALL) {
                     schematic.renderingLayer = MathHelper.clamp(schematic.renderingLayer + 1, 0, schematic.getHeight() - 1);
                     RenderSchematic.INSTANCE.refresh();
                 }
@@ -78,7 +79,7 @@ public class InputHandler {
 
             if (KEY_BINDING_LAYER_DEC.isPressed()) {
                 final SchematicWorld schematic = ClientProxy.schematic;
-                if (schematic != null && schematic.isRenderingLayer) {
+                if (schematic.layerMode != LayerMode.ALL) {
                     schematic.renderingLayer = MathHelper.clamp(schematic.renderingLayer - 1, 0, schematic.getHeight() - 1);
                     RenderSchematic.INSTANCE.refresh();
                 }
@@ -87,7 +88,7 @@ public class InputHandler {
             if (KEY_BINDING_LAYER_TOGGLE.isPressed()) {
                 final SchematicWorld schematic = ClientProxy.schematic;
                 if (schematic != null) {
-                    schematic.isRenderingLayer = !schematic.isRenderingLayer;
+                    schematic.layerMode = LayerMode.next(schematic.layerMode);
                     RenderSchematic.INSTANCE.refresh();
                 }
             }

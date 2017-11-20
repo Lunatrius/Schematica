@@ -112,15 +112,20 @@ public class SchematicPrinter {
         final int slot = player.inventory.currentItem;
         final boolean isSneaking = player.isSneaking();
 
-        final boolean isRenderingLayer = this.schematic.isRenderingLayer;
-        final int renderingLayer = this.schematic.renderingLayer;
-
-        if (isRenderingLayer) {
-            if (renderingLayer > maxY || renderingLayer < minY) {
+        switch (schematic.layerMode) {
+        case ALL: break;
+        case SINGLE_LAYER:
+            if (schematic.renderingLayer > maxY) {
                 return false;
             }
-
-            minY = maxY = renderingLayer;
+            maxY = schematic.renderingLayer;
+            //$FALL-THROUGH$
+        case ALL_BELOW:
+            if (schematic.renderingLayer < minY) {
+                return false;
+            }
+            maxY = schematic.renderingLayer;
+            break;
         }
 
         syncSneaking(player, true);
