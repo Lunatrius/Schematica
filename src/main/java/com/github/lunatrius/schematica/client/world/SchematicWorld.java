@@ -5,6 +5,7 @@ import com.github.lunatrius.core.util.math.MBlockPos;
 import com.github.lunatrius.schematica.api.ISchematic;
 import com.github.lunatrius.schematica.block.state.pattern.BlockStateReplacer;
 import com.github.lunatrius.schematica.client.world.chunk.ChunkProviderSchematic;
+import com.github.lunatrius.schematica.reference.Names;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -34,12 +35,45 @@ import java.util.Map;
 public class SchematicWorld extends WorldClient {
     private static final WorldSettings WORLD_SETTINGS = new WorldSettings(0, GameType.CREATIVE, false, false, WorldType.FLAT);
 
+    public static enum LayerMode {
+        ALL(Names.Gui.Control.MODE_ALL) {
+            @Override
+            public boolean shouldUseLayer(final SchematicWorld world, final int layer) {
+                return true;
+            }
+        },
+        SINGLE_LAYER(Names.Gui.Control.MODE_LAYERS) {
+            @Override
+            public boolean shouldUseLayer(final SchematicWorld world, final int layer) {
+                return layer == world.renderingLayer;
+            }
+        },
+        ALL_BELOW(Names.Gui.Control.MODE_BELOW) {
+            @Override
+            public boolean shouldUseLayer(final SchematicWorld world, final int layer) {
+                return layer <= world.renderingLayer;
+            }
+        };
+        public abstract boolean shouldUseLayer(SchematicWorld world, int layer);
+
+        private LayerMode(String name) {
+            this.name = name;
+        }
+
+        public final String name;
+
+        public static LayerMode next(final LayerMode mode) {
+            LayerMode[] values = values();
+            return values[(mode.ordinal() + 1) % values.length];
+        }
+    }
+
     private ISchematic schematic;
 
     public final MBlockPos position = new MBlockPos();
-    public boolean isRendering;
-    public boolean isRenderingLayer;
-    public int renderingLayer;
+    public boolean isRendering = false;
+    public LayerMode layerMode = LayerMode.ALL;
+    public int renderingLayer = 0;
 
     public SchematicWorld(final ISchematic schematic) {
         super(null, WORLD_SETTINGS, 0, EnumDifficulty.PEACEFUL, Minecraft.getMinecraft().mcProfiler);
@@ -48,15 +82,11 @@ public class SchematicWorld extends WorldClient {
         for (final TileEntity tileEntity : schematic.getTileEntities()) {
             initializeTileEntity(tileEntity);
         }
-
-        this.isRendering = false;
-        this.isRenderingLayer = false;
-        this.renderingLayer = 0;
     }
 
     @Override
     public IBlockState getBlockState(final BlockPos pos) {
-        if (this.isRenderingLayer && this.renderingLayer != pos.getY()) {
+        if (!this.layerMode.shouldUseLayer(this, pos.getY())) {
             return Blocks.AIR.getDefaultState();
         }
 
@@ -70,7 +100,7 @@ public class SchematicWorld extends WorldClient {
 
     @Override
     public TileEntity getTileEntity(final BlockPos pos) {
-        if (this.isRenderingLayer && this.renderingLayer != pos.getY()) {
+        if (!this.layerMode.shouldUseLayer(this, pos.getY())) {
             return null;
         }
 
