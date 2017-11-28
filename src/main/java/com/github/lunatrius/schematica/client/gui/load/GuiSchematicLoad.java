@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GuiSchematicLoad extends GuiScreenBase {
@@ -138,6 +139,7 @@ public class GuiSchematicLoad extends GuiScreenBase {
         if (filesFolders == null) {
             Reference.logger.error("listFiles returned null (directory: {})!", this.currentDirectory);
         } else {
+            Arrays.sort(filesFolders, (final File a, final File b) -> a.getName().compareToIgnoreCase(b.getName()));
             for (final File file : filesFolders) {
                 if (file == null) {
                     continue;
@@ -156,6 +158,7 @@ public class GuiSchematicLoad extends GuiScreenBase {
         if (filesSchematics == null || filesSchematics.length == 0) {
             this.schematicFiles.add(new GuiSchematicEntry(this.strNoSchematic, Blocks.DIRT, 0, false));
         } else {
+            Arrays.sort(filesSchematics, (final File a, final File b) -> a.getName().compareToIgnoreCase(b.getName()));
             for (final File file : filesSchematics) {
                 name = file.getName();
 
