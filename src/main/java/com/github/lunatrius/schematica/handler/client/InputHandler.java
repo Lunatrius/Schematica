@@ -71,7 +71,7 @@ public class InputHandler {
 
             if (KEY_BINDING_LAYER_INC.isPressed()) {
                 final SchematicWorld schematic = ClientProxy.schematic;
-                if (schematic.layerMode != LayerMode.ALL) {
+                if (schematic != null && schematic.layerMode != LayerMode.ALL) {
                     schematic.renderingLayer = MathHelper.clamp(schematic.renderingLayer + 1, 0, schematic.getHeight() - 1);
                     RenderSchematic.INSTANCE.refresh();
                 }
@@ -79,7 +79,7 @@ public class InputHandler {
 
             if (KEY_BINDING_LAYER_DEC.isPressed()) {
                 final SchematicWorld schematic = ClientProxy.schematic;
-                if (schematic.layerMode != LayerMode.ALL) {
+                if (schematic != null && schematic.layerMode != LayerMode.ALL) {
                     schematic.renderingLayer = MathHelper.clamp(schematic.renderingLayer - 1, 0, schematic.getHeight() - 1);
                     RenderSchematic.INSTANCE.refresh();
                 }
