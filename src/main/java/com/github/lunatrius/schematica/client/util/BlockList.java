@@ -72,6 +72,11 @@ public class BlockList {
                 }
             }
 
+            if (stack == null) {
+                Reference.logger.error("Could not find the item for: {} (getPickBlock() returned null, this is a bug)", blockState);
+                continue;
+            }
+
             if (stack.isEmpty()) {
                 Reference.logger.warn("Could not find the item for: {}", blockState);
                 continue;
