@@ -1,0 +1,193 @@
+# Localizated to Portuguese (Brazil) by SAMUELPV
+
+# gui - general
+schematica.gui.x=X:
+schematica.gui.y=Y:
+schematica.gui.z=Z:
+schematica.gui.on=ATIVAR
+schematica.gui.off=DESATIVAR
+schematica.gui.done=Pronto
+schematica.gui.down=Baixo
+schematica.gui.up=Cima
+schematica.gui.north=Norte
+schematica.gui.south=Sul
+schematica.gui.west=Leste
+schematica.gui.east=Oeste
+
+# gui - general - load
+schematica.gui.title=Selecionar o schematic
+schematica.gui.folderInfo=(Coloque os schematics aqui)
+schematica.gui.openFolder=Abrir pasta de schematics
+schematica.gui.noschematic=-- Nenhum schematic --
+
+# gui - general - save
+schematica.gui.point.red=Ponto Vermelho
+schematica.gui.point.blue=Ponto Azul
+schematica.gui.save=Salvar
+schematica.gui.saveselection=Salvar a seleção como um schematic
+schematica.gui.format=Formato: %s
+
+# gui - general - control
+schematica.gui.moveschematic=Mover o schematic
+schematica.gui.materials=Materiais
+schematica.gui.printer=       Construção Automática
+schematica.gui.operations=Operações
+schematica.gui.unload=Descarregar
+schematica.gui.all=TODAS
+schematica.gui.layers=Camadas
+schematica.gui.below=Todas abaixo
+schematica.gui.hide=Ocultar
+schematica.gui.show=Mostrar
+schematica.gui.movehere=Mover para cá
+schematica.gui.flip=Virar
+schematica.gui.rotate=Girar
+schematica.gui.materialname=Material
+schematica.gui.materialamount=Quantidade
+schematica.gui.materialavailable=Disponível
+schematica.gui.materialmissing=Faltando
+schematica.gui.materialdump=Salvar no arquivo
+
+# gui - config - categories
+schematica.config.category.debug=Depuração
+schematica.config.category.debug.tooltip=Configurações de depuração/desenvolvedor.\nNão mexa nisso a menos que você saiba o que está fazendo.
+schematica.config.category.render=Renderização
+schematica.config.category.render.tooltip=Configurações relacionadas à renderização.
+schematica.config.category.printer=Construção Automática
+schematica.config.category.printer.tooltip=Configurações relacionadas à construção automática.
+schematica.config.category.printer.swapslots=Slots da Hotbar
+schematica.config.category.printer.swapslots.tooltip=Permite que a construção automática use slots ocupados da hotbar.
+schematica.config.category.general=Geral
+schematica.config.category.general.tooltip=Configurações gerais.
+schematica.config.category.server=Servidor
+schematica.config.category.server.tooltip=Configurações do Servidor.
+
+# gui - config - debug
+schematica.config.dumpBlockList=Esvaziar Lista de Blocos
+schematica.config.dumpBlockList.tooltip=Esvaziar todos os estados de blocos na inicialização.
+schematica.config.showDebugInfo=Mostrar Informações de Depuração
+schematica.config.showDebugInfo.tooltip=Mostra informações extras na tela de depuração (F3).
+
+# gui - config - render
+schematica.config.alphaEnabled=Alfa Ativado
+schematica.config.alphaEnabled.tooltip=Habilita texturas transparentes.
+schematica.config.alpha=Alfa
+schematica.config.alpha.tooltip=Valor Alfa usado enquanto renderiza o schematic (1.0 = opaco, 0.5 = quase transparente, 0.0 = transparente).
+schematica.config.highlight=Destacar Blocos
+schematica.config.highlight.tooltip=Destaque os blocos inválidos e os blocos colocados.
+schematica.config.highlightAir=Destacar Ar
+schematica.config.highlightAir.tooltip=Destaca os blocos que são blocos de ar.
+schematica.config.blockDelta=Bloco Delta
+schematica.config.blockDelta.tooltip=Valor Delta usado para destaque (se você conhecer z-fighting, reforçar isso).
+schematica.config.renderDistance=Distância de Renderização
+schematica.config.renderDistance.tooltip=Distância da renderização do Schematic.
+
+# gui - config - printer
+schematica.config.placeDelay=Delay de Colocação
+schematica.config.placeDelay.tooltip=Delay entre tentativas de colocação (em tiques).
+schematica.config.timeout=Intervalo
+schematica.config.timeout.tooltip=Intervalo antes de tentar recolocar os blocos errados.
+schematica.config.placeDistance=Distância de Colocação
+schematica.config.placeDistance.tooltip=Distância de colocação máxima.
+schematica.config.placeInstantly=Colocar Instantaneamente
+schematica.config.placeInstantly.tooltip=Colocar todos os blocos que pode ser colocados em um tique.
+schematica.config.destroyBlocks=Destruir Blocos
+schematica.config.destroyBlocks.tooltip=A construção automática destruirá os blocos (apenas no modo criativo).
+schematica.config.destroyInstantly=Destruir Instantaneamente
+schematica.config.destroyInstantly.tooltip=Destrói todos os blocos que pode ser destruídos em um tique.
+schematica.config.placeAdjacent=Colocar Apenas Adjacentes
+schematica.config.placeAdjacent.tooltip=Coloca os blocos apenas se houver um bloco adjacente ao lado deles.
+
+# gui - config - printer - swap slots
+schematica.config.swapSlot0=Permitir Slot 1
+schematica.config.swapSlot0.tooltip=Permite que a construção automática use o slot 1 da hotbar.
+schematica.config.swapSlot1=Permitir Slot 2
+schematica.config.swapSlot1.tooltip=Permite que a construção automática use o slot 2 da hotbar.
+schematica.config.swapSlot2=Permitir Slot 3
+schematica.config.swapSlot2.tooltip=Permite que a construção automática use o slot 3 da hotbar.
+schematica.config.swapSlot3=Permitir Slot 4
+schematica.config.swapSlot3.tooltip=Permite que a construção automática use o slot 4 da hotbar.
+schematica.config.swapSlot4=Permitir Slot 5
+schematica.config.swapSlot4.tooltip=Permite que a construção automática use o slot 5 da hotbar.
+schematica.config.swapSlot5=Permitir Slot 6
+schematica.config.swapSlot5.tooltip=Permite que a construção automática use o slot 6 da hotbar.
+schematica.config.swapSlot6=Permitir Slot 7
+schematica.config.swapSlot6.tooltip=Permite que a construção automática use o slot 7 da hotbar.
+schematica.config.swapSlot7=Permitir Slot 8
+schematica.config.swapSlot7.tooltip=Permite que a construção automática use o slot 8 da hotbar.
+schematica.config.swapSlot8=Permitir Slot 9
+schematica.config.swapSlot8.tooltip=Permite que a construção automática use o slot 9 da hotbar.
+
+# gui - config - general
+schematica.config.schematicDirectory=Pasta de Schematics
+schematica.config.schematicDirectory.tooltip=Pasta onde fica os schematics salvos.
+schematica.config.extraAirBlocks=Blocos de Ar Extra
+schematica.config.extraAirBlocks.tooltip=Blocos extras para serem considerados como ar para o renderizador de schematic.
+
+# gui - config - server
+schematica.config.printerEnabled=Permitir Construção Automática
+schematica.config.printerEnabled.tooltip=Permite que os jogadores usem o modo de construção automática.
+schematica.config.saveEnabled=Permitir Salvamento
+schematica.config.saveEnabled.tooltip=Permite que os jogadores salvem os schematics.
+schematica.config.loadEnabled=Permitir Carregamento
+schematica.config.loadEnabled.tooltip=Permite que os jogadores carreguem os schematics.
+
+# keys
+schematica.key.category=Schematica
+schematica.key.load=Carregar schematic
+schematica.key.save=Salvar schematic
+schematica.key.control=Manipular schematic
+schematica.key.layerInc=Próxima Camada
+schematica.key.layerDec=Camada Anterior
+schematica.key.layerToggle=Alternar Todas/Modo de Camada
+schematica.key.renderToggle=Ativar/Desativar Renderização
+schematica.key.printerToggle=Ativar/Desativar Construção Automática
+schematica.key.moveHere=Mover para cá
+schematica.key.pickBlock=Pegar Bloco
+
+# commands - save
+schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name> [format]
+schematica.command.save.playersOnly=Este comando só pode ser usado por jogadores.
+schematica.command.save.started=Iniciado salvamento de %d chunks em %s.
+schematica.command.save.saveSucceeded=%s salvo com sucesso.
+schematica.command.save.saveFailed=Houve um problema ao salvar o schematic %s.
+schematica.command.save.quotaExceeded=Você excedeu sua cota no servidor. Por favor, use /schematicaList e /schematicaRemove para remover alguns schematics antigos.
+schematica.command.save.playerSchematicDirUnavailable=Houve um problema no servidor e seu schematic não foi salvo. Por favor, entre em contato com o administrador do servidor.
+schematica.command.save.unknownFormat=Formato desconhecido "%s".
+
+# commands - list
+schematica.command.list.usage=/schematicaList [page]
+schematica.command.list.notAvailable=Houve um problema ao recuperar sua lista de schematics.
+schematica.command.list.remove=Remover
+schematica.command.list.download=Baixar
+schematica.command.list.header=--- Mostrando schematics - Página %d de %d ---
+schematica.command.list.noSuchPage=Nenhuma dessas páginas
+schematica.command.list.noSchematics=Você não tem nenhum schematic disponível.
+
+# commands - remove
+schematica.command.remove.usage=/schematicaRemove <name>
+schematica.command.remove.schematicRemoved=O Schematic "%s" foi removido.
+schematica.command.remove.schematicNotFound=O Schematic "%s" não pode ser encontrado.
+schematica.command.remove.areYouSure=Tem certeza?
+
+# commands - download
+schematica.command.download.usage=/schematicaDownload <name>
+schematica.command.download.started=Download de %s iniciado...
+schematica.command.download.downloadSucceeded=%s baixado com sucesso.
+schematica.command.download.downloadFail=Falha ao fazer o download.
+
+# commands - replace
+schematica.command.replace.usage=/schematicaReplace <original> <replacement>
+schematica.command.replace.noSchematic=Você não tem schematic carregado.
+schematica.command.replace.success=Recolocou %s blocos.
+
+# messages
+schematica.message.togglePrinter=Construção Automática: %s
+schematica.message.invalidBlock="%s" não existe.
+schematica.message.invalidProperty="%s" não é uma propriedade válida.
+schematica.message.invalidPropertyForBlock="%s" não é uma propriedade válida para "%s".
+
+# schematic formats
+schematica.format.classic=Clássico
+schematica.format.alpha=Alfa (padrão)
+schematica.format.structure=Bloco de estrutura
+schematica.format.invalid=Inválido
