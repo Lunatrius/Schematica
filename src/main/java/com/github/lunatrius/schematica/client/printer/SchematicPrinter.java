@@ -107,7 +107,7 @@ public class SchematicPrinter {
 	}
 	
 	
-	private boolean blockIsReachable(BlockPos blockToPlace, Vector3d playerPos, double reachDistance) {
+	private boolean blockIsReachable(BlockPos blockToPlace, final Vector3d playerPos, double reachDistance) {
 		
 		double playerX = playerPos.x;
 		double playerY = playerPos.y;
@@ -187,6 +187,8 @@ public class SchematicPrinter {
 		final double playerY = ClientProxy.playerPosition.y - this.schematic.position.y;
 		final double playerZ = ClientProxy.playerPosition.z - this.schematic.position.z;
 		
+		final Vector3d relativePlPos = new Vector3d(playerX, playerY, playerZ);
+		
 		final double reachDistance = this.minecraft.playerController.getBlockReachDistance() - 0.1;
 //		final double blockReachDistanceSq = blockReachDisytance * blockReachDistance;
 		
@@ -221,7 +223,7 @@ public class SchematicPrinter {
 //				continue;
 //			}
 			
-			if (!blockIsReachable(pos, ClientProxy.playerPosition, 
+			if (!blockIsReachable(pos, relativePlPos, 
 					reachDistance)) {
 				continue;
 			}
