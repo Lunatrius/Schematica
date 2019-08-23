@@ -234,7 +234,7 @@ public class RenderSchematic extends RenderGlobal {
 
     @SubscribeEvent
     public void onRenderWorldLast(final RenderWorldLastEvent event) {
-        final EntityPlayerSP player = this.mc.player;
+        final EntityPlayerSP player = this.mc.getRenderViewEntity() instanceof EntityPlayerSP ? (EntityPlayerSP) this.mc.getRenderViewEntity() : this.mc.player;
         if (player != null) {
             this.profiler.startSection("schematica");
             ClientProxy.setPlayerData(player, event.getPartialTicks());
