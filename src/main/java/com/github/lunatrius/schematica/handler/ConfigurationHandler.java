@@ -34,7 +34,7 @@ public class ConfigurationHandler {
     public static final boolean HIGHLIGHT_AIR_DEFAULT = true;
     public static final double BLOCK_DELTA_DEFAULT = 0.005;
     public static final int RENDER_DISTANCE_DEFAULT = 8;
-    public static final int PLACE_DELAY_DEFAULT = 1;
+    public static final double PLACE_DELAY_DEFAULT = 1.0;
     public static final int TIMEOUT_DEFAULT = 10;
     public static final int PLACE_DISTANCE_DEFAULT = 5;
     public static final boolean PLACE_INSTANTLY_DEFAULT = false;
@@ -63,7 +63,7 @@ public class ConfigurationHandler {
     public static boolean highlightAir = HIGHLIGHT_AIR_DEFAULT;
     public static double blockDelta = BLOCK_DELTA_DEFAULT;
     public static int renderDistance = RENDER_DISTANCE_DEFAULT;
-    public static int placeDelay = PLACE_DELAY_DEFAULT;
+    public static double placeDelay = PLACE_DELAY_DEFAULT;
     public static int timeout = TIMEOUT_DEFAULT;
     public static int placeDistance = PLACE_DISTANCE_DEFAULT;
     public static boolean placeInstantly = PLACE_INSTANTLY_DEFAULT;
@@ -163,6 +163,7 @@ public class ConfigurationHandler {
         propHighlightAir.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.HIGHLIGHT_AIR);
         highlightAir = propHighlightAir.getBoolean(HIGHLIGHT_AIR_DEFAULT);
 
+        //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         propBlockDelta = configuration.get(Names.Config.Category.RENDER, Names.Config.BLOCK_DELTA, BLOCK_DELTA_DEFAULT, Names.Config.BLOCK_DELTA_DESC, 0.0, 0.2);
         propBlockDelta.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.BLOCK_DELTA);
         blockDelta = propBlockDelta.getDouble(BLOCK_DELTA_DEFAULT);
@@ -173,9 +174,9 @@ public class ConfigurationHandler {
     }
 
     private static void loadConfigurationPrinter() {
-        propPlaceDelay = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_DELAY, PLACE_DELAY_DEFAULT, Names.Config.PLACE_DELAY_DESC, 0, 20);
+        propPlaceDelay = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_DELAY, PLACE_DELAY_DEFAULT, Names.Config.PLACE_DELAY_DESC, 1.0, 20.0);
         propPlaceDelay.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_DELAY);
-        placeDelay = propPlaceDelay.getInt(PLACE_DELAY_DEFAULT);
+        placeDelay = propPlaceDelay.getDouble(PLACE_DELAY_DEFAULT);
 
         propTimeout = configuration.get(Names.Config.Category.PRINTER, Names.Config.TIMEOUT, TIMEOUT_DEFAULT, Names.Config.TIMEOUT_DESC, 0, 100);
         propTimeout.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TIMEOUT);
@@ -200,10 +201,6 @@ public class ConfigurationHandler {
         propPlaceAdjacent = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_ADJACENT, PLACE_ADJACENT_DEFAULT, Names.Config.PLACE_ADJACENT_DESC);
         propPlaceAdjacent.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_ADJACENT);
         placeAdjacent = propPlaceAdjacent.getBoolean(PLACE_ADJACENT_DEFAULT);
-
-        propDestroyInstantly = configuration.get(Names.Config.Category.PRINTER, Names.Config.DESTROY_INSTANTLY, DESTROY_INSTANTLY_DEFAULT, Names.Config.DESTROY_INSTANTLY_DESC);
-        propDestroyInstantly.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DESTROY_INSTANTLY);
-        destroyInstantly = propDestroyInstantly.getBoolean(DESTROY_INSTANTLY_DEFAULT);
 
         propDebugMode = configuration.get(Names.Config.Category.PRINTER, Names.Config.DEBUG_MODE, DEBUG_MODE_DEFAULT, Names.Config.DEBUG_MODE_DESC);
         propDebugMode.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DEBUG_MODE);

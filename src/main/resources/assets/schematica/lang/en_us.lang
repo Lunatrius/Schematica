@@ -81,7 +81,7 @@ schematica.config.renderDistance.tooltip=Schematic render distance.
 
 # gui - config - printer
 schematica.config.placeDelay=Placement Delay
-schematica.config.placeDelay.tooltip=Delay between placement attempts (in ticks).
+schematica.config.placeDelay.tooltip=Delay between placement attempts in ticks.
 schematica.config.timeout=Timeout
 schematica.config.timeout.tooltip=Timeout before re-trying failed blocks.
 schematica.config.placeDistance=Placement Distance

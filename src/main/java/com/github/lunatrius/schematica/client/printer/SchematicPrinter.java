@@ -338,6 +338,10 @@ public class SchematicPrinter {
         return placeBlock(world, player, pos, direction, offsetX, offsetY, offsetZ, extraClicks);
     }
 
+    /*
+     * Handles resources
+     */
+
     private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final BlockPos pos, final EnumFacing direction, final float offsetX, final float offsetY, final float offsetZ, final int extraClicks) {
         printDebug("3: {" + pos.toString()+"}");
         final EnumHand hand = EnumHand.MAIN_HAND;
@@ -363,6 +367,10 @@ public class SchematicPrinter {
 
         return success;
     }
+
+    /*
+     * Actually PLACES the blocks. Is called twice for multi-part blocks, meaning JUST slabs.
+     */
 
     private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final ItemStack itemStack, final BlockPos pos, final EnumFacing side, final Vec3d hitVec, final EnumHand hand) {
         printDebug("4: {" + pos.toString()+"}");

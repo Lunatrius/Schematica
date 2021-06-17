@@ -9,6 +9,8 @@ import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -18,7 +20,7 @@ public class TickHandler {
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
 
-    private int ticks = -1;
+    private double ticks = -1;
 
     private TickHandler() {}
 
@@ -49,8 +51,10 @@ public class TickHandler {
         if (world != null && player != null && schematic != null && schematic.isRendering) {
             this.minecraft.mcProfiler.startSection("printer");
             final SchematicPrinter printer = SchematicPrinter.INSTANCE;
-            if (printer.isEnabled() && printer.isPrinting() && this.ticks-- < 0) {
-                this.ticks = ConfigurationHandler.placeDelay;
+
+            if (printer.isEnabled() && printer.isPrinting() && this.ticks-- <= 0) {
+                //this.minecraft.player.sendMessage(new TextComponentTranslation(I18n.format(String.valueOf(ticks))));
+                this.ticks = this.ticks+ConfigurationHandler.placeDelay;
 
                 printer.print(world, player);
             }
