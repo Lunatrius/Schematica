@@ -52,6 +52,8 @@ public class ConfigurationHandler {
     public static final boolean SAVE_ENABLED_DEFAULT = true;
     public static final boolean LOAD_ENABLED_DEFAULT = true;
     public static final int PLAYER_QUOTA_KILOBYTES_DEFAULT = 8192;
+    public static final boolean DEBUG_MODE_DEFAULT = false;
+    public static final boolean STEALTH_MODE_DEFAULT = false;
 
     public static boolean dumpBlockList = DUMP_BLOCK_LIST_DEFAULT;
     public static boolean showDebugInfo = SHOW_DEBUG_INFO_DEFAULT;
@@ -78,6 +80,10 @@ public class ConfigurationHandler {
     public static boolean loadEnabled = LOAD_ENABLED_DEFAULT;
     public static int playerQuotaKilobytes = PLAYER_QUOTA_KILOBYTES_DEFAULT;
 
+    // ----------------------------------------------------------------------------------Psst, over here!
+    public static boolean stealthMode = false;
+    public static boolean debugMode = true;
+
     public static Property propDumpBlockList = null;
     public static Property propShowDebugInfo = null;
     public static Property propEnableAlpha = null;
@@ -101,6 +107,9 @@ public class ConfigurationHandler {
     public static Property propSaveEnabled = null;
     public static Property propLoadEnabled = null;
     public static Property propPlayerQuotaKilobytes = null;
+
+    public static Property propStealthMode = null;
+    public static Property propDebugMode = null;
 
     private static final Set<Block> extraAirBlockList = new HashSet<Block>();
 
@@ -191,6 +200,18 @@ public class ConfigurationHandler {
         propPlaceAdjacent = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_ADJACENT, PLACE_ADJACENT_DEFAULT, Names.Config.PLACE_ADJACENT_DESC);
         propPlaceAdjacent.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_ADJACENT);
         placeAdjacent = propPlaceAdjacent.getBoolean(PLACE_ADJACENT_DEFAULT);
+
+        propDestroyInstantly = configuration.get(Names.Config.Category.PRINTER, Names.Config.DESTROY_INSTANTLY, DESTROY_INSTANTLY_DEFAULT, Names.Config.DESTROY_INSTANTLY_DESC);
+        propDestroyInstantly.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DESTROY_INSTANTLY);
+        destroyInstantly = propDestroyInstantly.getBoolean(DESTROY_INSTANTLY_DEFAULT);
+
+        propDebugMode = configuration.get(Names.Config.Category.PRINTER, Names.Config.DEBUG_MODE, DEBUG_MODE_DEFAULT, Names.Config.DEBUG_MODE_DESC);
+        propDebugMode.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DEBUG_MODE);
+        debugMode = propDebugMode.getBoolean(DEBUG_MODE_DEFAULT);
+
+        propStealthMode = configuration.get(Names.Config.Category.PRINTER, Names.Config.STEALTH_MODE, STEALTH_MODE_DEFAULT, Names.Config.STEALTH_MODE_DESC);
+        propStealthMode.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.STEALTH_MODE);
+        stealthMode = propStealthMode.getBoolean(STEALTH_MODE_DEFAULT);
     }
 
     private static void loadConfigurationSwapSlots() {

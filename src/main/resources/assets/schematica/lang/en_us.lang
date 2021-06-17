@@ -95,6 +95,11 @@ schematica.config.destroyInstantly.tooltip=Destroy all blocks that can be destro
 schematica.config.placeAdjacent=Place Only Adjacent
 schematica.config.placeAdjacent.tooltip=Place blocks only if there is an adjacent block next to them.
 
+schematica.config.stealthMode=Stealth Mode
+schematica.config.stealthMode.tooltip=Harshly limited block placement. Best for 2b2t!
+schematica.config.debugMode=Debug mode
+schematica.config.debugMode.tooltip=Spams your chat with debug messages and messes with your viewing angle. You really don't need this.
+
 # gui - config - printer - swap slots
 schematica.config.swapSlot0=Allow Slot 1
 schematica.config.swapSlot0.tooltip=Allow the printer to use the hotbar slot 1.
