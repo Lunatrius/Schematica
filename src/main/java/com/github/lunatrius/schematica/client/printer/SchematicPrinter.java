@@ -175,23 +175,19 @@ public class SchematicPrinter {
             if (pos.distanceSqToCenter(dX, dY, dZ) > blockReachDistanceSq) {
                 continue;
             }
-
             InRange.add(new MBlockPos(pos));
-
         }
 
         MBCompareDist distcomp = new MBCompareDist(new Vec3d(dX+ averageVelocity.x, dY, dZ+ averageVelocity.z));
         MBCompareHeight heightcomp = new MBCompareHeight();
 
         if (ConfigurationHandler.priority == 1) {
-
             InRange.sort(distcomp);
             InRange.sort(heightcomp);
         } else {
             InRange.sort(heightcomp);
             InRange.sort(distcomp);
         }
-
 
         for (final MBlockPos pos: InRange) {
             try {
@@ -203,7 +199,6 @@ public class SchematicPrinter {
                 return syncSlotAndSneaking(player, slot, isSneaking, false);
             }
         }
-
         return syncSlotAndSneaking(player, slot, isSneaking, true);
     }
 
