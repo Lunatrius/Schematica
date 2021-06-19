@@ -62,16 +62,6 @@ public final class Names {
         public static final String SORT_TYPE = "sortType";
         public static final String SORT_TYPE_DESC = "Default sort type for the material list.";
 
-        public static final String PRINTER_ENABLED = "printerEnabled";
-        public static final String PRINTER_ENABLED_DESC = "Allow players to use the printer.";
-        public static final String SAVE_ENABLED = "saveEnabled";
-        public static final String SAVE_ENABLED_DESC = "Allow players to save schematics.";
-        public static final String LOAD_ENABLED = "loadEnabled";
-        public static final String LOAD_ENABLED_DESC = "Allow players to load schematics.";
-
-        public static final String PLAYER_QUOTA_KILOBYTES = "playerQuotaKilobytes";
-        public static final String PLAYER_QUOTA_KILOBYTES_DESC = "Amount of storage provided per-player for schematics on the server.";
-
         public static final String LANG_PREFIX = Reference.MODID + ".config";
     }
 

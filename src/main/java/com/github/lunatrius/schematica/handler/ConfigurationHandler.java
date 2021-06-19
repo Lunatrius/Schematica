@@ -48,9 +48,6 @@ public class ConfigurationHandler {
     public static final File SCHEMATIC_DIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATIC_DIRECTORY_STR);
     public static final String[] EXTRA_AIR_BLOCKS_DEFAULT = {};
     public static final String SORT_TYPE_DEFAULT = "";
-    public static final boolean PRINTER_ENABLED_DEFAULT = true;
-    public static final boolean SAVE_ENABLED_DEFAULT = true;
-    public static final boolean LOAD_ENABLED_DEFAULT = true;
     public static final int PLAYER_QUOTA_KILOBYTES_DEFAULT = 8192;
     public static final boolean DEBUG_MODE_DEFAULT = false;
     public static final boolean STEALTH_MODE_DEFAULT = true;
@@ -77,10 +74,6 @@ public class ConfigurationHandler {
     public static File schematicDirectory = SCHEMATIC_DIRECTORY_DEFAULT;
     public static String[] extraAirBlocks = Arrays.copyOf(EXTRA_AIR_BLOCKS_DEFAULT, EXTRA_AIR_BLOCKS_DEFAULT.length);
     public static String sortType = SORT_TYPE_DEFAULT;
-    public static boolean printerEnabled = PRINTER_ENABLED_DEFAULT;
-    public static boolean saveEnabled = SAVE_ENABLED_DEFAULT;
-    public static boolean loadEnabled = LOAD_ENABLED_DEFAULT;
-    public static int playerQuotaKilobytes = PLAYER_QUOTA_KILOBYTES_DEFAULT;
 
     // ----------------------------------------------------------------------------------Psst, over here!
     public static boolean stealthMode = STEALTH_MODE_DEFAULT;
@@ -108,10 +101,6 @@ public class ConfigurationHandler {
     public static Property propSchematicDirectory = null;
     public static Property propExtraAirBlocks = null;
     public static Property propSortType = null;
-    public static Property propPrinterEnabled = null;
-    public static Property propSaveEnabled = null;
-    public static Property propLoadEnabled = null;
-    public static Property propPlayerQuotaKilobytes = null;
 
     public static Property propStealthMode = null;
     public static Property propDebugMode = null;
@@ -133,7 +122,6 @@ public class ConfigurationHandler {
         loadConfigurationPrinter();
         loadConfigurationSwapSlots();
         loadConfigurationGeneral();
-        loadConfigurationServer();
 
         Schematica.proxy.createFolders();
 
@@ -301,23 +289,6 @@ public class ConfigurationHandler {
         }
     }
 
-    private static void loadConfigurationServer() {
-        propPrinterEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.PRINTER_ENABLED, PRINTER_ENABLED_DEFAULT, Names.Config.PRINTER_ENABLED_DESC);
-        propPrinterEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PRINTER_ENABLED);
-        printerEnabled = propPrinterEnabled.getBoolean(PRINTER_ENABLED_DEFAULT);
-
-        propSaveEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.SAVE_ENABLED, SAVE_ENABLED_DEFAULT, Names.Config.SAVE_ENABLED_DESC);
-        propSaveEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SAVE_ENABLED);
-        saveEnabled = propSaveEnabled.getBoolean(SAVE_ENABLED_DEFAULT);
-
-        propLoadEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.LOAD_ENABLED, LOAD_ENABLED_DEFAULT, Names.Config.LOAD_ENABLED_DESC);
-        propLoadEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.LOAD_ENABLED);
-        loadEnabled = propLoadEnabled.getBoolean(LOAD_ENABLED_DEFAULT);
-
-        propPlayerQuotaKilobytes = configuration.get(Names.Config.Category.SERVER, Names.Config.PLAYER_QUOTA_KILOBYTES, PLAYER_QUOTA_KILOBYTES_DEFAULT, Names.Config.PLAYER_QUOTA_KILOBYTES_DESC);
-        propPlayerQuotaKilobytes.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLAYER_QUOTA_KILOBYTES);
-        playerQuotaKilobytes = propPlayerQuotaKilobytes.getInt(PLAYER_QUOTA_KILOBYTES_DEFAULT);
-    }
 
     private ConfigurationHandler() {}
 

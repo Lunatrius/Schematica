@@ -8,9 +8,10 @@
 			"mcversion": "${mcversion}",
 			"version": "${version}",
 			"authorList": [
-				"Lunatrius"
+				"Lunatrius",
+				"Emblem"
 			],
-			"credits": "AbrarSyed, AtomicBlom, UltraMoogleMan",
+			"credits": "AbrarSyed, AtomicBlom, UltraMoogleMan, EmotionalLove",
 			"dependants": [  ],
 			"dependencies": [ "forge@[${minforgeversion},)", "lunatriuscore@[${coreversion},)" ],
 			"parent": "",
@@ -18,7 +19,7 @@
 			"logoFile": "/assets/schematica/logo.png",
 			"screenshots": [  ],
 			"updateUrl": "http://mc.lunatri.us/",
-			"url": "http://mc.lunatri.us/",
+			"url": "http://4chan.org/vp/",
 			"useDependencyInformation": true
 		}
 	]
