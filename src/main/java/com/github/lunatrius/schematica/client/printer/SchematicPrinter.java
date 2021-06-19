@@ -360,7 +360,7 @@ public class SchematicPrinter {
         }
 
         printDebug("2: {"+pos+"} succeeded on: " + solidSides);
-        final EnumFacing direction;
+        EnumFacing direction;
         final float offsetX;
         final float offsetY;
         final float offsetZ;
@@ -393,41 +393,42 @@ public class SchematicPrinter {
 
         if (ConfigurationHandler.stealthMode) {
             boolean passed = false;
+            List<EnumFacing> stealthsides = new ArrayList<>();
             for (EnumFacing face : solidSides) {
                 printDebug(face.toString());
                 switch (face) {
                     case UP:
-                        if (y >= py) {passed=true;}
+                        if (y >= py) {passed=true;stealthsides.add(face);}
                         break;
                     case DOWN:
-                        if (y <= py+2) {passed=true;}
+                        if (y <= py+2) {passed=true;stealthsides.add(face);}
                         break;
                     case SOUTH:
                         if (blockState.isFullBlock()) {
-                            if (z >= pz-1) {passed=true;}
+                            if (z >= pz-1) {passed=true;stealthsides.add(face);}
                         } else {
-                            if (z >= pz-2) {passed=true;}
+                            if (z >= pz-2) {passed=true;stealthsides.add(face);}
                         }
                         break;
                     case NORTH:
                         if (blockState.isFullBlock()) {
-                            if (z <= pz) {passed=true;}
+                            if (z <= pz) {passed=true;stealthsides.add(face);}
                         } else {
-                            if (z <= pz+1) {passed=true;}
+                            if (z <= pz+1) {passed=true;stealthsides.add(face);}
                         }
                         break;
                     case EAST:
                         if (blockState.isFullBlock()) {
-                            if (x >= px-1) {passed=true;}
+                            if (x >= px-1) {passed=true;stealthsides.add(face);}
                         } else {
-                            if (x >= px-2) {passed=true;}
+                            if (x >= px-2) {passed=true;stealthsides.add(face);}
                         }
                         break;
                     case WEST:
                         if (blockState.isFullBlock()) {
-                            if (x <= px) {passed=true;}
+                            if (x <= px) {passed=true;stealthsides.add(face);}
                         } else {
-                            if (x <= px+1) {passed=true;}
+                            if (x <= px+1) {passed=true;stealthsides.add(face);}
                         }
                         break;
                 }
@@ -435,6 +436,7 @@ public class SchematicPrinter {
             if (!passed) {
                 return false;
             }
+            direction = stealthsides.get(0);
             printDebug("Passed all checks.");
         }
 
