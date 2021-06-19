@@ -35,7 +35,7 @@ public class ConfigurationHandler {
     public static final double BLOCK_DELTA_DEFAULT = 0.005;
     public static final int RENDER_DISTANCE_DEFAULT = 8;
     public static final double PLACE_DELAY_DEFAULT = 1.0;
-    public static final int TIMEOUT_DEFAULT = 10;
+    public static final int TIMEOUT_DEFAULT = 5;
     public static final int PLACE_DISTANCE_DEFAULT = 5;
     public static final boolean PLACE_INSTANTLY_DEFAULT = false;
     public static final boolean DESTROY_BLOCKS_DEFAULT = false;
@@ -53,8 +53,8 @@ public class ConfigurationHandler {
     public static final boolean LOAD_ENABLED_DEFAULT = true;
     public static final int PLAYER_QUOTA_KILOBYTES_DEFAULT = 8192;
     public static final boolean DEBUG_MODE_DEFAULT = false;
-    public static final boolean STEALTH_MODE_DEFAULT = false;
-    public static final int PRIORITY_DEFAULT = 2;
+    public static final boolean STEALTH_MODE_DEFAULT = true;
+    public static final int PRIORITY_DEFAULT = 1;
     public static final int DIRECTIONAL_PRIORITY_DEFAULT = 25;
 
     public static boolean dumpBlockList = DUMP_BLOCK_LIST_DEFAULT;
