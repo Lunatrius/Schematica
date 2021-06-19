@@ -34,10 +34,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidBase;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class SchematicPrinter {
     public static final SchematicPrinter INSTANCE = new SchematicPrinter();
@@ -50,6 +47,10 @@ public class SchematicPrinter {
     private SchematicWorld schematic = null;
     private byte[][][] timeout = null;
     private HashMap<BlockPos, Integer> syncBlacklist = new HashMap<BlockPos, Integer>();
+    private List<Vec3d> rollingVel = new ArrayList<>();
+    private int rollingPos = 0;
+    private Vec3d averageVelocity = new Vec3d(0,0,0);
+
 
     public boolean isEnabled() {
         return this.isEnabled;
@@ -93,19 +94,54 @@ public class SchematicPrinter {
     //----------------------------------------------------------------------------------------------------------------------------------------
     public boolean print(final WorldClient world, final EntityPlayerSP player) {
         final double dX = ClientProxy.playerPosition.x - this.schematic.position.x;
-        final double dY = ClientProxy.playerPosition.y - this.schematic.position.y+1.6;
+        final double dY = ClientProxy.playerPosition.y - this.schematic.position.y+player.getEyeHeight();
         final double dZ = ClientProxy.playerPosition.z - this.schematic.position.z;
         final int x = (int) Math.floor(dX);
         final int y = (int) Math.floor(dY);
         final int z = (int) Math.floor(dZ);
         final int range = ConfigurationHandler.placeDistance;
-
         final int minX = Math.max(0, x - range);
         final int maxX = Math.min(this.schematic.getWidth() - 1, x + range);
         int minY = Math.max(0, y - range);
         int maxY = Math.min(this.schematic.getHeight() - 1, y + range);
         final int minZ = Math.max(0, z - range);
         final int maxZ = Math.min(this.schematic.getLength() - 1, z + range);
+
+        final int rollover = ConfigurationHandler.directionalPriority;
+
+        if (rollover > 0) {
+            if (rollover < rollingVel.size()) {
+                rollingVel.clear();
+                rollingPos = 0;
+            }
+
+            Vec3d cm = new Vec3d(player.motionX, 0, player.motionZ);
+
+            if (cm.x != 0 && cm.z != 0) {
+                if (rollingVel.size() == rollover) {
+                    rollingVel.set(rollingPos, cm.normalize());
+                } else {
+                    rollingVel.add(rollingPos, cm.normalize());
+                }
+                rollingPos++;
+                if (rollingPos >= rollover) {
+                    rollingPos = 0;
+                }
+                double vx = 0;
+                double vz = 0;
+                for (final Vec3d pos : rollingVel) {
+                    vx = vx + pos.x;
+                    vz = vz + pos.z;
+                }
+                averageVelocity = new Vec3d(vx, 0, vz).normalize().scale(-1000);
+            }
+        } else if (rollover == 0) {
+            averageVelocity = new Vec3d(0,0,0);
+        } else {
+            averageVelocity = new Vec3d(10000,0,10);
+        }
+
+
 
         if (minX > maxX || minY > maxY || minZ > maxZ) {
             return false;
@@ -134,11 +170,30 @@ public class SchematicPrinter {
 
         final double blockReachDistance = this.minecraft.playerController.getBlockReachDistance() - 0.1;
         final double blockReachDistanceSq = blockReachDistance * blockReachDistance;
+        List<MBlockPos> InRange = new ArrayList<>();
         for (final MBlockPos pos : BlockPosHelper.getAllInBoxXZY(minX, minY, minZ, maxX, maxY, maxZ)) {
             if (pos.distanceSqToCenter(dX, dY, dZ) > blockReachDistanceSq) {
                 continue;
             }
 
+            InRange.add(new MBlockPos(pos));
+
+        }
+
+        MBCompareDist distcomp = new MBCompareDist(new Vec3d(dX+ averageVelocity.x, dY, dZ+ averageVelocity.z));
+        MBCompareHeight heightcomp = new MBCompareHeight();
+
+        if (ConfigurationHandler.priority == 1) {
+
+            InRange.sort(distcomp);
+            InRange.sort(heightcomp);
+        } else {
+            InRange.sort(heightcomp);
+            InRange.sort(distcomp);
+        }
+
+
+        for (final MBlockPos pos: InRange) {
             try {
                 if (placeBlock(world, player, pos)) {
                     return syncSlotAndSneaking(player, slot, isSneaking, true);
@@ -155,7 +210,7 @@ public class SchematicPrinter {
 
 
     private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final BlockPos pos) {
-        printDebug("1: {" + pos.toString()+"}");
+
         final int x = pos.getX();
         final int y = pos.getY();
         final int z = pos.getZ();
@@ -275,7 +330,7 @@ public class SchematicPrinter {
             return Arrays.asList(EnumFacing.VALUES);
         }
 
-        final List<EnumFacing> list = new ArrayList<EnumFacing>();
+        final List<EnumFacing> list = new ArrayList<>();
 
         for (final EnumFacing side : EnumFacing.VALUES) {
             if (isSolid(world, pos, side)) {
@@ -478,5 +533,42 @@ public class SchematicPrinter {
             this.minecraft.player.sendMessage(new TextComponentTranslation(I18n.format(message)));
         }
         return ConfigurationHandler.debugMode;
+    }
+
+    private List<Vec3d> raycast(Vec3d endpoint) {
+        List<Vec3d> blocks = null;
+        blocks.add(new Vec3d(1,2,3));
+
+
+        return blocks;
+    }
+}
+
+class MBCompareDist implements Comparator<MBlockPos> {
+    Vec3d p;
+    public MBCompareDist(Vec3d point) {
+        p = new Vec3d(point.x-.5, point.y-.5, point.z-.5);
+    }
+    public int compare(MBlockPos A, MBlockPos B) {
+        if (A.x == B.x && A.z == B.z) {
+            return 0;
+        } else if (Math.pow(A.x-p.x, 2)+Math.pow(A.z-p.z,2) > Math.pow(B.x-p.x, 2)+Math.pow(B.z-p.z,2)) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+}
+
+class MBCompareHeight implements Comparator<MBlockPos> {
+
+    public int compare(MBlockPos A, MBlockPos B) {
+        if (A.y == B.y) {
+            return 0;
+        } else if (A.y > B.y) {
+            return 1;
+        } else {
+            return -1;
+        }
     }
 }

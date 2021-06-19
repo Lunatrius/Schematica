@@ -54,6 +54,8 @@ public class ConfigurationHandler {
     public static final int PLAYER_QUOTA_KILOBYTES_DEFAULT = 8192;
     public static final boolean DEBUG_MODE_DEFAULT = false;
     public static final boolean STEALTH_MODE_DEFAULT = false;
+    public static final int PRIORITY_DEFAULT = 2;
+    public static final int DIRECTIONAL_PRIORITY_DEFAULT = 25;
 
     public static boolean dumpBlockList = DUMP_BLOCK_LIST_DEFAULT;
     public static boolean showDebugInfo = SHOW_DEBUG_INFO_DEFAULT;
@@ -81,8 +83,11 @@ public class ConfigurationHandler {
     public static int playerQuotaKilobytes = PLAYER_QUOTA_KILOBYTES_DEFAULT;
 
     // ----------------------------------------------------------------------------------Psst, over here!
-    public static boolean stealthMode = false;
-    public static boolean debugMode = true;
+    public static boolean stealthMode = STEALTH_MODE_DEFAULT;
+    public static boolean debugMode = DEBUG_MODE_DEFAULT;
+    public static int priority = PRIORITY_DEFAULT;
+    public static int directionalPriority = DIRECTIONAL_PRIORITY_DEFAULT;
+
 
     public static Property propDumpBlockList = null;
     public static Property propShowDebugInfo = null;
@@ -110,6 +115,8 @@ public class ConfigurationHandler {
 
     public static Property propStealthMode = null;
     public static Property propDebugMode = null;
+    public static Property propPriority = null;
+    public static Property propDirectionalPriority = null;
 
     private static final Set<Block> extraAirBlockList = new HashSet<Block>();
 
@@ -163,7 +170,6 @@ public class ConfigurationHandler {
         propHighlightAir.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.HIGHLIGHT_AIR);
         highlightAir = propHighlightAir.getBoolean(HIGHLIGHT_AIR_DEFAULT);
 
-        //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         propBlockDelta = configuration.get(Names.Config.Category.RENDER, Names.Config.BLOCK_DELTA, BLOCK_DELTA_DEFAULT, Names.Config.BLOCK_DELTA_DESC, 0.0, 0.2);
         propBlockDelta.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.BLOCK_DELTA);
         blockDelta = propBlockDelta.getDouble(BLOCK_DELTA_DEFAULT);
@@ -209,6 +215,16 @@ public class ConfigurationHandler {
         propStealthMode = configuration.get(Names.Config.Category.PRINTER, Names.Config.STEALTH_MODE, STEALTH_MODE_DEFAULT, Names.Config.STEALTH_MODE_DESC);
         propStealthMode.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.STEALTH_MODE);
         stealthMode = propStealthMode.getBoolean(STEALTH_MODE_DEFAULT);
+
+        propPriority = configuration.get(Names.Config.Category.PRINTER, Names.Config.PRIORITY, PRIORITY_DEFAULT, Names.Config.PRIORITY_DESC, 1, 2);
+        propPriority.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PRIORITY);
+        priority = propPriority.getInt(PRIORITY_DEFAULT);
+
+        propDirectionalPriority = configuration.get(Names.Config.Category.PRINTER, Names.Config.DIRECTIONAL_PRIORITY, DIRECTIONAL_PRIORITY_DEFAULT, Names.Config.DIRECTIONAL_PRIORITY_DESC, -1, 50);
+        propDirectionalPriority.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DIRECTIONAL_PRIORITY);
+        directionalPriority = propDirectionalPriority.getInt(DIRECTIONAL_PRIORITY_DEFAULT);
+        
+
     }
 
     private static void loadConfigurationSwapSlots() {

@@ -20,7 +20,6 @@ public class PrinterUtil {
         float yaw = (float) Math.toDegrees(Math.atan2(diffZ, diffX)) - 90F;
         float pitch = (float) -Math.toDegrees(Math.atan2(diffY, diffXZ));
 
-        // DEBUG: look at the center of the face you're placing a block on.
         if(ConfigurationHandler.debugMode) {
             Minecraft.getMinecraft().player.setPositionAndRotation(Minecraft.getMinecraft().player.posX, Minecraft.getMinecraft().player.posY, Minecraft.getMinecraft().player.posZ, Minecraft.getMinecraft().player.rotationYaw + MathHelper.wrapDegrees(yaw - Minecraft.getMinecraft().player.rotationYaw), Minecraft.getMinecraft().player.rotationPitch + MathHelper.wrapDegrees(pitch - Minecraft.getMinecraft().player.rotationPitch));
         }
