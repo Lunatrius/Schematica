@@ -216,7 +216,7 @@ public class ConfigurationHandler {
         propStealthMode.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.STEALTH_MODE);
         stealthMode = propStealthMode.getBoolean(STEALTH_MODE_DEFAULT);
 
-        propPriority = configuration.get(Names.Config.Category.PRINTER, Names.Config.PRIORITY, PRIORITY_DEFAULT, Names.Config.PRIORITY_DESC, 1, 2);
+        propPriority = configuration.get(Names.Config.Category.PRINTER, Names.Config.PRIORITY, PRIORITY_DEFAULT, Names.Config.PRIORITY_DESC, 1, 3);
         propPriority.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PRIORITY);
         priority = propPriority.getInt(PRIORITY_DEFAULT);
 

@@ -14,6 +14,7 @@ import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -32,7 +33,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.BlockFluidBase;
 
 import java.util.*;
 
@@ -106,6 +106,7 @@ public class SchematicPrinter {
         int maxY = Math.min(this.schematic.getHeight() - 1, y + range);
         final int minZ = Math.max(0, z - range);
         final int maxZ = Math.min(this.schematic.getLength() - 1, z + range);
+        final int priority = ConfigurationHandler.priority;
 
         final int rollover = ConfigurationHandler.directionalPriority;
 
@@ -170,26 +171,38 @@ public class SchematicPrinter {
 
         final double blockReachDistance = this.minecraft.playerController.getBlockReachDistance() - 0.1;
         final double blockReachDistanceSq = blockReachDistance * blockReachDistance;
-        List<MBlockPos> InRange = new ArrayList<>();
+        List<MBlockPos> inRange = new ArrayList<>();
+        List<MBlockPos> inRangeB = new ArrayList<>();
         for (final MBlockPos pos : BlockPosHelper.getAllInBoxXZY(minX, minY, minZ, maxX, maxY, maxZ)) {
             if (pos.distanceSqToCenter(dX, dY, dZ) > blockReachDistanceSq) {
                 continue;
             }
-            InRange.add(new MBlockPos(pos));
+            if (priority > 1 && pos.y > dY-2) {
+                inRangeB.add(new MBlockPos(pos));
+            } else {
+                inRange.add(new MBlockPos(pos));
+            }
+
         }
 
         MBCompareDist distcomp = new MBCompareDist(new Vec3d(dX+ averageVelocity.x, dY, dZ+ averageVelocity.z));
         MBCompareHeight heightcomp = new MBCompareHeight();
 
-        if (ConfigurationHandler.priority == 1) {
-            InRange.sort(distcomp);
-            InRange.sort(heightcomp);
+        if (priority > 1) { // 1 is layers, 2 is pillars, 3 is below only
+            inRange.sort(heightcomp);
+            inRange.sort(distcomp);
+            if (priority == 2) {
+                inRangeB.sort(heightcomp);
+                inRangeB.sort(distcomp);
+                inRange.addAll(inRangeB);
+            }
         } else {
-            InRange.sort(heightcomp);
-            InRange.sort(distcomp);
+            inRange.sort(distcomp);
+            inRange.sort(heightcomp);
+
         }
 
-        for (final MBlockPos pos: InRange) {
+        for (final MBlockPos pos: inRange) {
             try {
                 if (placeBlock(world, player, pos)) {
                     return syncSlotAndSneaking(player, slot, isSneaking, true);
@@ -289,15 +302,9 @@ public class SchematicPrinter {
      */
     private boolean isSolid(final World world, final BlockPos pos, final EnumFacing side) {
         final BlockPos offset = pos.offset(side);
-
         final IBlockState blockState = world.getBlockState(offset);
         final Block block = blockState.getBlock();
 
-
-        if (block == null) {
-            //printDebug(side + ": failed- doesn't exist / block not loaded.");
-            return false;
-        }
 
         if (block.isAir(blockState, world, offset)) {
             //printDebug(side + ": failed- is Air.");
@@ -305,7 +312,7 @@ public class SchematicPrinter {
         }
 
 
-        if (block instanceof BlockFluidBase) {
+        if (block instanceof BlockLiquid) {
             //printDebug(side + ": failed- is fluid. (How did you get here?)");
             return false;
         }
@@ -353,21 +360,24 @@ public class SchematicPrinter {
         }
 
         printDebug("2: {"+pos+"} succeeded on: " + solidSides);
-
         final EnumFacing direction;
         final float offsetX;
         final float offsetY;
         final float offsetZ;
         final int extraClicks;
 
+        double x = pos.getX();
+        double y = pos.getY();
+        double z = pos.getZ();
+        double px = player.posX;
+        double py = player.posY;
+        double pz = player.posZ;
+
         if (data != null) {
             final List<EnumFacing> validDirections = data.getValidBlockFacings(solidSides, blockState);
             if (validDirections.size() == 0) {
-                //What if we just... ignored this?
                 return false;
-                //validDirections.add(EnumFacing.NORTH);
             }
-
             direction = validDirections.get(0);
             offsetX = data.getOffsetX(blockState);
             offsetY = data.getOffsetY(blockState);
@@ -381,10 +391,56 @@ public class SchematicPrinter {
             extraClicks = 0;
         }
 
+        if (ConfigurationHandler.stealthMode) {
+            boolean passed = false;
+            for (EnumFacing face : solidSides) {
+                printDebug(face.toString());
+                switch (face) {
+                    case UP:
+                        if (y >= py) {passed=true;}
+                        break;
+                    case DOWN:
+                        if (y <= py+2) {passed=true;}
+                        break;
+                    case SOUTH:
+                        if (blockState.isFullBlock()) {
+                            if (z >= pz-1) {passed=true;}
+                        } else {
+                            if (z >= pz-2) {passed=true;}
+                        }
+                        break;
+                    case NORTH:
+                        if (blockState.isFullBlock()) {
+                            if (z <= pz) {passed=true;}
+                        } else {
+                            if (z <= pz+1) {passed=true;}
+                        }
+                        break;
+                    case EAST:
+                        if (blockState.isFullBlock()) {
+                            if (x >= px-1) {passed=true;}
+                        } else {
+                            if (x >= px-2) {passed=true;}
+                        }
+                        break;
+                    case WEST:
+                        if (blockState.isFullBlock()) {
+                            if (x <= px) {passed=true;}
+                        } else {
+                            if (x <= px+1) {passed=true;}
+                        }
+                        break;
+                }
+            }
+            if (!passed) {
+                return false;
+            }
+            printDebug("Passed all checks.");
+        }
+
         if (!swapToItem(player.inventory, itemStack)) {
             return false;
         }
-
         return placeBlock(world, player, pos, direction, offsetX, offsetY, offsetZ, extraClicks);
     }
 
@@ -393,7 +449,7 @@ public class SchematicPrinter {
      */
 
     private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final BlockPos pos, final EnumFacing direction, final float offsetX, final float offsetY, final float offsetZ, final int extraClicks) {
-        printDebug("3: {" + pos.toString()+"}");
+        printDebug("3: placing.");
         final EnumHand hand = EnumHand.MAIN_HAND;
         final ItemStack itemStack = player.getHeldItem(hand);
         boolean success = false;
@@ -423,7 +479,6 @@ public class SchematicPrinter {
      */
 
     private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final ItemStack itemStack, final BlockPos pos, final EnumFacing side, final Vec3d hitVec, final EnumHand hand) {
-        printDebug("4: {" + pos.toString()+"}");
         // FIXME: where did this event go?
         /*
         if (ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_BLOCK, world, pos, side, hitVec).isCanceled()) {
@@ -439,9 +494,6 @@ public class SchematicPrinter {
         final double y = pos.getY()-ref.getY();
         final double z = pos.getZ()-ref.getZ();
         final Vec3d epiclook = new Vec3d(x*.5+cent.x,y*.5+cent.y,z*.5+cent.z);
-
-        printDebug("Look position: "+x+" "+y+" "+z);
-
 
         PrinterUtil.faceVectorPacketInstant(epiclook);
 
@@ -523,17 +575,15 @@ public class SchematicPrinter {
         return this.minecraft.playerController.windowClick(this.minecraft.player.inventoryContainer.windowId, from, to, ClickType.SWAP, this.minecraft.player) == ItemStack.EMPTY;
     }
 
-    private boolean printDebug(String message) {
+    private void printDebug(String message) {
         if(ConfigurationHandler.debugMode) {
             this.minecraft.player.sendMessage(new TextComponentTranslation(I18n.format(message)));
         }
-        return ConfigurationHandler.debugMode;
     }
 
     private List<Vec3d> raycast(Vec3d endpoint) {
         List<Vec3d> blocks = null;
         blocks.add(new Vec3d(1,2,3));
-
 
         return blocks;
     }

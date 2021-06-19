@@ -51,7 +51,7 @@ public final class Names {
         public static final String STEALTH_MODE = "stealthMode";
         public static final String STEALTH_MODE_DESC = "Harshly limited block placement. Best for 2b2t!";
         public static final String PRIORITY = "priority";
-        public static final String PRIORITY_DESC = "How block placement should be prioritized, 1=layers, 2=distance";
+        public static final String PRIORITY_DESC = "How block placement should be prioritized. 1=layers, 2=pillars, 3=pillars (below only).";
         public static final String DIRECTIONAL_PRIORITY = "directionalPriority";
         public static final String DIRECTIONAL_PRIORITY_DESC = "Prioritize placing blocks in the opposite direction you're moving in. Bigger numbers means more smoothing, 0 is disabled, -1 prioritizes +X.";
 
