@@ -6,7 +6,7 @@
 			"name": "Schematica",
 			"description": "Import and export Minecraft schematic files in Minecraft!",
 			"mcversion": "${mcversion}",
-			"version": "${version}",
+			"version": "${version} BETA",
 			"authorList": [
 				"Lunatrius",
 				"Emblem"

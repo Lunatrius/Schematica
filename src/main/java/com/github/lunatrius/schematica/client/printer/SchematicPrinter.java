@@ -307,13 +307,13 @@ public class SchematicPrinter {
 
 
         if (block.isAir(blockState, world, offset)) {
-            //printDebug(side + ": failed- is Air.");
+           //printDebug(side + ": failed- is Air.");
             return false;
         }
 
 
         if (block instanceof BlockLiquid) {
-            //printDebug(side + ": failed- is fluid. (How did you get here?)");
+            //printDebug(side + ": failed- is fluid.");
             return false;
         }
 
