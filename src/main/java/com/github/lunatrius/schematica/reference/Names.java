@@ -54,6 +54,8 @@ public final class Names {
         public static final String PRIORITY_DESC = "How block placement should be prioritized. 1=layers, 2=pillars, 3=pillars (below only).";
         public static final String DIRECTIONAL_PRIORITY = "directionalPriority";
         public static final String DIRECTIONAL_PRIORITY_DESC = "Prioritize placing blocks in the opposite direction you're moving in. Bigger numbers means more smoothing, 0 is disabled, -1 prioritizes +X.";
+        public static final String DISABLE_WHILE_MOVING = "disableWhileMoving";
+        public static final String DISABLE_WHILE_MOVING_DESC = "Disable the printer while you're moving.";
 
         public static final String SCHEMATIC_DIRECTORY = "schematicDirectory";
         public static final String SCHEMATIC_DIRECTORY_DESC = "Schematic directory.";

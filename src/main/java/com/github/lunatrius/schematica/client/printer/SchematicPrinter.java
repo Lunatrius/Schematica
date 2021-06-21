@@ -91,8 +91,17 @@ public class SchematicPrinter {
         }
         this.syncBlacklist.clear();
     }
-    //----------------------------------------------------------------------------------------------------------------------------------------
+
     public boolean print(final WorldClient world, final EntityPlayerSP player) {
+        if (ConfigurationHandler.disableWhileMoving) {
+            Vec3d playerspeed = new Vec3d(player.motionX,player.motionY+.0784,player.motionZ);
+            //printDebug(player.motionX + ", "+ player.motionY + ", " + player.motionZ);
+            printDebug(playerspeed.lengthVector()+"");
+            if (playerspeed.lengthVector()>.001) {
+                return false;
+            }
+        }
+
         final double dX = ClientProxy.playerPosition.x - this.schematic.position.x;
         final double dY = ClientProxy.playerPosition.y - this.schematic.position.y+player.getEyeHeight();
         final double dZ = ClientProxy.playerPosition.z - this.schematic.position.z;

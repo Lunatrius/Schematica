@@ -22,7 +22,7 @@ import java.util.Set;
 public class ConfigurationHandler {
     public static final ConfigurationHandler INSTANCE = new ConfigurationHandler();
 
-    public static final String VERSION = "1";
+    public static final String VERSION = "2";
 
     public static Configuration configuration;
 
@@ -48,11 +48,11 @@ public class ConfigurationHandler {
     public static final File SCHEMATIC_DIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATIC_DIRECTORY_STR);
     public static final String[] EXTRA_AIR_BLOCKS_DEFAULT = {};
     public static final String SORT_TYPE_DEFAULT = "";
-    public static final int PLAYER_QUOTA_KILOBYTES_DEFAULT = 8192;
     public static final boolean DEBUG_MODE_DEFAULT = false;
     public static final boolean STEALTH_MODE_DEFAULT = true;
     public static final int PRIORITY_DEFAULT = 1;
     public static final int DIRECTIONAL_PRIORITY_DEFAULT = 25;
+    public static final boolean DISABLE_WHILE_MOVING_DEFAULT = false;
 
     public static boolean dumpBlockList = DUMP_BLOCK_LIST_DEFAULT;
     public static boolean showDebugInfo = SHOW_DEBUG_INFO_DEFAULT;
@@ -80,7 +80,7 @@ public class ConfigurationHandler {
     public static boolean debugMode = DEBUG_MODE_DEFAULT;
     public static int priority = PRIORITY_DEFAULT;
     public static int directionalPriority = DIRECTIONAL_PRIORITY_DEFAULT;
-
+    public static boolean disableWhileMoving = DISABLE_WHILE_MOVING_DEFAULT;
 
     public static Property propDumpBlockList = null;
     public static Property propShowDebugInfo = null;
@@ -106,6 +106,7 @@ public class ConfigurationHandler {
     public static Property propDebugMode = null;
     public static Property propPriority = null;
     public static Property propDirectionalPriority = null;
+    public static Property propdisableWhileMoving = null;
 
     private static final Set<Block> extraAirBlockList = new HashSet<Block>();
 
@@ -211,6 +212,10 @@ public class ConfigurationHandler {
         propDirectionalPriority = configuration.get(Names.Config.Category.PRINTER, Names.Config.DIRECTIONAL_PRIORITY, DIRECTIONAL_PRIORITY_DEFAULT, Names.Config.DIRECTIONAL_PRIORITY_DESC, -1, 50);
         propDirectionalPriority.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DIRECTIONAL_PRIORITY);
         directionalPriority = propDirectionalPriority.getInt(DIRECTIONAL_PRIORITY_DEFAULT);
+
+        propdisableWhileMoving = configuration.get(Names.Config.Category.PRINTER, Names.Config.DISABLE_WHILE_MOVING, DISABLE_WHILE_MOVING_DEFAULT, Names.Config.DISABLE_WHILE_MOVING_DESC);
+        propdisableWhileMoving.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DISABLE_WHILE_MOVING);
+        disableWhileMoving = propdisableWhileMoving.getBoolean(DISABLE_WHILE_MOVING_DEFAULT);
         
 
     }

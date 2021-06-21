@@ -78,6 +78,8 @@ schematica.config.blockDelta=Block Delta
 schematica.config.blockDelta.tooltip=Delta value used for highlighting (if you experience z-fighting, increase this).
 schematica.config.renderDistance=Render Distance
 schematica.config.renderDistance.tooltip=Schematic render distance.
+schematica.config.disableWhileMoving=Disable While Moving
+schematica.config.disableWhileMoving.tooltip=Disable printing while you're moving, duh.
 
 # gui - config - printer
 schematica.config.placeDelay=Placement Delay
