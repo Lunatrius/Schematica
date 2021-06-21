@@ -53,6 +53,7 @@ public class ConfigurationHandler {
     public static final int PRIORITY_DEFAULT = 1;
     public static final int DIRECTIONAL_PRIORITY_DEFAULT = 25;
     public static final boolean DISABLE_WHILE_MOVING_DEFAULT = false;
+    public static final boolean PLACE_REPLACEABLE_DEFAULT = false;
 
     public static boolean dumpBlockList = DUMP_BLOCK_LIST_DEFAULT;
     public static boolean showDebugInfo = SHOW_DEBUG_INFO_DEFAULT;
@@ -81,6 +82,7 @@ public class ConfigurationHandler {
     public static int priority = PRIORITY_DEFAULT;
     public static int directionalPriority = DIRECTIONAL_PRIORITY_DEFAULT;
     public static boolean disableWhileMoving = DISABLE_WHILE_MOVING_DEFAULT;
+    public static  boolean replace = false;
 
     public static Property propDumpBlockList = null;
     public static Property propShowDebugInfo = null;
@@ -107,6 +109,8 @@ public class ConfigurationHandler {
     public static Property propPriority = null;
     public static Property propDirectionalPriority = null;
     public static Property propdisableWhileMoving = null;
+    public static Property propReplace = null;
+
 
     private static final Set<Block> extraAirBlockList = new HashSet<Block>();
 
@@ -216,6 +220,10 @@ public class ConfigurationHandler {
         propdisableWhileMoving = configuration.get(Names.Config.Category.PRINTER, Names.Config.DISABLE_WHILE_MOVING, DISABLE_WHILE_MOVING_DEFAULT, Names.Config.DISABLE_WHILE_MOVING_DESC);
         propdisableWhileMoving.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DISABLE_WHILE_MOVING);
         disableWhileMoving = propdisableWhileMoving.getBoolean(DISABLE_WHILE_MOVING_DEFAULT);
+
+        propReplace = configuration.get(Names.Config.Category.PRINTER, Names.Config.REPLACE, PLACE_REPLACEABLE_DEFAULT, Names.Config.REPLACE_DESC);
+        propReplace.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.REPLACE);
+        replace = propReplace.getBoolean(PLACE_REPLACEABLE_DEFAULT);
         
 
     }

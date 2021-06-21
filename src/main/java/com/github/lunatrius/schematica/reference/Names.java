@@ -56,6 +56,9 @@ public final class Names {
         public static final String DIRECTIONAL_PRIORITY_DESC = "Prioritize placing blocks in the opposite direction you're moving in. Bigger numbers means more smoothing, 0 is disabled, -1 prioritizes +X.";
         public static final String DISABLE_WHILE_MOVING = "disableWhileMoving";
         public static final String DISABLE_WHILE_MOVING_DESC = "Disable the printer while you're moving.";
+        public static final String REPLACE = "replace";
+        public static final String REPLACE_DESC = "Allow placing on replaceable blocks such as tallgrass or water.";
+
 
         public static final String SCHEMATIC_DIRECTORY = "schematicDirectory";
         public static final String SCHEMATIC_DIRECTORY_DESC = "Schematic directory.";

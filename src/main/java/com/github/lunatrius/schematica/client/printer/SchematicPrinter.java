@@ -321,14 +321,16 @@ public class SchematicPrinter {
         }
 
 
-        if (block instanceof BlockLiquid) {
-            //printDebug(side + ": failed- is fluid.");
-            return false;
-        }
+        if (!ConfigurationHandler.replace) {
+            if (block instanceof BlockLiquid) {
+                //printDebug(side + ": failed- is fluid.");
+                return false;
+            }
 
-        if (block.isReplaceable(world, offset)) {
-            //printDebug(side + ": failed- block is replaceable?");
-            return false;
+            if (block.isReplaceable(world, offset)) {
+                //printDebug(side + ": failed- block is replaceable?");
+                return false;
+            }
         }
 
         //printDebug(side +": Passed!");

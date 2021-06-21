@@ -106,6 +106,8 @@ schematica.config.priority=Placement Priority
 schematica.config.priority.tooltip=How block placement should be prioritized. 1=layers, 2=pillars, 3=pillars (below only).
 schematica.config.directionalPriority=Directional Priority
 schematica.config.directionalPriority.tooltip=Prioritize placing blocks in the opposite direction you're moving in. Bigger numbers means more smoothing, 0 is disabled, -1 prioritizes +X.
+schematica.config.replace=Replace Replaceables
+schematica.config.replace.tooltip=Allow placing on replaceable blocks such as tallgrass or water.
 
 # gui - config - printer - swap slots
 schematica.config.swapSlot0=Allow Slot 1
