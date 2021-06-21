@@ -68,8 +68,13 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.printer = SchematicPrinter.INSTANCE;
     }
 
+    private final EnumFacing[] facingList = {EnumFacing.WEST,EnumFacing.DOWN,EnumFacing.NORTH,EnumFacing.EAST,EnumFacing.UP,EnumFacing.SOUTH};
+    private final String[] facingStringList = {"X", "Y", "Z", "-X", "-Y", "-Z"};
+    private final int[] facingColorList = {0xFF4444, 0x44FF44, 0x4444FF, 0xFF4444, 0x44FF44, 0x4444FF};
+
     @Override
     public void initGui() {
+
         this.centerX = this.width / 2;
         this.centerY = this.height / 2;
 
@@ -101,16 +106,20 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnMove = new GuiButton(id++, this.width - 90, this.height - 80, 80, 20, I18n.format(Names.Gui.Control.MOVE_HERE));
         this.buttonList.add(this.btnMove);
 
-        this.btnFlipDirection = new GuiButton(id++, this.width - 180, this.height - 55, 80, 20, I18n.format(Names.Gui.Control.TRANSFORM_PREFIX + ClientProxy.axisFlip.getName()));
+        this.btnFlipDirection = new GuiButton(id++, this.width - 35, this.height - 55, 24, 20, "X");
+        this.btnFlipDirection.displayString = facingStringList[ClientProxy.axisFlip];
+        this.btnFlipDirection.packedFGColour = facingColorList[ClientProxy.axisFlip];
         this.buttonList.add(this.btnFlipDirection);
 
-        this.btnFlip = new GuiUnicodeGlyphButton(id++, this.width - 90, this.height - 55, 80, 20, " " + I18n.format(Names.Gui.Control.FLIP), "\u2194", 2.0f);
+        this.btnFlip = new GuiUnicodeGlyphButton(id++, this.width - 90, this.height - 55, 56, 20, " " + I18n.format(Names.Gui.Control.FLIP), "\u2194", 2.0f);
         this.buttonList.add(this.btnFlip);
 
-        this.btnRotateDirection = new GuiButton(id++, this.width - 180, this.height - 30, 80, 20, I18n.format(Names.Gui.Control.TRANSFORM_PREFIX + ClientProxy.axisRotation.getName()));
+        this.btnRotateDirection = new GuiButton(id++, this.width - 35, this.height - 30, 24, 20, "X");
+        this.btnRotateDirection.displayString = facingStringList[ClientProxy.axisRotation];
+        this.btnRotateDirection.packedFGColour = facingColorList[ClientProxy.axisRotation];
         this.buttonList.add(this.btnRotateDirection);
 
-        this.btnRotate = new GuiUnicodeGlyphButton(id++, this.width - 90, this.height - 30, 80, 20, " " + I18n.format(Names.Gui.Control.ROTATE), "\u21bb", 2.0f);
+        this.btnRotate = new GuiUnicodeGlyphButton(id++, this.width - 90, this.height - 30, 56, 20, " " + I18n.format(Names.Gui.Control.ROTATE), "\u21ba", 2.0f);
         this.buttonList.add(this.btnRotate);
 
         this.btnMaterials = new GuiButton(id++, 10, this.height - 70, 80, 20, this.strMaterials);
@@ -201,31 +210,43 @@ public class GuiSchematicControl extends GuiScreenBase {
                 ClientProxy.moveSchematicToPlayer(this.schematic);
                 RenderSchematic.INSTANCE.refresh();
                 setPoint(this.numericX, this.numericY, this.numericZ, this.schematic.position);
-            } else if (guiButton.id == this.btnFlipDirection.id) {
-                final EnumFacing[] values = EnumFacing.VALUES;
-                ClientProxy.axisFlip = values[((ClientProxy.axisFlip.ordinal() + 2) % values.length)];
-                guiButton.displayString = I18n.format(Names.Gui.Control.TRANSFORM_PREFIX + ClientProxy.axisFlip.getName());
+            } else if (guiButton.id == this.btnFlipDirection.id) { //---------------------------------------------------------------------- Flip code
+                ClientProxy.axisFlip = (ClientProxy.axisFlip+1)%3;
+                guiButton.displayString = facingStringList[ClientProxy.axisFlip];
+                guiButton.packedFGColour = facingColorList[ClientProxy.axisFlip];
             } else if (guiButton.id == this.btnFlip.id) {
-                if (FlipHelper.INSTANCE.flip(this.schematic, ClientProxy.axisFlip, isShiftKeyDown())) {
+                if (FlipHelper.INSTANCE.flip(this.schematic, facingList[ClientProxy.axisFlip], isShiftKeyDown())) {
                     RenderSchematic.INSTANCE.refresh();
                     SchematicPrinter.INSTANCE.refresh();
                 }
             } else if (guiButton.id == this.btnRotateDirection.id) {
-                final EnumFacing[] values = EnumFacing.VALUES;
-                ClientProxy.axisRotation = values[((ClientProxy.axisRotation.ordinal() + 1) % values.length)];
-                guiButton.displayString = I18n.format(Names.Gui.Control.TRANSFORM_PREFIX + ClientProxy.axisRotation.getName());
+                ClientProxy.axisRotation = (ClientProxy.axisRotation+1)%3;
+                if (isCtrlKeyDown()) {
+                    guiButton.displayString = facingStringList[ClientProxy.axisRotation+3];
+                    guiButton.packedFGColour = facingColorList[ClientProxy.axisRotation+3];
+                } else {
+                    guiButton.displayString = facingStringList[ClientProxy.axisRotation];
+                    guiButton.packedFGColour = facingColorList[ClientProxy.axisRotation];
+                }
             } else if (guiButton.id == this.btnRotate.id) {
-                if (RotationHelper.INSTANCE.rotate(this.schematic, ClientProxy.axisRotation, isShiftKeyDown())) {
-                    setPoint(this.numericX, this.numericY, this.numericZ, this.schematic.position);
-                    RenderSchematic.INSTANCE.refresh();
-                    SchematicPrinter.INSTANCE.refresh();
+                if (isCtrlKeyDown()) {
+                    if (RotationHelper.INSTANCE.rotate(this.schematic, facingList[ClientProxy.axisRotation+3], isShiftKeyDown())) {
+                        setPoint(this.numericX, this.numericY, this.numericZ, this.schematic.position);
+                        RenderSchematic.INSTANCE.refresh();
+                        SchematicPrinter.INSTANCE.refresh();
+                    }
+                } else {
+                    if (RotationHelper.INSTANCE.rotate(this.schematic, facingList[ClientProxy.axisRotation], isShiftKeyDown())) {
+                        setPoint(this.numericX, this.numericY, this.numericZ, this.schematic.position);
+                        RenderSchematic.INSTANCE.refresh();
+                        SchematicPrinter.INSTANCE.refresh();
+                    }
                 }
             } else if (guiButton.id == this.btnMaterials.id) {
                 this.mc.displayGuiScreen(new GuiSchematicMaterials(this));
             } else if (guiButton.id == this.btnPrint.id && this.printer.isEnabled()) {
                 final boolean isPrinting = this.printer.togglePrinting();
                 this.btnPrint.displayString = isPrinting ? this.strOn : this.strOff;
-
             } else if (guiButton.id == this.btnSchematics.id) {
                 this.mc.displayGuiScreen(new GuiSchematicLoad(this.parentScreen));
             }
@@ -241,7 +262,18 @@ public class GuiSchematicControl extends GuiScreenBase {
         }
 
         if (this.btnRotate.enabled) {
+            if (isCtrlKeyDown()) {
+                this.btnRotate = new GuiUnicodeGlyphButton(this.btnRotate.id, this.width - 90, this.height - 30, 56, 20, " " + I18n.format(Names.Gui.Control.ROTATE), "\u21bb", 2.0f);
+                this.btnRotateDirection.displayString = facingStringList[ClientProxy.axisRotation+3];
+                this.btnRotateDirection.packedFGColour = facingColorList[ClientProxy.axisRotation+3];
+            } else {
+                this.btnRotate = new GuiUnicodeGlyphButton(this.btnRotate.id, this.width - 90, this.height - 30, 56, 20, " " + I18n.format(Names.Gui.Control.ROTATE), "\u21ba", 2.0f);
+                this.btnRotateDirection.displayString = facingStringList[ClientProxy.axisRotation];
+                this.btnRotateDirection.packedFGColour = facingColorList[ClientProxy.axisRotation];
+            }
+            this.buttonList.set(this.btnRotate.id, this.btnRotate);
             this.btnRotate.packedFGColour = isShiftKeyDown() ? 0xFF0000 : 0x000000;
+
         }
     }
 
