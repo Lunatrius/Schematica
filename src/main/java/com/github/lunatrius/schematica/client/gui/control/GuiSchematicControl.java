@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.client.gui.control;
 import com.github.lunatrius.core.client.gui.GuiNumericField;
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.client.gui.load.GuiSchematicLoad;
 import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
 import com.github.lunatrius.schematica.client.util.FlipHelper;
@@ -45,6 +46,7 @@ public class GuiSchematicControl extends GuiScreenBase {
 
     private GuiButton btnMaterials = null;
     private GuiButton btnPrint = null;
+    private GuiButton btnSchematics = null;
 
     private final String strMoveSchematic = I18n.format(Names.Gui.Control.MOVE_SCHEMATIC);
     private final String strOperations = I18n.format(Names.Gui.Control.OPERATIONS);
@@ -58,6 +60,7 @@ public class GuiSchematicControl extends GuiScreenBase {
     private final String strZ = I18n.format(Names.Gui.Z);
     private final String strOn = I18n.format(Names.Gui.ON);
     private final String strOff = I18n.format(Names.Gui.OFF);
+    private final String strSchematics = I18n.format(Names.Gui.Control.SCHEMATICS);
 
     public GuiSchematicControl(final GuiScreen guiScreen) {
         super(guiScreen);
@@ -116,6 +119,9 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnPrint = new GuiButton(id++, 10, this.height - 30, 80, 20, this.printer.isPrinting() ? this.strOn : this.strOff);
         this.buttonList.add(this.btnPrint);
 
+    this.btnSchematics = new GuiButton(id++, this.width-90, 10,80,20, this.strSchematics);
+    this.buttonList.add(this.btnSchematics);
+
         this.numericX.setEnabled(this.schematic != null);
         this.numericY.setEnabled(this.schematic != null);
         this.numericZ.setEnabled(this.schematic != null);
@@ -132,6 +138,8 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnRotate.enabled = this.schematic != null;
         this.btnMaterials.enabled = this.schematic != null;
         this.btnPrint.enabled = this.schematic != null && this.printer.isEnabled();
+
+        this.btnSchematics.enabled = true;
 
         setMinMax(this.numericX);
         setMinMax(this.numericY);
@@ -162,6 +170,7 @@ public class GuiSchematicControl extends GuiScreenBase {
     @Override
     protected void actionPerformed(final GuiButton guiButton) {
         if (guiButton.enabled) {
+
             if (this.schematic == null) {
                 return;
             }
@@ -216,6 +225,9 @@ public class GuiSchematicControl extends GuiScreenBase {
             } else if (guiButton.id == this.btnPrint.id && this.printer.isEnabled()) {
                 final boolean isPrinting = this.printer.togglePrinting();
                 this.btnPrint.displayString = isPrinting ? this.strOn : this.strOff;
+
+            } else if (guiButton.id == this.btnSchematics.id) {
+                this.mc.displayGuiScreen(new GuiSchematicLoad(this.parentScreen));
             }
         }
     }

@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica.client.gui.load;
 
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.client.gui.control.GuiSchematicControl;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
@@ -87,7 +88,8 @@ public class GuiSchematicLoad extends GuiScreenBase {
                 if (Schematica.proxy.isLoadEnabled) {
                     loadSchematic();
                 }
-                this.mc.displayGuiScreen(this.parentScreen);
+                //this.mc.displayGuiScreen(this.parentScreen);
+                this.mc.displayGuiScreen(new GuiSchematicControl(this.parentScreen));
             } else {
                 this.guiSchematicLoadSlot.actionPerformed(guiButton);
             }

@@ -181,6 +181,8 @@ public final class Names {
 
             public static final String SORT_PREFIX = "schematica.gui.material";
             public static final String DUMP = "schematica.gui.materialdump";
+            public static final String SCHEMATICS = "schematica.gui.schematics";
+
         }
 
         public static final String X = "schematica.gui.x";
@@ -207,6 +209,7 @@ public final class Names {
         public static final String PRINTER_TOGGLE = "schematica.key.printerToggle";
         public static final String MOVE_HERE = "schematica.key.moveHere";
         public static final String PICK_BLOCK = "schematica.key.pickBlock";
+        public static final String LOAD_MANIPULATE  = "schematica.key.loadManipulate";
     }
 
     public static final class NBT {
