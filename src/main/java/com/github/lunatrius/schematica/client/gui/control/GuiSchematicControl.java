@@ -15,7 +15,10 @@ import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Names;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.config.GuiUnicodeGlyphButton;
@@ -28,6 +31,7 @@ public class GuiSchematicControl extends GuiScreenBase {
 
     private int centerX = 0;
     private int centerY = 0;
+
 
     private GuiNumericField numericX = null;
     private GuiNumericField numericY = null;
@@ -62,6 +66,8 @@ public class GuiSchematicControl extends GuiScreenBase {
     private final String strOff = I18n.format(Names.Gui.OFF);
     private final String strSchematics = I18n.format(Names.Gui.Control.SCHEMATICS);
 
+
+
     public GuiSchematicControl(final GuiScreen guiScreen) {
         super(guiScreen);
         this.schematic = ClientProxy.schematic;
@@ -70,13 +76,14 @@ public class GuiSchematicControl extends GuiScreenBase {
 
     private final EnumFacing[] facingList = {EnumFacing.WEST,EnumFacing.DOWN,EnumFacing.NORTH,EnumFacing.EAST,EnumFacing.UP,EnumFacing.SOUTH};
     private final String[] facingStringList = {"X", "Y", "Z", "-X", "-Y", "-Z"};
-    private final int[] facingColorList = {0xFF4444, 0x44FF44, 0x4444FF, 0xFF4444, 0x44FF44, 0x4444FF};
+    private final int[] facingColorList = {0xFF2222, 0x22FF22, 0x7F7FFF, 0xFF2222, 0x22FF22, 0x7F7FFF};
 
     @Override
     public void initGui() {
 
         this.centerX = this.width / 2;
         this.centerY = this.height / 2;
+
 
         this.buttonList.clear();
 
@@ -111,7 +118,12 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnFlipDirection.packedFGColour = facingColorList[ClientProxy.axisFlip];
         this.buttonList.add(this.btnFlipDirection);
 
-        this.btnFlip = new GuiUnicodeGlyphButton(id++, this.width - 90, this.height - 55, 56, 20, " " + I18n.format(Names.Gui.Control.FLIP), "\u2194", 2.0f);
+        if (ClientProxy.axisFlip == 1) {
+            this.btnFlip = new GuiUnicodeGlyphButton(id++, this.width - 90, this.height - 55, 56, 20, " " + I18n.format(Names.Gui.Control.FLIP), "\u2195", 2.0f);
+        } else {
+            this.btnFlip = new GuiUnicodeGlyphButton(id++, this.width - 90, this.height - 55, 56, 20, " " + I18n.format(Names.Gui.Control.FLIP), "\u2194", 2.0f);
+        }
+        //this.btnFlip = new GuiUnicodeGlyphButton(id++, this.width - 90, this.height - 55, 56, 20, " " + I18n.format(Names.Gui.Control.FLIP), "\u2194", 2.0f);
         this.buttonList.add(this.btnFlip);
 
         this.btnRotateDirection = new GuiButton(id++, this.width - 35, this.height - 30, 24, 20, "X");
@@ -163,6 +175,8 @@ public class GuiSchematicControl extends GuiScreenBase {
         if (this.schematic != null) {
             this.nfLayer.setValue(this.schematic.renderingLayer);
         }
+
+
     }
 
     private void setMinMax(final GuiNumericField numericField) {
@@ -214,6 +228,12 @@ public class GuiSchematicControl extends GuiScreenBase {
                 ClientProxy.axisFlip = (ClientProxy.axisFlip+1)%3;
                 guiButton.displayString = facingStringList[ClientProxy.axisFlip];
                 guiButton.packedFGColour = facingColorList[ClientProxy.axisFlip];
+                if (ClientProxy.axisFlip == 1) {
+                    this.btnFlip = new GuiUnicodeGlyphButton(this.btnFlip.id, this.width - 90, this.height - 55, 56, 20, "  " + I18n.format(Names.Gui.Control.FLIP), "\u2195", 2.0f);
+                } else {
+                    this.btnFlip = new GuiUnicodeGlyphButton(this.btnFlip.id, this.width - 90, this.height - 55, 56, 20, " " + I18n.format(Names.Gui.Control.FLIP), "\u2194", 2.0f);
+                }
+                this.buttonList.set(this.btnFlip.id, this.btnFlip);
             } else if (guiButton.id == this.btnFlip.id) {
                 if (FlipHelper.INSTANCE.flip(this.schematic, facingList[ClientProxy.axisFlip], isShiftKeyDown())) {
                     RenderSchematic.INSTANCE.refresh();
@@ -290,6 +310,25 @@ public class GuiSchematicControl extends GuiScreenBase {
         drawString(this.fontRenderer, this.strY, this.centerX - 65, this.centerY + 1, 0xFFFFFF);
         drawString(this.fontRenderer, this.strZ, this.centerX - 65, this.centerY + 26, 0xFFFFFF);
 
+        drawCenteredString(this.fontRenderer, this.strMoveSchematic, this.centerX, this.centerY - 45, 0xFFFFFF);
+        drawCenteredString(this.fontRenderer, this.strMaterials, 50, this.height - 85, 0xFFFFFF);
+        drawCenteredString(this.fontRenderer, this.strPrinter, 50, this.height - 45, 0xFFFFFF);
+        drawCenteredString(this.fontRenderer, this.strOperations, this.width - 50, this.height - 120, 0xFFFFFF);
+
+        drawString(this.fontRenderer, this.strX, this.centerX - 65, this.centerY - 24, 0xFFFFFF);
+        drawString(this.fontRenderer, this.strY, this.centerX - 65, this.centerY + 1, 0xFFFFFF);
+        drawString(this.fontRenderer, this.strZ, this.centerX - 65, this.centerY + 26, 0xFFFFFF);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(centerX+71, centerY, this.zLevel);
+        Entity entity = this.mc.getRenderViewEntity();
+        GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch), -1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw), 0.0F, 1.0F, 0.0F);
+        GlStateManager.scale(-2.0F, -2.0F, -2.0F);
+        OpenGlHelper.renderDirections(10);
+        GlStateManager.popMatrix();
+
         super.drawScreen(mouseX, mouseY, partialTicks);
+
     }
 }

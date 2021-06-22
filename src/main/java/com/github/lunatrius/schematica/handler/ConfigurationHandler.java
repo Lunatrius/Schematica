@@ -82,7 +82,7 @@ public class ConfigurationHandler {
     public static int priority = PRIORITY_DEFAULT;
     public static int directionalPriority = DIRECTIONAL_PRIORITY_DEFAULT;
     public static boolean disableWhileMoving = DISABLE_WHILE_MOVING_DEFAULT;
-    public static  boolean replace = false;
+    public static boolean replace = false;
 
     public static Property propDumpBlockList = null;
     public static Property propShowDebugInfo = null;
