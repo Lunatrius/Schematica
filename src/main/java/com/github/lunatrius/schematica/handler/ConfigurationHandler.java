@@ -71,7 +71,7 @@ public class ConfigurationHandler {
     public static boolean destroyInstantly = DESTROY_INSTANTLY_DEFAULT;
     public static boolean placeAdjacent = PLACE_ADJACENT_DEFAULT;
     public static boolean[] swapSlots = Arrays.copyOf(SWAP_SLOTS_DEFAULT, SWAP_SLOTS_DEFAULT.length);
-    public static final Queue<Integer> swapSlotsQueue = new ArrayDeque<Integer>();
+    public static final Queue<Integer> swapSlotsQueue = new ArrayDeque<>();
     public static File schematicDirectory = SCHEMATIC_DIRECTORY_DEFAULT;
     public static String[] extraAirBlocks = Arrays.copyOf(EXTRA_AIR_BLOCKS_DEFAULT, EXTRA_AIR_BLOCKS_DEFAULT.length);
     public static String sortType = SORT_TYPE_DEFAULT;
@@ -112,7 +112,7 @@ public class ConfigurationHandler {
     public static Property propReplace = null;
 
 
-    private static final Set<Block> extraAirBlockList = new HashSet<Block>();
+    private static final Set<Block> extraAirBlockList = new HashSet<>();
 
     public static void init(final File configFile) {
         if (configuration == null) {
