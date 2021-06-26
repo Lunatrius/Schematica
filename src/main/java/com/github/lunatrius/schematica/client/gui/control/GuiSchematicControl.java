@@ -2,7 +2,6 @@ package com.github.lunatrius.schematica.client.gui.control;
 
 import com.github.lunatrius.core.client.gui.GuiNumericField;
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
-import com.github.lunatrius.core.util.math.MBlockPos;
 import com.github.lunatrius.schematica.Schematica;
 import com.github.lunatrius.schematica.client.gui.load.GuiSchematicLoad;
 import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
@@ -109,6 +108,8 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnUnload = new GuiButton(id++,  10, 35, 80, 20, this.strUnload);
         this.buttonList.add(this.btnUnload);
 
+        this.btnMaterials = new GuiButton(id++, 10, 85, 80, 20, this.strMaterials);
+        this.buttonList.add(this.btnMaterials);
 
         this.btnLayerMode = new GuiButton(id++, this.width - 90, this.height - 200, 80, 20, I18n.format((this.schematic != null ? this.schematic.layerMode : LayerMode.ALL).name));
         this.buttonList.add(this.btnLayerMode);
@@ -119,8 +120,8 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnHide = new GuiButton(id++, this.width - 90, this.height - 130, 80, 20, this.schematic != null && this.schematic.isRendering ? this.strHide : this.strShow);
         this.buttonList.add(this.btnHide);
 
-            this.btnSnap = new GuiButton(id++, this.width - 90, this.height - 105, 80, 20, "Align to Map");
-            this.buttonList.add(this.btnSnap);
+        this.btnSnap = new GuiButton(id++, this.width - 90, this.height - 105, 80, 20, I18n.format(Names.Gui.Control.SNAP));
+        this.buttonList.add(this.btnSnap);
 
         this.btnMove = new GuiButton(id++, this.width - 90, this.height - 80, 80, 20, I18n.format(Names.Gui.Control.MOVE_HERE));
         this.buttonList.add(this.btnMove);
@@ -145,10 +146,7 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnRotate = new GuiUnicodeGlyphButton(id++, this.width - 90, this.height - 30, 56, 20, " " + I18n.format(Names.Gui.Control.ROTATE), "\u21ba", 2.0f);
         this.buttonList.add(this.btnRotate);
 
-        this.btnMaterials = new GuiButton(id++, 10, this.height - 70, 80, 20, this.strMaterials);
-        this.buttonList.add(this.btnMaterials);
-
-        this.btnPrint = new GuiButton(id++, 10, this.height - 30, 80, 20, this.printer.isPrinting() ? this.strOn : this.strOff);
+        this.btnPrint = new GuiButton(id++, 10, this.height - 30, 80, 20, this.printer.isPrinting() ? this.strPrinter+": "+this.strOn : this.strPrinter+": "+this.strOff);
         this.buttonList.add(this.btnPrint);
 
         this.numericX.setEnabled(this.schematic != null);
@@ -274,7 +272,7 @@ public class GuiSchematicControl extends GuiScreenBase {
                 this.mc.displayGuiScreen(new GuiSchematicMaterials(this));
             } else if (guiButton.id == this.btnPrint.id && this.printer.isEnabled()) {
                 final boolean isPrinting = this.printer.togglePrinting();
-                this.btnPrint.displayString = isPrinting ? this.strOn : this.strOff;
+                this.btnPrint.displayString = isPrinting ? this.strPrinter+": "+this.strOn : this.strPrinter+": "+this.strOff;
             } else if (guiButton.id == this.btnSchematics.id) {
                 this.mc.displayGuiScreen(new GuiSchematicLoad(this.parentScreen));
             } else if (guiButton.id == this.btnSnap.id) {
@@ -318,17 +316,6 @@ public class GuiSchematicControl extends GuiScreenBase {
         // drawDefaultBackground();
 
         drawCenteredString(this.fontRenderer, this.strMoveSchematic, this.centerX, this.centerY - 45, 0xFFFFFF);
-        drawCenteredString(this.fontRenderer, this.strMaterials, 50, this.height - 85, 0xFFFFFF);
-        drawCenteredString(this.fontRenderer, this.strPrinter, 50, this.height - 45, 0xFFFFFF);
-        drawCenteredString(this.fontRenderer, this.strOperations, this.width - 50, this.height - 120, 0xFFFFFF);
-
-        drawString(this.fontRenderer, this.strX, this.centerX - 65, this.centerY - 24, 0xFFFFFF);
-        drawString(this.fontRenderer, this.strY, this.centerX - 65, this.centerY + 1, 0xFFFFFF);
-        drawString(this.fontRenderer, this.strZ, this.centerX - 65, this.centerY + 26, 0xFFFFFF);
-
-        drawCenteredString(this.fontRenderer, this.strMoveSchematic, this.centerX, this.centerY - 45, 0xFFFFFF);
-        drawCenteredString(this.fontRenderer, this.strMaterials, 50, this.height - 85, 0xFFFFFF);
-        drawCenteredString(this.fontRenderer, this.strPrinter, 50, this.height - 45, 0xFFFFFF);
         drawCenteredString(this.fontRenderer, this.strOperations, this.width - 50, this.height - 145, 0xFFFFFF);
         drawCenteredString(this.fontRenderer, this.strLayer, this.width - 50, this.height - 215, 0xFFFFFF);
 

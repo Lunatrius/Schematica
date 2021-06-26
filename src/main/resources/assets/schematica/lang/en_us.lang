@@ -45,6 +45,7 @@ schematica.gui.materialavailable=Available
 schematica.gui.materialmissing=Missing
 schematica.gui.materialdump=Save to file
 schematica.gui.schematics=Schematics
+schematica.gui.snap=Align to Map
 
 # gui - config - categories
 schematica.config.category.debug=Debug

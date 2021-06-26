@@ -176,6 +176,7 @@ public final class Names {
             public static final String FLIP = "schematica.gui.flip";
             public static final String ROTATE = "schematica.gui.rotate";
             public static final String TRANSFORM_PREFIX = "schematica.gui.";
+            public static final String SNAP = "Schematica.gui.snap";
 
             public static final String MATERIAL_NAME = "schematica.gui.materialname";
             public static final String MATERIAL_AMOUNT = "schematica.gui.materialamount";
