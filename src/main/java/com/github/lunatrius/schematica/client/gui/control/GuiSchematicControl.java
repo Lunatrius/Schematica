@@ -283,6 +283,7 @@ public class GuiSchematicControl extends GuiScreenBase {
 
                 this.schematic.position.x = (int)(Math.floor((schemx+128+schemwidth)/128)*128-64-schemwidth);
                 this.schematic.position.z = (int)(Math.floor((schemz+128+schemlen)/128)*128-64-schemlen);
+                RenderSchematic.INSTANCE.refresh();
             }
         }
     }

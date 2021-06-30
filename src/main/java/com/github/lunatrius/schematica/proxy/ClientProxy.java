@@ -48,9 +48,12 @@ public class ClientProxy extends CommonProxy {
     public static final MBlockPos pointB = new MBlockPos();
     public static final MBlockPos pointMin = new MBlockPos();
     public static final MBlockPos pointMax = new MBlockPos();
-
+    public static boolean viewErrorToggle = false;
+    public static boolean viewingErrors = false;
+    public static int errorMode = 0;
     public static int axisFlip = 0;
     public static int axisRotation = 0;
+    public static int listRadius = 0;
 
     public static RayTraceResult objectMouseOver = null;
 
@@ -64,6 +67,7 @@ public class ClientProxy extends CommonProxy {
         orientation = getOrientation(player);
 
         rotationRender = MathHelper.floor(player.rotationYaw / 90) & 3;
+        viewErrorToggle =  ConfigurationHandler.viewErrorToggle;
     }
 
     private static EnumFacing getOrientation(final EntityPlayer player) {
@@ -171,6 +175,7 @@ public class ClientProxy extends CommonProxy {
         for (final KeyBinding keyBinding : InputHandler.KEY_BINDINGS) {
             ClientRegistry.registerKeyBinding(keyBinding);
         }
+        viewErrorToggle =  ConfigurationHandler.viewErrorToggle;
     }
 
     @Override

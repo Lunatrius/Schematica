@@ -58,6 +58,9 @@ public final class Names {
         public static final String DISABLE_WHILE_MOVING_DESC = "Disable the printer while you're moving.";
         public static final String REPLACE = "replace";
         public static final String REPLACE_DESC = "Allow placing on replaceable blocks such as tallgrass or water.";
+        public static final String VIEW_ERRORS_TOGGLE = "Error view toggling";
+        public static final String VIEW_ERRORS_TOGGLE_DESC = "If true, the 'View Errors' key toggles instead of press-and-hold.";
+
 
 
         public static final String SCHEMATIC_DIRECTORY = "schematicDirectory";
@@ -176,7 +179,7 @@ public final class Names {
             public static final String FLIP = "schematica.gui.flip";
             public static final String ROTATE = "schematica.gui.rotate";
             public static final String TRANSFORM_PREFIX = "schematica.gui.";
-            public static final String SNAP = "Schematica.gui.snap";
+            public static final String SNAP = "schematica.gui.snap";
 
             public static final String MATERIAL_NAME = "schematica.gui.materialname";
             public static final String MATERIAL_AMOUNT = "schematica.gui.materialamount";
@@ -214,6 +217,14 @@ public final class Names {
         public static final String MOVE_HERE = "schematica.key.moveHere";
         public static final String PICK_BLOCK = "schematica.key.pickBlock";
         public static final String LOAD_MANIPULATE  = "schematica.key.loadManipulate";
+        public static final String VIEW_ERRORS = "schematica.key.viewErrors";
+    }
+
+    public static final class ErrorType {
+        public static final String ERROR_LEVEL = "schematica.gui.errorLevel";
+        public static final String ALL = "schematica.gui.all";
+        public static final String NBT = "schematica.gui.nbt";
+        public static final String ERRORS = "schematica.gui.errors";
     }
 
     public static final class NBT {

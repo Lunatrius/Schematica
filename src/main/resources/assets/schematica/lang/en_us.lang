@@ -46,6 +46,9 @@ schematica.gui.materialmissing=Missing
 schematica.gui.materialdump=Save to file
 schematica.gui.schematics=Schematics
 schematica.gui.snap=Align to Map
+schematica.gui.errorlevel=Error level:
+schematica.gui.nbt=Wrong NBT
+schematica.gui.errors=Wrong block / air
 
 # gui - config - categories
 schematica.config.category.debug=Debug
@@ -80,8 +83,8 @@ schematica.config.blockDelta=Block Delta
 schematica.config.blockDelta.tooltip=Delta value used for highlighting (if you experience z-fighting, increase this).
 schematica.config.renderDistance=Render Distance
 schematica.config.renderDistance.tooltip=Schematic render distance.
-schematica.config.disableWhileMoving=Disable While Moving
-schematica.config.disableWhileMoving.tooltip=Disable printing while you're moving, duh.
+schematica.config.toggleViewErrors='View Errors' toggles
+schematica.config.toggleViewErrors.tooltip=If true, the 'View Errors' key toggles instead of press-and-hold.
 
 # gui - config - printer
 schematica.config.placeDelay=Placement Delay
@@ -109,6 +112,8 @@ schematica.config.directionalPriority=Directional Priority
 schematica.config.directionalPriority.tooltip=Prioritize placing blocks in the opposite direction you're moving in. Bigger numbers means more smoothing, 0 is disabled, -1 prioritizes +X.
 schematica.config.replace=Replace Replaceables
 schematica.config.replace.tooltip=Allow placing on replaceable blocks such as tallgrass or water.
+schematica.config.disableWhileMoving=Disable While Moving
+schematica.config.disableWhileMoving.tooltip=Disable printing while you're moving, duh.
 
 # gui - config - printer - swap slots
 schematica.config.swapSlot0=Allow Slot 1
@@ -156,8 +161,8 @@ schematica.key.renderToggle=Toggle Rendering
 schematica.key.printerToggle=Toggle Printer
 schematica.key.moveHere=Move here
 schematica.key.pickBlock=Pick Block
-
 schematica.key.loadManipulate=Load / Manipulate Schematic
+schematica.key.viewErrors=View Errors
 
 # commands - save
 schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name> [format]

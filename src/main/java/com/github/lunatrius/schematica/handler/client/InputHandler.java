@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.handler.client;
 
+import ca.weblite.objc.Client;
 import com.github.lunatrius.schematica.client.gui.control.GuiSchematicControl;
 import com.github.lunatrius.schematica.client.gui.load.GuiSchematicLoad;
 import com.github.lunatrius.schematica.client.gui.save.GuiSchematicSave;
@@ -39,7 +40,7 @@ public class InputHandler {
     private static final KeyBinding KEY_BINDING_MOVE_HERE = new KeyBinding(Names.Keys.MOVE_HERE, Keyboard.KEY_NONE, Names.Keys.CATEGORY);
     private static final KeyBinding KEY_BINDING_PICK_BLOCK = new KeyBinding(Names.Keys.PICK_BLOCK, KeyConflictContext.IN_GAME, KeyModifier.SHIFT, -98, Names.Keys.CATEGORY);
     private static final  KeyBinding KEY_BINDING_LOAD_MANIPULATE = new KeyBinding(Names.Keys.LOAD_MANIPULATE, Keyboard.KEY_DIVIDE, Names.Keys.CATEGORY);
-
+    private static final  KeyBinding KEY_BINDING_VIEW_ERRORS = new KeyBinding(Names.Keys.VIEW_ERRORS, Keyboard.KEY_LCONTROL, Names.Keys.CATEGORY);
     public static final KeyBinding[] KEY_BINDINGS = new KeyBinding[] {
             //KEY_BINDING_LOAD,
             KEY_BINDING_SAVE,
@@ -51,7 +52,8 @@ public class InputHandler {
             KEY_BINDING_PRINTER_TOGGLE,
             KEY_BINDING_MOVE_HERE,
             KEY_BINDING_PICK_BLOCK,
-            KEY_BINDING_LOAD_MANIPULATE
+            KEY_BINDING_LOAD_MANIPULATE,
+            KEY_BINDING_VIEW_ERRORS
     };
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
@@ -134,6 +136,17 @@ public class InputHandler {
                 if (schematic != null && schematic.isRendering) {
                     pickBlock(schematic, ClientProxy.objectMouseOver);
                 }
+            }
+
+            if (KEY_BINDING_VIEW_ERRORS.isPressed()) {
+                if (ClientProxy.viewingErrors) {
+                    ClientProxy.viewingErrors = false;
+                } else {
+                    ClientProxy.viewingErrors = true;
+                }
+            }
+            if (!KEY_BINDING_VIEW_ERRORS.isKeyDown() && !ClientProxy.viewErrorToggle) {
+                ClientProxy.viewingErrors = false;
             }
         }
     }

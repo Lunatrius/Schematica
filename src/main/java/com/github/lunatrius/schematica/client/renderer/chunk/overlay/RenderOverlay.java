@@ -136,7 +136,6 @@ public class RenderOverlay extends RenderChunk {
                     }
                 }
             }
-
             // Draw the type array (but not the padding)
             for (final BlockPos.MutableBlockPos pos : BlockPos.getAllInBoxMutable(from, to)) {
                 int secX = pos.getX() - fromEx.getX();
@@ -144,7 +143,6 @@ public class RenderOverlay extends RenderChunk {
                 int secZ = pos.getZ() - fromEx.getZ();
 
                 BlockType type = types[secX][secY][secZ];
-
                 if (type != null) {
                     if (!compiledOverlay.isLayerStarted(layer)) {
                         compiledOverlay.setLayerStarted(layer);

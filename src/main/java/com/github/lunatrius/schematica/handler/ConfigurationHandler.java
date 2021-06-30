@@ -54,6 +54,7 @@ public class ConfigurationHandler {
     public static final int DIRECTIONAL_PRIORITY_DEFAULT = 25;
     public static final boolean DISABLE_WHILE_MOVING_DEFAULT = false;
     public static final boolean PLACE_REPLACEABLE_DEFAULT = false;
+    public static final boolean VIEW_ERRORS_TOGGLE_DEFAULT = false;
 
     public static boolean dumpBlockList = DUMP_BLOCK_LIST_DEFAULT;
     public static boolean showDebugInfo = SHOW_DEBUG_INFO_DEFAULT;
@@ -76,13 +77,15 @@ public class ConfigurationHandler {
     public static String[] extraAirBlocks = Arrays.copyOf(EXTRA_AIR_BLOCKS_DEFAULT, EXTRA_AIR_BLOCKS_DEFAULT.length);
     public static String sortType = SORT_TYPE_DEFAULT;
 
+
     // ----------------------------------------------------------------------------------Psst, over here!
     public static boolean stealthMode = STEALTH_MODE_DEFAULT;
     public static boolean debugMode = DEBUG_MODE_DEFAULT;
     public static int priority = PRIORITY_DEFAULT;
     public static int directionalPriority = DIRECTIONAL_PRIORITY_DEFAULT;
     public static boolean disableWhileMoving = DISABLE_WHILE_MOVING_DEFAULT;
-    public static boolean replace = false;
+    public static boolean replace = PLACE_REPLACEABLE_DEFAULT;
+    public static boolean viewErrorToggle = VIEW_ERRORS_TOGGLE_DEFAULT;
 
     public static Property propDumpBlockList = null;
     public static Property propShowDebugInfo = null;
@@ -110,6 +113,7 @@ public class ConfigurationHandler {
     public static Property propDirectionalPriority = null;
     public static Property propdisableWhileMoving = null;
     public static Property propReplace = null;
+    public static Property propViewErrorToggle = null;
 
 
     private static final Set<Block> extraAirBlockList = new HashSet<>();
@@ -249,6 +253,10 @@ public class ConfigurationHandler {
         propExtraAirBlocks = configuration.get(Names.Config.Category.GENERAL, Names.Config.EXTRA_AIR_BLOCKS, EXTRA_AIR_BLOCKS_DEFAULT, Names.Config.EXTRA_AIR_BLOCKS_DESC);
         propExtraAirBlocks.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.EXTRA_AIR_BLOCKS);
         extraAirBlocks = propExtraAirBlocks.getStringList();
+
+        propViewErrorToggle = configuration.get(Names.Config.Category.GENERAL, Names.Config.VIEW_ERRORS_TOGGLE, VIEW_ERRORS_TOGGLE_DEFAULT, Names.Config.VIEW_ERRORS_TOGGLE_DESC);
+        propViewErrorToggle.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.VIEW_ERRORS_TOGGLE);
+        viewErrorToggle = propViewErrorToggle.getBoolean(VIEW_ERRORS_TOGGLE_DEFAULT);
 
         propSortType = configuration.get(Names.Config.Category.GENERAL, Names.Config.SORT_TYPE, SORT_TYPE_DEFAULT, Names.Config.SORT_TYPE_DESC);
         propSortType.setShowInGui(false);
