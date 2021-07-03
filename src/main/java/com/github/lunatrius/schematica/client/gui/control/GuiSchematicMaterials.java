@@ -41,7 +41,7 @@ public class GuiSchematicMaterials extends GuiScreenBase {
     private final String strMaterialAmount = I18n.format(Names.Gui.Control.MATERIAL_AMOUNT);
     protected static List<BlockList.WrappedItemStack> blockList = new ArrayList<>();
 
-
+// TODO: Get these in the lang files.
     private final GuiSlider.FormatHelper sliderHelper = (id, name, value) -> {
         if (value < 5) {
             return "Radius: infinite";

@@ -174,6 +174,7 @@ public class BlockList {
             }
         }
 
+        //TODO: figure out what this IF statement does- and if we even need it.7
         private static String getFormattedStackAmount(final ItemStack itemStack, final int amount) {
             final int stackSize = itemStack.getMaxStackSize();
             if (true /* amount < stackSize */) {

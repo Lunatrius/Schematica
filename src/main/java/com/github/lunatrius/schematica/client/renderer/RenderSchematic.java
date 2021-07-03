@@ -241,10 +241,13 @@ public class RenderSchematic extends RenderGlobal {
             this.profiler.endStartSection("guide");
             if (ClientProxy.isRenderingGuide || isRenderingSchematic) {
                 GlStateManager.pushMatrix();
-                GlStateManager.disableDepth();
-                renderOverlay(schematic, isRenderingSchematic);
-                //drawMistakes();      // Hoboy. This might take some time before I get back to it. Billboarding is no bueno.
-                GlStateManager.enableDepth();
+                if (ClientProxy.viewingErrors) {
+                    GlStateManager.disableDepth();
+                    renderOverlay(schematic, isRenderingSchematic);
+                    GlStateManager.enableDepth();
+                } else {
+                    renderOverlay(schematic, isRenderingSchematic);
+                }
                 GlStateManager.popMatrix();
             }
 

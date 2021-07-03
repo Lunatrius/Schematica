@@ -4,11 +4,17 @@ import com.github.lunatrius.core.client.gui.GuiHelper;
 import com.github.lunatrius.schematica.client.util.BlockList;
 import com.github.lunatrius.schematica.reference.Names;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentDamage;
 import net.minecraft.item.ItemStack;
+
+import javax.swing.text.html.HTML;
 
 class GuiSchematicMaterialsSlot extends GuiSlot {
     private final Minecraft minecraft = Minecraft.getMinecraft();
@@ -69,9 +75,14 @@ class GuiSchematicMaterialsSlot extends GuiSlot {
         this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amount, x + 215 - this.minecraft.fontRenderer.getStringWidth(amount), y + 1, 0xFFFFFF);
         this.guiSchematicMaterials.drawString(this.minecraft.fontRenderer, amountMissing, x + 215 - this.minecraft.fontRenderer.getStringWidth(amountMissing), y + 11, 0xFFFFFF);
 
-        if (mouseX > x && mouseY > y && mouseX <= x + 18 && mouseY <= y + 18) {
-            this.guiSchematicMaterials.renderToolTip(itemStack, mouseX, mouseY);
-            GlStateManager.disableLighting();
+        if (mouseX > x && mouseY > y && mouseY <= y + 18) {
+            if (mouseX <= x + 18 ) {
+                this.guiSchematicMaterials.renderToolTip(itemStack, mouseX, mouseY);
+                GlStateManager.disableLighting();
+            } else {
+                GuiLabel test = new GuiLabel(this.mc.fontRenderer, mouseX, mouseY, 40,40,40,40);
+                test.drawString(this.mc.fontRenderer,"This is a test",10,10,0x888888);
+            }
         }
     }
 }
