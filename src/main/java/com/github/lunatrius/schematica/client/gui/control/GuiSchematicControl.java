@@ -165,7 +165,7 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.btnRotate.enabled = this.schematic != null;
         this.btnMaterials.enabled = this.schematic != null;
         this.btnPrint.enabled = this.schematic != null && this.printer.isEnabled();
-
+        this.btnSnap.enabled = this.schematic != null;
         this.btnSchematics.enabled = true;
 
         setMinMax(this.numericX);
@@ -280,10 +280,10 @@ public class GuiSchematicControl extends GuiScreenBase {
                 int schemz = this.schematic.position.getZ();
                 double schemlen = this.schematic.getLength();
                 double schemwidth = this.schematic.getWidth();
-
                 this.schematic.position.x = (int)(Math.floor((schemx+128+schemwidth)/128)*128-64-schemwidth);
                 this.schematic.position.z = (int)(Math.floor((schemz+128+schemlen)/128)*128-64-schemlen);
                 RenderSchematic.INSTANCE.refresh();
+                setPoint(this.numericX, this.numericY, this.numericZ, this.schematic.position);
             }
         }
     }

@@ -86,10 +86,11 @@ public class GuiSchematicLoad extends GuiScreenBase {
                 }
             } else if (guiButton.id == this.btnDone.id) {
                 if (Schematica.proxy.isLoadEnabled) {
-                    loadSchematic();
+                    if (loadSchematic()) {
+                        this.mc.displayGuiScreen(new GuiSchematicControl(this.parentScreen));
+                    }
                 }
                 //this.mc.displayGuiScreen(this.parentScreen);
-                this.mc.displayGuiScreen(new GuiSchematicControl(this.parentScreen));
             } else {
                 this.guiSchematicLoadSlot.actionPerformed(guiButton);
             }
@@ -169,7 +170,7 @@ public class GuiSchematicLoad extends GuiScreenBase {
         }
     }
 
-    private void loadSchematic() {
+    private boolean loadSchematic() {
         final int selectedIndex = this.guiSchematicLoadSlot.selectedIndex;
 
         try {
@@ -179,11 +180,14 @@ public class GuiSchematicLoad extends GuiScreenBase {
                     final SchematicWorld schematic = ClientProxy.schematic;
                     if (schematic != null) {
                         ClientProxy.moveSchematicToPlayer(schematic);
+                        return true;
                     }
                 }
             }
+
         } catch (final Exception e) {
             Reference.logger.error("Failed to load schematic!", e);
         }
+        return false;
     }
 }
