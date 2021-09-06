@@ -17,7 +17,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -25,7 +24,6 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketEntityAction;
@@ -218,7 +216,7 @@ public class SchematicPrinter {
         for (final MBlockPos pos: inRange) {
             try {
                 if (placeBlock(world, player, pos)) {
-                    return syncSlotAndSneaking(player, slot, isSneaking, true);
+                    //return syncSlotAndSneaking(player, slot, isSneaking, true);
                 }
             } catch (final Exception e) {
                 Reference.logger.error("Could not place block!", e);
@@ -352,7 +350,6 @@ public class SchematicPrinter {
         final List<EnumFacing> list = new ArrayList<>();
 
         for (final EnumFacing side : EnumFacing.VALUES) {
-            printDebug(pos + ", " + side + " = " + isSolid(world, pos, side, blocc) );
             if (isSolid(world, pos, side, blocc)) {
                 list.add(side);
             }
@@ -366,10 +363,17 @@ public class SchematicPrinter {
             return false;
         }
 
+        // Handle blocks that rely on facing direction. No, I don't fully understand how this works.
+        // TODO: Hello invalid stair placement!
+        // In Stealth mode, we kind of have to kill Stairs placement after sending the look packet, which is bad.
+        // Pls find a way around this
+
         final PlacementData data = PlacementRegistry.INSTANCE.getPlacementData(blockState, itemStack);
-        if (data != null && !data.isValidPlayerFacing(blockState, player, pos, world)) {
-            return false;
-        } // TODO: Hello invalid stair placement!
+        if (!ConfigurationHandler.stealthMode) {
+            if (data != null && !data.isValidPlayerFacing(blockState, player, pos, world)) {
+                return false;
+            }
+        }
 
         Block floor = world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock();
         if (blockState.getBlock() instanceof BlockFalling && (floor instanceof BlockLiquid || floor instanceof BlockAir)) {
@@ -507,14 +511,6 @@ public class SchematicPrinter {
      */
 
     private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final ItemStack itemStack, final BlockPos pos, final EnumFacing side, final Vec3d hitVec, final EnumHand hand) {
-        // FIXME: where did this event go?
-        /*
-        if (ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_BLOCK, world, pos, side, hitVec).isCanceled()) {
-            return false;
-        }
-        */
-
-        // FIXME: when an adjacent block is not required the blocks should be placed 1 block away from the actual position (because air is replaceable)
 
         final BlockPos ref = pos.offset(side);
         final Vec3d cent = new Vec3d(ref.getX()+.5, ref.getY()+.5, ref.getZ()+.5);
@@ -523,7 +519,9 @@ public class SchematicPrinter {
         final double z = pos.getZ()-ref.getZ();
         final Vec3d epiclook = new Vec3d(x*.5+cent.x,y*.5+cent.y,z*.5+cent.z);
 
-        PrinterUtil.faceVectorPacketInstant(epiclook);
+        if(ConfigurationHandler.stealthMode) {
+            PrinterUtil.faceVectorPacketInstant(epiclook);
+        }
 
         final BlockPos actualPos = ConfigurationHandler.placeAdjacent ? pos : pos.offset(side);
         final EnumActionResult result = this.minecraft.playerController.processRightClickBlock(player, world, actualPos, side, hitVec, hand);
