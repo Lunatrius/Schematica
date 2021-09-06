@@ -216,7 +216,7 @@ public class SchematicPrinter {
         for (final MBlockPos pos: inRange) {
             try {
                 if (placeBlock(world, player, pos)) {
-                    //return syncSlotAndSneaking(player, slot, isSneaking, true);
+                    return syncSlotAndSneaking(player, slot, isSneaking, true);
                 }
             } catch (final Exception e) {
                 Reference.logger.error("Could not place block!", e);
