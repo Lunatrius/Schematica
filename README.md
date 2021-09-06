@@ -1,4 +1,10 @@
 ## Welcome to Schematica!
+
+This is my fork of Schematica, with the goal to make it usable on Anarchy servers, and to improve its overall quality.
+Eventually I'd like to update this for newer Minecraft versions, though at the moment I have no clue and no plans on how to do that- I'll save that for when I have most of my planned features implemented.
+If you have any bugs or suggestions, feel free to let me know!
+https://docs.google.com/forms/d/e/1FAIpQLScpT1qL_RdMT3U1m_95NmT62JIzc5gfbq5jH6PXiiWG-IakLQ/viewform?usp=sf_link
+
 ### Compiling
 
 [Setup Schematica](#setup-schematica)
