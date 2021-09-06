@@ -14,7 +14,10 @@ import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -22,6 +25,7 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketEntityAction;
@@ -307,9 +311,8 @@ public class SchematicPrinter {
      *This is called for every side, and checks if you can place against that side.
      * -pos is the block we're attempting to place.
      * -side is the side we're checking for placeability.
-     * This checks every side, regardless of
      */
-    private boolean isSolid(final World world, final BlockPos pos, final EnumFacing side) {
+    private boolean isSolid(final World world, final BlockPos pos, final EnumFacing side, final IBlockState blocc) {
         final BlockPos offset = pos.offset(side);
         final IBlockState blockState = world.getBlockState(offset);
         final Block block = blockState.getBlock();
@@ -333,12 +336,15 @@ public class SchematicPrinter {
             }
         }
 
-        //printDebug(side +": Passed!");
+        if (!blocc.getBlock().canPlaceBlockOnSide(world,pos,side)) {
+            return false; // Ensures we don't try to place torches on the sides of slabs and flowerpots on stairs, etc.
+        }
+
 
         return true;
     }
 
-    private List<EnumFacing> getSolidSides(final World world, final BlockPos pos) {
+    private List<EnumFacing> getSolidSides(final World world, final BlockPos pos, final IBlockState blocc) {
         if (!ConfigurationHandler.placeAdjacent) {
             return Arrays.asList(EnumFacing.VALUES);
         }
@@ -346,7 +352,8 @@ public class SchematicPrinter {
         final List<EnumFacing> list = new ArrayList<>();
 
         for (final EnumFacing side : EnumFacing.VALUES) {
-            if (isSolid(world, pos, side)) {
+            printDebug(pos + ", " + side + " = " + isSolid(world, pos, side, blocc) );
+            if (isSolid(world, pos, side, blocc)) {
                 list.add(side);
             }
         }
@@ -362,9 +369,15 @@ public class SchematicPrinter {
         final PlacementData data = PlacementRegistry.INSTANCE.getPlacementData(blockState, itemStack);
         if (data != null && !data.isValidPlayerFacing(blockState, player, pos, world)) {
             return false;
+        } // TODO: Hello invalid stair placement!
+
+        Block floor = world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock();
+        if (blockState.getBlock() instanceof BlockFalling && (floor instanceof BlockLiquid || floor instanceof BlockAir)) {
+            printDebug("Skipping gravity block placement!");
+            return false;
         }
 
-        final List<EnumFacing> solidSides = getSolidSides(world, pos);
+        final List<EnumFacing> solidSides = getSolidSides(world, pos, blockState);
 
         if (solidSides.size() == 0) {
             return false;
@@ -406,7 +419,6 @@ public class SchematicPrinter {
             boolean passed = false;
             List<EnumFacing> stealthsides = new ArrayList<>();
             for (EnumFacing face : solidSides) {
-                printDebug(face.toString());
                 switch (face) {
                     case UP:
                         if (y >= py) {passed=true;stealthsides.add(face);}
@@ -447,8 +459,11 @@ public class SchematicPrinter {
             if (!passed) {
                 return false;
             }
+            printDebug("Solid vs. Stealth");
+            printDebug(solidSides.toString());
+            printDebug(stealthsides.toString());
+
             direction = stealthsides.get(0);
-            printDebug("Passed all checks.");
         }
 
         if (!swapToItem(player.inventory, itemStack)) {
