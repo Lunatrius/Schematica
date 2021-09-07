@@ -3,7 +3,20 @@
 This is my fork of Schematica, with the goal to make it usable on Anarchy servers, and to improve its overall quality.
 Eventually I'd like to update this for newer Minecraft versions, though at the moment I have no clue and no plans on how to do that- I'll save that for when I have most of my planned features implemented.
 If you have any bugs or suggestions, feel free to let me know!
+
 https://docs.google.com/forms/d/e/1FAIpQLScpT1qL_RdMT3U1m_95NmT62JIzc5gfbq5jH6PXiiWG-IakLQ/viewform?usp=sf_link
+
+### New Features and QoL changes
+
+1. Stealth mode. This allows Schematica to work on 2b2t, using more strict placement requirements and rotation packets. (NOTE: STAIRS ARE BROKEN)
+2. Placement Priority. When filling blocks in, place layer-by-layer, or fill in behind you.
+3. Directional Priority. Place blocks behind you as you walk, place the farthest blocks first, or just place along the X axis first.
+4. Disable while moving. Stops printing while you're moving.
+5. More flexible placement delay- includes decimals, and  can place every client tick.
+6. Wallhack rendering. View missing and incorrect blocks by pressing the View Errors key (default LCONTROL)
+7. Snap to Map. Great for map art!
+8. Block supports. Things like sand, anvils and torches check  to see if the supporting block exists before placing.
+9. Much more fluid UI, including merged Load and Manipulate Schematic keybinds and cleaner rotation buttons.
 
 ### Compiling
 
