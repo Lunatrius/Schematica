@@ -9,7 +9,7 @@ https://docs.google.com/forms/d/e/1FAIpQLScpT1qL_RdMT3U1m_95NmT62JIzc5gfbq5jH6PX
 ### New Features and QoL changes
 
 1. Stealth mode. This allows Schematica to work on 2b2t, using more strict placement requirements and rotation packets. (NOTE: STAIRS ARE BROKEN)
-2. Placement Priority. When filling blocks in, place layer-by-layer, or fill in behind you.
+2. Placement Priority. When filling blocks in, place layer-by-layer, or fill in as pillars.
 3. Directional Priority. Place blocks behind you as you walk, place the farthest blocks first, or just place along the X axis first.
 4. Disable while moving. Stops printing while you're moving.
 5. More flexible placement delay- includes decimals, and  can place every client tick.
