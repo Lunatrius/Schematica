@@ -126,6 +126,7 @@ public class ClientProxy extends CommonProxy {
         if (schematic != null) {
             final MBlockPos position = schematic.position;
             position.x = (int) Math.floor(playerPosition.x);
+            Reference.logger.error("Moving schem from original x:", position.x);
             position.y = (int) Math.floor(playerPosition.y);
             position.z = (int) Math.floor(playerPosition.z);
 
@@ -209,25 +210,25 @@ public class ClientProxy extends CommonProxy {
     public void resetSettings() {
         super.resetSettings();
 
-        SchematicPrinter.INSTANCE.setEnabled(true);
-        unloadSchematic();
-
-        isRenderingGuide = false;
-
-        playerPosition.set(0, 0, 0);
-        orientation = null;
-        rotationRender = 0;
-
-        pointA.set(0, 0, 0);
-        pointB.set(0, 0, 0);
-        updatePoints();
+//        SchematicPrinter.INSTANCE.setEnabled(true);
+//        unloadSchematic();
+//
+//        isRenderingGuide = false;
+//
+//        playerPosition.set(0, 0, 0);
+//        orientation = null;
+//        rotationRender = 0;
+//
+//        pointA.set(0, 0, 0);
+//        pointB.set(0, 0, 0);
+//        updatePoints();
     }
 
     @Override
     public void unloadSchematic() {
-        schematic = null;
-        RenderSchematic.INSTANCE.setWorldAndLoadRenderers(null);
-        SchematicPrinter.INSTANCE.setSchematic(null);
+//        schematic = null;
+//        RenderSchematic.INSTANCE.setWorldAndLoadRenderers(null);
+//        SchematicPrinter.INSTANCE.setSchematic(null);
     }
 
     @Override

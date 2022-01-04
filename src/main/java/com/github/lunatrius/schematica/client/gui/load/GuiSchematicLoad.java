@@ -176,7 +176,7 @@ public class GuiSchematicLoad extends GuiScreenBase {
                 if (Schematica.proxy.loadSchematic(null, this.currentDirectory, schematicEntry.getName())) {
                     final SchematicWorld schematic = ClientProxy.schematic;
                     if (schematic != null) {
-                        ClientProxy.moveSchematicToPlayer(schematic);
+//                        ClientProxy.moveSchematicToPlayer(schematic);
                     }
                 }
             }
