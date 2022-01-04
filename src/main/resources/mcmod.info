@@ -10,7 +10,7 @@
 			"authorList": [
 				"Lunatrius"
 			],
-			"credits": "AbrarSyed, AtomicBlom, UltraMoogleMan",
+			"credits": "AbrarSyed, AtomicBlom, UltraMoogleMan, Entropy5",
 			"dependants": [  ],
 			"dependencies": [ "forge@[${minforgeversion},)", "lunatriuscore@[${coreversion},)" ],
 			"parent": "",
