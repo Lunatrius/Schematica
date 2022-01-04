@@ -3,6 +3,7 @@ package com.github.lunatrius.schematica.proxy;
 import com.github.lunatrius.core.util.math.MBlockPos;
 import com.github.lunatrius.core.util.vector.Vector3d;
 import com.github.lunatrius.schematica.api.ISchematic;
+import com.github.lunatrius.schematica.client.gui.control.GuiSchematicControl;
 import com.github.lunatrius.schematica.client.printer.SchematicPrinter;
 import com.github.lunatrius.schematica.client.renderer.RenderSchematic;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
@@ -43,6 +44,7 @@ public class ClientProxy extends CommonProxy {
     public static int rotationRender = 0;
 
     public static SchematicWorld schematic = null;
+    public static boolean firstLoad = false;
 
     public static final MBlockPos pointA = new MBlockPos();
     public static final MBlockPos pointB = new MBlockPos();
@@ -126,7 +128,6 @@ public class ClientProxy extends CommonProxy {
         if (schematic != null) {
             final MBlockPos position = schematic.position;
             position.x = (int) Math.floor(playerPosition.x);
-            Reference.logger.error("Moving schem from original x:", position.x);
             position.y = (int) Math.floor(playerPosition.y);
             position.z = (int) Math.floor(playerPosition.z);
 
@@ -210,25 +211,23 @@ public class ClientProxy extends CommonProxy {
     public void resetSettings() {
         super.resetSettings();
 
-//        SchematicPrinter.INSTANCE.setEnabled(true);
-//        unloadSchematic();
-//
-//        isRenderingGuide = false;
-//
-//        playerPosition.set(0, 0, 0);
-//        orientation = null;
-//        rotationRender = 0;
-//
-//        pointA.set(0, 0, 0);
-//        pointB.set(0, 0, 0);
-//        updatePoints();
+        SchematicPrinter.INSTANCE.setEnabled(true);
+
+        isRenderingGuide = false;
+        playerPosition.set(0, 0, 0);
+        orientation = null;
+        rotationRender = 0;
+
+        pointA.set(0, 0, 0);
+        pointB.set(0, 0, 0);
+        updatePoints();
     }
 
     @Override
     public void unloadSchematic() {
-//        schematic = null;
-//        RenderSchematic.INSTANCE.setWorldAndLoadRenderers(null);
-//        SchematicPrinter.INSTANCE.setSchematic(null);
+        schematic = null;
+        RenderSchematic.INSTANCE.setWorldAndLoadRenderers(null);
+        SchematicPrinter.INSTANCE.setSchematic(null);
     }
 
     @Override
@@ -246,6 +245,7 @@ public class ClientProxy extends CommonProxy {
         RenderSchematic.INSTANCE.setWorldAndLoadRenderers(world);
         SchematicPrinter.INSTANCE.setSchematic(world);
         world.isRendering = true;
+        firstLoad = true;
 
         return true;
     }

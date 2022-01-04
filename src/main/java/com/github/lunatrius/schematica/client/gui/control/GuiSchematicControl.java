@@ -33,6 +33,7 @@ public class GuiSchematicControl extends GuiScreenBase {
     private GuiNumericField numericZ = null;
 
     private GuiButton btnUnload = null;
+    private GuiButton btnShowXYZ = null;
     private GuiButton btnLayerMode = null;
     private GuiNumericField nfLayer = null;
 
@@ -75,13 +76,10 @@ public class GuiSchematicControl extends GuiScreenBase {
         int id = 0;
 
         this.numericX = new GuiNumericField(this.fontRenderer, id++, this.centerX - 50, this.centerY - 30, 100, 20);
-        this.buttonList.add(this.numericX);
-
         this.numericY = new GuiNumericField(this.fontRenderer, id++, this.centerX - 50, this.centerY - 5, 100, 20);
-        this.buttonList.add(this.numericY);
-
         this.numericZ = new GuiNumericField(this.fontRenderer, id++, this.centerX - 50, this.centerY + 20, 100, 20);
-        this.buttonList.add(this.numericZ);
+        this.btnShowXYZ = new GuiButton(id++, this.centerX - 50, this.centerY - 5, 100, 20, "Reveal last XYZ");
+        this.buttonList.add(this.btnShowXYZ);
 
         this.btnUnload = new GuiButton(id++, this.width - 90, this.height - 200, 80, 20, this.strUnload);
         this.buttonList.add(this.btnUnload);
@@ -178,6 +176,8 @@ public class GuiSchematicControl extends GuiScreenBase {
             } else if (guiButton.id == this.btnUnload.id) {
                 Schematica.proxy.unloadSchematic();
                 this.mc.displayGuiScreen(this.parentScreen);
+            } else if (guiButton.id == this.btnShowXYZ.id) {
+                this.triggerXYZ();
             } else if (guiButton.id == this.btnLayerMode.id) {
                 this.schematic.layerMode = LayerMode.next(this.schematic.layerMode);
                 this.btnLayerMode.displayString = I18n.format(this.schematic.layerMode.name);
@@ -247,5 +247,12 @@ public class GuiSchematicControl extends GuiScreenBase {
         drawString(this.fontRenderer, this.strZ, this.centerX - 65, this.centerY + 26, 0xFFFFFF);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+
+    public void triggerXYZ() {
+        this.buttonList.add(this.numericX);
+        this.buttonList.add(this.numericY);
+        this.buttonList.add(this.numericZ);
+        this.buttonList.remove(this.btnShowXYZ);
     }
 }
