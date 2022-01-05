@@ -143,7 +143,11 @@ public class RenderOverlay extends RenderChunk {
                 int secY = pos.getY() - fromEx.getY();
                 int secZ = pos.getZ() - fromEx.getZ();
 
-                BlockType type = types[secX][secY][secZ];
+                BlockType type = null;
+
+                if (secX >= 0 && secY >= 0 && secZ >= 0 && types.length > secX && types[secX].length > secY && types[secX][secY].length > secZ) {
+                    type = types[secX][secY][secZ];
+                }
 
                 if (type != null) {
                     if (!compiledOverlay.isLayerStarted(layer)) {
