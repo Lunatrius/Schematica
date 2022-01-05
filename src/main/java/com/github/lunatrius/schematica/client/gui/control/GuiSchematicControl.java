@@ -117,6 +117,9 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.numericX.setEnabled(this.schematic != null);
         this.numericY.setEnabled(this.schematic != null);
         this.numericZ.setEnabled(this.schematic != null);
+        if (ClientProxy.showCoords) {
+            triggerXYZ();
+        }
 
         this.btnUnload.enabled = this.schematic != null;
         this.btnLayerMode.enabled = this.schematic != null;
@@ -178,6 +181,7 @@ public class GuiSchematicControl extends GuiScreenBase {
                 this.mc.displayGuiScreen(this.parentScreen);
             } else if (guiButton.id == this.btnShowXYZ.id) {
                 this.triggerXYZ();
+                ClientProxy.showCoords = true;
             } else if (guiButton.id == this.btnLayerMode.id) {
                 this.schematic.layerMode = LayerMode.next(this.schematic.layerMode);
                 this.btnLayerMode.displayString = I18n.format(this.schematic.layerMode.name);
