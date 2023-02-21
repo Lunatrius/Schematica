@@ -14,10 +14,14 @@ import com.github.lunatrius.schematica.proxy.ClientProxy;
 import com.github.lunatrius.schematica.reference.Constants;
 import com.github.lunatrius.schematica.reference.Reference;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
+import net.minecraft.block.BlockFalling;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.item.ItemBucket;
@@ -29,13 +33,10 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.BlockFluidBase;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class SchematicPrinter {
     public static final SchematicPrinter INSTANCE = new SchematicPrinter();
@@ -48,6 +49,10 @@ public class SchematicPrinter {
     private SchematicWorld schematic = null;
     private byte[][][] timeout = null;
     private HashMap<BlockPos, Integer> syncBlacklist = new HashMap<BlockPos, Integer>();
+    private List<Vec3d> rollingVel = new ArrayList<>();
+    private int rollingPos = 0;
+    private Vec3d averageVelocity = new Vec3d(0,0,0);
+
 
     public boolean isEnabled() {
         return this.isEnabled;
@@ -90,20 +95,65 @@ public class SchematicPrinter {
     }
 
     public boolean print(final WorldClient world, final EntityPlayerSP player) {
+        if (ConfigurationHandler.disableWhileMoving) {
+            Vec3d playerspeed = new Vec3d(player.motionX,player.motionY+.0784,player.motionZ);
+            //printDebug(player.motionX + ", "+ player.motionY + ", " + player.motionZ);
+            printDebug(playerspeed.lengthVector()+"");
+            if (playerspeed.lengthVector()>.001) {
+                return false;
+            }
+        }
+
         final double dX = ClientProxy.playerPosition.x - this.schematic.position.x;
-        final double dY = ClientProxy.playerPosition.y - this.schematic.position.y;
+        final double dY = ClientProxy.playerPosition.y - this.schematic.position.y+player.getEyeHeight();
         final double dZ = ClientProxy.playerPosition.z - this.schematic.position.z;
         final int x = (int) Math.floor(dX);
         final int y = (int) Math.floor(dY);
         final int z = (int) Math.floor(dZ);
         final int range = ConfigurationHandler.placeDistance;
-
         final int minX = Math.max(0, x - range);
         final int maxX = Math.min(this.schematic.getWidth() - 1, x + range);
         int minY = Math.max(0, y - range);
         int maxY = Math.min(this.schematic.getHeight() - 1, y + range);
         final int minZ = Math.max(0, z - range);
         final int maxZ = Math.min(this.schematic.getLength() - 1, z + range);
+        final int priority = ConfigurationHandler.priority;
+
+        final int rollover = ConfigurationHandler.directionalPriority;
+
+        if (rollover > 0) {
+            if (rollover < rollingVel.size()) {
+                rollingVel.clear();
+                rollingPos = 0;
+            }
+
+            Vec3d cm = new Vec3d(player.motionX, 0, player.motionZ);
+
+            if (cm.x != 0 && cm.z != 0) {
+                if (rollingVel.size() == rollover) {
+                    rollingVel.set(rollingPos, cm.normalize());
+                } else {
+                    rollingVel.add(rollingPos, cm.normalize());
+                }
+                rollingPos++;
+                if (rollingPos >= rollover) {
+                    rollingPos = 0;
+                }
+                double vx = 0;
+                double vz = 0;
+                for (final Vec3d pos : rollingVel) {
+                    vx = vx + pos.x;
+                    vz = vz + pos.z;
+                }
+                averageVelocity = new Vec3d(vx, 0, vz).normalize().scale(-1000);
+            }
+        } else if (rollover == 0) {
+            averageVelocity = new Vec3d(0,0,0);
+        } else {
+            averageVelocity = new Vec3d(10000,0,10);
+        }
+
+
 
         if (minX > maxX || minY > maxY || minZ > maxZ) {
             return false;
@@ -132,11 +182,38 @@ public class SchematicPrinter {
 
         final double blockReachDistance = this.minecraft.playerController.getBlockReachDistance() - 0.1;
         final double blockReachDistanceSq = blockReachDistance * blockReachDistance;
+        List<MBlockPos> inRange = new ArrayList<>();
+        List<MBlockPos> inRangeB = new ArrayList<>();
         for (final MBlockPos pos : BlockPosHelper.getAllInBoxXZY(minX, minY, minZ, maxX, maxY, maxZ)) {
             if (pos.distanceSqToCenter(dX, dY, dZ) > blockReachDistanceSq) {
                 continue;
             }
+            if (priority > 1 && pos.y > dY-2) {
+                inRangeB.add(new MBlockPos(pos));
+            } else {
+                inRange.add(new MBlockPos(pos));
+            }
 
+        }
+
+        MBCompareDist distcomp = new MBCompareDist(new Vec3d(dX+ averageVelocity.x, dY, dZ+ averageVelocity.z));
+        MBCompareHeight heightcomp = new MBCompareHeight();
+
+        if (priority > 1) { // 1 is layers, 2 is pillars, 3 is below only
+            inRange.sort(heightcomp);
+            inRange.sort(distcomp);
+            if (priority == 2) {
+                inRangeB.sort(heightcomp);
+                inRangeB.sort(distcomp);
+                inRange.addAll(inRangeB);
+            }
+        } else {
+            inRange.sort(distcomp);
+            inRange.sort(heightcomp);
+
+        }
+
+        for (final MBlockPos pos: inRange) {
             try {
                 if (placeBlock(world, player, pos)) {
                     return syncSlotAndSneaking(player, slot, isSneaking, true);
@@ -146,17 +223,13 @@ public class SchematicPrinter {
                 return syncSlotAndSneaking(player, slot, isSneaking, false);
             }
         }
-
         return syncSlotAndSneaking(player, slot, isSneaking, true);
     }
 
-    private boolean syncSlotAndSneaking(final EntityPlayerSP player, final int slot, final boolean isSneaking, final boolean success) {
-        player.inventory.currentItem = slot;
-        syncSneaking(player, isSneaking);
-        return success;
-    }
+
 
     private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final BlockPos pos) {
+
         final int x = pos.getX();
         final int y = pos.getY();
         final int z = pos.getZ();
@@ -232,40 +305,52 @@ public class SchematicPrinter {
         return false;
     }
 
-    private boolean isSolid(final World world, final BlockPos pos, final EnumFacing side) {
+    /*
+     *This is called for every side, and checks if you can place against that side.
+     * -pos is the block we're attempting to place.
+     * -side is the side we're checking for placeability.
+     */
+    private boolean isSolid(final World world, final BlockPos pos, final EnumFacing side, final IBlockState blocc) {
         final BlockPos offset = pos.offset(side);
-
         final IBlockState blockState = world.getBlockState(offset);
         final Block block = blockState.getBlock();
 
-        if (block == null) {
-            return false;
-        }
 
         if (block.isAir(blockState, world, offset)) {
+           //printDebug(side + ": failed- is Air.");
             return false;
         }
 
-        if (block instanceof BlockFluidBase) {
-            return false;
+
+        if (!ConfigurationHandler.replace) {
+            if (block instanceof BlockLiquid) {
+                //printDebug(side + ": failed- is fluid.");
+                return false;
+            }
+
+            if (block.isReplaceable(world, offset)) {
+                //printDebug(side + ": failed- block is replaceable?");
+                return false;
+            }
         }
 
-        if (block.isReplaceable(world, offset)) {
-            return false;
+        if (!blocc.getBlock().canPlaceBlockOnSide(world,pos,side)) {
+            return false; // Ensures we don't try to place torches on the sides of slabs and flowerpots on stairs, etc.
         }
+
 
         return true;
     }
 
-    private List<EnumFacing> getSolidSides(final World world, final BlockPos pos) {
+    private List<EnumFacing> getSolidSides(final World world, final BlockPos pos, final IBlockState blocc) {
         if (!ConfigurationHandler.placeAdjacent) {
             return Arrays.asList(EnumFacing.VALUES);
         }
 
-        final List<EnumFacing> list = new ArrayList<EnumFacing>();
+        final List<EnumFacing> list = new ArrayList<>();
 
         for (final EnumFacing side : EnumFacing.VALUES) {
-            if (isSolid(world, pos, side)) {
+            if (isSolid(world, pos, side, blocc)) {
                 list.add(side);
             }
         }
@@ -278,29 +363,49 @@ public class SchematicPrinter {
             return false;
         }
 
+        // Handle blocks that rely on facing direction. No, I don't fully understand how this works.
+        // TODO: Hello invalid stair placement!
+        // In Stealth mode, we kind of have to kill Stairs placement after sending the look packet, which is bad.
+        // Pls find a way around this
+
         final PlacementData data = PlacementRegistry.INSTANCE.getPlacementData(blockState, itemStack);
-        if (data != null && !data.isValidPlayerFacing(blockState, player, pos, world)) {
+        if (!ConfigurationHandler.stealthMode) {
+            if (data != null && !data.isValidPlayerFacing(blockState, player, pos, world)) {
+                return false;
+            }
+        }
+
+        Block floor = world.getBlockState(pos.offset(EnumFacing.DOWN)).getBlock();
+        if (blockState.getBlock() instanceof BlockFalling && (floor instanceof BlockLiquid || floor instanceof BlockAir)) {
+            printDebug("Skipping gravity block placement!");
             return false;
         }
 
-        final List<EnumFacing> solidSides = getSolidSides(world, pos);
+        final List<EnumFacing> solidSides = getSolidSides(world, pos, blockState);
 
         if (solidSides.size() == 0) {
             return false;
         }
 
-        final EnumFacing direction;
+        printDebug("2: {"+pos+"} succeeded on: " + solidSides);
+        EnumFacing direction;
         final float offsetX;
         final float offsetY;
         final float offsetZ;
         final int extraClicks;
+
+        double x = pos.getX();
+        double y = pos.getY();
+        double z = pos.getZ();
+        double px = player.posX;
+        double py = player.posY;
+        double pz = player.posZ;
 
         if (data != null) {
             final List<EnumFacing> validDirections = data.getValidBlockFacings(solidSides, blockState);
             if (validDirections.size() == 0) {
                 return false;
             }
-
             direction = validDirections.get(0);
             offsetX = data.getOffsetX(blockState);
             offsetY = data.getOffsetY(blockState);
@@ -314,14 +419,69 @@ public class SchematicPrinter {
             extraClicks = 0;
         }
 
+        if (ConfigurationHandler.stealthMode) {
+            boolean passed = false;
+            List<EnumFacing> stealthsides = new ArrayList<>();
+            for (EnumFacing face : solidSides) {
+                switch (face) {
+                    case UP:
+                        if (y >= py) {passed=true;stealthsides.add(face);}
+                        break;
+                    case DOWN:
+                        if (y <= py+2) {passed=true;stealthsides.add(face);}
+                        break;
+                    case SOUTH:
+                        if (blockState.isFullBlock()) {
+                            if (z >= pz-1) {passed=true;stealthsides.add(face);}
+                        } else {
+                            if (z >= pz-2) {passed=true;stealthsides.add(face);}
+                        }
+                        break;
+                    case NORTH:
+                        if (blockState.isFullBlock()) {
+                            if (z <= pz) {passed=true;stealthsides.add(face);}
+                        } else {
+                            if (z <= pz+1) {passed=true;stealthsides.add(face);}
+                        }
+                        break;
+                    case EAST:
+                        if (blockState.isFullBlock()) {
+                            if (x >= px-1) {passed=true;stealthsides.add(face);}
+                        } else {
+                            if (x >= px-2) {passed=true;stealthsides.add(face);}
+                        }
+                        break;
+                    case WEST:
+                        if (blockState.isFullBlock()) {
+                            if (x <= px) {passed=true;stealthsides.add(face);}
+                        } else {
+                            if (x <= px+1) {passed=true;stealthsides.add(face);}
+                        }
+                        break;
+                }
+            }
+            if (!passed) {
+                return false;
+            }
+            printDebug("Solid vs. Stealth");
+            printDebug(solidSides.toString());
+            printDebug(stealthsides.toString());
+
+            direction = stealthsides.get(0);
+        }
+
         if (!swapToItem(player.inventory, itemStack)) {
             return false;
         }
-
         return placeBlock(world, player, pos, direction, offsetX, offsetY, offsetZ, extraClicks);
     }
 
+    /*
+     * Handles resources
+     */
+
     private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final BlockPos pos, final EnumFacing direction, final float offsetX, final float offsetY, final float offsetZ, final int extraClicks) {
+        printDebug("3: placing.");
         final EnumHand hand = EnumHand.MAIN_HAND;
         final ItemStack itemStack = player.getHeldItem(hand);
         boolean success = false;
@@ -346,15 +506,23 @@ public class SchematicPrinter {
         return success;
     }
 
-    private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final ItemStack itemStack, final BlockPos pos, final EnumFacing side, final Vec3d hitVec, final EnumHand hand) {
-        // FIXME: where did this event go?
-        /*
-        if (ForgeEventFactory.onPlayerInteract(player, Action.RIGHT_CLICK_BLOCK, world, pos, side, hitVec).isCanceled()) {
-            return false;
-        }
-        */
+    /*
+     * Actually PLACES the blocks. Is called twice for multi-part blocks, meaning JUST slabs.
+     */
 
-        // FIXME: when an adjacent block is not required the blocks should be placed 1 block away from the actual position (because air is replaceable)
+    private boolean placeBlock(final WorldClient world, final EntityPlayerSP player, final ItemStack itemStack, final BlockPos pos, final EnumFacing side, final Vec3d hitVec, final EnumHand hand) {
+
+        final BlockPos ref = pos.offset(side);
+        final Vec3d cent = new Vec3d(ref.getX()+.5, ref.getY()+.5, ref.getZ()+.5);
+        final double x = pos.getX()-ref.getX();
+        final double y = pos.getY()-ref.getY();
+        final double z = pos.getZ()-ref.getZ();
+        final Vec3d epiclook = new Vec3d(x*.5+cent.x,y*.5+cent.y,z*.5+cent.z);
+
+        if(ConfigurationHandler.stealthMode) {
+            PrinterUtil.faceVectorPacketInstant(epiclook);
+        }
+
         final BlockPos actualPos = ConfigurationHandler.placeAdjacent ? pos : pos.offset(side);
         final EnumActionResult result = this.minecraft.playerController.processRightClickBlock(player, world, actualPos, side, hitVec, hand);
         if ((result != EnumActionResult.SUCCESS)) {
@@ -363,6 +531,13 @@ public class SchematicPrinter {
 
         player.swingArm(hand);
         return true;
+    }
+
+
+    private boolean syncSlotAndSneaking(final EntityPlayerSP player, final int slot, final boolean isSneaking, final boolean success) {
+        player.inventory.currentItem = slot;
+        syncSneaking(player, isSneaking);
+        return success;
     }
 
     private void syncSneaking(final EntityPlayerSP player, final boolean isSneaking) {
@@ -424,5 +599,47 @@ public class SchematicPrinter {
 
     private boolean swapSlots(final int from, final int to) {
         return this.minecraft.playerController.windowClick(this.minecraft.player.inventoryContainer.windowId, from, to, ClickType.SWAP, this.minecraft.player) == ItemStack.EMPTY;
+    }
+
+    private void printDebug(String message) {
+        if(ConfigurationHandler.debugMode) {
+            this.minecraft.player.sendMessage(new TextComponentTranslation(I18n.format(message)));
+        }
+    }
+
+    private List<Vec3d> raycast(Vec3d endpoint) {
+        List<Vec3d> blocks = null;
+        blocks.add(new Vec3d(1,2,3));
+
+        return blocks;
+    }
+}
+
+class MBCompareDist implements Comparator<MBlockPos> {
+    Vec3d p;
+    public MBCompareDist(Vec3d point) {
+        p = new Vec3d(point.x-.5, point.y-.5, point.z-.5);
+    }
+    public int compare(MBlockPos A, MBlockPos B) {
+        if (A.x == B.x && A.z == B.z) {
+            return 0;
+        } else if (Math.pow(A.x-p.x, 2)+Math.pow(A.z-p.z,2) > Math.pow(B.x-p.x, 2)+Math.pow(B.z-p.z,2)) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+}
+
+class MBCompareHeight implements Comparator<MBlockPos> {
+
+    public int compare(MBlockPos A, MBlockPos B) {
+        if (A.y == B.y) {
+            return 0;
+        } else if (A.y > B.y) {
+            return 1;
+        } else {
+            return -1;
+        }
     }
 }

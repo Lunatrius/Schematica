@@ -22,7 +22,7 @@ import java.util.Set;
 public class ConfigurationHandler {
     public static final ConfigurationHandler INSTANCE = new ConfigurationHandler();
 
-    public static final String VERSION = "1";
+    public static final String VERSION = "2";
 
     public static Configuration configuration;
 
@@ -34,8 +34,8 @@ public class ConfigurationHandler {
     public static final boolean HIGHLIGHT_AIR_DEFAULT = true;
     public static final double BLOCK_DELTA_DEFAULT = 0.005;
     public static final int RENDER_DISTANCE_DEFAULT = 8;
-    public static final int PLACE_DELAY_DEFAULT = 1;
-    public static final int TIMEOUT_DEFAULT = 10;
+    public static final double PLACE_DELAY_DEFAULT = 1.0;
+    public static final int TIMEOUT_DEFAULT = 5;
     public static final int PLACE_DISTANCE_DEFAULT = 5;
     public static final boolean PLACE_INSTANTLY_DEFAULT = false;
     public static final boolean DESTROY_BLOCKS_DEFAULT = false;
@@ -48,10 +48,13 @@ public class ConfigurationHandler {
     public static final File SCHEMATIC_DIRECTORY_DEFAULT = new File(Schematica.proxy.getDataDirectory(), SCHEMATIC_DIRECTORY_STR);
     public static final String[] EXTRA_AIR_BLOCKS_DEFAULT = {};
     public static final String SORT_TYPE_DEFAULT = "";
-    public static final boolean PRINTER_ENABLED_DEFAULT = true;
-    public static final boolean SAVE_ENABLED_DEFAULT = true;
-    public static final boolean LOAD_ENABLED_DEFAULT = true;
-    public static final int PLAYER_QUOTA_KILOBYTES_DEFAULT = 8192;
+    public static final boolean DEBUG_MODE_DEFAULT = false;
+    public static final boolean STEALTH_MODE_DEFAULT = true;
+    public static final int PRIORITY_DEFAULT = 1;
+    public static final int DIRECTIONAL_PRIORITY_DEFAULT = 25;
+    public static final boolean DISABLE_WHILE_MOVING_DEFAULT = false;
+    public static final boolean PLACE_REPLACEABLE_DEFAULT = false;
+    public static final boolean VIEW_ERRORS_TOGGLE_DEFAULT = false;
 
     public static boolean dumpBlockList = DUMP_BLOCK_LIST_DEFAULT;
     public static boolean showDebugInfo = SHOW_DEBUG_INFO_DEFAULT;
@@ -61,7 +64,7 @@ public class ConfigurationHandler {
     public static boolean highlightAir = HIGHLIGHT_AIR_DEFAULT;
     public static double blockDelta = BLOCK_DELTA_DEFAULT;
     public static int renderDistance = RENDER_DISTANCE_DEFAULT;
-    public static int placeDelay = PLACE_DELAY_DEFAULT;
+    public static double placeDelay = PLACE_DELAY_DEFAULT;
     public static int timeout = TIMEOUT_DEFAULT;
     public static int placeDistance = PLACE_DISTANCE_DEFAULT;
     public static boolean placeInstantly = PLACE_INSTANTLY_DEFAULT;
@@ -69,14 +72,20 @@ public class ConfigurationHandler {
     public static boolean destroyInstantly = DESTROY_INSTANTLY_DEFAULT;
     public static boolean placeAdjacent = PLACE_ADJACENT_DEFAULT;
     public static boolean[] swapSlots = Arrays.copyOf(SWAP_SLOTS_DEFAULT, SWAP_SLOTS_DEFAULT.length);
-    public static final Queue<Integer> swapSlotsQueue = new ArrayDeque<Integer>();
+    public static final Queue<Integer> swapSlotsQueue = new ArrayDeque<>();
     public static File schematicDirectory = SCHEMATIC_DIRECTORY_DEFAULT;
     public static String[] extraAirBlocks = Arrays.copyOf(EXTRA_AIR_BLOCKS_DEFAULT, EXTRA_AIR_BLOCKS_DEFAULT.length);
     public static String sortType = SORT_TYPE_DEFAULT;
-    public static boolean printerEnabled = PRINTER_ENABLED_DEFAULT;
-    public static boolean saveEnabled = SAVE_ENABLED_DEFAULT;
-    public static boolean loadEnabled = LOAD_ENABLED_DEFAULT;
-    public static int playerQuotaKilobytes = PLAYER_QUOTA_KILOBYTES_DEFAULT;
+
+
+    // ----------------------------------------------------------------------------------Psst, over here!
+    public static boolean stealthMode = STEALTH_MODE_DEFAULT;
+    public static boolean debugMode = DEBUG_MODE_DEFAULT;
+    public static int priority = PRIORITY_DEFAULT;
+    public static int directionalPriority = DIRECTIONAL_PRIORITY_DEFAULT;
+    public static boolean disableWhileMoving = DISABLE_WHILE_MOVING_DEFAULT;
+    public static boolean replace = PLACE_REPLACEABLE_DEFAULT;
+    public static boolean viewErrorToggle = VIEW_ERRORS_TOGGLE_DEFAULT;
 
     public static Property propDumpBlockList = null;
     public static Property propShowDebugInfo = null;
@@ -97,12 +106,17 @@ public class ConfigurationHandler {
     public static Property propSchematicDirectory = null;
     public static Property propExtraAirBlocks = null;
     public static Property propSortType = null;
-    public static Property propPrinterEnabled = null;
-    public static Property propSaveEnabled = null;
-    public static Property propLoadEnabled = null;
-    public static Property propPlayerQuotaKilobytes = null;
 
-    private static final Set<Block> extraAirBlockList = new HashSet<Block>();
+    public static Property propStealthMode = null;
+    public static Property propDebugMode = null;
+    public static Property propPriority = null;
+    public static Property propDirectionalPriority = null;
+    public static Property propdisableWhileMoving = null;
+    public static Property propReplace = null;
+    public static Property propViewErrorToggle = null;
+
+
+    private static final Set<Block> extraAirBlockList = new HashSet<>();
 
     public static void init(final File configFile) {
         if (configuration == null) {
@@ -117,7 +131,6 @@ public class ConfigurationHandler {
         loadConfigurationPrinter();
         loadConfigurationSwapSlots();
         loadConfigurationGeneral();
-        loadConfigurationServer();
 
         Schematica.proxy.createFolders();
 
@@ -164,9 +177,9 @@ public class ConfigurationHandler {
     }
 
     private static void loadConfigurationPrinter() {
-        propPlaceDelay = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_DELAY, PLACE_DELAY_DEFAULT, Names.Config.PLACE_DELAY_DESC, 0, 20);
+        propPlaceDelay = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_DELAY, PLACE_DELAY_DEFAULT, Names.Config.PLACE_DELAY_DESC, 1.0, 20.0);
         propPlaceDelay.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_DELAY);
-        placeDelay = propPlaceDelay.getInt(PLACE_DELAY_DEFAULT);
+        placeDelay = propPlaceDelay.getDouble(PLACE_DELAY_DEFAULT);
 
         propTimeout = configuration.get(Names.Config.Category.PRINTER, Names.Config.TIMEOUT, TIMEOUT_DEFAULT, Names.Config.TIMEOUT_DESC, 0, 100);
         propTimeout.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.TIMEOUT);
@@ -191,6 +204,32 @@ public class ConfigurationHandler {
         propPlaceAdjacent = configuration.get(Names.Config.Category.PRINTER, Names.Config.PLACE_ADJACENT, PLACE_ADJACENT_DEFAULT, Names.Config.PLACE_ADJACENT_DESC);
         propPlaceAdjacent.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLACE_ADJACENT);
         placeAdjacent = propPlaceAdjacent.getBoolean(PLACE_ADJACENT_DEFAULT);
+
+        propDebugMode = configuration.get(Names.Config.Category.PRINTER, Names.Config.DEBUG_MODE, DEBUG_MODE_DEFAULT, Names.Config.DEBUG_MODE_DESC);
+        propDebugMode.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DEBUG_MODE);
+        debugMode = propDebugMode.getBoolean(DEBUG_MODE_DEFAULT);
+
+        propStealthMode = configuration.get(Names.Config.Category.PRINTER, Names.Config.STEALTH_MODE, STEALTH_MODE_DEFAULT, Names.Config.STEALTH_MODE_DESC);
+        propStealthMode.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.STEALTH_MODE);
+        stealthMode = propStealthMode.getBoolean(STEALTH_MODE_DEFAULT);
+
+        propPriority = configuration.get(Names.Config.Category.PRINTER, Names.Config.PRIORITY, PRIORITY_DEFAULT, Names.Config.PRIORITY_DESC, 1, 3);
+        propPriority.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PRIORITY);
+        priority = propPriority.getInt(PRIORITY_DEFAULT);
+
+        propDirectionalPriority = configuration.get(Names.Config.Category.PRINTER, Names.Config.DIRECTIONAL_PRIORITY, DIRECTIONAL_PRIORITY_DEFAULT, Names.Config.DIRECTIONAL_PRIORITY_DESC, -1, 50);
+        propDirectionalPriority.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DIRECTIONAL_PRIORITY);
+        directionalPriority = propDirectionalPriority.getInt(DIRECTIONAL_PRIORITY_DEFAULT);
+
+        propdisableWhileMoving = configuration.get(Names.Config.Category.PRINTER, Names.Config.DISABLE_WHILE_MOVING, DISABLE_WHILE_MOVING_DEFAULT, Names.Config.DISABLE_WHILE_MOVING_DESC);
+        propdisableWhileMoving.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.DISABLE_WHILE_MOVING);
+        disableWhileMoving = propdisableWhileMoving.getBoolean(DISABLE_WHILE_MOVING_DEFAULT);
+
+        propReplace = configuration.get(Names.Config.Category.PRINTER, Names.Config.REPLACE, PLACE_REPLACEABLE_DEFAULT, Names.Config.REPLACE_DESC);
+        propReplace.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.REPLACE);
+        replace = propReplace.getBoolean(PLACE_REPLACEABLE_DEFAULT);
+        
+
     }
 
     private static void loadConfigurationSwapSlots() {
@@ -214,6 +253,10 @@ public class ConfigurationHandler {
         propExtraAirBlocks = configuration.get(Names.Config.Category.GENERAL, Names.Config.EXTRA_AIR_BLOCKS, EXTRA_AIR_BLOCKS_DEFAULT, Names.Config.EXTRA_AIR_BLOCKS_DESC);
         propExtraAirBlocks.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.EXTRA_AIR_BLOCKS);
         extraAirBlocks = propExtraAirBlocks.getStringList();
+
+        propViewErrorToggle = configuration.get(Names.Config.Category.GENERAL, Names.Config.VIEW_ERRORS_TOGGLE, VIEW_ERRORS_TOGGLE_DEFAULT, Names.Config.VIEW_ERRORS_TOGGLE_DESC);
+        propViewErrorToggle.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.VIEW_ERRORS_TOGGLE);
+        viewErrorToggle = propViewErrorToggle.getBoolean(VIEW_ERRORS_TOGGLE_DEFAULT);
 
         propSortType = configuration.get(Names.Config.Category.GENERAL, Names.Config.SORT_TYPE, SORT_TYPE_DEFAULT, Names.Config.SORT_TYPE_DESC);
         propSortType.setShowInGui(false);
@@ -267,23 +310,6 @@ public class ConfigurationHandler {
         }
     }
 
-    private static void loadConfigurationServer() {
-        propPrinterEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.PRINTER_ENABLED, PRINTER_ENABLED_DEFAULT, Names.Config.PRINTER_ENABLED_DESC);
-        propPrinterEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PRINTER_ENABLED);
-        printerEnabled = propPrinterEnabled.getBoolean(PRINTER_ENABLED_DEFAULT);
-
-        propSaveEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.SAVE_ENABLED, SAVE_ENABLED_DEFAULT, Names.Config.SAVE_ENABLED_DESC);
-        propSaveEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.SAVE_ENABLED);
-        saveEnabled = propSaveEnabled.getBoolean(SAVE_ENABLED_DEFAULT);
-
-        propLoadEnabled = configuration.get(Names.Config.Category.SERVER, Names.Config.LOAD_ENABLED, LOAD_ENABLED_DEFAULT, Names.Config.LOAD_ENABLED_DESC);
-        propLoadEnabled.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.LOAD_ENABLED);
-        loadEnabled = propLoadEnabled.getBoolean(LOAD_ENABLED_DEFAULT);
-
-        propPlayerQuotaKilobytes = configuration.get(Names.Config.Category.SERVER, Names.Config.PLAYER_QUOTA_KILOBYTES, PLAYER_QUOTA_KILOBYTES_DEFAULT, Names.Config.PLAYER_QUOTA_KILOBYTES_DESC);
-        propPlayerQuotaKilobytes.setLanguageKey(Names.Config.LANG_PREFIX + "." + Names.Config.PLAYER_QUOTA_KILOBYTES);
-        playerQuotaKilobytes = propPlayerQuotaKilobytes.getInt(PLAYER_QUOTA_KILOBYTES_DEFAULT);
-    }
 
     private ConfigurationHandler() {}
 

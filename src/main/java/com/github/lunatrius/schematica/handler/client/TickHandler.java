@@ -18,7 +18,7 @@ public class TickHandler {
 
     private final Minecraft minecraft = Minecraft.getMinecraft();
 
-    private int ticks = -1;
+    private double ticks = -1;
 
     private TickHandler() {}
 
@@ -46,11 +46,12 @@ public class TickHandler {
         final WorldClient world = this.minecraft.world;
         final EntityPlayerSP player = this.minecraft.player;
         final SchematicWorld schematic = ClientProxy.schematic;
-        if (world != null && player != null && schematic != null && schematic.isRendering) {
+        if (world != null && player != null && schematic != null) {
             this.minecraft.mcProfiler.startSection("printer");
             final SchematicPrinter printer = SchematicPrinter.INSTANCE;
-            if (printer.isEnabled() && printer.isPrinting() && this.ticks-- < 0) {
-                this.ticks = ConfigurationHandler.placeDelay;
+
+            if (printer.isEnabled() && printer.isPrinting() && this.ticks-- <= 0) {
+                this.ticks = this.ticks+ConfigurationHandler.placeDelay;
 
                 printer.print(world, player);
             }

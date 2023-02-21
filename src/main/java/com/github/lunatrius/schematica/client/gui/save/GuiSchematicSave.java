@@ -11,7 +11,10 @@ import com.github.lunatrius.schematica.world.schematic.SchematicFormat;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 
 import java.io.File;
@@ -68,6 +71,7 @@ public class GuiSchematicSave extends GuiScreenBase {
         this.centerY = this.height / 2;
 
         this.buttonList.clear();
+        this.textFields.clear();
 
         int id = 0;
 
@@ -138,6 +142,10 @@ public class GuiSchematicSave extends GuiScreenBase {
     protected void actionPerformed(final GuiButton guiButton) {
         if (guiButton.enabled) {
             if (guiButton.id == this.btnPointA.id) {
+                ClientProxy.isRenderingGuide=true;
+                this.btnEnable.displayString = this.strOn;
+                this.btnSave.enabled = true;
+                this.btnFormat.enabled = true;
                 ClientProxy.movePointToPlayer(ClientProxy.pointA);
                 ClientProxy.updatePoints();
                 setPoint(this.numericAX, this.numericAY, this.numericAZ, ClientProxy.pointA);
@@ -150,7 +158,13 @@ public class GuiSchematicSave extends GuiScreenBase {
             } else if (guiButton.id == this.numericAZ.id) {
                 ClientProxy.pointA.z = this.numericAZ.getValue();
                 ClientProxy.updatePoints();
+
+
             } else if (guiButton.id == this.btnPointB.id) {
+                ClientProxy.isRenderingGuide=true;
+                this.btnEnable.displayString = this.strOn;
+                this.btnSave.enabled = true;
+                this.btnFormat.enabled = true;
                 ClientProxy.movePointToPlayer(ClientProxy.pointB);
                 ClientProxy.updatePoints();
                 setPoint(this.numericBX, this.numericBY, this.numericBZ, ClientProxy.pointB);
@@ -164,19 +178,35 @@ public class GuiSchematicSave extends GuiScreenBase {
                 ClientProxy.pointB.z = this.numericBZ.getValue();
                 ClientProxy.updatePoints();
             } else if (guiButton.id == this.btnEnable.id) {
-                ClientProxy.isRenderingGuide = !ClientProxy.isRenderingGuide && Schematica.proxy.isSaveEnabled;
-                this.btnEnable.displayString = ClientProxy.isRenderingGuide ? this.strOn : this.strOff;
-                this.btnSave.enabled = ClientProxy.isRenderingGuide || ClientProxy.schematic != null;
-                this.btnFormat.enabled = ClientProxy.isRenderingGuide || ClientProxy.schematic != null;
+                if (ClientProxy.isRenderingGuide) {
+                    ClientProxy.isRenderingGuide=false;
+                    this.btnEnable.displayString = this.strOff;
+                    if (ClientProxy.schematic == null) {
+                        this.btnSave.enabled = false;
+                        this.btnFormat.enabled = false;
+                    }
+                } else {
+                    ClientProxy.isRenderingGuide=true;
+                    this.btnEnable.displayString = this.strOn;
+                    this.btnSave.enabled = true;
+                    this.btnFormat.enabled = true;
+                }
             } else if (guiButton.id == this.btnFormat.id) {
                 this.format = nextFormat();
                 this.btnFormat.displayString = I18n.format(Names.Gui.Save.FORMAT, I18n.format(SchematicFormat.getFormatName(this.format)));
-            } else if (guiButton.id == this.btnSave.id) {
+            } else if (guiButton.id == this.btnSave.id && !this.filename.equals("")) {
                 final String path = this.tfFilename.getText() + SchematicFormat.getExtension(this.format);
                 if (ClientProxy.isRenderingGuide) {
                     if (Schematica.proxy.saveSchematic(this.mc.player, ConfigurationHandler.schematicDirectory, path, this.mc.world, this.format, ClientProxy.pointMin, ClientProxy.pointMax)) {
                         this.filename = "";
                         this.tfFilename.setText(this.filename);
+                        ClientProxy.isRenderingGuide=false;
+                        this.btnEnable.displayString = this.strOff;
+                        if (ClientProxy.schematic == null) {
+                            this.btnSave.enabled = false;
+                            this.btnFormat.enabled = false;
+                        }
+                        this.mc.displayGuiScreen(this.parentScreen);
                     }
                 } else {
                     SchematicFormat.writeToFileAndNotify(new File(ConfigurationHandler.schematicDirectory, path), this.format, ClientProxy.schematic.getSchematic(), this.mc.player);
@@ -198,22 +228,21 @@ public class GuiSchematicSave extends GuiScreenBase {
         drawString(this.fontRenderer, this.strSaveSelection, this.width - 205, this.height - 70, 0xFFFFFF);
 
         drawString(this.fontRenderer, this.strX, this.centerX - 145, this.centerY - 24, 0xFFFFFF);
-        drawString(this.fontRenderer, Integer.toString(ClientProxy.pointA.x), this.centerX - 25, this.centerY - 24, 0xFFFFFF);
-
         drawString(this.fontRenderer, this.strY, this.centerX - 145, this.centerY + 1, 0xFFFFFF);
-        drawString(this.fontRenderer, Integer.toString(ClientProxy.pointA.y), this.centerX - 25, this.centerY + 1, 0xFFFFFF);
-
         drawString(this.fontRenderer, this.strZ, this.centerX - 145, this.centerY + 26, 0xFFFFFF);
-        drawString(this.fontRenderer, Integer.toString(ClientProxy.pointA.z), this.centerX - 25, this.centerY + 26, 0xFFFFFF);
 
         drawString(this.fontRenderer, this.strX, this.centerX + 15, this.centerY - 24, 0xFFFFFF);
-        drawString(this.fontRenderer, Integer.toString(ClientProxy.pointB.x), this.centerX + 135, this.centerY - 24, 0xFFFFFF);
-
         drawString(this.fontRenderer, this.strY, this.centerX + 15, this.centerY + 1, 0xFFFFFF);
-        drawString(this.fontRenderer, Integer.toString(ClientProxy.pointB.y), this.centerX + 135, this.centerY + 1, 0xFFFFFF);
-
         drawString(this.fontRenderer, this.strZ, this.centerX + 15, this.centerY + 26, 0xFFFFFF);
-        drawString(this.fontRenderer, Integer.toString(ClientProxy.pointB.z), this.centerX + 135, this.centerY + 26, 0xFFFFFF);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(centerX+155, centerY, this.zLevel);
+        Entity entity = this.mc.getRenderViewEntity();
+        GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch), -1.0F, 0.0F, 0.0F);
+        GlStateManager.rotate(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw), 0.0F, 1.0F, 0.0F);
+        GlStateManager.scale(-2.0F, -2.0F, -2.0F);
+        OpenGlHelper.renderDirections(10);
+        GlStateManager.popMatrix();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
