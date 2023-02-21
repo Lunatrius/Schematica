@@ -243,7 +243,7 @@ public class ClientProxy extends CommonProxy {
 
         final SchematicWorld world = new SchematicWorld(schematic);
 
-        String[] parts = filename.split("[_.]");
+        String[] parts = filename.split("[_.]");  // name _ x _ y _ z . schematic
         if (parts.length == 5) {
             Reference.logger.debug("Loaded {} [w:{},h:{},l:{}]", filename, world.getWidth(), world.getHeight(), world.getLength());
             autoAlign = true;
