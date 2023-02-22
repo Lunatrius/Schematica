@@ -45,10 +45,9 @@ public class ClientProxy extends CommonProxy {
     public static int rotationRender = 0;
 
     public static SchematicWorld schematic = null;
-    public static boolean firstLoad = false;  // Gets toggled true while manually loading a schematic
-    public static boolean showCoords = false;  // True on loading schematic, remains true until reconnect
+    public static boolean firstLoad = false;  // True during first load of a schematic, to move to player
+    public static boolean showCoords = false;  // Are we currently allowed to show coords? Toggled true on load or toggle, and false on disconnect.
     public static boolean autoAlign = false;  // When schematic formatted name_x_y_z, make this true and align
-
     public static final MBlockPos pointA = new MBlockPos();
     public static final MBlockPos pointB = new MBlockPos();
     public static final MBlockPos pointMin = new MBlockPos();
@@ -249,37 +248,39 @@ public class ClientProxy extends CommonProxy {
         }
 
         final SchematicWorld world = new SchematicWorld(schematic);
-
+        autoAlign = false;
         String[] parts = filename.split("[_.]");  // name _ x _ y _ z . schematic
         if (parts.length == 5) {
-            Reference.logger.debug("Loaded {} [w:{},h:{},l:{}]", filename, world.getWidth(), world.getHeight(), world.getLength());
-            autoAlign = true;
-            int px = (int) Math.floor(playerPosition.x);
-            int py = (int) Math.floor(playerPosition.y);
-            int pz = (int) Math.floor(playerPosition.z);
-            String psx = String.format("%07d", px);
-            String psy = String.format("%07d", py);
-            String psz = String.format("%07d", pz);
-            int gx = Integer.parseInt(psx.substring(0, psx.length()-parts[1].length()) + parts[1]);
-            int gy = Integer.parseInt(psy.substring(0, psy.length()-parts[2].length()) + parts[2]);
-            int gz = Integer.parseInt(psz.substring(0, psz.length()-parts[3].length()) + parts[3]);
-            int dx = Integer.parseInt("1" + new String(new char[parts[1].length()]).replace('\0', '0'));
-            int dz = Integer.parseInt("1" + new String(new char[parts[3].length()]).replace('\0', '0'));
-            if (gx - px < -dx/2) {
-                gx = gx + dx;
-            } else if (gx - px > dx/2) {
-                gx = gx - dx;
+            try {
+                Reference.logger.debug("Loaded {} [w:{},h:{},l:{}]", filename, world.getWidth(), world.getHeight(), world.getLength());
+                int px = (int) Math.floor(playerPosition.x);
+                int py = (int) Math.floor(playerPosition.y);
+                int pz = (int) Math.floor(playerPosition.z);
+                String psx = String.format("%07d", px);
+                String psy = String.format("%07d", py);
+                String psz = String.format("%07d", pz);
+                int gx = Integer.parseInt(psx.substring(0, psx.length()-parts[1].length()) + parts[1]);
+                int gy = Integer.parseInt(psy.substring(0, psy.length()-parts[2].length()) + parts[2]);
+                int gz = Integer.parseInt(psz.substring(0, psz.length()-parts[3].length()) + parts[3]);
+                int dx = Integer.parseInt("1" + new String(new char[parts[1].length()]).replace('\0', '0'));
+                int dz = Integer.parseInt("1" + new String(new char[parts[3].length()]).replace('\0', '0'));
+                if (gx - px < -dx/2) {
+                    gx = gx + dx;
+                } else if (gx - px > dx/2) {
+                    gx = gx - dx;
+                }
+                if (gz - pz < -dz/2) {
+                    gz = gz + dz;
+                } else if (gz - pz > dz/2) {
+                    gz = gz - dz;
+                }
+                world.position.x = gx;
+                world.position.y = gy;
+                world.position.z = gz;
+                autoAlign = true;
+            } catch (Exception e) {
+                Reference.logger.debug("Failed to auto align");
             }
-            if (gz - pz < -dz/2) {
-                gz = gz + dz;
-            } else if (gz - pz > dz/2) {
-                gz = gz - dz;
-            }
-            world.position.x = gx;
-            world.position.y = gy;
-            world.position.z = gz;
-        } else {
-            autoAlign = false;
         }
         ClientProxy.schematic = world;
         RenderSchematic.INSTANCE.setWorldAndLoadRenderers(world);

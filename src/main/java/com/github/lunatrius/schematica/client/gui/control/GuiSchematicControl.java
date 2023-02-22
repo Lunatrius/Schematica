@@ -94,11 +94,13 @@ public class GuiSchematicControl extends GuiScreenBase {
         int id = 0;
 
         this.numericX = new GuiNumericField(this.fontRenderer, id++, this.centerX - 50, this.centerY - 30, 100, 20);
+        this.buttonList.add(this.numericX);
         this.numericY = new GuiNumericField(this.fontRenderer, id++, this.centerX - 50, this.centerY - 5, 100, 20);
+        this.buttonList.add(this.numericY);
         this.numericZ = new GuiNumericField(this.fontRenderer, id++, this.centerX - 50, this.centerY + 20, 100, 20);
+        this.buttonList.add(this.numericZ);
         this.btnShowXYZ = new GuiButton(id++, this.centerX - 50, this.centerY - 5, 100, 20, "Reveal last XYZ");
         this.buttonList.add(this.btnShowXYZ);
-
 
         this.btnSchematics = new GuiButton(id++, 10, 10,80,20, this.strSchematics);
         this.buttonList.add(this.btnSchematics);
@@ -150,6 +152,9 @@ public class GuiSchematicControl extends GuiScreenBase {
         this.numericX.setEnabled(this.schematic != null);
         this.numericY.setEnabled(this.schematic != null);
         this.numericZ.setEnabled(this.schematic != null);
+        this.numericX.visible = false;
+        this.numericY.visible = false;
+        this.numericZ.visible = false;
         if (ClientProxy.showCoords) {
             triggerXYZ();
         }
@@ -342,9 +347,9 @@ public class GuiSchematicControl extends GuiScreenBase {
     }
 
     public void triggerXYZ() {
-        this.buttonList.add(this.numericX);
-        this.buttonList.add(this.numericY);
-        this.buttonList.add(this.numericZ);
-        this.buttonList.remove(this.btnShowXYZ);
+        this.numericX.visible = true;
+        this.numericY.visible = true;
+        this.numericZ.visible = true;
+        this.btnShowXYZ.visible = false;
     }
 }

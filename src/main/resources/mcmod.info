@@ -6,11 +6,12 @@
 			"name": "Schematica",
 			"description": "Import and export Minecraft schematic files in Minecraft!",
 			"mcversion": "${mcversion}",
-			"version": "${version}",
+			"version": "${version} BETA",
 			"authorList": [
-				"Lunatrius"
+				"Lunatrius",
+				"Emblem"
 			],
-			"credits": "AbrarSyed, AtomicBlom, UltraMoogleMan",
+			"credits": "AbrarSyed, AtomicBlom, UltraMoogleMan, EmotionalLove, Entropy5",
 			"dependants": [  ],
 			"dependencies": [ "forge@[${minforgeversion},)", "lunatriuscore@[${coreversion},)" ],
 			"parent": "",
@@ -18,7 +19,7 @@
 			"logoFile": "/assets/schematica/logo.png",
 			"screenshots": [  ],
 			"updateUrl": "http://mc.lunatri.us/",
-			"url": "http://mc.lunatri.us/",
+			"url": "http://4chan.org/vp/",
 			"useDependencyInformation": true
 		}
 	]

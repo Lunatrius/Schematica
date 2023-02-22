@@ -24,12 +24,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher;
 import net.minecraft.client.renderer.chunk.CompiledChunk;
 import net.minecraft.client.renderer.chunk.RenderChunk;
@@ -37,21 +33,17 @@ import net.minecraft.client.renderer.chunk.VisGraph;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.*;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -63,12 +55,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @SideOnly(Side.CLIENT)
 @MethodsReturnNonnullByDefault
@@ -231,10 +218,11 @@ public class RenderSchematic extends RenderGlobal {
             this.renderDispatcherOverlay = null;
         }
     }
-
+        //---------------------------------------------------------------------------------------------------------------------------------------------------------------------
     @SubscribeEvent
     public void onRenderWorldLast(final RenderWorldLastEvent event) {
-        final EntityPlayerSP player = this.mc.player;
+        //final EntityPlayerSP player = this.mc.player;
+        final EntityPlayerSP player = this.mc.getRenderViewEntity() instanceof EntityPlayerSP ? (EntityPlayerSP) this.mc.getRenderViewEntity() : this.mc.player;
         if (player != null) {
             this.profiler.startSection("schematica");
             ClientProxy.setPlayerData(player, event.getPartialTicks());
@@ -251,7 +239,13 @@ public class RenderSchematic extends RenderGlobal {
             this.profiler.endStartSection("guide");
             if (ClientProxy.isRenderingGuide || isRenderingSchematic) {
                 GlStateManager.pushMatrix();
-                renderOverlay(schematic, isRenderingSchematic);
+                if (ClientProxy.viewingErrors) {
+                    GlStateManager.disableDepth();
+                    renderOverlay(schematic, isRenderingSchematic);
+                    GlStateManager.enableDepth();
+                } else {
+                    renderOverlay(schematic, isRenderingSchematic);
+                }
                 GlStateManager.popMatrix();
             }
 
@@ -958,4 +952,84 @@ public class RenderSchematic extends RenderGlobal {
             this.counter = counter;
         }
     }
+
+    public void drawMistakes() {
+
+        List<Vec3d> mistakes = new ArrayList<>();
+        mistakes.add(new Vec3d(1,7,1));
+
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        GL11.glEnable(GL11.GL_LINE_SMOOTH);
+        GeometryTessellator tessellator = GeometryTessellator.getInstance();
+        tessellator.beginLines();
+        for (Vec3d blocc:mistakes) {
+            BlockPos block = new BlockPos(blocc);
+            tessellator.drawCuboid(block, GeometryMasks.Quad.ALL, 0xFF800000);
+        }
+
+        tessellator.draw();
+
+
+        GL11.glDisable(GL11.GL_LINE_SMOOTH);
+        GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
+
+
+        TextureManager renderer = mc.getTextureManager();
+        renderer.bindTexture(new ResourceLocation("schematica","WrongBlock.png"));
+        renderParticle(new Vec3d(1,7,1), mc.player);
+
+    }
+
+    public void renderParticle(Vec3d particlePos, Entity entityIn)
+    {
+        //float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder buffer = tessellator.getBuffer();
+
+        float base = 0.017453292F;
+        float rotationX = MathHelper.cos(entityIn.rotationYaw * 0.017453292F);
+        float rotationZ = MathHelper.sin(entityIn.rotationYaw * 0.017453292F);
+        float rotationYZ = -rotationZ * MathHelper.sin(entityIn.rotationPitch * 0.017453292F);
+        float rotationXY = rotationX * MathHelper.sin(entityIn.rotationPitch * 0.017453292F);
+        float rotationXZ = MathHelper.cos(entityIn.rotationPitch * 0.017453292F);
+
+        double x = particlePos.x + mc.player.getPosition().getX();
+        double y = particlePos.y + mc.player.getPosition().getY();
+        double z = particlePos.z + mc.player.getPosition().getZ();
+
+        float f = ActiveRenderInfo.getRotationX();
+        float f1 = ActiveRenderInfo.getRotationZ();
+        float f2 = ActiveRenderInfo.getRotationYZ();
+        float f3 = ActiveRenderInfo.getRotationXY();
+        float f4 = ActiveRenderInfo.getRotationXZ();
+
+        Particle.interpPosX = x;
+        Particle.interpPosY = y;
+        Particle.interpPosZ = z;
+        Particle.cameraViewDir = mc.player.getLookVec(); // This is VERY temporary, FIX THIS AFTER
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        GlStateManager.alphaFunc(516, 0.003921569F);
+        buffer.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+
+        buffer.pos((x - rotationX * 0.5F - rotationXY * 0.5F), (y - rotationZ * 0.5F), (z - rotationYZ * 0.5F - rotationXZ * 0.5F)).tex((double)f1, (double)f3).color(1f,1f,1f, 0.1F).endVertex();
+        buffer.pos((x - rotationX * 0.5F + rotationXY * 0.5F), (y + rotationZ * 0.5F), (z - rotationYZ * 0.5F + rotationXZ * 0.5F)).tex((double)f1, (double)f2).color(1f,1f,1f, 0.1F).endVertex();
+        buffer.pos((x + rotationX * 0.5F + rotationXY * 0.5F), (y + rotationZ * 0.5F), (z + rotationYZ * 0.5F + rotationXZ * 0.5F)).tex((double)f, (double)f2).color(1f,1f,1f, 0.1F).endVertex();
+        buffer.pos((x + rotationX * 0.5F - rotationXY * 0.5F), (y - rotationZ * 0.5F), (z + rotationYZ * 0.5F - rotationXZ * 0.5F)).tex((double)f, (double)f3).color(1f,1f,1f, 0.1F).endVertex();
+
+        //System.out.println(buffer.toString());
+        //tessellator.draw();
+        buffer.finishDrawing();
+
+        GlStateManager.disableBlend();
+        GlStateManager.alphaFunc(516, 0.1F);
+
+
+
+
+    }
+
 }

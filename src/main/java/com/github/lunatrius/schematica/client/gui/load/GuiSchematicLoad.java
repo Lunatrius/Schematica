@@ -2,6 +2,7 @@ package com.github.lunatrius.schematica.client.gui.load;
 
 import com.github.lunatrius.core.client.gui.GuiScreenBase;
 import com.github.lunatrius.schematica.Schematica;
+import com.github.lunatrius.schematica.client.gui.control.GuiSchematicControl;
 import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
@@ -85,9 +86,11 @@ public class GuiSchematicLoad extends GuiScreenBase {
                 }
             } else if (guiButton.id == this.btnDone.id) {
                 if (Schematica.proxy.isLoadEnabled) {
-                    loadSchematic();
+                    if (loadSchematic()) {
+                        this.mc.displayGuiScreen(new GuiSchematicControl(this.parentScreen));
+                    }
                 }
-                this.mc.displayGuiScreen(this.parentScreen);
+                //this.mc.displayGuiScreen(this.parentScreen);
             } else {
                 this.guiSchematicLoadSlot.actionPerformed(guiButton);
             }
@@ -167,7 +170,7 @@ public class GuiSchematicLoad extends GuiScreenBase {
         }
     }
 
-    private void loadSchematic() {
+    private boolean loadSchematic() {
         final int selectedIndex = this.guiSchematicLoadSlot.selectedIndex;
 
         try {
@@ -176,12 +179,18 @@ public class GuiSchematicLoad extends GuiScreenBase {
                 if (Schematica.proxy.loadSchematic(null, this.currentDirectory, schematicEntry.getName())) {
                     final SchematicWorld schematic = ClientProxy.schematic;
                     if (schematic != null) {
-                        ClientProxy.moveSchematicToPlayer(schematic);
+                        if (ClientProxy.firstLoad && !ClientProxy.autoAlign) {
+                            ClientProxy.moveSchematicToPlayer(schematic);
+                            ClientProxy.firstLoad = false;
+                        }
+                        return true;
                     }
                 }
             }
+
         } catch (final Exception e) {
             Reference.logger.error("Failed to load schematic!", e);
         }
+        return false;
     }
 }
