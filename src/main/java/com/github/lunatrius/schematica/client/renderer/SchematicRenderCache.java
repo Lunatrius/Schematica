@@ -1,5 +1,6 @@
 package com.github.lunatrius.schematica.client.renderer;
 
+import com.github.lunatrius.schematica.client.world.SchematicWorld;
 import com.github.lunatrius.schematica.handler.ConfigurationHandler;
 import com.github.lunatrius.schematica.proxy.ClientProxy;
 import net.minecraft.block.state.IBlockState;
@@ -18,12 +19,12 @@ public class SchematicRenderCache extends ChunkCache {
 
     @Override
     public IBlockState getBlockState(final BlockPos pos) {
-        final BlockPos schPos = ClientProxy.schematic.position;
-        if (schPos == null) {
+        final SchematicWorld schW = ClientProxy.schematic;
+        if (schW == null || schW.position == null) {
             return Blocks.AIR.getDefaultState();
         }
 
-        final BlockPos realPos = pos.add(schPos);
+        final BlockPos realPos = pos.add(schW.position);
         final World world = this.minecraft.world;
 
         if (world == null || !world.isAirBlock(realPos) && !ConfigurationHandler.isExtraAirBlock(world.getBlockState(realPos).getBlock())) {

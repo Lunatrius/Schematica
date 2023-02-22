@@ -26,7 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockList {
-    public List<WrappedItemStack> getList(final EntityPlayer player, final SchematicWorld world, final World mcWorld) {
+    public List<WrappedItemStack> getList(final EntityPlayer player, final SchematicWorld world, final World mcWorld, final int radius) {
+        System.out.println("Radius: "+radius);
         final List<WrappedItemStack> blockList = new ArrayList<WrappedItemStack>();
 
         if (world == null) {
@@ -35,8 +36,26 @@ public class BlockList {
 
         final RayTraceResult rtr = new RayTraceResult(player);
         final MBlockPos mcPos = new MBlockPos();
-
-        for (final MBlockPos pos : BlockPosHelper.getAllInBox(BlockPos.ORIGIN, new BlockPos(world.getWidth() - 1, world.getHeight() - 1, world.getLength() - 1))) {
+        System.out.println(world.position);
+        BlockPos posA = BlockPos.ORIGIN;
+        BlockPos posB = new BlockPos(world.getWidth() - 1, world.getHeight() - 1, world.getLength() - 1);
+        if (radius > 0) {
+            double x = player.posX-world.position.x-radius;
+            double y = player.posY-world.position.y-radius;
+            double z = player.posZ-world.position.z-radius;
+            if (x<0) {x=0;}
+            if (y<0) {y=0;}
+            if (z<0) {z=0;}
+            posA = new BlockPos(x,y,z);
+            x = player.posX-world.position.x+radius;
+            y = player.posY-world.position.y+radius;
+            z = player.posZ-world.position.z+radius;
+            if (x>world.getWidth()-1) {x=world.getWidth()-1;}
+            if (y>world.getHeight()-1) {y=world.getHeight()-1;}
+            if (z>world.getLength()-1) {z=world.getLength()-1;}
+            posB = new BlockPos(x,y,z);
+        }
+        for (final MBlockPos pos : BlockPosHelper.getAllInBox(posA, posB)) {
             if (!world.layerMode.shouldUseLayer(world, pos.getY())) {
                 continue;
             }
@@ -155,6 +174,7 @@ public class BlockList {
             }
         }
 
+        //TODO: figure out what this IF statement does- and if we even need it.7
         private static String getFormattedStackAmount(final ItemStack itemStack, final int amount) {
             final int stackSize = itemStack.getMaxStackSize();
             if (true /* amount < stackSize */) {

@@ -11,7 +11,9 @@ import com.github.lunatrius.schematica.reference.Reference;
 import com.github.lunatrius.schematica.util.ItemStackSortType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiPageButtonList;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiSlider;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.client.config.GuiUnicodeGlyphButton;
@@ -20,7 +22,8 @@ import org.apache.commons.io.IOUtils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 
@@ -32,17 +35,44 @@ public class GuiSchematicMaterials extends GuiScreenBase {
     private GuiUnicodeGlyphButton btnSort = null;
     private GuiButton btnDump = null;
     private GuiButton btnDone = null;
+    private GuiSlider slRadius = null;
 
     private final String strMaterialName = I18n.format(Names.Gui.Control.MATERIAL_NAME);
     private final String strMaterialAmount = I18n.format(Names.Gui.Control.MATERIAL_AMOUNT);
+    protected static List<BlockList.WrappedItemStack> blockList = new ArrayList<>();
 
-    protected final List<BlockList.WrappedItemStack> blockList;
+// TODO: Get these in the lang files.
+    private final GuiSlider.FormatHelper sliderHelper = (id, name, value) -> {
+        if (value < 5) {
+            return "Radius: infinite";
+        } else {
+            return ("Radius: " + (int) (Math.floor((value)/5)*5));
+        }
+    };
+
+    private final GuiPageButtonList.GuiResponder sliderResponder = new GuiPageButtonList.GuiResponder() {
+        @Override
+        public void setEntryValue(int id, boolean value) { }
+
+        @Override
+        public void setEntryValue(int id, float value) {
+            if (value < 5) {
+                ClientProxy.listRadius = 0;
+            } else {
+                ClientProxy.listRadius = (int) (Math.floor(value/ 5) * 5);
+            }
+        }
+
+        @Override
+        public void setEntryValue(int id, String value) { }
+    };
+
 
     public GuiSchematicMaterials(final GuiScreen guiScreen) {
         super(guiScreen);
         final Minecraft minecraft = Minecraft.getMinecraft();
         final SchematicWorld schematic = ClientProxy.schematic;
-        this.blockList = new BlockList().getList(minecraft.player, schematic, minecraft.world);
+        this.blockList = new BlockList().getList(minecraft.player, schematic, minecraft.world, ClientProxy.listRadius);
         this.sortType.sort(this.blockList);
     }
 
@@ -50,14 +80,23 @@ public class GuiSchematicMaterials extends GuiScreenBase {
     public void initGui() {
         int id = 0;
 
-        this.btnSort = new GuiUnicodeGlyphButton(++id, this.width / 2 - 154, this.height - 30, 100, 20, " " + I18n.format(Names.Gui.Control.SORT_PREFIX + this.sortType.label), this.sortType.glyph, 2.0f);
+        this.btnSort = new GuiUnicodeGlyphButton(++id, this.width / 2 - 154, this.height - 50, 100, 20, " " + I18n.format(Names.Gui.Control.SORT_PREFIX + this.sortType.label), this.sortType.glyph, 2.0f);
         this.buttonList.add(this.btnSort);
 
-        this.btnDump = new GuiButton(++id, this.width / 2 - 50, this.height - 30, 100, 20, I18n.format(Names.Gui.Control.DUMP));
+        this.btnDump = new GuiButton(++id, this.width / 2 - 50, this.height - 50, 100, 20, I18n.format(Names.Gui.Control.DUMP));
         this.buttonList.add(this.btnDump);
 
-        this.btnDone = new GuiButton(++id, this.width / 2 + 54, this.height - 30, 100, 20, I18n.format(Names.Gui.DONE));
+        this.btnDone = new GuiButton(++id, this.width / 2 + 54, this.height - 50, 100, 20, I18n.format(Names.Gui.DONE));
         this.buttonList.add(this.btnDone);
+
+        this.slRadius = new GuiSlider(sliderResponder, ++id,this.width / 2 - 75,this.height-25,"matRadius", 0, 100,ClientProxy.listRadius,sliderHelper) {
+            @Override
+            public void mouseReleased(int mouseX, int mouseY) {
+                this.isMouseDown = false;
+                updateMaterialList();
+            }
+        };
+        this.buttonList.add(this.slRadius);
 
         this.guiSchematicMaterialsSlot = new GuiSchematicMaterialsSlot(this);
     }
@@ -131,10 +170,19 @@ public class GuiSchematicMaterials extends GuiScreenBase {
         final File dumps = Schematica.proxy.getDirectory("dumps");
         try {
             try (FileOutputStream outputStream = new FileOutputStream(new File(dumps, Reference.MODID + "-materials.txt"))) {
-                IOUtils.write(stringBuilder.toString(), outputStream, Charset.forName("utf-8"));
+                IOUtils.write(stringBuilder.toString(), outputStream, StandardCharsets.UTF_8);
             }
         } catch (final Exception e) {
             Reference.logger.error("Could not dump the material list!", e);
         }
     }
+
+    public void updateMaterialList() {
+        this.blockList = new ArrayList<>();
+        final Minecraft minecraft = Minecraft.getMinecraft();
+        final SchematicWorld schematic = ClientProxy.schematic;
+        this.blockList = new BlockList().getList(minecraft.player, schematic, minecraft.world, ClientProxy.listRadius);
+        this.sortType.sort(this.blockList);
+    }
+
 }

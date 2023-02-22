@@ -24,8 +24,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.matthewprenger.cursegradle'
 
-ext.build = System.getenv().BUILD_NUMBER ?: 'git'
-ext.modversion = "${project.version_major}.${project.version_minor}.${project.version_micro}.${build}"
+ext.modversion = "${project.version_major}.${project.version_minor}.${project.version_micro}"
 
 group = 'com.github.lunatrius'
 version = "${project.version_minecraft}-${modversion}"

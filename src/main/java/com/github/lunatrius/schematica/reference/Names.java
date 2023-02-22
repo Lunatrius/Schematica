@@ -46,6 +46,22 @@ public final class Names {
         public static final String PLACE_ADJACENT_DESC = "Place blocks only if there is an adjacent block next to them.";
         public static final String SWAP_SLOT = "swapSlot";
         public static final String SWAP_SLOT_DESC = "Allow the printer to use this hotbar slot.";
+        public static final String DEBUG_MODE = "debugMode";
+        public static final String DEBUG_MODE_DESC = "Spams your chat with debug messages and messes with your viewing angle. You really don't need this.";
+        public static final String STEALTH_MODE = "stealthMode";
+        public static final String STEALTH_MODE_DESC = "Harshly limited block placement. Best for 2b2t!";
+        public static final String PRIORITY = "priority";
+        public static final String PRIORITY_DESC = "How block placement should be prioritized. 1=layers, 2=pillars, 3=pillars (below only).";
+        public static final String DIRECTIONAL_PRIORITY = "directionalPriority";
+        public static final String DIRECTIONAL_PRIORITY_DESC = "Prioritize placing blocks in the opposite direction you're moving in. Bigger numbers means more smoothing, 0 is disabled, -1 prioritizes +X.";
+        public static final String DISABLE_WHILE_MOVING = "disableWhileMoving";
+        public static final String DISABLE_WHILE_MOVING_DESC = "Disable the printer while you're moving.";
+        public static final String REPLACE = "replace";
+        public static final String REPLACE_DESC = "Allow placing on replaceable blocks such as tallgrass or water.";
+        public static final String VIEW_ERRORS_TOGGLE = "Error view toggling";
+        public static final String VIEW_ERRORS_TOGGLE_DESC = "If true, the 'View Errors' key toggles instead of press-and-hold.";
+
+
 
         public static final String SCHEMATIC_DIRECTORY = "schematicDirectory";
         public static final String SCHEMATIC_DIRECTORY_DESC = "Schematic directory.";
@@ -53,16 +69,6 @@ public final class Names {
         public static final String EXTRA_AIR_BLOCKS_DESC = "Extra blocks to consider as air for the schematic renderer.";
         public static final String SORT_TYPE = "sortType";
         public static final String SORT_TYPE_DESC = "Default sort type for the material list.";
-
-        public static final String PRINTER_ENABLED = "printerEnabled";
-        public static final String PRINTER_ENABLED_DESC = "Allow players to use the printer.";
-        public static final String SAVE_ENABLED = "saveEnabled";
-        public static final String SAVE_ENABLED_DESC = "Allow players to save schematics.";
-        public static final String LOAD_ENABLED = "loadEnabled";
-        public static final String LOAD_ENABLED_DESC = "Allow players to load schematics.";
-
-        public static final String PLAYER_QUOTA_KILOBYTES = "playerQuotaKilobytes";
-        public static final String PLAYER_QUOTA_KILOBYTES_DESC = "Amount of storage provided per-player for schematics on the server.";
 
         public static final String LANG_PREFIX = Reference.MODID + ".config";
     }
@@ -173,6 +179,7 @@ public final class Names {
             public static final String FLIP = "schematica.gui.flip";
             public static final String ROTATE = "schematica.gui.rotate";
             public static final String TRANSFORM_PREFIX = "schematica.gui.";
+            public static final String SNAP = "schematica.gui.snap";
 
             public static final String MATERIAL_NAME = "schematica.gui.materialname";
             public static final String MATERIAL_AMOUNT = "schematica.gui.materialamount";
@@ -181,6 +188,8 @@ public final class Names {
 
             public static final String SORT_PREFIX = "schematica.gui.material";
             public static final String DUMP = "schematica.gui.materialdump";
+            public static final String SCHEMATICS = "schematica.gui.schematics";
+
         }
 
         public static final String X = "schematica.gui.x";
@@ -207,6 +216,15 @@ public final class Names {
         public static final String PRINTER_TOGGLE = "schematica.key.printerToggle";
         public static final String MOVE_HERE = "schematica.key.moveHere";
         public static final String PICK_BLOCK = "schematica.key.pickBlock";
+        public static final String LOAD_MANIPULATE  = "schematica.key.loadManipulate";
+        public static final String VIEW_ERRORS = "schematica.key.viewErrors";
+    }
+
+    public static final class ErrorType {
+        public static final String ERROR_LEVEL = "schematica.gui.errorLevel";
+        public static final String ALL = "schematica.gui.all";
+        public static final String NBT = "schematica.gui.nbt";
+        public static final String ERRORS = "schematica.gui.errors";
     }
 
     public static final class NBT {

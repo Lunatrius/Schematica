@@ -60,7 +60,7 @@ public class ServerProxy extends CommonProxy {
         //Space used by public directory
         schematicDirectory = getPlayerSchematicDirectory(player, false);
         spaceUsed += getSpaceUsedByDirectory(schematicDirectory);
-        return ((spaceUsed / 1024) > ConfigurationHandler.playerQuotaKilobytes);
+        return ((spaceUsed / 1024) > 8192);
     }
 
     private int getSpaceUsedByDirectory(final File directory) {

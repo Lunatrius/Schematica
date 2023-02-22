@@ -136,16 +136,16 @@ public class RenderOverlay extends RenderChunk {
                     }
                 }
             }
-
             // Draw the type array (but not the padding)
             for (final BlockPos.MutableBlockPos pos : BlockPos.getAllInBoxMutable(from, to)) {
                 int secX = pos.getX() - fromEx.getX();
                 int secY = pos.getY() - fromEx.getY();
                 int secZ = pos.getZ() - fromEx.getZ();
 
-                BlockType type = types[secX][secY][secZ];
-
-                if (type != null) {
+                BlockType type = null;
+                if (secX >= 0 && secY >= 0 && secZ >= 0 && types.length > secX && types[secX].length > secY && types[secX][secY].length > secZ) {
+                    type = types[secX][secY][secZ];
+                }                if (type != null) {
                     if (!compiledOverlay.isLayerStarted(layer)) {
                         compiledOverlay.setLayerStarted(layer);
                         preRenderBlocks(buffer, from);

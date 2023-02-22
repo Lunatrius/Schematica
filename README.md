@@ -1,8 +1,24 @@
 ## Welcome to Schematica!
-### Compiling
-[Setup Java](#setup-java)
 
-[Setup Git](#setup-git)
+This is my fork of Schematica, with the goal to make it usable on Anarchy servers, and to improve its overall quality.
+Eventually I'd like to update this for newer Minecraft versions, though at the moment I have no clue and no plans on how to do that- I'll save that for when I have most of my planned features implemented.
+If you have any bugs or suggestions, feel free to let me know!
+
+https://docs.google.com/forms/d/e/1FAIpQLScpT1qL_RdMT3U1m_95NmT62JIzc5gfbq5jH6PXiiWG-IakLQ/viewform?usp=sf_link
+
+### New Features and QoL changes
+
+1. Stealth mode. This allows Schematica to work on 2b2t, using more strict placement requirements and rotation packets. (NOTE: STAIRS ARE BROKEN)
+2. Placement Priority. When filling blocks in, place layer-by-layer, or fill in as pillars.
+3. Directional Priority. Place blocks behind you as you walk, place the farthest blocks first, or just place along the X axis first.
+4. Disable while moving. Stops printing while you're moving.
+5. More flexible placement delay- includes decimals, and  can place every client tick.
+6. Wallhack rendering. View missing and incorrect blocks by pressing the View Errors key (default LCONTROL)
+7. Snap to Map. Great for map art!
+8. Block supports. Things like sand, anvils and torches check  to see if the supporting block exists before placing.
+9. Much more fluid UI, including merged Load and Manipulate Schematic keybinds and cleaner rotation buttons.
+
+### Compiling
 
 [Setup Schematica](#setup-schematica)
 
@@ -10,39 +26,12 @@
 
 [Updating Your Repository](#updating-your-repository)
 
-#### Setup Java
-The Java JDK is used to compile Schematica.
-
-1. Download and install the Java JDK.
-    * [Windows/Mac download link](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html). Scroll down, accept the `Oracle Binary Code License Agreement for Java SE`, and download it (if you have a 64-bit OS, please download the 64-bit version).
-    * Linux: Installation methods for certain popular flavors of Linux are listed below. If your distribution is not listed, follow the instructions specific to your package manager or install it manually [here](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html).
-        * Gentoo: `emerge dev-java/oracle-jdk-bin`
-        * Archlinux: `pacman -S jdk7-openjdk`
-        * Ubuntu/Debian: `apt-get install openjdk-7-jdk`
-        * Fedora: `yum install java-1.7.0-openjdk`
-2. Set up the environment.
-    * Windows: Set environment variables for the JDK.
-        1. Go to `Control Panel\System and Security\System`, and click on `Advanced System Settings` on the left-hand side.
-        2. Click on `Environment Variables`.
-        3. Under `System Variables`, click `New`.
-        4. For `Variable Name`, input `JAVA_HOME`.
-        5. For `Variable Value`, input something similar to `C:\Program Files\Java\jdk1.7.0_45` exactly as shown (or wherever your Java JDK installation is), and click `Ok`.
-        6. Scroll down to a variable named `Path`, and double-click on it.
-        7. Append `;%JAVA_HOME%\bin` EXACTLY AS SHOWN and click `Ok`. Make sure the location is correct; double-check just to make sure.
-3. Open up your command line and run `javac`. If it spews out a bunch of possible options and the usage, then you're good to go. If not try the steps again.
-
-#### Setup Git
-Git is used to clone Schematica and update your local copy.
-
-1. Download and install Git [here](http://git-scm.com/download/).
-2. *Optional* Download and install a Git GUI client, such as Github for Windows/Mac, SmartGitHg, TortoiseGit, etc. A nice list is available [here](http://git-scm.com/downloads/guis).
-
 #### Setup Schematica
-This section assumes that you're using the command-line version of Git.
+This section assumes that you have Git and JDK installed, and you're using the command-line version of Git.
 
 1. Open up your command line.
 2. Navigate to a place where you want to download Schematica's source (eg `C:\Development\Github\Minecraft\`) by executing `cd [folder location]`. This location is known as `mcdev` from now on.
-3. Execute `git clone git@github.com:Lunatrius/Schematica.git`. This will download Schematica's source into `mcdev`.
+3. Execute `git clone https://github.com/Theyoungster/Schematica.git`. This will download Schematica's source into `mcdev`.
 4. Right now, you should have a directory that looks something like:
 
 ***

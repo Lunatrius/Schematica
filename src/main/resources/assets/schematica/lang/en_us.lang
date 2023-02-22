@@ -44,6 +44,11 @@ schematica.gui.materialamount=Amount
 schematica.gui.materialavailable=Available
 schematica.gui.materialmissing=Missing
 schematica.gui.materialdump=Save to file
+schematica.gui.schematics=Schematics
+schematica.gui.snap=Align to Map
+schematica.gui.errorlevel=Error level:
+schematica.gui.nbt=Wrong NBT
+schematica.gui.errors=Wrong block / air
 
 # gui - config - categories
 schematica.config.category.debug=Debug
@@ -75,13 +80,15 @@ schematica.config.highlight.tooltip=Highlight invalid placed blocks and to be pl
 schematica.config.highlightAir=Highlight Air
 schematica.config.highlightAir.tooltip=Highlight blocks that should be air.
 schematica.config.blockDelta=Block Delta
-schematica.config.blockDelta.tooltip=Delta value used for highlighting (if you experience z-fighting increase this).
+schematica.config.blockDelta.tooltip=Delta value used for highlighting (if you experience z-fighting, increase this).
 schematica.config.renderDistance=Render Distance
 schematica.config.renderDistance.tooltip=Schematic render distance.
+schematica.config.toggleViewErrors='View Errors' toggles
+schematica.config.toggleViewErrors.tooltip=If true, the 'View Errors' key toggles instead of press-and-hold.
 
 # gui - config - printer
 schematica.config.placeDelay=Placement Delay
-schematica.config.placeDelay.tooltip=Delay between placement attempts (in ticks).
+schematica.config.placeDelay.tooltip=Delay between placement attempts in ticks.
 schematica.config.timeout=Timeout
 schematica.config.timeout.tooltip=Timeout before re-trying failed blocks.
 schematica.config.placeDistance=Placement Distance
@@ -94,6 +101,19 @@ schematica.config.destroyInstantly=Destroy Instantly
 schematica.config.destroyInstantly.tooltip=Destroy all blocks that can be destroyed in one tick.
 schematica.config.placeAdjacent=Place Only Adjacent
 schematica.config.placeAdjacent.tooltip=Place blocks only if there is an adjacent block next to them.
+
+schematica.config.stealthMode=Stealth Mode
+schematica.config.stealthMode.tooltip=Harshly limited block placement. Best for 2b2t!
+schematica.config.debugMode=Debug mode
+schematica.config.debugMode.tooltip=Spams your chat with debug messages and messes with your viewing angle. You really don't need this.
+schematica.config.priority=Placement Priority
+schematica.config.priority.tooltip=How block placement should be prioritized. 1=layers, 2=pillars, 3=pillars (below only).
+schematica.config.directionalPriority=Directional Priority
+schematica.config.directionalPriority.tooltip=Prioritize placing blocks in the opposite direction you're moving in. Bigger numbers means more smoothing, 0 is disabled, -1 prioritizes +X.
+schematica.config.replace=Replace Replaceables
+schematica.config.replace.tooltip=Allow placing on replaceable blocks such as tallgrass or water.
+schematica.config.disableWhileMoving=Disable While Moving
+schematica.config.disableWhileMoving.tooltip=Disable printing while you're moving, duh.
 
 # gui - config - printer - swap slots
 schematica.config.swapSlot0=Allow Slot 1
@@ -141,6 +161,8 @@ schematica.key.renderToggle=Toggle Rendering
 schematica.key.printerToggle=Toggle Printer
 schematica.key.moveHere=Move here
 schematica.key.pickBlock=Pick Block
+schematica.key.loadManipulate=Load / Manipulate Schematic
+schematica.key.viewErrors=View Errors
 
 # commands - save
 schematica.command.save.usage=/schematicaSave <startX> <startY> <startZ> <endX> <endY> <endZ> <name> [format]

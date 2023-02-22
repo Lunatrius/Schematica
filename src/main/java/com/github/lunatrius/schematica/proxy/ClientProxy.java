@@ -27,12 +27,14 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.config.GuiConfigEntries;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class ClientProxy extends CommonProxy {
     public static boolean isRenderingGuide = false;
@@ -43,14 +45,19 @@ public class ClientProxy extends CommonProxy {
     public static int rotationRender = 0;
 
     public static SchematicWorld schematic = null;
-
+    public static boolean firstLoad = false;  // True during first load of a schematic, to move to player
+    public static boolean showCoords = false;  // Are we currently allowed to show coords? Toggled true on load or toggle, and false on disconnect.
+    public static boolean autoAlign = false;  // When schematic formatted name_x_y_z, make this true and align
     public static final MBlockPos pointA = new MBlockPos();
     public static final MBlockPos pointB = new MBlockPos();
     public static final MBlockPos pointMin = new MBlockPos();
     public static final MBlockPos pointMax = new MBlockPos();
-
-    public static EnumFacing axisFlip = EnumFacing.UP;
-    public static EnumFacing axisRotation = EnumFacing.UP;
+    public static boolean viewErrorToggle = false;
+    public static boolean viewingErrors = false;
+    public static int errorMode = 0;
+    public static int axisFlip = 0;
+    public static int axisRotation = 0;
+    public static int listRadius = 0;
 
     public static RayTraceResult objectMouseOver = null;
 
@@ -64,6 +71,7 @@ public class ClientProxy extends CommonProxy {
         orientation = getOrientation(player);
 
         rotationRender = MathHelper.floor(player.rotationYaw / 90) & 3;
+        viewErrorToggle =  ConfigurationHandler.viewErrorToggle;
     }
 
     private static EnumFacing getOrientation(final EntityPlayer player) {
@@ -160,7 +168,9 @@ public class ClientProxy extends CommonProxy {
                 ConfigurationHandler.propRenderDistance,
                 ConfigurationHandler.propPlaceDelay,
                 ConfigurationHandler.propTimeout,
-                ConfigurationHandler.propPlaceDistance
+                ConfigurationHandler.propPlaceDistance,
+                ConfigurationHandler.propPriority,
+                ConfigurationHandler.propDirectionalPriority
         };
         for (final Property prop : sliders) {
             prop.setConfigEntryClass(GuiConfigEntries.NumberSliderEntry.class);
@@ -169,6 +179,7 @@ public class ClientProxy extends CommonProxy {
         for (final KeyBinding keyBinding : InputHandler.KEY_BINDINGS) {
             ClientRegistry.registerKeyBinding(keyBinding);
         }
+        viewErrorToggle =  ConfigurationHandler.viewErrorToggle;
     }
 
     @Override
@@ -210,13 +221,12 @@ public class ClientProxy extends CommonProxy {
         super.resetSettings();
 
         SchematicPrinter.INSTANCE.setEnabled(true);
-        unloadSchematic();
 
         isRenderingGuide = false;
-
         playerPosition.set(0, 0, 0);
         orientation = null;
         rotationRender = 0;
+        showCoords = false;
 
         pointA.set(0, 0, 0);
         pointB.set(0, 0, 0);
@@ -238,13 +248,46 @@ public class ClientProxy extends CommonProxy {
         }
 
         final SchematicWorld world = new SchematicWorld(schematic);
-
-        Reference.logger.debug("Loaded {} [w:{},h:{},l:{}]", filename, world.getWidth(), world.getHeight(), world.getLength());
-
+        autoAlign = false;
+        String[] parts = filename.split("[_.]");  // name _ x _ y _ z . schematic
+        if (parts.length == 5) {
+            try {
+                Reference.logger.debug("Loaded {} [w:{},h:{},l:{}]", filename, world.getWidth(), world.getHeight(), world.getLength());
+                int px = (int) Math.floor(playerPosition.x);
+                int py = (int) Math.floor(playerPosition.y);
+                int pz = (int) Math.floor(playerPosition.z);
+                String psx = String.format("%07d", px);
+                String psy = String.format("%07d", py);
+                String psz = String.format("%07d", pz);
+                int gx = Integer.parseInt(psx.substring(0, psx.length()-parts[1].length()) + parts[1]);
+                int gy = Integer.parseInt(psy.substring(0, psy.length()-parts[2].length()) + parts[2]);
+                int gz = Integer.parseInt(psz.substring(0, psz.length()-parts[3].length()) + parts[3]);
+                int dx = Integer.parseInt("1" + new String(new char[parts[1].length()]).replace('\0', '0'));
+                int dz = Integer.parseInt("1" + new String(new char[parts[3].length()]).replace('\0', '0'));
+                if (gx - px < -dx/2) {
+                    gx = gx + dx;
+                } else if (gx - px > dx/2) {
+                    gx = gx - dx;
+                }
+                if (gz - pz < -dz/2) {
+                    gz = gz + dz;
+                } else if (gz - pz > dz/2) {
+                    gz = gz - dz;
+                }
+                world.position.x = gx;
+                world.position.y = gy;
+                world.position.z = gz;
+                autoAlign = true;
+            } catch (Exception e) {
+                Reference.logger.debug("Failed to auto align");
+            }
+        }
         ClientProxy.schematic = world;
         RenderSchematic.INSTANCE.setWorldAndLoadRenderers(world);
         SchematicPrinter.INSTANCE.setSchematic(world);
         world.isRendering = true;
+        firstLoad = true;
+        showCoords = true;
 
         return true;
     }
